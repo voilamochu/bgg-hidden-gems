@@ -307,6 +307,7 @@ def main():
     print(f"Volume-band indicators: {sum(c.startswith('volband_') for c in common.columns)}; release-decade indicators: {sum(c.startswith('decade_') for c in common.columns)}")
     print(f"Common complete-case population for model comparisons: {len(common):,} games.")
 
+
     print("\n" + "=" * 78)
     print("1. NESTED DESCRIPTIVE EXPECTED-RATING SPECIFICATIONS")
     print("=" * 78)
@@ -428,6 +429,21 @@ def main():
         "quality, omitted audience selection, edition/marketing effects, tag error, "
         "or noise. It is not evidence of broad appeal and is not a final hidden-gem score."
     )
+
+    # ------------------------------------------------------------------
+    # 6. Persist per-game baseline outputs for downstream comparison
+    #    (script 22).  Same specifications and population as above.
+    # ------------------------------------------------------------------
+    out_cols = [
+        "game_id", "avg_rating_current", "bayes_rating", "users_rated",
+        "pred_S3_categories", "resid_S3_categories", "cv_resid_S3_categories",
+        "pred_S5_binned_categories", "resid_S5_binned_categories",
+    ]
+    out_cols = [c for c in out_cols if c in common.columns]
+    (REPO_DIR / "data" / "processed").mkdir(parents=True, exist_ok=True)
+    common[out_cols].to_parquet(
+        REPO_DIR / "data" / "processed" / "rq2_residuals.parquet", index=False)
+    print(f"Wrote {len(common):,} rows to data/processed/rq2_residuals.parquet")
 
 
 if __name__ == "__main__":
