@@ -885,3 +885,50 @@ The even/odd partition difference declines with count, from a median **0.374** a
 
 - Any correction that treats the low-volume-user mean (e.g., 8.85 for single-rating users) as an unbiased estimate of game quality is unsupported: on identical games these users sit ~2 points above 1,000+-rating users.
 - Next: estimate per-user severity conditioned on games and test its stability (even/odd, time periods), then decompose the residual gap into experience/exposure components.
+
+## 2026-08-23: Phase A steps 2-3 — severity offsets are real, stable, and close the gap
+
+### Scope and method
+
+**[Method]** Ran new `scripts/16_phase2_user_severity_stability.py` (two-way additive fit `rating = mu + game_alpha + user_delta` over all 26,924,709 canonical observations by alternating projections; 95,540 games x 571,248 raters) and `scripts/17_phase2_gap_decomposition.py` (game-mix standardization and era-controlled contrasts). Outputs: `user_severity.parquet`, `game_adjusted_means.parquet`, `user_severity_stability.json`, `gap_decomposition.json`, `gap_cells_low_high.parquet`. Timestamps used only as labeled sensitivities because their semantics remain unresolved.
+
+### Severity offsets conditioned on games (step 2)
+
+1. **User severity offsets are large and ordered by lifetime volume [Empirical finding]:** mean delta falls monotonically from **+0.84** (band '1') to **-1.25** (band '1000+') — a **2.09-point** spread conditional on the games each band rates. This matches the within-game FE gradient from script 15 almost exactly.
+
+2. **Severity is a stable rater trait, not fitting noise [Empirical finding]:**
+   - Even/odd parity halves (independent observation splits; users with >=20 obs per half, n=223,069): Pearson **r=0.872**, Spearman **0.844**, median |delta_even - delta_odd| = **0.175**, SD of difference 0.356 vs SD of each half ~0.704. A placebo correlation across mismatched users is **~0.003**.
+   - Across time periods (median split, >=10 obs per period): postdate reading r=**0.533** (n=110,826), rating_tstamp reading r=**0.478** (n=113,177). Moderately stable under both readings; lower than parity stability, consistent with some genuine drift and/or period-composition differences. Which timestamp field applies barely changes the conclusion.
+   - ICC-style reliability by band (script 18, `rater_credibility.json`): **0.74** at 10-24 observations, **0.89** at 50-99, **0.95** at 100-249, **0.995** at 1000+. Signal SD ~0.61-0.70 throughout.
+
+3. **How much rating variance does identity explain? [Empirical finding]** Nested-model R2 on all observations: game identity alone explains **R2=0.230** of rating variance; rater identity alone explains **R2=0.249**; the additive two-way fit explains **R2=0.438**. The two are nearly complementary (sampled corr(alpha, delta) ~ -0.05). Under this data's conditions, *who rates matters about as much as what is rated* for individual rating variation.
+
+### Decomposition of the low-vs-high gap (step 3)
+
+Low group = lifetime bands 1-9 (802,335 observations); high group = bands 500+ (5,594,821).
+
+4. **Game mix explains little; severity explains essentially all the rest [Empirical finding]:**
+   - Raw pooled gap: low **8.291** vs high **6.602** = **+1.689**.
+   - Standardized to identical game weights (Kitagawa-style over shared games; support overlap is 98.7% of low-group observations): gap **+1.389** — game-mix composition accounts for only ~0.30 points (~18%).
+   - After additionally subtracting fitted user severity offsets: gap **+0.012** — statistically and practically indistinguishable from zero. The entire standardized gap is an additive rater-level level difference; no low-volume-x-game-type interaction is needed.
+
+5. **Calendar-era composition cannot produce the gap [Empirical finding / sensitivity]:** mean ratings rise strongly over the snapshot (e.g., 6.39 in 2003 to 7.31 in 2023 by postdate reading). But recomputing paired within-game contrasts inside era windows gives +1.60 (<=2010), +1.77 (2011-2017), +1.70 (2018-2025) under postdate and +1.56/+1.74/+1.69 under rating_tstamp — the gap persists in every window under both readings. Light-volume users actually rate *newer* games on average (mean year 2018.8 vs 2016.6), the opposite direction from what an era-inflation artifact would require.
+
+6. **No experience-hardening within raters [Hypothesis-grade empirical finding]:** among users with >=50 lifetime observations, last-decile ratings sit slightly HIGHER than first-decile (+0.055 by postdate order, +0.234 by rating_tstamp order). If heavy raters became harsher with experience we would see the opposite sign; ordering uses unresolved-semantics timestamps, so this remains hypothesis-grade.
+
+### What severity adjustment does and does not buy (RQ1 relevance)
+
+7. **Adjusted game estimates answer a different question, not a better predictor of observed ratings [Model-dependent conclusion]:** held-out prediction of individual odd-half ratings from even-half fits: raw train game-mean RMSE **1.417**; game-FE-only prediction (mu + alpha) RMSE **1.563**; adding user deltas **1.253** (-11.6% vs raw). Interpretation: severity-adjusted game means deliberately remove who-rated effects, so they predict the *observed* rating stream worse than raw means when rater mixes repeat; knowing the rater helps predict individuals. Adjusted estimates target "level net of rater composition," which must not be marketed as higher-fidelity measurement of the same quantity.
+
+8. **Magnitude of adjustment at game level [Observed fact]:** adjusted minus raw game means have median **+0.67**, P5-P95 [-0.56, +1.47]; shifts are similar across snapshot volume bands (medians 0.64-0.82), i.e., adjustment is not simply a low-volume-game boost.
+
+### Classification per AGENTS.md
+
+- **Measurement noise:** cannot explain these patterns (parity stability, holdout gains, era-window persistence).
+- **Selection into what users rate:** accounts for only ~18% of the raw gap (standardization step).
+- **Rater-level level differences (severity/scale anchoring):** account for essentially everything that remains, and are stable enough to estimate (reliability >=0.74 with >=10 obs/half).
+- **Caveat kept open [Unidentified]:** delta_u itself may partially encode enthusiasm trajectories (users whose enthusiasm faded rate more games and more harshly); "severity" here is descriptive level, not a causal disposition. Distinguishing those requires data this snapshot lacks.
+
+### Implication for the debiasing premise
+
+The friend-style premise that harsh/generous patterns reflect *who rates what* is mostly wrong in this data: who-rates-what explains little once you condition on games, while *who rates them at all* — captured by stable per-user offsets — explains nearly all of it. Any correction aimed only at game-mix or noise will therefore leave a ~1.4-point rater-level gradient untouched.
