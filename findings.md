@@ -853,3 +853,35 @@ The even/odd partition difference declines with count, from a median **0.374** a
 **[Limitation]** This is descriptive only. There is no external quality target, repeated independent rating task, user exposure denominator, or non-rater population with which to validate accuracy or separate rater severity from game-selection composition. The split measure is deliberately non-temporal, and duplicate/revision semantics remain unresolved.
 
 **[Implication / next question]** Do not use rating count alone as a credibility weight or rater debiasing rule. The next analysis should examine user-game selection and cross-game participation—especially whether high- and low-volume users rate systematically different game types and whether user-level severity persists after conditioning on overlapping games—before any debiasing model is considered.
+
+## 2026-08-23: Phase A step 1 — the volume-level gap survives within games
+
+### Scope and method
+
+**[Method]** Ran new `scripts/15_phase2_same_game_volume_comparison.py` against the canonical `rating_observations.parquet` extract (26,924,709 observations, 571,248 raters, 95,540 games in the SQLite snapshot). Users were grouped by lifetime rating count into the established volume bands (`rater_behavior_by_volume.parquet`). Four complementary designs, simplest first: (1) raw band means; (2) shared-ground overlap between band rater pools; (3) paired within-game contrasts (games with >=3 distinct raters in each compared group); (4) a game fixed-effects regression `rating ~ band dummies + game FE` on all 26.9M observations (exact within-game demeaning, SEs clustered by game). Timestamps not used. Outputs: `data/processed/phase2/game_band_cells.parquet`, `within_game_diffs_*.parquet`, `same_game_volume_contrast.json`.
+
+### Results
+
+1. **The raw band gradient reproduces on canonical observations [Observed fact]:** pooled mean rating falls monotonically from **8.854** (band '1', 124,374 users) to **6.397** (band '1000+', 1,344 users); restricting to games with >=100 snapshot ratings barely changes it (**8.824 -> 6.448**).
+
+2. **Shared ground exists mainly through popularity [Empirical finding]:** band-'1' users collectively rated 21,297 games; **17,021** of these were also rated by >=1 band-'1000+' user (Jaccard 0.247), and **5,881** games have >=3 distinct raters on each side. Low-band users concentrate heavily on popular games: **95.8%** of band-'2-24' *observations* fall on games having >=3 band-'1000+' raters (per-user shares are bimodal {0,1} because most low-band users rate few games; observation-weighted shares are the informative form).
+
+3. **The gap survives within games almost intact — the central result [Empirical finding]:**
+   - Paired contrast band '1' vs '1000+' (>=3 raters each side, **5,881 games**, median 744 total raters/game): mean within-game gap **+2.28** points (median **+2.27**, IQR +1.61 to +2.99), **96.4% of games positive**, precision-weighted pooled **+2.08**. The unconditional gap is **2.42** points.
+   - Paired contrast bands '2-24' vs '500+' (**23,664 games**): mean **+1.28** (median +1.20), **93.4% positive**. Not a singleton-user artifact.
+   - Sensitivities leave conclusions unchanged: dropping sub-1.0 junk ratings and repeated user-game extras gives +2.28 / +1.28; restricting to >=100-rating games gives **+2.19 / +1.13**.
+   - Game-FE regression across all ten bands (reference '1000+'): coefficients decline smoothly **+2.066 (band 1), +1.663 (2-4), +1.343 (5-9), +1.053 (10-24), +0.837 (25-49), +0.679 (50-99), +0.504 (100-249), +0.314 (250-499), +0.173 (500-999)** with cluster SEs 0.002–0.018. Both statistically and practically significant throughout.
+
+### Interpretation
+
+**[Supported conclusion]** Different game mixes explain almost none of the low-vs-high-volume rating-level gap. Conditional on rating the *same game*, lighter BGG participants rate roughly 1–2 points higher, and the conditional gap nearly equals the unconditional one. Under AGENTS.md's classification this behaves like a rater-level level difference (severity/scale anchoring or enthusiasm-state differences), not measurement noise and not primarily composition.
+
+**[Unidentified remaining confounds]** This does NOT prove pure severity:
+- *Within-game selection*: among a game's raters, those who go on to become heavy BGG users may differ in enthusiasm-for-that-game from one-shot raters; lifetime volume is itself partly an outcome of enthusiasm trajectories.
+- *Timing*: heavy users' ratings may be older or newer on average; platform-era drift could contribute to the same pattern. Untested here (timestamp semantics unresolved; see next steps).
+- The paired universe skews toward popular games by construction.
+
+### Implications
+
+- Any correction that treats the low-volume-user mean (e.g., 8.85 for single-rating users) as an unbiased estimate of game quality is unsupported: on identical games these users sit ~2 points above 1,000+-rating users.
+- Next: estimate per-user severity conditioned on games and test its stability (even/odd, time periods), then decompose the residual gap into experience/exposure components.
