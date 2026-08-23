@@ -25,3 +25,7 @@ reports/figures/
 
 # Local scratch
 scratch/
+
+# Large raw datasets
+/data/raw/bgg.sqlite
+/data/processed/phase2/*.parquet

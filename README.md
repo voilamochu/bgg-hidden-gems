@@ -25,7 +25,7 @@ Start simple and add complexity only when the data and evidence justify it.
 - Establish what the data actually contains and what can realistically be inferred from it before deciding on a model.
 - Use BGG's raw average and Geek Rating as baselines rather than assuming either is correct or incorrect.
 - Explicitly investigate self-selection and audience effects, even if the first attempts are necessarily crude.
-- Treat any friend-provided "debiased" ranking, if supplied in `data/`, as something to analyse and test, not as ground truth.
+- The friend-provided debiased-ratings dataset is now available at `data/raw/complete_2025_bgg_debiased_ranks.csv`; treat it as an observed output to analyse and test, not as ground truth.
 - Document what cannot be corrected for instead of hiding uncertainty behind increasingly elaborate formulas.
 - Let the data determine which corrections are useful. Don't add a correction simply because it sounds statistically sensible.
 
@@ -41,6 +41,13 @@ For each candidate, we should eventually be able to distinguish between:
 - whether the evidence points toward broad appeal or primarily a well-loved niche.
 
 The exact output structure can wait until we know what the data can actually support.
+
+## Documents
+
+- [Research summary](docs/research_summary.md)
+- [Research report](docs/research_report.md)
+- [Research handoff](docs/research_handoff.md)
+- [Running findings log](findings.md)
 
 ## Guiding principle
 The objective is not to produce the most complicated or novel ranking.

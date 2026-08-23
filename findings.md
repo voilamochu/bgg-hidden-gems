@@ -1,5 +1,7 @@
 # Findings Log
 
+> **Current-data status (2026-08-23):** The current processed research population is **16,627 games**, after excluding explicit BGG `Admin: Upcoming Releases` and `Admin: Unreleased Games` records. The refreshed downstream results are in the final **population-correction refresh** entry. Numerical entries before that entry were generated on the pre-correction 16,726-game population and are retained as historical provenance; use the refresh entry for current figures.
+
 ## 2026-08-23: Final Research Population Definition (Structural PnP & Self-Published Rule)
 
 ### Context & Goal
@@ -478,9 +480,9 @@ Ran `scripts/08_rq3_identifiability_audit.py` over the 16,726-game processed res
 
 Ran `scripts/09_friend_ranking_audit.py` against both `data/raw/bgg_games_current.parquet` and the processed research population. The audit is limited to game-level observations. It does **not** attempt to validate the friend's user-level debiasing methodology, because the repository contains no user-rating matrix, rater identities, rating timestamps, or other inputs needed for that exercise.
 
-1. **The actual friend output is not present in the current repo [Observed Fact / Blocker]:** neither file contains a `debiased_rating` field, any field with a debias/friend label, or a separate friend-ranking file. The raw file has **34 columns** and the processed research population has **36 columns**; the available `dump_*` columns are `dump_rank`, `dump_geek_rating`, `dump_avg_rating`, `dump_voters`, and `dump_year`. `dump_geek_rating` is treated as a legacy BGG rating field, not substituted for the missing friend result.
+1. **At the time of this audit, the friend output was not present in the BGG parquet data [Historical observed fact / Blocker]:** neither the raw BGG parquet nor the processed research population contained a `debiased_rating` field or any field with a debias/friend label. The raw parquet had **34 columns** and the processed research population had **36 columns**; the available `dump_*` columns were `dump_rank`, `dump_geek_rating`, `dump_avg_rating`, `dump_voters`, and `dump_year`. `dump_geek_rating` was treated as a legacy BGG field, not substituted for the missing friend result.
 
-   Consequently, this dataset cannot currently answer which games the friend’s result promoted or demoted, how the correction differed from `avg_rating_current` or `bayes_rating`, or whether the correction varied by volume, year, complexity, category, or mechanic. Those comparisons require the friend's game-level output matched by `game_id`.
+   Consequently, the parquet-only dataset could not then answer which games the friend’s result promoted or demoted, how the correction differed from `avg_rating_current` or `bayes_rating`, or whether the correction varied by volume, year, complexity, category, or mechanic. Those comparisons require the friend’s game-level output matched by `game_id`.
 
 ### Do the `dump_*` fields support a temporal comparison?
 
@@ -496,7 +498,7 @@ Ran `scripts/09_friend_ranking_audit.py` against both `data/raw/bgg_games_curren
 
 ### What can be said about the friend's correction?
 
-7. **No promoted/demoted games or game-type pattern is identifiable yet [Supported Conclusion]:** because `debiased_rating` is absent, there is no observed correction to calculate as `debiased_rating - avg_rating_current` or `debiased_rating - bayes_rating`. Any list of promoted or demoted games, or any claim that the correction favors low-volume, older, complex, reimplemented, card, party, wargame, or other types, would require inventing an output or incorrectly relabeling `dump_geek_rating`.
+7. **At the time of this audit, no promoted/demoted games or game-type pattern was identifiable [Historical supported conclusion]:** because `debiased_rating` was absent from the BGG parquet data, there was no observed correction to calculate as `debiased_rating - avg_rating_current` or `debiased_rating - bayes_rating`. Any list of promoted or demoted games, or any claim that the correction favors low-volume, older, complex, reimplemented, card, party, wargame, or other types, would have required inventing an output or incorrectly relabeling `dump_geek_rating`.
 
 8. **`dump_geek_rating` cannot stand in for the friend's score [Supported Conclusion]:** it is highly correlated with current `bayes_rating` (**r=0.983**, n=16,280) and is explicitly named as a legacy Geek Rating field. That makes it useful for the snapshot audit above, but not evidence about a separate debiasing rule. The available data can describe BGG's own current-versus-legacy changes; it cannot characterize the friend's ranking behavior.
 
@@ -508,4 +510,346 @@ Ran `scripts/09_friend_ranking_audit.py` against both `data/raw/bgg_games_curren
 - To analyze the friend result later, retain a versioned table keyed by `game_id` containing `debiased_rating`, computation date, method/version metadata, universe and missing-value rules, plus the current and historical BGG fields used for comparison.
 - To evaluate the underlying method in a later richer dataset, preserve pseudonymous user-game ratings, rating timestamps, user history/participation context, and—if the hidden-gem question remains in scope—independent exposure or audience-segment information. Those data would enable a separate methodology audit; they are not available now.
 
-**Implication [Implication]:** the friend's ranking remains an unobserved baseline in this repository. The defensible result from the current data is limited to a provisional audit of the likely legacy BGG snapshot and a clear record of what is missing. Do not interpret `dump_geek_rating` as debiased, and do not use current-versus-dump differences as validation of the friend's method.
+**Implication [Historical status]:** at the time of this prior audit, the friend output was available for a separate game-level comparison but had not yet been analyzed. That audit remains limited to a provisional review of the likely legacy BGG snapshot. Do not interpret `dump_geek_rating` as debiased, and do not use current-versus-dump differences as validation of the friend's method.
+
+## 2026-08-23: Friend debiased-ratings artifact available for future analysis
+
+**[Historical observed data-status update]** The file `data/raw/complete_2025_bgg_debiased_ranks.csv` was newly present at that point. It contains **24,695 rows and 26 columns**, including unique non-null `game_id` and non-null `debiased_rating` fields. That update recorded artifact availability and schema only; the subsequent comparison is recorded below.
+
+## 2026-08-23: Game-level comparison of the friend debiased rating
+
+### Method and coverage
+
+**[Observed data / Method]** `scripts/10_friend_debiased_comparison.py` compares the supplied `debiased_rating` output with the processed research population by exact `game_id`. It reuses the existing RQ2 specifications and stable-candidate convention from scripts 05–06; it does not reconstruct or modify the friend's method and does not create a new ranking. The comparison uses the direct population overlap for coverage and correction summaries, and the RQ2 complete-case subset for residual comparisons.
+
+- The friend file has **24,695 rows and 26 columns**. The research population has **16,726 rows and 36 columns**.
+- There are **16,144 unique game IDs in common**: this covers **96.5%** of the research population and **65.4%** of the friend file. There are **582 research-population games** and **8,551 friend-file games** outside the direct overlap. This is a universe difference, not evidence that either file is wrong.
+- `debiased_rating`, `debiased_rank`, `avg_rating`, and `voters` are complete in the friend file. `geek_rating` is missing for 5 rows, `bgg_rank` for 513 rows, `weight` for 5,062 rows, and `kickstarted` for 4,783 rows. The friend file therefore has a usable score for all matched games, but not complete coverage for every characteristic comparison.
+- The residual comparison has **16,129 matched complete cases**, excluding 15 direct-overlap games because the existing RQ2 inputs are incomplete. The RQ2 residuals are therefore not being recomputed on a changed population.
+
+### Relationship to current BGG fields
+
+**[Empirical finding]** The friend score is very close to the current raw average in the matched research population: Pearson and Spearman correlations are both approximately **0.982**. Its relationship with current Bayesian rating is weaker by Pearson (**0.587**) but stronger by Spearman (**0.772**), reflecting the different scale and shrinkage behavior of `bayes_rating`. The friend score has correlations of **0.635** with the RQ2 category-adjusted residual and **0.653** with the mean residual across the existing adjusted specifications. It is not independent of the rating information already used in the simpler baselines.
+
+The direct paired source fields also indicate that the friend file is not simply a copy of the current snapshot:
+
+- Friend `avg_rating` versus current `avg_rating_current`: Pearson **0.996**, median friend-minus-current difference **+0.012**; the friend value is higher in **67.3%** of pairs.
+- Friend `geek_rating` versus current `bayes_rating`: Pearson **0.987**, median difference **+0.002**; the friend value is higher in **61.3%** of pairs.
+- Friend `voters` versus current `users_rated`: Pearson **0.995**, with a median friend-minus-current difference of **−23**; the friend count is higher in only **1.9%** of pairs.
+
+These are snapshot/field comparisons, not validation of the friend's inputs or calculation.
+
+### Size and direction of the correction
+
+Define the observed corrections as `debiased_rating - avg_rating_current` and `debiased_rating - bayes_rating`.
+
+**[Empirical finding]** Relative to the current raw average, the correction is modest on average but nontrivial for individual games: mean **+0.020**, median **+0.024**, standard deviation **0.152**, 1st–99th percentile range **−0.385 to +0.436**, with **57.9% positive** and **42.1% negative** corrections. Thus the supplied output generally moves scores upward slightly while making substantial two-sided changes for a minority of games; the data do not establish why.
+
+Relative to `bayes_rating`, the friend score is higher for **92.1%** of matched games, with mean difference **+0.861** and median **+0.841**. This is expected to be strongly affected by the Bayesian baseline's shrinkage of low-volume games toward its prior. It should not be described as evidence that the friend method is broadly more favorable or more accurate.
+
+### Dependence on rating volume and game characteristics
+
+**[Empirical finding / Descriptive only]** The raw-average correction has a modest positive monotonic association with log rating volume (Spearman **+0.158**), but it is not monotonic across the observed bands. The mean correction is **−0.004** for 100–199 ratings, rises to **+0.056 to +0.059** for 2,500–10,000 ratings, and returns to approximately zero (**+0.003**) for 25,000 or more ratings. The share of positive corrections follows a similar pattern, from **50.2%** at 100–199 ratings to **76.3%** at 5,000–10,000 and **50.9%** at 25,000+. This is consistent with a volume-dependent adjustment, but the game-level output cannot identify whether it reflects measurement-noise correction, selection correction, composition, snapshot mismatch, or some combination.
+
+The correction relative to Bayes is negatively associated with log volume (Spearman **−0.088**) and is largest in low-volume bands, which is primarily the expected consequence of comparing against a strongly shrunk baseline. Other descriptive associations for the raw correction are small: Spearman correlations are **+0.070** with complexity, **+0.008** with playtime, **+0.121** with minimum players, **+0.043** with maximum players, **+0.039** with release year, and **+0.009** with reimplementation status. These are associations in the supplied output, not evidence of causal rules or broad appeal.
+
+Raw corrections are somewhat larger for heavier games: the mean rises from **+0.015** at weight ≤1.5 to **+0.053** at weight ≥3.5. By release decade, the correction is mixed and small (mean **−0.007** in the 1980s versus **+0.036** in the 1990s and **+0.027** in the 2020s). Tag-level contrasts are more pronounced but composition-sensitive: among tags with at least 100 matched games, Trains (**+0.209**), Transportation (**+0.151**), Industry/Manufacturing (**+0.110**), and Economic (**+0.109**) have the largest mean raw corrections, while Miniatures (**−0.109**), Zombies (**−0.098**), Movies/TV/Radio (**−0.074**), and Adventure (**−0.056**) are among the most negative. These tag results should be treated as descriptive contrasts because tags overlap and correlate with age, volume, edition structure, and audience.
+
+### Largest observed movers
+
+**[Observed examples, diagnostic rather than recommendations]** The largest positive changes versus current raw average include *TseuQuesT* (**+2.143**), *Alien: USCSS Nostromo* (**+1.500**), *6: Siege – The Board Game* (**+1.189**), *Propuh* (**+1.169**), and *Cairo Corridor* (**+0.954**). The largest negative changes include *The Fantasy Trip: Legacy Edition* (**−1.524**), *AFU: Armed Forces of Ukraine* (**−1.523**), *Evil Upheaval* (**−1.215**), *The Supershow* (**−1.000**), and *Zoomaka* (**−0.991**). These extremes include low-volume games and very high or very low raw averages, so they do not by themselves reveal a general debiasing principle.
+
+The largest positive changes versus Bayes are concentrated among high-average, low-volume games—for example *On to Richmond II: The Union Strikes South* (**+3.416**), *Monikers: Monikers-er* (**+3.099**), and *Axis Empires: Ultimate Edition* (**+3.068**). The largest negative changes include *Global Survival* (**−2.931**), *Wonders of The First CCG* (**−2.903**), and *Alien: USCSS Nostromo* (**−2.491**). This again illustrates the baseline difference more directly than it validates either score.
+
+### Comparison with RQ2 residual candidates
+
+**[Empirical finding]** The friend top set overlaps most with raw-average leaders and much less with the existing RQ2 residual leaders:
+
+- In the matched **top 1%** (161 games), friend versus current-average overlap is **110/161** with Jaccard **51.9%**; versus Bayes it is **32/161** (**11.0%** Jaccard); versus the existing category-adjusted residual it is **18/161** (**5.9%** Jaccard).
+- The friend top 1% contains **13 of the 99 matched stable RQ2 top-1% candidates** (**13.1% of the stable set**; **8.1% of the friend set**).
+- In the matched **top 5%** (806 games), friend versus current-average overlap is **645/806** with Jaccard **66.7%**; versus Bayes it is **229/806** (**16.6%** Jaccard); versus the category-adjusted residual it is **222/806** (**16.0%** Jaccard).
+- The friend top 5% contains **181 of the 559 matched stable RQ2 top-5% candidates** (**32.4% of the stable set**; **22.5% of the friend set**).
+
+**[Supported conclusion]** The friend's output supplies a distinct ordering and does not reduce to the existing Bayesian rating or RQ2 residual. At the same time, its very high agreement with raw average and the absence of an independent outcome mean that this dataset cannot establish that the distinct ordering adds useful signal, corrects selection into the BGG rater population, or identifies hidden gems. The overlap results are descriptive stability/relationship evidence only, not predictive validation.
+
+### What this dataset can and cannot establish
+
+- **Can establish [supported]:** the exact overlap and schema differences; how the supplied score numerically differs from current raw and Bayesian baselines; how those differences vary descriptively with volume and recorded game characteristics; the identity of extreme movers; and how the friend's top sets overlap with existing RQ2 candidates.
+- **Cannot establish [limitation]:** whether the friend score corrects random rating noise, selection into the observed BGG rater pool, rating-scale drift, or some combination; whether its corrections improve estimates of underlying quality; whether promoted games appeal beyond their existing niche; or whether its top candidates are more likely to be hidden gems. Those questions require the underlying user-level ratings, rater and rating-time context, the friend's method/provenance, and ideally an independent outcome or exposure measure.
+- The friend file's different universe, likely snapshot mismatch, missing characteristic fields, overlapping game tags, and the existing 100-rating research floor all limit interpretation. No temporal validation or user-level methodology audit was attempted.
+
+**Implication [Next question]:** treat `debiased_rating` as an additional observed baseline/hypothesis for later comparison, not as validated debiasing. A richer dataset should first document the method and timing, then test whether its game-level corrections predict held-out or independent user-level evidence and whether they address selection rather than only measurement noise.
+
+## 2026-08-23: Provisional RQ2 candidate report generated
+
+**[Reporting decision]** Created `docs/rq2_candidate_report.md` as a candidate-screening artifact, using the unchanged RQ2 robustness convention rather than raw residual rank alone. The report reuses the seven adjusted specifications (S1, S1b, S2, S3, S4, S5, S6) on the existing **16,711-game** complete-case population. Each specification contributes its top **1% (167 games)**; “stable” remains selection in at least **5/7** specifications. The 25 reported records are the stable candidates with the largest mean residual across those seven specifications. All 25 selected records happen to be present in **7/7** top sets.
+
+The report presents the primary S3 expected rating and residual, the seven-specification mean and dispersion, rating count, Bayes rating, friend `debiased_rating` where matched, complexity, playtime, player count, and concise category/mechanic profiles. It is explicitly labeled provisional: residual stability is not independent validation, related editions/family records are not independent discoveries, and no candidate can be called a hidden gem or broad-appeal game from this dataset.
+
+## 2026-08-23: Explicit unreleased/pre-release records removed from the research population
+
+### Audit and rule
+
+**[Observed data / Population issue]** The prior cleaning pipeline treated `year` in the allowed range as sufficient publication evidence, but the BGG `families` metadata contains explicit administrative status tags that identify records still treated as upcoming or unreleased. In the old **16,726-game** processed population, there were **99 such records**: **98** with `Admin: Upcoming Releases` and **1** with `Admin: Unreleased Games`. **Legacy of Eastbrook Hills** (`game_id=422742`, year 2026, 114 ratings) is one of the upcoming records and was incorrectly eligible for the prior research population.
+
+The strongest available status evidence is an exact, case-insensitive match on these two BGG administrative family tags:
+
+- `Admin: Upcoming Releases`
+- `Admin: Unreleased Games`
+
+The cleaning rule now excludes a record when either exact tag is present, before the rating-count floor. It does not use title words, a 2025/2026 year alone, rating count, or the presence of crowdfunding/campaign metadata as release-status heuristics. The raw scrape was fetched in August 2026, but it has no field for an exact public-release date.
+
+### Crowdfunding and campaign ambiguity
+
+**[Observed fact / Limitation]** Crowdfunding history is not equivalent to current unreleased status in this dataset. After the new filter, **3,639** retained games still carry a `Crowdfunding:` family tag (including Kickstarter and Gamefound), and **254** carry the `Mechanism: Campaign Games` tag. These tags describe funding or gameplay history and are retained unless an explicit administrative unreleased tag is also present. No distinct `preorder` or `pre-order` family status field was found. This preserves released crowdfunded games while excluding records that BGG explicitly marks as upcoming/unreleased.
+
+The rule remains conservative and imperfect: an administrative tag could be stale, and the game-level dump has no independently verified retail/general-release date, campaign-completion field, or public-availability history. Some upcoming-tagged records have older nominal years or substantial ratings, which could reflect early/crowdfunding ratings or stale metadata. Those cases are documented as ambiguity rather than resolved with title heuristics.
+
+### Resulting population change
+
+**[Observed result]** Running the updated `scripts/01_clean_population.py` removes exactly **99** records from the prior population and produces **16,627 games**. The sequential waterfall changes as follows:
+
+- Publication/status step: **112,166 → 107,246** after excluding explicit unreleased statuses along with the existing year/meta filters.
+- Rating-floor step: **16,952 → 16,851**.
+- Latin-script step: **16,916 → 16,815**.
+- Final structural-filtered population: **16,726 → 16,627**.
+- The regenerated population contains **zero** records with either explicit administrative unreleased tag.
+
+No other filter, model, or RQ2 methodology was changed. The existing RQ1/RQ2/friend analyses and reports that quote the former 16,726-game population are historical outputs from the pre-status-cleaning population and should be rerun before being treated as current results. The provisional RQ2 candidate report was regenerated with the unchanged selection rule so that explicitly unreleased records are not presented as current candidates.
+
+**[Observed downstream update]** After regeneration, `docs/rq2_candidate_report.md` uses **16,612** complete cases and a top-1% threshold of **166 games**. Legacy of Eastbrook Hills is absent. The report's selection rule and interpretation remain unchanged; the numerical candidate list is now aligned with the cleaned population.
+
+## 2026-08-23: Population-correction refresh of downstream analyses
+
+### Scope
+
+**[Refresh decision]** Reran the existing `scripts/03_rating_volume_behavior.py`, `04_rating_volume_composition.py`, `05_rq2_expected_rating_baseline.py`, `06_rq2_residual_robustness.py`, `07_rq2_stable_audience_proxies.py`, `08_rq3_identifiability_audit.py`, `09_friend_ranking_audit.py`, `10_friend_debiased_comparison.py`, and `11_rq2_candidate_report.py` against the corrected processed population. No predictors, model specifications, stability thresholds, audience proxies, or comparison definitions were changed. This entry supersedes the pre-correction numerical results above for current use.
+
+### Current population and RQ1 rating-volume results
+
+**[Observed fact]** The processed population has **16,627 games** and the RQ2 complete-case population has **16,612 games** (15 missing weight values). The current population's median rating count is **357** and mean is **1,714.5**. The top 1% of games by rating volume accounts for **27.1%** of all ratings; the bottom half accounts for **5.6%**.
+
+**[Refreshed empirical findings]** Mean raw rating still rises from **6.424** in the 100–199 band to **7.531** in the 25k+ band, a **+1.107-point** shift. Cross-game rating SD falls from **0.878** to **0.550**, while the lower tail moves much more than the upper tail: the 25k+ versus 100–199 P10 shift is **+1.60**, compared with **+0.61** at P90. The share below 6.0 falls from **30.9%** to **2.4%**, while the share at least 8.0 rises from **4.1%** to **18.9%**. These figures continue to support the existing conclusion that sampling noise alone does not explain the volume pattern.
+
+- Pearson/Spearman association of raw average with log rating volume is **+0.316/+0.308**; the corresponding Bayes-volume associations are **+0.857/+0.805**.
+- The descriptive raw-average volume coefficient is **+0.453** rating points per tenfold increase in ratings; after weight and year adjustment it is **+0.311**, with partial correlation **+0.288** and R² **0.492**.
+- The fitted BGG Bayes relationship remains approximately a **5.49 prior mean with 2,500 pseudo-votes** (fit RMSE **0.0248**). This remains a volume-weighted baseline, not a user-population quality estimate.
+- The composition refresh preserves the within-group volume pattern. For low volume (100–499) versus high volume (≥2,500), the raw-rating contrast is **+0.382** for light games, **+0.355** for medium games, and **+0.256** for heavy games; it is also positive in most release-decade, playtime, player-count, category, and mechanic strata.
+
+**[Current supported conclusion]** The release-status correction removes pre-release records but does not change the RQ1 interpretation: rating volume remains entangled with popularity, composition, and selection, not just averaging noise.
+
+### Current RQ2 expected-rating and residual robustness results
+
+**[Refreshed model output]** The unchanged nine specifications now fit 16,612 games. The primary S3 category baseline has **R²=0.5402**, RMSE **0.5505**, and cross-validated RMSE **0.5517**. The existing sensitivity variants give S4 **R²=0.5599**, S5 **R²=0.5610**, and S6 **R²=0.5746**. S3 residual correlation with raw average is **0.678**, with Bayes **0.194**, and with log volume approximately **0.000**; its P95/P99 are **+0.872/+1.318**.
+
+The adjusted-family robustness results are:
+
+- **Top 1%:** 166 games per specification; mean pairwise Jaccard **53.8%**; union **322**; stable (≥5/7) **117**; sensitive (≤1/7) **97**; all-seven intersection **79**.
+- **Top 5%:** 830 games per specification; mean pairwise Jaccard **56.8%**; union **1,448**; stable **621**; sensitive **291**; all-seven intersection **380**.
+
+Stable top-1% candidates have mean raw rating **8.003**, mean Bayes **5.745**, median volume **179**, median weight **1.963**, and median playtime **45 minutes**. Stable top-5% candidates have mean raw rating **7.767**, mean Bayes **5.794**, median volume **216**, median weight **2.044**, and median playtime **50 minutes**. These remain descriptive characteristics of robust conditional anomalies, not evidence of broad appeal.
+
+**[Current supported conclusion]** The population correction changes counts and fitted coefficients slightly but leaves the RQ2 interpretation unchanged: stability across related specifications makes a positive residual more reproducible, not independently validated or equivalent to a hidden gem.
+
+### Current audience-proxy and RQ3 refresh
+
+**[Refreshed descriptive finding]** The stable sets remain heterogeneous and the same audience-proxy interpretation applies. Stable top-1% contains **117** games and stable top-5% **621**. Top-1% stable games have mean category-tag count **2.675** and mechanic-tag count **3.496**; top-5% stable games have means **2.936** and **3.968**. Medians remain 3 category tags and 3 mechanic tags in both sets.
+
+The strongest refreshed descriptive contrasts are consistent with the prior patterns: stable top-1% is enriched for Sports (**20.5%**), Party Game (**23.9%**), and Humor (**17.1%**) relative to the rest; stable top-5% is enriched for Sports (**9.0%**), Party Game (**14.5%**), Fantasy (**20.3%**), Miniatures (**10.1%**), and Fighting (**13.2%**). Party Game + Humor occurs in **14.5%** of stable top-1% and **6.9%** of stable top-5%, versus **2.1%** and **2.0%** of their respective complements. Wargame + Miniatures occurs in **5.1%** of stable top-1% and **5.2%** of stable top-5%, versus **1.9%** and **1.8%** of the complements. These are metadata profiles, not independent reach measures.
+
+The refreshed RQ3 audit uses 16,612 common games, with stable top-1% **n=117** and top-5% **n=621**. Coverage and field roles are unchanged: no field directly measures rater segments, exposure, non-raters, plays, ownership, sales, external traffic, or independent audience response. RQ3 therefore remains unidentified.
+
+### Current friend-output comparison
+
+**[Refreshed descriptive finding]** Against the corrected population, the friend file overlaps **16,139** games: **97.1%** of the research population and **65.4%** of the friend file. There are **8,556 friend-only** and **488 research-only** records; the RQ2 complete-case overlap is **16,124**.
+
+The score relationships and correction sizes are effectively unchanged: Pearson/Spearman correlation with current raw average is **0.982/0.982**; the raw correction mean/median is **+0.020/+0.024**, with **57.9%** positive; the Bayes correction mean/median is **+0.861/+0.841**, with **92.1%** positive. The corrected-population top-1% friend set contains **14 of 103** matched stable RQ2 candidates; the top-5% contains **181 of 567**. This remains an output comparison, not validation of the friend's user-level method.
+
+### Current candidate report and handoff
+
+**[Refreshed artifact]** `docs/rq2_candidate_report.md` now uses the corrected **16,612-game** complete-case population and **166-game** top-1% threshold. Its unchanged stable-candidate rule yields a current 25-record screening report; explicitly unreleased records, including Legacy of Eastbrook Hills, are absent.
+
+**[Limitation / next step]** The refreshed figures are still based on the same selected game-level BGG population and the same descriptive models. The release-status correction addresses a concrete population-definition error; it does not address rater self-selection, broad appeal, or the validity of any debiasing method. The richer user-level dataset remains necessary for those questions.
+
+## 2026-08-23: Provisional modern Eurogame-style shortlist
+
+### Method and screening decision
+
+**[Reporting decision]** Created `scripts/12_modern_euro_shortlist.py` and `docs/modern_euro_shortlist.md` as a qualitative screening report over the corrected RQ2 candidate pool. The script reuses the unchanged seven adjusted specifications (S1, S1b, S2, S3, S4, S5, S6), the existing top-1% threshold of **166 games per specification**, and the existing stable threshold of **at least 5/7 selections**. It does not fit a new model, alter residuals, or create a new score.
+
+The screen required year ≥2000 and at least one available BGG category/mechanic associated with strategic/resource-management, economic, engine-building, worker-placement, tile/territory, auction, hand-management, optimization, variable-power, or related designs. It removed records with explicit sports, party, dexterity, wargame, simulation, storytelling/narrative, role-playing, fighting, or dice-oriented profiles; explicit reimplementations; family/edition records identified through BGG family metadata or edition markers; and two remaining campaign/dungeon-crawler or narrative-oriented profiles after metadata review. The release-status exclusion was inherited from the corrected population, not redefined here.
+
+### Result
+
+**[Observed screening result]** Among the **16,612-game** RQ2 complete-case population, the initial modern Euro-associated screen found **21** stable top-1% candidates. Family/edition/reimplementation and clear non-Euro metadata exclusions left **6** records for profile review; one additional campaign/dungeon-crawler record was removed. The resulting provisional shortlist has five games:
+
+- **Brightcast** — 8.10 raw rating, 141 ratings, S3 residual **+1.70**, mean seven-specification residual **+1.67**, stable **7/7**.
+- **Evil Upheaval** — 8.51 raw rating, 141 ratings, S3 residual **+1.83**, mean residual **+1.58**, stable **6/7**.
+- **Goblin Grapple** — 8.00 raw rating, 213 ratings, S3 residual **+1.66**, mean residual **+1.54**, stable **7/7**.
+- **Grasse: Mestres Perfumistas** — 8.05 raw rating, 116 ratings, S3 residual **+1.44**, mean residual **+1.42**, stable **5/7**; this is the clearest conventional economic/worker-placement Euro profile.
+- **Abuela Co.** — 8.21 raw rating, 114 ratings, S3 residual **+1.44**, mean residual **+1.33**, stable **5/7**; this is a lighter hand-management/set-collection card-game edge case.
+
+**[Supported interpretation]** These are candidates for being higher-rated than expected under the existing RQ2 baseline, with robustness across related specifications. The screen does not establish that they are genuinely underrated in the population-wide sense, that their ratings are free of selection effects, or that they are hidden gems with broad appeal. The retained set is heterogeneous: Grasse is a conventional Euro-style fit, while the other four are lighter, thematic, two-player, or confrontational card designs retained under the requested mechanism-based definition.
+
+### Limitations and implication
+
+**[Limitation]** BGG categories and mechanics are incomplete, overlapping, and partly subjective. Metadata can remove obvious sports/party/wargame/narrative records and obvious editions, but it cannot reliably identify genre boundaries, audience breadth, or appeal beyond the current rater niche. Family metadata and edition markers can also miss obscure relationships or exclude a legitimate standalone design.
+
+**[Implication / next question]** The shortlist is suitable for manual candidate screening and later comparison with richer audience evidence, but not for declaring hidden gems or for defining an RQ3 ranking. Any next-stage evaluation should test whether these RQ2 candidates show independent cross-audience reach; the current game-level dataset cannot answer that.
+
+## 2026-08-23: Final metadata screening of the modern Euro shortlist
+
+### Audit scope
+
+**[Screening method]** Reviewed the five current shortlist records against the available processed BGG fields and the raw-derived population rule. The audit checked year, `/boardgame/` versus expansion link, `is_expansion`, `expands_name`, `is_reimplementation`, `reimplements_name`, family tags, explicit administrative unreleased tags, BGG rank, rating count, and description/designer completeness. No RQ2 residual, predictor, threshold, or stability definition was changed, and no new score was created.
+
+**[Observed metadata]** All five records have a valid 2018–2025 year, a `/boardgame/` link, `is_expansion=False`, null `expands_name`, `is_reimplementation=False`, null `reimplements_name`, and neither `Admin: Upcoming Releases` nor `Admin: Unreleased Games`. None carries a `Game:` family or explicit edition marker. Crowdfunding tags on Evil Upheaval and Grasse indicate Kickstarter/Catarse history only; they are not evidence that the records are currently unreleased.
+
+### Classifications
+
+**[Screening result]** The classifications below mean `KEEP` = no concrete exclusion is visible and the record remains suitable for provisional follow-up; `UNCERTAIN` = no exclusion is proven, but release visibility, metadata completeness, genre fit, or sample size is too weak for a clean keep decision. No candidate received a metadata-grounded `REMOVE` classification.
+
+- **Brightcast — UNCERTAIN.** It has no expansion, reimplementation, edition, or explicit unreleased marker, but it is a 2025 record with only 141 ratings, no listed designer, and only 5 voters in the older dump snapshot. The available fields cannot establish general/public release visibility or reduce the risk that the +1.70 S3 residual reflects a very small, self-selected audience.
+- **Evil Upheaval — UNCERTAIN.** It passes the standalone/reimplementation/edition/status checks and dates to 2021, but has only 141 ratings, no listed designer, and an IP/theme-led profile. Its +1.83 S3 residual may be particularly sensitive to niche selection; the Kickstarter tag does not resolve release timing.
+- **Goblin Grapple — KEEP.** It passes the standalone, edition, reimplementation, and status checks and has 213 ratings. Its BGG rank is 21,463, so there is no metadata indication that it is an established high-reach title. Missing designer metadata and a malformed short description reduce confidence, while the high residual remains vulnerable to a small, self-selected card-game audience.
+- **Grasse: Mestres Perfumistas — KEEP.** It is the strongest metadata-supported conventional Euro fit: a 2018 standalone record with economic/industry, rondel, trading, and worker-placement metadata, no family/reimplementation/edition/status issue, and BGG rank 9,653. Its 116 ratings, raw 8.05 versus Bayes 5.60, and +1.44 S3 residual still make it a thin-sample RQ2 candidate rather than evidence of broad appeal.
+- **Abuela Co. — UNCERTAIN.** It passes the standalone, edition, reimplementation, and status checks, but has only 114 ratings, rank 10,535, and sparse genre metadata (only `Card Game`, with hand management and set collection). Its release visibility and fit as a modern Euro are less strongly evidenced than Grasse's, and the +1.44 residual may reflect a narrow rater pool.
+
+**[Supported conclusion]** Available metadata supports treating Goblin Grapple and Grasse as provisional follow-up candidates, while Brightcast, Evil Upheaval, and Abuela Co. remain screening-uncertain. It does not prove that any record had reached broad/public release at the snapshot date, that any is independent of an unrecorded related design, or that any is broadly appealing. BGG rank is included only as context for apparent established popularity and was not used as an RQ2 predictor or broad-appeal proxy.
+
+**[Implication]** The shortlist should be carried forward as a provisional research list with the three uncertain records flagged, not converted into a final hidden-gem ranking. Resolving release provenance, edition relationships, and audience breadth requires stronger BGG product-history metadata and/or the richer user-level/exposure data; the current game-level dataset cannot resolve those questions.
+
+## 2026-08-23: Phase 2 SQLite database discovery inventory
+
+### Discovery scope
+
+**[Method]** Inspected `data/raw/bgg.sqlite` read-only using SQLite schema queries, `PRAGMA table_info`, `PRAGMA index_list`/`index_info`, `PRAGMA foreign_key_list`, and row/coverage counts. No database table or record was modified, and no substantive rating, user, or audience analysis was performed. The detailed inventory is in `docs/phase2_database_inventory.md`.
+
+### Database structure
+
+**[Observed schema]** The database is approximately **9.0 GB** and contains 11 application tables. The most important tables are:
+
+- `user_ratings`: **18,942,215** compact individual ratings across **21,925 games** and **411,375 usernames**, with no timestamp or user-profile fields.
+- `reviews`: **29,618,326** review/rating records across **103,084 games** and **606,497 pseudonymous users**; fields include `rating`, `rating_tstamp`, `comment_tstamp`, `postdate`, and `reviewid`.
+- `collections`: **29,618,326** user-game status records with ownership, want-to-play, preorder, previously-owned, wishlist, want, want-to-buy, for-trade, and `status_tstamp` fields.
+- `users`: **606,497** pseudonymous user records with state/country and up to five message-board name/description/timestamp fields.
+- Game metadata is split across `games` (**161,404** rows), `game_attrs` (**21,925**), `game_links` (**43,196**), `game_ranks` (**34,513**), `game_tags` (**276,045**), `rating_dist` (**485,707**), and `weights` (**22,329**).
+
+No application table declares foreign keys. Primary keys exist for `game_attrs` and `weights` (`game_id`) and composite keys exist for links, ranks, tags, and rating distributions. `games` has a unique non-null `game_id` index but **35,138 null-ID rows**; `reviews`, `collections`, and `user_ratings` have no declared primary key or uniqueness constraint. Relevant game/user indexes exist, but relationships are not database-enforced.
+
+### Key Phase 2 discoveries
+
+**[Observed data]** The database contains the individual-level evidence the game-level phase lacked:
+
+- `reviews` contains **26,924,709 non-null ratings**; `rating_tstamp` is present for **26,924,708** of them and spans **2001-05-29 to 2025-02-10**. `comment_tstamp` is present for **6,264,799** rows, and `postdate` for **29,602,822** rows.
+- `collections` has the same row count and the same distinct game/user/review-ID counts as `reviews` (**103,084 games**, **606,497 users**, **29,617,496 review IDs**), suggesting a paired extraction. This is not a proven one-to-one relationship because no foreign key or uniqueness constraint is declared.
+- All `reviews.user_pseudouserid` and collection user IDs match the unique `users.user_pseudouserid` table. In contrast, `user_ratings.username` has **zero** matches to those pseudonymous IDs, so the compact rating table is not currently joinable to the user/profile/collection path.
+- `users` has **195,460 null country values** and 242 distinct country values. It contains no explicit demographics, play counts, exposure, purchase history, or rater-credibility variable.
+- `collections.status_tstamp` is present for **21,061,870** rows and spans **2010-10-26 to 2025-02-10**. The flags are status fields, not a documented history of ownership or play events.
+
+**[Supported implication]** The `reviews`–`users`–`collections` path appears capable of supporting later audits of rating timing, user-level rating behavior, collection/status overlap, and cross-game participation. This makes audience-selection investigation newly possible in principle, subject to key and timestamp validation.
+
+### Important unknowns
+
+**[Limitation]** Discovery did not establish whether `reviews` contains repeated user-game ratings, whether `reviewid` represents a stable review/rating event, or whether the timestamps represent event creation versus scrape/application time. It also did not establish whether `collections` is a current snapshot or longitudinal status history, whether `user_ratings` is a separate snapshot/transformation, or whether all tables share one coherent extraction date. The database still lacks a denominator for people exposed to a game who did not rate it, plus sales, plays, impressions, and direct audience-segment labels.
+
+**[Next step]** Phase 2 should begin with duplicate/cardinality checks, validation of the `reviews`–`collections` join, timestamp semantics and snapshot consistency, and assessment of whether pseudonymous users can be safely used to study rater composition. No substantive audience or debiasing conclusions should be drawn from the new database until those audits are complete.
+
+## 2026-08-23: Phase 2 analytical access layer and Parquet extracts
+
+### Architecture and extraction decision
+
+**[Implementation]** Created `scripts/13_build_phase2_extracts.py` and the read-only analytical layer under `data/processed/phase2/`. DuckDB's SQLite scanner extension was unavailable in the offline environment, so the script uses Python's SQLite driver in `mode=ro` with PyArrow streaming writes. The resulting Zstandard-compressed Parquet files are directly queryable with DuckDB; the raw 9 GB SQLite database was not modified.
+
+The canonical architecture is:
+
+```text
+games/game_attrs/weights ── game_id ── ratings/reviews ── user_pseudouserid ── users
+                                      │
+                                      └── game_id + reviewid + user_pseudouserid ── collections
+game_tags/game_links ──────────────── game_id ── games
+```
+
+The reusable extracts are:
+
+- `data/processed/phase2/games.parquet` — **21,925** detailed game rows, joining `game_attrs` to browse fields and weights.
+- `data/processed/phase2/users.parquet` — **606,497** pseudonymous users with state/country and message-board timestamps; message text is intentionally omitted.
+- `data/processed/phase2/user_ratings.parquet` — **18,942,215** compact ratings with source row ID, game ID, rating, and username; it has no timestamps and its username namespace is not joinable to `users`.
+- `data/processed/phase2/ratings.parquet` — **29,618,326** review/rating rows with `source_rowid`, game/review/user keys, rating, and timestamps. It preserves rows with null ratings; use `WHERE rating IS NOT NULL` for rating-bearing rows.
+- `data/processed/phase2/collections.parquet` — **29,618,326** collection/status rows with `source_rowid`, game/review/user keys, status timestamp, and ownership/wishlist/preorder-related flags.
+- `data/processed/phase2/game_tags.parquet` — **276,045** normalized game tags.
+- `data/processed/phase2/game_links.parquet` — **43,196** game relationship rows.
+- `data/processed/phase2/validation.json` and `extract_counts.json` — extraction checks and row counts. `data/processed/phase2/README.md` documents the layer.
+
+### Validated joins and source semantics
+
+**[Observed validation]** Deterministic representative checks found:
+
+- The five current Euro shortlist IDs yielded **556** review rows; all **556/556** matched a `users` row and all **556/556** matched `collections` on `(game_id, reviewid, user_pseudouserid)`.
+- A deterministic cross-table sample of **890** review rows matched both `users` and `collections` on the same keys.
+- The sampled game metadata join succeeded for the **2** shortlisted IDs present in `game_attrs` and `games`.
+- The exported Parquet row counts match the source counts, and the five shortlisted IDs are present in the ratings extract. Their database snapshot rating-bearing row counts are **5 Brightcast, 140 Evil Upheaval, 209 Goblin Grapple, 111 Grasse, and 66 Abuela Co.** These differ from the later game-level snapshot counts and confirm that the SQLite database is not the same snapshot as the current game-level population.
+
+**[Observed duplicate semantics]** `reviews` and `collections` have no declared primary key. Globally, `reviews` has **29,618,326 rows** but **29,617,496 distinct review IDs**, so `reviewid` is not globally unique. Repeated user-game rows also occur: for Carcassonne (`game_id=822`) there are **137,437 rows**, **137,437 distinct review IDs**, and **136,937 distinct users**. Example repeated user-game records have different review IDs and rating timestamps, sometimes with the same rating, so they must be treated as possible review/rating events or updates—not silently collapsed to one observation. The extracts preserve all source rows and add SQLite `source_rowid` as a snapshot-local unique row key.
+
+**[Observed timestamp semantics]** The timestamp fields are not interchangeable. In sampled rows, `rating_tstamp` can be seconds after `postdate` or several years later; therefore it cannot yet be assumed to be the first rating date or original review date. `comment_tstamp` is sparse and sometimes absent. The access layer stores the original timestamp strings without parsing or imposing an event policy.
+
+### Unresolved ambiguities carried forward
+
+**[Limitation]** The access layer deliberately does not deduplicate review rows, select a latest rating, infer rating-change events, or claim that collection flags are longitudinal exposure/ownership histories. The exact meaning of `reviewid`, the semantics/provenance of each timestamp, snapshot timing across tables, and the relation between `user_ratings.username` and the pseudonymous review users remain unresolved. The next Phase 2 step is a focused cardinality, timestamp, and snapshot audit before any rater-behavior or cross-audience analysis.
+
+## 2026-08-23: Canonical rating observations and descriptive rater behavior
+
+### Canonical source and observation definition
+
+**[Method decision]** Created `scripts/14_phase2_rating_semantics_and_rater_behavior.py` and defined `data/processed/phase2/rating_observations.parquet` as the canonical individual-rating dataset. It contains every row from the review-based `ratings.parquet` extract with a non-null `rating`: **26,924,709 observations**. The retained fields are `rating_observation_id` (the source SQLite row ID), `game_id`, `reviewid`, `user_pseudouserid`, `rating`, `rating_tstamp`, `comment_tstamp`, and `postdate`.
+
+No user-game, review-ID, timestamp, or rating-value deduplication was applied. This preserves potentially meaningful review/rating history while making the source row explicitly addressable. `user_ratings.parquet` is retained as an auxiliary alternate source: it has no timestamp and its `username` identifiers do not join to the pseudonymous `users` table, so it is not the canonical source for user-level behavior.
+
+### Duplicate-record semantics
+
+**[Observed data]** In the canonical non-null-rating data there are **26,922,724 distinct user-game pairs**. **1,795 pairs** repeat, accounting for **1,985 repeated observations** and a maximum of **11 observations** for one pair. Every repeated pair has multiple review IDs; **764 repeated pairs** have more than one distinct rating value. Repeated user-game records are therefore rare (about **0.007%** of observations) but not safely removable: they can represent separate review/rating events or updates, and some contain different rating timestamps even when the rating value is unchanged.
+
+**[Supported decision]** User-level counts are reported in two forms: `rating_observations` counts all retained source observations, while `distinct_games` counts unique games per user. They are nearly identical in aggregate because repeats are rare, but the distinction is preserved for later sensitivity checks. No “latest rating” rule is adopted yet.
+
+### Timestamp semantics
+
+**[Observed data]** `rating_tstamp` parses for **26,924,708 of 26,924,709** canonical ratings. `postdate` parses for **26,910,193**, leaving **26,910,193 rows** with both fields. Among those paired timestamps:
+
+- `rating_tstamp` is later than `postdate` for **18,236,438** rows (**67.8%**);
+- the two timestamps are exactly equal for **8,673,740** rows (**32.2%**);
+- `rating_tstamp` is earlier for only **15** rows;
+- the median `rating_tstamp - postdate` is **1.92 days**, the 90th percentile is **1,081.88 days**, and the maximum is **8,588.63 days**.
+
+**[Supported conclusion]** `rating_tstamp` cannot safely be treated as the original rating/publication timestamp. It is a rating-related timestamp whose provenance is unresolved; the long positive offsets are consistent with later rating updates, review/rating record changes, or extraction semantics. The canonical extract preserves it as a raw field, and the stability check below does not order observations by it.
+
+### Rater-level descriptive results
+
+**[Method]** Computed per-user rating count, distinct-game count, mean, within-user standard deviation, rating quantiles/range, and repeated-observation count in `rater_stats.parquet`. Users were grouped by lifetime canonical rating-observation count. For users with at least 20 observations, a deterministic even/odd `rating_observation_id` split provides an internal partition-consistency measure. This is not temporal stability because the timestamp semantics are unresolved.
+
+The canonical source contains **571,248 users with at least one rating**, with a mean of **47.13** observations per user and median **11**. The mean of user means is **7.981**, the between-user SD of those means is **1.286**, the mean within-user rating SD is **1.248**, and its median is **1.207**.
+
+| Lifetime observations | Users | Mean user rating | Between-user SD | Mean within-user SD | Median split absolute difference | Split users |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 124,374 | 8.854 | 1.737 | — | — | 0 |
+| 2–4 | 86,646 | 8.484 | 1.241 | 0.956 | — | 0 |
+| 5–9 | 64,786 | 8.062 | 0.965 | 1.224 | — | 0 |
+| 10–24 | 96,230 | 7.737 | 0.804 | 1.315 | 0.374 | 23,857 |
+| 25–49 | 72,632 | 7.498 | 0.714 | 1.349 | 0.298 | 72,632 |
+| 50–99 | 58,743 | 7.347 | 0.673 | 1.350 | 0.210 | 58,743 |
+| 100–249 | 45,884 | 7.174 | 0.653 | 1.344 | 0.142 | 45,884 |
+| 250–499 | 15,245 | 6.943 | 0.641 | 1.354 | 0.094 | 15,245 |
+| 500–999 | 5,364 | 6.731 | 0.642 | 1.355 | 0.067 | 5,364 |
+| 1,000+ | 1,344 | 6.435 | 0.708 | 1.372 | 0.043 | 1,344 |
+
+**[Empirical finding]** Rating distributions vary strongly with lifetime rating count. Mean user rating falls from **8.854** among one-rating users to **6.435** among users with 1,000+ observations, a **2.42-point** difference. Between-user variation is much larger among one- and low-count users and settles near **0.64–0.71** at high counts. Within-user spread rises from the small multi-rating bands to approximately **1.35–1.37** among high-volume users, consistent with high-volume users rating a broader or less selectively positive set of games, though this cannot distinguish behavior from composition.
+
+The even/odd partition difference declines with count, from a median **0.374** at 10–24 observations to **0.043** at 1,000+, as expected when averaging more observations. This shows greater numerical consistency of high-count user means, but it is not evidence that high-count users are more accurate, less biased, or more representative.
+
+### Interpretation, limitations, and next implication
+
+**[Supported conclusion]** The data support the premise that users differ systematically in rating level and dispersion, and that lifetime rating count is strongly associated with those differences. However, rating count is not established as a rater-credibility measure. It is simultaneously an activity/exposure measure, is affected by which games users choose to rate, and is entangled with time, game mix, and selection into BGG. Singleton means are especially unstable, while high-count users are more internally precise but may be systematically harsher or more broadly sampled.
+
+**[Limitation]** This is descriptive only. There is no external quality target, repeated independent rating task, user exposure denominator, or non-rater population with which to validate accuracy or separate rater severity from game-selection composition. The split measure is deliberately non-temporal, and duplicate/revision semantics remain unresolved.
+
+**[Implication / next question]** Do not use rating count alone as a credibility weight or rater debiasing rule. The next analysis should examine user-game selection and cross-game participation—especially whether high- and low-volume users rate systematically different game types and whether user-level severity persists after conditioning on overlapping games—before any debiasing model is considered.

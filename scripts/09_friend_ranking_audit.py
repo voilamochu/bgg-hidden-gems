@@ -2,15 +2,14 @@
 Script 09: Audit of the friend-provided debiased ranking
 ----------------------------------------------------------
 This audit is deliberately limited to what the current game-level files can
-support. It checks whether a debiased-rating field or separate ranking file is
-present, then examines whether current and dump_* fields are consistent with
-an earlier BGG snapshot.
+support. It reports whether the friend-provided CSV is present and records its
+schema, then examines whether current and dump_* fields are consistent with an
+earlier BGG snapshot.
 
-It does not validate the friend's user-level method, reconstruct a ranking,
-or treat dump_geek_rating as the friend's debiased result. If the actual
-debiased field is supplied later, it should be analyzed as an observed output
-against raw and Bayesian ratings, with all such comparisons clearly separated
-from validation of the underlying method.
+It does not validate the friend's user-level method, reconstruct a ranking, or
+treat dump_geek_rating as the friend's debiased result. This script inspects
+the friend file for availability/schema only; game-level comparison is
+implemented separately in 10_friend_debiased_comparison.py.
 """
 
 from pathlib import Path
@@ -21,6 +20,7 @@ import pandas as pd
 REPO_DIR = Path(__file__).resolve().parent.parent
 RAW_PATH = REPO_DIR / "data" / "raw" / "bgg_games_current.parquet"
 PROCESSED_PATH = REPO_DIR / "data" / "processed" / "bgg_research_population.parquet"
+FRIEND_PATH = REPO_DIR / "data" / "raw" / "complete_2025_bgg_debiased_ranks.csv"
 
 
 def pair_summary(df, left, right):
@@ -92,10 +92,19 @@ def main():
 
     print(f"Raw rows: {len(raw):,}; processed research rows: {len(research):,}")
     print(f"Possible friend/debiased fields: {possible_friend_fields or 'NONE'}")
-    print(
-        "No debiased_rating field or separate friend-ranking file is present in the current repo. "
-        "dump_geek_rating is retained as a legacy BGG field and is not substituted for it."
-    )
+    if FRIEND_PATH.exists():
+        friend = pd.read_csv(FRIEND_PATH)
+        print(
+            f"Friend dataset is available at {FRIEND_PATH}: {len(friend):,} rows, "
+            f"{len(friend.columns)} columns; game_id unique={friend['game_id'].is_unique}, "
+            f"debiased_rating non-null={friend['debiased_rating'].notna().sum():,}."
+        )
+        print("Availability/schema only: the friend result is not analyzed by this audit.")
+    else:
+        print(
+            "No debiased_rating field or separate friend-ranking file is present in the current repo. "
+            "dump_geek_rating is retained as a legacy BGG field and is not substituted for it."
+        )
 
     timestamps = pd.to_datetime(raw["attrs_fetched_at"], unit="s", utc=True).dropna()
     print(
@@ -114,11 +123,17 @@ def main():
         "dump_* being an earlier/legacy BGG snapshot, but it does not prove the snapshot date. "
         "The same-platform fields are not an independent audience or user-level validation sample."
     )
-    print(
-        "\nFriend-result comparison status: unavailable. Promoted/demoted games and variation of the "
-        "friend's correction by volume, year, complexity, or game type cannot be characterized "
-        "until the actual debiased output is supplied."
-    )
+    if FRIEND_PATH.exists():
+        print(
+            "\nFriend-result comparison status: available. This audit records availability/schema only; "
+            "see 10_friend_debiased_comparison.py for the separate game-level comparison."
+        )
+    else:
+        print(
+            "\nFriend-result comparison status: unavailable. Promoted/demoted games and variation of the "
+            "friend's correction by volume, year, complexity, or game type cannot be characterized "
+            "until the actual debiased output is supplied."
+        )
 
 
 if __name__ == "__main__":

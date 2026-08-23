@@ -1,10 +1,10 @@
 # Research Handoff
 
-Source of truth: `findings.md`, through 2026-08-23. This is a handoff of established results, not a new analysis or ranking.
+Source of truth: [findings.md](../findings.md), through 2026-08-23. This is a handoff of established results, not a new analysis or ranking.
 
 ## Dataset status
 
-The research population contains **16,726 games** from a game-level BGG snapshot, after excluding expansions, unpublished/pre-1950/future records, games below 100 ratings, non-Latin-script titles, and structurally non-commercial PnP/self-published records. The RQ2 model comparisons use **16,711 complete cases**.
+The current research population contains **16,627 games** from a game-level BGG snapshot, after also excluding exact BGG `Admin: Upcoming Releases` and `Admin: Unreleased Games` statuses. The RQ2 candidate report uses **16,612 complete cases**. Earlier findings summarized below used the pre-correction 16,726-game population and should be rerun before being treated as current numerical estimates.
 
 The central limitation is unchanged throughout: the data contain game-level aggregates, not individual ratings, rater identities, exposure/non-rater information, or rating histories. Rating counts therefore describe participation in a selected BGG population, not audience breadth.
 
@@ -56,7 +56,7 @@ The central limitation is unchanged throughout: the data contain game-level aggr
 
 ### Friend-provided ranking status
 
-- **[Observed fact / blocker]** The repository contains no `debiased_rating` field or separate friend-ranking file. The `dump_*` fields are not a substitute; `dump_geek_rating` is a legacy BGG-style field.
+- **[Observed fact / status]** The friend-provided file is available at `data/raw/complete_2025_bgg_debiased_ranks.csv` and contains `game_id` and `debiased_rating` fields. Its game-level comparison with current baselines is now recorded in the later findings entry; the underlying user-level method remains unevaluated. The `dump_*` fields remain legacy/current BGG fields and are not a substitute for the friend output.
 - **[Empirical finding / qualified interpretation]** `dump_voters` is consistent with an earlier BGG snapshot: current counts exceed dump counts for 96.3% of paired research-population games, with median difference +24. However, no dump timestamp or provenance date exists.
 - **[Limitation]** Current-versus-dump differences are descriptive same-platform changes, not leakage-safe temporal validation, independent audience evidence, or validation of the friend’s user-level method.
 
@@ -65,7 +65,7 @@ The central limitation is unchanged throughout: the data contain game-level aggr
 1. The underlying quality of individual games after separating measurement noise from selected-rater composition.
 2. Whether any low-volume positive residual reflects broad latent appeal or a well-matched niche audience.
 3. Whether robust residual candidates would perform similarly among people who did not select them on BGG.
-4. Whether the friend’s debiased output promotes or demotes particular games or game types; its actual output is not present.
+4. Whether the observed game-level corrections from the friend output reflect useful correction of measurement noise, selection, or both; the current data do not validate the underlying method.
 5. Whether any proposed correction addresses measurement noise, selection into the rated population, or both.
 
 These are unresolved questions, not conclusions that the current results failed to find an effect.
@@ -76,7 +76,7 @@ These are unresolved questions, not conclusions that the current results failed 
 - **Selection versus noise:** Are high or low game-level averages driven by the composition of raters who chose each game, and how does that composition change with rating volume?
 - **RQ2 validation:** Do residuals remain predictive or stable out of time and across user/game populations that are not the same retained BGG snapshot?
 - **RQ3 measurement:** What exposure denominator and audience-stratified outcome can distinguish “many people encountered and liked the game” from “a narrow group rated it highly”?
-- **Friend-method audit:** With the versioned friend output, user-game ratings, timestamps, and method metadata, what does the correction actually target? That would be a separate methodology audit; it cannot be performed from the current aggregates.
+- **Friend-method audit:** With the available friend output, user-game ratings, timestamps, and method metadata, what does the correction actually target? That would be a separate methodology audit; it cannot be performed from the current aggregates alone.
 
 ## Handoff recommendation
 

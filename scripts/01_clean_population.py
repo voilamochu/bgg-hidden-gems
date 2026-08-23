@@ -8,7 +8,7 @@ Population criteria:
 1. Valid Unique game_id (deduplication / drop missing IDs)
 2. Non-expansions (filtering boardgame expansions by link, category, expands_name, and flag)
    - Standalone reimplementations are explicitly retained.
-3. Published games from 1950 onwards (excluding unreleased prototypes, meta-entries, year=0/null, and pre-1950 releases)
+3. Published games from 1950 onwards (excluding explicit BGG upcoming/unreleased statuses, meta-entries, year=0/null, and pre-1950 releases)
 4. Non-future games (published <= 2026)
 5. Minimum rating count threshold (users_rated >= 100)
 6. Latin-script titles only (excluding non-Latin scripts such as Cyrillic, CJK, Hangul, Kana; foreign Latin titles like 'Die Macher' are retained)
@@ -130,6 +130,27 @@ def is_primarily_pnp_or_self_published(categories_str: str, families_str: str) -
     return not is_physical_commercial
 
 
+def has_explicit_unreleased_status(families_str: str) -> bool:
+    """Return true only for explicit BGG administrative unreleased statuses.
+
+    Crowdfunding/platform history and campaign-game mechanics are deliberately
+    not treated as release status: many released games retain those tags.
+    """
+    if not isinstance(families_str, str) or not families_str.startswith("["):
+        return False
+    try:
+        family_tags = json.loads(families_str)
+    except Exception:
+        return False
+    if not isinstance(family_tags, list):
+        return False
+    unreleased_tags = {
+        "admin: upcoming releases",
+        "admin: unreleased games",
+    }
+    return any(str(tag).strip().lower() in unreleased_tags for tag in family_tags)
+
+
 def main():
     print(f"Loading raw BGG data from: {RAW_DATA_PATH}")
     if not RAW_DATA_PATH.exists():
@@ -166,15 +187,24 @@ def main():
     df_step2 = df_step1[~all_exp].copy()
     print(f"  - Remaining base/standalone games: {len(df_step2):,}")
 
-    # 3. Publication Year filter (1950 <= year <= 2026, published, non-meta)
+    # 3. Publication status/year filter (explicit BGG unreleased statuses excluded)
     meta_game_ids = {18291, 23953, 5985} # Unpublished Prototype, Outside BGG Scope, Game Accessory
     meta_mask = df_step2['game_id'].isin(meta_game_ids)
     year_null = df_step2['year'].isna()
     year_zero = df_step2['year'] == 0
-    year_valid_mask = (df_step2['year'] >= 1950) & (df_step2['year'] <= 2026) & ~meta_mask & ~year_zero & ~year_null
+    explicit_unreleased = df_step2['families'].apply(has_explicit_unreleased_status)
+    year_valid_mask = (
+        (df_step2['year'] >= 1950)
+        & (df_step2['year'] <= 2026)
+        & ~meta_mask
+        & ~year_zero
+        & ~year_null
+        & ~explicit_unreleased
+    )
     df_step3 = df_step2[year_valid_mask].copy()
     print(f"\n[Step 3] Publication Status & Year Range (1950 - 2026):")
-    print(f"  - Dropped pre-1950, unreleased (year=0/null), meta, and future: {len(df_step2) - len(df_step3):,}")
+    print(f"  - Explicit BGG upcoming/unreleased status tags: {explicit_unreleased.sum():,}")
+    print(f"  - Dropped pre-1950, explicitly unreleased, year=0/null, meta, and future: {len(df_step2) - len(df_step3):,}")
     print(f"  - Remaining games published 1950-2026: {len(df_step3):,}")
 
     # 4. Rating count threshold (users_rated >= 100)
@@ -227,7 +257,7 @@ def main():
         {"Step": "0. Raw Dataset", "Excluded at Step": 0, "Retained Records": n_raw},
         {"Step": "1. Valid game_id", "Excluded at Step": null_gid.sum(), "Retained Records": len(df_step1)},
         {"Step": "2. Non-expansions", "Excluded at Step": all_exp.sum(), "Retained Records": len(df_step2)},
-        {"Step": "3. Published 1950-2026", "Excluded at Step": len(df_step2) - len(df_step3), "Retained Records": len(df_step3)},
+        {"Step": "3. Published 1950-2026; explicit unreleased excluded", "Excluded at Step": len(df_step2) - len(df_step3), "Retained Records": len(df_step3)},
         {"Step": "4. Rating count floor (users_rated >= 100)", "Excluded at Step": len(df_step3) - len(df_step4), "Retained Records": len(df_step4)},
         {"Step": "5. Latin script titles only", "Excluded at Step": non_latin_cnt, "Retained Records": len(df_step5)},
         {"Step": "6. Structural PnP / Self-Pub / POD", "Excluded at Step": pnp_pod_mask.sum(), "Retained Records": len(pop_df)},
