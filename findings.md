@@ -984,3 +984,35 @@ The friend-style premise that harsh/generous patterns reflect *who rates what* i
 
 - A severity-adjusted game estimate is now implementable and reproducible from committed scripts (adj_mean in `game_adjusted_means.parquet`). It removes measured rater-level composition. It does NOT measure broad appeal, does not fix within-game self-selection, and is not a better predictor of observed ratings than raw averages (script 16 holdout).
 - For any underratedness analysis, severity adjustment and the RQ2 conditional residual answer different questions (who-vs-what level vs expected-given-characteristics); both remain model-dependent screens rather than quality estimates.
+
+## 2026-08-23: Session summary — Phase 2 user-level program complete through first pass
+
+### What was established this session
+
+Scripts 15-22 built the user-level evidence base (all rerunnable against `data/processed/phase2/` extracts; derived extracts under the same directory; DuckDB engine):
+
+1. The low-vs-high lifetime-volume rating gap (+2.42 pooled) survives within games (+2.28 paired) and is closed to +0.01 by game-mix standardization plus stable per-user severity offsets.
+2. Per-user severity is estimable (reliability >=0.89 at >=50 observations), stable across independent halves (r=0.87), only moderately stable across time periods (r~0.5), and not a cohort or career-drift artifact.
+3. Rating variance decomposition: game identity R2=0.230, rater identity R2=0.249, additive both 0.438.
+4. Severity adjustment raises, not lowers, the game-level volume gradient (+0.44 -> +0.51 per tenfold ratings): rater-level composition works against the popularity premium.
+5. Era composition does not produce the gap (persists in all era windows under both timestamp readings); aggregate era rise is composition; within-game era trend is slightly negative.
+6. Geographic audiences agree closely (r~0.86); ownership status is the largest audience split found (median same-game gap 0.95).
+7. The friend's `debiased_rating` is behaviorally a shrunken severity adjustment of ours (level corr 0.996; shift corr 0.836, slope 0.67): it targets rater-level level differences - selection into rating, not measurement noise.
+8. No accuracy criterion exists for raters; volume/severity/tenure/spread are entangled activity measures. "Credibility weighting" is not identifiable from this data.
+
+### Final refit note
+
+The committed `scripts/16` was rerun end-to-end at full convergence (100 alternating-projection iterations, final max change 0.0028). All headline numbers were unchanged from the reported values (R2 decomposition, parity stability, band means identical to 3 decimals; downstream scripts 17/18/22 regenerated with no material diffs).
+
+### Still open / next highest-value questions
+
+1. **Within-game self-selection** remains unidentified: additive deltas capture who-is-harsher, but not whether a game's *rater pool composition within an audience* biases its mean (e.g., only enthusiasts rate niche games at all). This needs exposure-denominator data or panel structure; no proxy in this snapshot identifies it.
+2. **Timestamp semantics** still unresolved; temporal results carry both readings but provenance would sharpen drift conclusions.
+3. **Ownership history**: snapshot-time `own` flags show a 0.95-point split; longitudinal collection data would turn this into a real selection test.
+4. **Validation target for corrections**: whether severity-adjusted estimates predict held-out future ratings or external outcomes better than raw averages is untestable here beyond parity splits; a second time-period scrape would enable true out-of-time validation.
+
+### Deliverables index
+
+- Scripts: `15_phase2_same_game_volume_comparison.py`, `16_phase2_user_severity_stability.py` (`--reuse` mode available), `17_phase2_gap_decomposition.py`, `18_phase2_rater_credibility.py`, `19_phase2_temporal_drift.py`, `20_phase2_audience_selection.py`, `21_phase2_cross_audience_consistency.py`, `22_phase2_baseline_comparison.py`; residual export added to `05`.
+- Derived extracts (gitignored, reproducible): `game_band_cells.parquet`, `within_game_diffs_*.parquet`, `user_severity.parquet`, `game_adjusted_means.parquet`, `gap_cells_low_high.parquet`, `era_mix_by_group.parquet`, comparison tables.
+- JSON result summaries beside each script's outputs under `data/processed/phase2/`.
