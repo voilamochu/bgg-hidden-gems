@@ -25,7 +25,7 @@ Start simple and add complexity only when the data and evidence justify it.
 - Establish what the data actually contains and what can realistically be inferred from it before deciding on a model.
 - Use BGG's raw average and Geek Rating as baselines rather than assuming either is correct or incorrect.
 - Explicitly investigate self-selection and audience effects, even if the first attempts are necessarily crude.
-- Treat the existing friend-provided "debiased" ranking as something to analyse and test, not as ground truth.
+- Treat any friend-provided "debiased" ranking, if supplied in `data/`, as something to analyse and test, not as ground truth.
 - Document what cannot be corrected for instead of hiding uncertainty behind increasingly elaborate formulas.
 - Let the data determine which corrections are useful. Don't add a correction simply because it sounds statistically sensible.
 
