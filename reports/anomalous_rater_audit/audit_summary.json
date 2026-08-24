@@ -1,0 +1,70 @@
+{
+  "universe": "pre-filtered extract (scripts/23); equals population semi-join",
+  "observations_source": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/3/bgg-hidden-gems/data/processed/phase2-filtered/rating_observations_filtered.parquet",
+  "total_users": 544955,
+  "total_observations": 25335220,
+  "median_user_n": 11.0,
+  "definitions": {
+    "binning": "ROUND(rating) clipped to [1,10]; SD/range/min/max on raw floats",
+    "flags": {
+      "f_single_value": "all ratings in one integer bin",
+      "f_k_le2": "<=2 distinct integer bins used",
+      "f_range_le1": "MAX(rating)-MIN(rating) <= 1.0 (raw)",
+      "f_sd_lt_02": "STDDEV_SAMP(rating) < 0.2",
+      "f_sd_lt_05": "SD < 0.5 (median within-user SD is ~1.21 in Phase 2)",
+      "f_modal_ge80/ge90/eq100": "share of ratings at modal bin",
+      "f_entropy_lt05": "Shannon entropy of binned histogram < 0.5 bits (max log2(10)=3.32)",
+      "f_top2_ge95": "top-2 bins cover >= 95% of ratings",
+      "degenerate_broad": "n>=10 AND (k<=2 OR SD<0.5 OR modal>=0.90)",
+      "degenerate_strict": "n>=20 AND (single-value OR SD<0.2 OR modal>=0.95)"
+    },
+    "note": "composites are decision-context only; no exclusion performed"
+  },
+  "headline": {
+    "pct_degenerate_broad_among_n_ge_10": 1.379,
+    "pct_degenerate_strict_among_n_ge_20": 0.307,
+    "pct_degenerate_strict_among_n_ge_100": 0.149,
+    "pct_single_value_among_n_ge_20": 0.207,
+    "pct_sd_lt_05_among_n_ge_20": 0.557
+  },
+  "full_snapshot_comparator": {
+    "users_matched_to_full_snapshot": 544955,
+    "corr_filtered_vs_full_n": 0.9908,
+    "pct_band_changes_full_vs_filtered": 6.49,
+    "n_ge50_filtered_but_below50_full": 0,
+    "n_ge50_filtered_total": 121497,
+    "caveat": "descriptive only; full-snapshot lifetime counts include ratings outside the 16,627-game population"
+  },
+  "game_context": [
+    {
+      "group": "degenerate_strict",
+      "users": 667,
+      "median_distinct_games": 40.0,
+      "p25_distinct_games": 26.0,
+      "p75_distinct_games": 66.5,
+      "median_host_game_volume": 7927.0,
+      "mean_niche_share_lt100": 0.008,
+      "mean_user_mean_rating": 9.6407,
+      "flavor_counts": "{\"single_high_9_10\": 424, \"single_low_1_3\": 6, \"other_strict\": 237}"
+    },
+    {
+      "group": "other_n_ge_20",
+      "users": 216435,
+      "median_distinct_games": 57.0,
+      "p25_distinct_games": 33.0,
+      "p75_distinct_games": 117.0,
+      "median_host_game_volume": 12821.0,
+      "mean_niche_share_lt100": 0.0025,
+      "mean_user_mean_rating": 7.3759,
+      "flavor_counts": "\"mixed\""
+    }
+  ],
+  "game_impact": {
+    "games_touched_by_flagged": 12593.0,
+    "games_with_ge5_flagged_obs": 4922.0,
+    "games_flagged_share_ge_05": 85.0,
+    "games_flagged_share_ge_20": 15.0,
+    "max_flagged_share": 1.0,
+    "p99_flagged_share": 0.04172316384180785
+  }
+}
