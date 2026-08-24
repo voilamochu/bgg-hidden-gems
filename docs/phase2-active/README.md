@@ -171,6 +171,20 @@ Focused follow-up to Phase 3 taste: after accounting for global severity `delta_
 
 **Artefacts:** `scripts/28_phase31_rater_informativeness.py` (bounded, scratch copies, no wide-table). Outputs: `data/processed/phase2-active/phase31_informativeness.json` (gitignored) + committed `docs/phase2-active/phase31_informativeness.json`; reports `reports/phase31_informativeness/tiered_summary.csv` + `threshold_sensitivity.csv` + `phase31_informativeness.json`. See `findings.md` 2026-08-24 Phase 3.1 entry.
 
+## Phase 4 within-game rater-pool self-selection (scripts/29, active)
+
+Within-game selection threat to `adj_mean_g` after global severity: *are this game's raters systematically different from the active population in ways that inflate/deflate its observed rating even after `delta_u`?* Tested on same active universe (`16,627` games, `≥10` minus strict, `24.5M` obs) reusing `mu=7.144`, `user_severity_active`, `game_adjusted_means_active` — no refit.
+
+- **Layer A — pool composition vs population [Empirical finding]:** per-game `mean(delta)` = `-0.293 ±0.177` (`P05 -0.563`, `P95 -0.024`, range `-2.03`–`1.99`) vs obs-weighted pop `-0.303` and user-pop `0.00`. `χ²(df6)` median `50.3` (`P90 454.5`), `KL` `0.07` (`P90 0.324`) — most games diverge from volume-mix but share differences are the auditable metric. `share_heavy_500plus` median `0.271` (`P90 0.478`) vs obs-pop `0.194`; `share_light_10-24` median `0.039` (`P90 0.103`) vs obs-pop `0.062`; `share_own` median `0.575` (`P90 0.748`) vs `0.581` population; `share_deg_broad` median `0.0` (`P90 0.012`). After Phase 3.1, heavy/light mapping is severity itself.
+
+- **Layer B — do raters like *this* game more than expected? [Empirical finding; Model-dependent]:** game surprise `r_ug = rating - adj_mean - delta` mean per game `3.8e-17 ±7e-15` (`maxabs 2e-13`) — **exact zero by construction** (`alpha_g` fitted on same data). Cross-half `rating - adj_mean - delta_cross` (even→odd) `mean 0.00014 ±0.015` (`P05 -0.015`, `P95 0.016`) — 1% of rating SD `1.53` and 2% of band-severity spread `1.04`. Enthusiasm vs own other-game mean `-0.416 ±0.732`, `r=0.987` with `adj_mean` — it is game quality (`alpha`), not selection beyond severity.
+
+- **Material movement [Empirical finding]:** `raw - adj = mean(delta)` (`r 0.984`), `corr(adj,raw)=0.979`, rank overlap top100 `62/100` (`J 0.45`) — severity correction does move candidates (38% turnover). `adj` vs `adj+resid` `r=1.0` overlap `100/100` — residual beyond delta adds nothing; enthusiasm rank `r 0.987` not distinct.
+
+**Result [Supported conclusion]:** within-game selection beyond global severity is not measurably distinct or material here; `adj_mean` remains sufficient, do not build a hidden-gem score from residual. `mean_delta_pool`/`share_heavy` may be reported as sensitivity (drives `raw` vs `adj` shift) but `selection_residual` should not condition downstream ranking. Exposure unobserved; collection `own` snapshot-time; games `80.89%` metadata coverage; `60` games absent from SQLite snapshot; `χ²` inflated by large `n`.
+
+**Artefacts:** `scripts/29_phase4_within_game_selection.py` (bounded `4GB/3threads`, `scratch/phase2-active` copy-once, single-scan, anchor `mean(delta)` diff `0.0`). Outputs: `data/processed/phase2-active/phase4_selection.json` (gitignored) + committed `docs/phase2-active/phase4_selection.json` + `reports/phase4_selection/selection_diagnostic.csv` (`16,564` games, `game_id,n_raters_active,raw_mean,adj_mean,mean_delta_pool,selection_residual_mean,selection_z,p,cross,share_heavy…`) + `selection_diagnostic.json` + per-game JSON + `pool_composition_summary.json`. See `findings.md` 2026-08-24 Phase 4 entry.
+
 ## Reproduce
 
 ```bash
@@ -195,6 +209,11 @@ python scripts/28_phase31_rater_informativeness.py \
     --active-dir scratch/phase2-active \
     --population scratch/phase2-active/bgg_research_population.parquet \
     --out-dir data/processed/phase2-active
+
+# Phase 4 within-game selection (reuse refreshed baseline, no refit)
+python scripts/29_phase4_within_game_selection.py \
+    --active-dir scratch/phase2-active \
+    --out-dir reports/phase4_selection
 ```
 In worktrees without local base extracts, point `--input-dir`/`--active-dir` at the copied extracts
 (e.g. `scratch/phase2`) and `--population` at `scratch/phase2/bgg_research_population.parquet`. The refresh script fails closed if `data/processed/phase2-active/` is missing.
