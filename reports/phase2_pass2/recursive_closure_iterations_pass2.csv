@@ -1,0 +1,4 @@
+iteration,game_count,user_count,rating_observation_count,games_removed_for_lt100,users_removed_for_lt10,users_removed_as_degenerate_strict,cumulative_removals_games,cumulative_removals_users,cumulative_removals_obs,convergence
+0,14698,287306,24146464,0,0,0,0,0,0,False
+1,14698,287302,24146307,0,0,4,0,4,157,False
+2,14698,287302,24146307,0,0,0,0,4,157,True

@@ -1,0 +1,114 @@
+{
+  "universe": "pass2 14698 games (rating_observations_pass2)",
+  "observations_source": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/rating_observations_pass2.parquet",
+  "total_users": 287306,
+  "total_observations": 24146464,
+  "median_user_n": 39.0,
+  "definitions": {
+    "binning": "ROUND(rating) clipped to [1,10]; SD/range/min/max on raw floats",
+    "flags": {
+      "f_single_value": "all ratings in one integer bin",
+      "f_k_le2": "<=2 distinct integer bins used",
+      "f_range_le1": "MAX-MIN <=1.0 raw",
+      "f_sd_lt_02": "STDDEV_SAMP <0.2",
+      "f_sd_lt_05": "SD<0.5",
+      "f_modal_ge80/ge90/eq100": "share at modal bin",
+      "f_entropy_lt05": "Shannon entropy <0.5 bits",
+      "f_top2_ge95": "top-2 bins >=95%",
+      "degenerate_broad": "n>=10 AND (k<=2 OR SD<0.5 OR modal>=0.90)",
+      "degenerate_strict": "n>=20 AND (single-value OR SD<0.2 OR modal>=0.95)"
+    },
+    "note": "composites are decision-context only; no exclusion performed in this audit step; primary exclusion is degenerate_strict"
+  },
+  "headline": {
+    "pct_degenerate_broad_among_n_ge_10": 1.136,
+    "pct_degenerate_strict_among_n_ge_10": 0.001,
+    "pct_degenerate_strict_among_n_ge_20": 0.002,
+    "pct_single_value_among_n_ge_20": 0.0,
+    "pct_sd_lt_05_among_n_ge_20": 0.29,
+    "pct_k_le2_among_n_ge_20": 0.138,
+    "pct_modal_ge90_among_n_ge_20": 0.091,
+    "pct_degenerate_strict_among_n_ge_100": 0.0,
+    "comparison": {
+      "first_pass_pct_degenerate_strict_n_ge_20": 0.307,
+      "pass2_pct_degenerate_strict_n_ge_20": 0.002,
+      "first_pass_pct_broad_n_ge_10": 1.379,
+      "pass2_pct_broad_n_ge_10": 1.136
+    }
+  },
+  "game_context": [
+    {
+      "group": "degenerate_strict",
+      "users": 4,
+      "median_distinct_games": 42.5,
+      "p25_distinct_games": 35.5,
+      "p75_distinct_games": 46.25,
+      "median_host_game_volume": 6092.0,
+      "mean_niche_share_lt100": 0.0,
+      "mean_user_mean_rating": 9.1976,
+      "flavor_counts": "{\"single_high_9_10\": 0, \"single_low_1_3\": 0, \"other_strict\": 4}"
+    },
+    {
+      "group": "other_n_ge_20",
+      "users": 214961,
+      "median_distinct_games": 57.0,
+      "p25_distinct_games": 33.0,
+      "p75_distinct_games": 116.0,
+      "median_host_game_volume": 12884.0,
+      "mean_niche_share_lt100": 0.0,
+      "mean_user_mean_rating": 7.3703,
+      "flavor_counts": "\"mixed\""
+    }
+  ],
+  "game_impact": {
+    "games_touched_by_flagged": 10009.0,
+    "games_with_ge5_flagged_obs": 3655.0,
+    "games_flagged_share_ge_05": 1.0,
+    "games_flagged_share_ge_20": 0.0,
+    "max_flagged_share": 0.0556,
+    "p99_flagged_share": 0.0248
+  },
+  "first_pass_comparison": {
+    "first_pass_total_users": 544955,
+    "first_pass_total_obs": 25335220,
+    "first_pass_headline": {
+      "pct_degenerate_broad_among_n_ge_10": 1.379,
+      "pct_degenerate_strict_among_n_ge_20": 0.307,
+      "pct_degenerate_strict_among_n_ge_100": 0.149,
+      "pct_single_value_among_n_ge_20": 0.207,
+      "pct_sd_lt_05_among_n_ge_20": 0.557
+    },
+    "first_pass_strict_users": 667,
+    "first_pass_broad_users": 3993,
+    "first_pass_note": "first-pass on 16,627 population filtered 25.3M (544,955 users with >=1 rating); active after 288730"
+  },
+  "flag_comparison": {
+    "strict_before": 667,
+    "strict_now": 4,
+    "strict_overlap": 0,
+    "strict_newly_flagged": 4,
+    "strict_no_longer_flagged": 667,
+    "broad_before": 3992,
+    "broad_now": 3264,
+    "broad_overlap": 3184,
+    "broad_newly_flagged": 80,
+    "broad_no_longer_flagged": 808
+  },
+  "removal_if_excluded": {
+    "strict_users_pass2": 4,
+    "strict_obs_pass2": 157,
+    "pct_obs_pass2": 0.0007,
+    "broad_users_pass2": 3264,
+    "broad_obs_pass2": 103222,
+    "pct_broad_obs_pass2": 0.4275
+  },
+  "games_affected": {
+    "games_touched_by_strict_pass2": 155
+  },
+  "heavy_tail": {
+    "pct_strict_1000plus_pass2": 0.0,
+    "pct_broad_1000plus_pass2": 0.296,
+    "users_1000plus_pass2": 1013,
+    "note": "Compare vs first-pass 0.28% at 1000+ heavy-tail"
+  }
+}

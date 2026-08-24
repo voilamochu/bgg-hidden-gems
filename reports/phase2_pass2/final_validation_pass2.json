@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-08-24T15:48:39Z",
+  "final_population": {
+    "games": 14698,
+    "users": 287302,
+    "observations": 24146307
+  },
+  "initial_pass2": {
+    "games": 14698,
+    "users": 287306,
+    "observations": 24146464
+  },
+  "validation_checks": {
+    "every_retained_game_ge100": {
+      "min_cnt": 100,
+      "max_cnt": 122032,
+      "avg_cnt": 1642.8294325758607,
+      "violations_lt100": 0,
+      "pass": true
+    },
+    "every_retained_user_ge10": {
+      "min_cnt": 10,
+      "max_cnt": 11628,
+      "avg_cnt": 84.04503623364961,
+      "violations_lt10": 0,
+      "pass": true
+    },
+    "zero_degenerate_strict_remain": {
+      "count": 0,
+      "pass": true
+    },
+    "zero_excluded_games_appear": {
+      "pass": true
+    },
+    "zero_excluded_users_appear": {
+      "pass": true
+    },
+    "rating_observations_reconcile": {
+      "total": 24146307,
+      "sum_per_game": 24146307,
+      "sum_per_user": 24146307,
+      "pass": true
+    },
+    "final_membership_consistent": {
+      "distinct_games_in_ro": 14698,
+      "distinct_users_in_ro": 287302,
+      "expected_games": 14698,
+      "expected_users": 287302,
+      "pass": true
+    }
+  },
+  "overall_pass": true,
+  "iterations": 3
+}

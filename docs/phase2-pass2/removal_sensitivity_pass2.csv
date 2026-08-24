@@ -1,0 +1,8 @@
+rule,users_removed,pct_users_removed,observations_removed,pct_observations_removed
+strict_composite_n20,4,0.0014,157,0.0007
+broad_composite_n10,3264,1.1361,103222,0.4275
+single_value_only_n50,0,0.0,0,0.0
+single_value_only_n20,0,0.0,0,0.0
+sd_lt_02_only_n50,0,0.0,0,0.0
+modal_eq100_only_n50,0,0.0,0,0.0
+extreme_binary_1_10_n20,51,0.0178,4742,0.0196

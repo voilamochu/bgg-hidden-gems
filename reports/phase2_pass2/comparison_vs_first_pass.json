@@ -1,0 +1,259 @@
+{
+  "generated_at": "2026-08-24T15:54:07Z",
+  "pass1_active_baseline": "docs/phase2-active/active_baseline_refresh.json (mu 7.144, R2 both 0.394, 24,509,788 obs, 288,730 users, 16,564 games)",
+  "pass2_final_baseline": "data/processed/phase2-pass2/pass2_baseline_refresh.json (mu 7.139, R2 both 0.393, 24,146,307 obs, 287,302 users, 14,698 games)",
+  "historical_full_snapshot": "data/processed/phase2/rating_observations.parquet 26,924,709 obs, 95,540 games, R2 both 0.438 (historical reference)",
+  "rows": [
+    {
+      "metric": "mu (global mean rating)",
+      "unit": "rating points",
+      "pass1_active": 7.144,
+      "pass2_final": 7.139,
+      "absolute_change": -0.005,
+      "percentage_change": -0.07,
+      "interpretation": "Grand mean rating; -0.005 shift negligible vs SD 1.53"
+    },
+    {
+      "metric": "pooled_gap_10-24_vs_1000+",
+      "unit": "rating points",
+      "pass1_active": 1.2552,
+      "pass2_final": 1.2521,
+      "absolute_change": -0.0031,
+      "percentage_change": -0.25,
+      "interpretation": "Raw volume gap; -0.003 change <0.3% \u2014 stable"
+    },
+    {
+      "metric": "within_game_gap_10-24_vs_1000+ (paired)",
+      "unit": "rating points",
+      "pass1_active": 1.1081,
+      "pass2_final": 1.0984,
+      "absolute_change": -0.0097,
+      "percentage_change": -0.88,
+      "interpretation": "Within-game low vs high; -0.01 (-0.9%) stable, still +1.10"
+    },
+    {
+      "metric": "within_game_gap_10-49_vs_500plus",
+      "unit": "rating points",
+      "pass1_active": 0.8287,
+      "pass2_final": 0.8176,
+      "absolute_change": -0.0111,
+      "percentage_change": -1.34,
+      "interpretation": "Broader low vs high; -0.011 (-1.3%) stable"
+    },
+    {
+      "metric": "game_FE_beta_10-24_vs_1000+",
+      "unit": "rating points",
+      "pass1_active": 1.0578,
+      "pass2_final": 1.0555,
+      "absolute_change": -0.0024,
+      "percentage_change": -0.23,
+      "interpretation": "Fixed-effects regression; -0.002 (-0.23%) stable"
+    },
+    {
+      "metric": "severity_mean_10-24",
+      "unit": "rating points",
+      "pass1_active": 0.268,
+      "pass2_final": 0.2672,
+      "absolute_change": -0.0008,
+      "percentage_change": -0.3,
+      "interpretation": "Low-volume rater generosity; stable +0.27"
+    },
+    {
+      "metric": "severity_mean_1000+",
+      "unit": "rating points",
+      "pass1_active": -0.7751,
+      "pass2_final": -0.7726,
+      "absolute_change": 0.0025,
+      "percentage_change": -0.32,
+      "interpretation": "High-volume severity; stable -0.77"
+    },
+    {
+      "metric": "severity_spread (max-min mean_delta)",
+      "unit": "rating points",
+      "pass1_active": 1.0431,
+      "pass2_final": 1.0398,
+      "absolute_change": -0.0033,
+      "percentage_change": -0.31,
+      "interpretation": "Severity spread 1.04 \u2192 1.04 stable; confirms additive severity not removed by improved population"
+    },
+    {
+      "metric": "R2_game_identity_only",
+      "unit": "variance explained",
+      "pass1_active": 0.2014,
+      "pass2_final": 0.1997,
+      "absolute_change": -0.0017,
+      "percentage_change": -0.85,
+      "interpretation": "Game explains ~20% variance; -0.0017 (-0.85%) stable"
+    },
+    {
+      "metric": "R2_rater_identity_only",
+      "unit": "variance explained",
+      "pass1_active": 0.2181,
+      "pass2_final": 0.2182,
+      "absolute_change": 0.0,
+      "percentage_change": 0.02,
+      "interpretation": "Rater explains ~22% variance; +0.0000 stable"
+    },
+    {
+      "metric": "R2_additive_both",
+      "unit": "variance explained",
+      "pass1_active": 0.3943,
+      "pass2_final": 0.3931,
+      "absolute_change": -0.0012,
+      "percentage_change": -0.32,
+      "interpretation": "Joint explains 39.4% \u2192 39.3% stable"
+    },
+    {
+      "metric": "total_var",
+      "unit": "rating variance",
+      "pass1_active": 2.3541,
+      "pass2_final": 2.3467,
+      "absolute_change": -0.0073,
+      "percentage_change": -0.31,
+      "interpretation": "Total rating variance 2.35 \u2192 2.35 stable"
+    },
+    {
+      "metric": "parity_pearson_min10_each_half",
+      "unit": "correlation",
+      "pass1_active": 0.8772,
+      "pass2_final": 0.8768,
+      "absolute_change": -0.0004,
+      "percentage_change": -0.04,
+      "interpretation": "Even/odd stability r 0.877 \u2192 0.877 stable"
+    },
+    {
+      "metric": "median_abs_delta_diff",
+      "unit": "rating points",
+      "pass1_active": 0.167,
+      "pass2_final": 0.1672,
+      "absolute_change": 0.0002,
+      "percentage_change": 0.15,
+      "interpretation": "Parity noise median |diff| 0.167 \u2192 0.167 stable"
+    },
+    {
+      "metric": "raw_gap_low_vs_high (500plus)",
+      "unit": "rating points",
+      "pass1_active": 1.055,
+      "pass2_final": 1.0529,
+      "absolute_change": -0.0022,
+      "percentage_change": -0.21,
+      "interpretation": "Gap decomposition raw gap 1.055 \u2192 1.053 stable"
+    },
+    {
+      "metric": "std_gap_raw (common game weights)",
+      "unit": "rating points",
+      "pass1_active": 0.8916,
+      "pass2_final": 0.8887,
+      "absolute_change": -0.0029,
+      "percentage_change": -0.32,
+      "interpretation": "Standardized raw gap 0.892 \u2192 0.889 stable"
+    },
+    {
+      "metric": "std_gap_severity_adjusted",
+      "unit": "rating points",
+      "pass1_active": -0.0343,
+      "pass2_final": -0.0351,
+      "absolute_change": -0.0008,
+      "percentage_change": 2.28,
+      "interpretation": "After severity gap closes to -0.03 \u2192 -0.035 stable; confirms gap is severity not game mix"
+    },
+    {
+      "metric": "holdout_RMSE_game_only",
+      "unit": "rating points",
+      "pass1_active": 1.4724,
+      "pass2_final": 1.4841,
+      "absolute_change": 0.0117,
+      "percentage_change": 0.79,
+      "interpretation": "Game-only holdout RMSE 1.472 \u2192 1.484 (+0.8%) tiny increase, not material"
+    },
+    {
+      "metric": "holdout_RMSE_with_severity",
+      "unit": "rating points",
+      "pass1_active": 1.2378,
+      "pass2_final": 1.244,
+      "absolute_change": 0.0062,
+      "percentage_change": 0.5,
+      "interpretation": "With severity 1.238 \u2192 1.244 (+0.5%) stable; severity still improves 0.23 RMSE"
+    },
+    {
+      "metric": "holdout_RMSE_raw_train_game_mean",
+      "unit": "rating points",
+      "pass1_active": 1.3724,
+      "pass2_final": 1.3715,
+      "absolute_change": -0.0009,
+      "percentage_change": -0.06,
+      "interpretation": "Raw train game mean RMSE stable"
+    },
+    {
+      "metric": "pearson_raw_vs_adj (game means)",
+      "unit": "correlation",
+      "pass1_active": 0.9794,
+      "pass2_final": 0.9835,
+      "absolute_change": 0.0041,
+      "percentage_change": 0.42,
+      "interpretation": "Raw vs adj game means r 0.979 \u2192 0.983 stable; severity adjustment preserves ranking"
+    },
+    {
+      "metric": "spearman_raw_vs_adj",
+      "unit": "correlation",
+      "pass1_active": 0.98,
+      "pass2_final": 0.9822,
+      "absolute_change": 0.0022,
+      "percentage_change": 0.22,
+      "interpretation": "Rank correlation stable"
+    },
+    {
+      "metric": "corr_n_vs_shift (game)",
+      "unit": "correlation",
+      "pass1_active": 0.0171,
+      "pass2_final": 0.0149,
+      "absolute_change": -0.0022,
+      "percentage_change": -12.68,
+      "interpretation": "Correlation between n_obs and severity shift near zero; stable"
+    },
+    {
+      "metric": "n_observations",
+      "unit": "count",
+      "pass1_active": 24509788,
+      "pass2_final": 24146307,
+      "absolute_change": -363481,
+      "percentage_change": -1.48,
+      "interpretation": "Total observations 24.5M \u2192 24.1M (-363k, -1.5%) due to 269 game prune + 4 users"
+    },
+    {
+      "metric": "n_users",
+      "unit": "count",
+      "pass1_active": 288730,
+      "pass2_final": 287302,
+      "absolute_change": -1428,
+      "percentage_change": -0.49,
+      "interpretation": "Users 288730 \u2192 287302 (-1428, -0.49%) due to closure"
+    },
+    {
+      "metric": "n_games_with_ratings",
+      "unit": "count",
+      "pass1_active": 16564,
+      "pass2_final": 14698,
+      "absolute_change": -1866,
+      "percentage_change": -11.27,
+      "interpretation": "Games 16564 \u2192 14698 (-1866, -11.3%) due to edition dedup + <100 filter"
+    }
+  ],
+  "historical_reference_rows": [
+    {
+      "metric": "R2_game_identity_only_historical_full_snapshot",
+      "unit": "variance explained",
+      "historical_95k_full": 0.23,
+      "pass1_active": 0.20137406712911587,
+      "pass2_final": 0.19966004821164895
+    },
+    {
+      "metric": "R2_both_historical",
+      "unit": "variance explained",
+      "historical_95k_full": 0.438,
+      "pass1_active": 0.3943211541852414,
+      "pass2_final": 0.39307501512048915
+    }
+  ],
+  "interpretation_summary": "The improved population definition (16,627 \u2192 14,698 via 269 edition-duplicate prune, plus 100/10 + degenerate closure removing 4 users) does NOT materially change the empirical conclusions: the +1.10 within-game gap remains and is still additive severity (parity r 0.877 stable), R2 decomposition shifts <1% (game 0.201\u21920.200, rater 0.218\u21920.218, both 0.394\u21920.393), severity spread 1.04 stable, gap closed to -0.03 remains, holdout RMSE improvement with severity stable. The population change is -11% games, -0.5% users, -1.5% obs but the underlying severity structure is invariant."
+}

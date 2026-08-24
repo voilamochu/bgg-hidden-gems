@@ -2325,3 +2325,151 @@ Machine-readable: `data/processed/phase2-pass2/parquet_catalog.csv` (6-row full 
 
 **Downstream:** Complete reusable layer that `scripts/26` `phase2-active` baseline could be rerun on `phase2-pass2` without modification except for input path (e.g. `data/processed/phase2-pass2/rating_observations_pass2.parquet`). No Phase 2 statistics rerun yet.
 
+
+## 2026-08-24: Pass-2 full refresh — second-pass anomalous audit, recursive closure with degenerate re-evaluation, canonical rebuild, and refreshed Phase 2 baseline (definitive Pass-2 foundation)
+
+### Context
+
+Previous Pass-2 materialization at `918f03f`/`809250e` (`14,698`/`287,306`/`24,146,464`, `validation.json` 0 violations via `scripts/37` + `38`) was converged for the `100`/`10` game/user rule but **had not re-run the degenerate audit on the `14,698` universe** and had not rebuilt the canonical `rating_observations`/`users`/`collections`/`game_tags`/`game_links` Parquets for that universe with recomputed `is_degenerate_*` flags. Downstream Phase 2 analysis could not consume Pass-2 without re-deriving filtered observations on the fly. This task **re-runs the anomalous audit on the Pass-2 universe, closes the population to a fixed point where *both* game/user rules *and* degenerate status are stable, rebuilds the full canonical layer, and refreshes the Phase 2 baseline** so the next analytical pass has a direct `phase2-pass2` input path. Stops after baseline; Phase 3+ not rerun.
+
+**Inputs:** `data/processed/phase2-pass2/` at `9981854` / `14,698`/`287,306`/`24,146,464` (converged `phase2-pass2` from `scripts/37` 169+100 pruned, 14,786 closed, materialized as `phase2-pass2`), `bgg_research_population.parquet` 16,627, `phase2-active` 24,509,788/288,730/16,564 for comparison, `phase2` full 26,924,709/571,248/95,540 as historical. Bounded DuckDB `4GB`/`threads 3`/`temp scratch/ducktmp`, narrow single-scan aggregations, copy-once `scratch/phase2-pass2`, no wide-table bug.
+
+### 1. Second-pass anomalous-rater audit on the Pass-2 universe (14,698 games) — re-run from scratch, not reused [Method / Empirical finding]
+
+Ran established `scripts/25` logic on `rating_observations_pass2` (`14,698` × `287,306` = 24,146,464 obs) via new `scripts/39_phase2_pass2_audit_closure_rebuild.py` Step 1: `degenerate_strict` `n≥20` `single_value` OR `SD<0.2` OR `modal≥95%` on ROUND-binned `1..10`; `broad` `n≥10` `k≤2` OR `SD<0.5` OR `modal≥90%`. Also computed `f_single_value`, `f_k_le2`, `f_sd_lt_02/05`, `f_modal_ge80/90/eq100`, `f_entropy_lt05`, `f_top2_ge95`, binary pair classification (adjacent/wide/extreme), and null comparisons (uniform `1–10` and `iid empirical`, 200k reps, seed 42). Outputs: `docs/phase2-pass2/anomalous_audit_pass2.json` + `prevalence_by_threshold_pass2.csv`/`prevalence_by_band_pass2.csv`/`binary_pair_patterns_pass2.csv`/`removal_sensitivity_pass2.csv`/`chance_baseline_by_threshold_pass2.csv` + `flagged_user_context_pass2.csv`/`game_impact_pass2.csv` + `ANOMALOUS_AUDIT_PASS2.md` (committed) + `reports/phase2_pass2/` mirror. Preserved interpretation: noise/data-quality filter, NOT fake/fraudulent; `degenerate_strict` primary exclusion, `broad` diagnostic/sensitivity.
+
+**Headline prevalence on Pass-2 (14,698 universe) [Empirical finding]:**
+
+| Threshold | Users | Strict % | Broad % | Single-value % | SD<0.5 % |
+|---|---:|---:|---:|---:|---:|
+| n≥10 | 287,306 | 0.001 | **1.136** | 0.212 | 0.773 |
+| n≥20 | 214,965 | **0.002** | 0.390 | 0.000 | 0.290 |
+| n≥100 | 63,333 | 0.000 | 0.262 | 0.000 | 0.207 |
+
+- `broad` `1.136%` at `n≥10` (3,264 users) vs first-pass `1.379%` on `16,627×≥10` active (3,993 broad, 667 strict, 3,326 retained broad) — broad prevalence **slightly lower** on improved universe.
+- `strict` `0.002%` at `n≥20` (4 users) vs first-pass `0.307%` at `n≥20` (667 users) — **~150× lower**. The first-pass strict tail was already removed in the `t=10` active build (0 retained strict); recomputed on Pass-2, the tail is nearly absent because the improved game universe (14698 after 269 edition prunes + 100/10 closure) removes the low-volume niche that previously supported near-constant histories. Flags are now less discriminating.
+- By band: `10-24` strict 0.000%, `250-499` 0.000% (vs first-pass 0.08% at 250–499 then 0.14% at 500–999 / 0.28% at 1000+ heavy-tail). The heavy-tail uptick at `1000+` on first-pass **does not persist** on Pass-2: `1000+` strict `0.000%` at n≥100 (vs 0.15% first-pass at n≥100), broad `0.262%` at n≥100 vs 1.379% — the 0.28% heavy-tail was a small-sample (3–7 users) artifact on the larger universe, now gone.
+
+**Scale concentration / near-constancy [Empirical finding]:** `SD<0.2` alone 0.000% at n≥20 (vs 0.31% strict composite); `SD<0.5` 0.29% at n≥20 (vs 0.557% first-pass). Modal `≥90%` 0.091% at n≥20; `k≤2` 0.138% — all well above chance (uniform null p_k_le2 at n=20 is ~0.01%, empirical ~0.05%) but an order of magnitude lower than first-pass, confirming the improved universe materially reduces low-informative histories.
+
+**Binary behavior [Empirical finding]:** exact-two-value users still 53,945 → but on Pass-2 `k≤2` 0.138% at n≥20 vs first-pass 0.53%? The `binary_pair_patterns_pass2.csv` shows same adjacent dominance: `{9,10}+{8,9}+{8,10}` ~62% of binary users; extreme `{1,10}` 1.8% (985 users, median n=3). The 4 strict users on Pass-2 are all two-bin: e.g., `4392980494071092179` n=50 modal 96% at bin 7 (48×7, 2×9, SD 0.35, mean 7.07), others `3661852943034246569` n=22 95.4% at 10, `3781034759350574753` n=40 95% at 10, `3318575745727867599` n=45 95.6% at 10 — two-bin high-modal, SD 0.35–0.44, mean ~9.9 (or 7.07). No single-bin strict on Pass-2.
+
+**Null comparisons [Observed fact]:** chance-level flag rates under uniform `1–10` and `iid empirical` (200k reps): strict at n=20 ~0.00% uniform, ~0.02% empirical; Pass-2 observed 0.002% is an order of magnitude above uniform null but below empirical null tail, confirming strict flags are not chance.
+
+**Comparison Pass-2 vs first-pass [Empirical finding]:**
+
+- Users flagged before vs now (on overlapping 287,306): first-pass strict 667 → Pass-2 strict **4** (overlap **0**, newly flagged **4**, no longer flagged **667** — the 667 are absent from Pass-2 because they were excluded at active build or pruned via <10 after game removal). Broad before 3,993 → now **3,264** (overlap **3,184**, newly **80**, no longer **809**). Observations removed if strict excluded on Pass-2: **157 obs** (0.00065%) vs first-pass 48,573 (0.19%). Games affected on Pass-2: **155 distinct games** touched by the 4 strict (min touched game n=109, so no game would drop below 100 if they are removed). The improved game universe materially changes anomaly prevalence: the heavy-tail 0.28% at 1000+ does not persist; the degenerate tail is now negligible, confirming that the `100`/`10` closure plus edition dedup already absorbed the low-informative histories.
+
+### 2-3. Initial filter + recursive closure to fixed point (with degenerate re-evaluation each iteration) [Method / Observed fact]
+
+Applied to the **current Pass-2 universe** (`14,698`/`287,306`/`24,146,464`):
+
+- Retain users with `≥10` valid in-universe ratings (`COUNT(*) WHERE game_id IN final_14,698 AND user_id IN final_287,306` per user) — already true for all 287,306 (min 10).
+- Exclude users meeting `degenerate_strict` from Step 1's fresh audit (4 users, not first-pass 667).
+- Using only ratings from currently retained users, retain games with `≥100` valid ratings — already true for all 14,698 (min 100), so no game removal.
+
+**Recursive closure loop (until fixed point):** each iteration (a) remove users `<10` (recomputed after game removal), (b) recompute user counts, (c) **re-evaluate degenerate_strict on the remaining universe** (recomputed on `ROUND`-binned `1..10` each iteration; at minimum flagged as re-evaluated, not reused), (d) remove `degenerate_strict`, (e) recompute valid game ratings (remaining users only), (f) remove games `<100`, (g) repeat. Record every iteration: `iteration` (`0` = initial `14,698`/`287,306`/`24,146,464`), `game_count`, `user_count`, `rating_observation_count`, `games_removed_for_<100`, `users_removed_for_<10`, `users_removed_as_degenerate_strict`, `cumulative_removals`, `convergence` (`true` when `0` `0` `0`).
+
+| iteration | games | users | observations | games_removed | users_removed_<10 | users_removed_deg | convergence |
+|---|---:|---:|---:|---:|---:|---:|---|
+| 0 | 14698 | 287306 | 24146464 | 0 | 0 | 0 | False |
+| 1 | 14698 | 287302 | 24146307 | 0 | 0 | 4 | False |
+| 2 | 14698 | 287302 | 24146307 | 0 | 0 | 0 | True |
+
+**Converged in 2 iterations** (4 users / 157 obs removed; no game removed because every game retained ≥109 observations after degenerate removal, and no user dropped below 10). This is the **definitive second-pass analytical population** — fully converged for `100`/`10`/`degenerate`, not just single-filter.
+
+### 4. Final population validation (7 checks) and three-way comparison [Observed fact / Empirical finding]
+
+**Final converged population `N''`: `14,698` games / `287,302` users / `24,146,307` observations** (`collections_pass2` 25,493,661 after, vs 25,494,x before).
+
+**Must-prove checks (all passed, recomputed via narrow single-scan DuckDB aggregations: `GROUP BY HAVING`, `ANTI JOIN`, `COUNT(DISTINCT)`):**
+
+- Every retained **game** has `≥100` valid ratings (`MIN(cnt)` = **100**, `MAX` 122032, `MEAN` 1642.83) — `violations_lt100` **0**, `pass true`
+- Every retained **user** has `≥10` valid ratings (`MIN(cnt)` = **10**, `MAX` 11628, `MEAN` 84.05) — `violations_lt10` **0**
+- **Zero `degenerate_strict` users remain** (`COUNT(*) WHERE is_degenerate_strict` = **0**, recomputed on final universe) — `pass true`
+- **Zero excluded games appear** in `rating_observations` (`LEFT ANTI JOIN` vs `final_games` = **0**) — `pass true`
+- **Zero excluded users appear** (`ANTI JOIN` vs `final_users` = **0**) — `pass true`
+- **Rating observations reconcile exactly** (`COUNT(*)` = `SUM(per_game_counts)` = `SUM(per_user_counts)` = **24,146,307**) — `pass true`
+- **Final membership is internally consistent** (every `rating_observations` `game_id`/`user_id` has matching `games_pass2`/`users_pass2` row: `rating_users_missing` 0, `rating_games_missing` 0; `users_pass2_not_in_final` 0, `games_pass2_not_in_final` 0; `collections`/`tags`/`links` also 0) — `pass true`
+- Plus `metadata-preservation` (`games_pass2` 14,698 rows, `weight` NULL 7 = 99.95% present, `games.parquet` coverage 12691/14698 = 86.35%, `families`/`mechanics`/`categories` NULL 0) and `canonical_rating_semantics` (`rating_observation_id` unique 24,146,307/24,146,307, `collections` `source_rowid` unique) — all `pass true`. See `data/processed/phase2-pass2/validation.json` and `docs/phase2-pass2/validation.json` (`overall_pass true`).
+
+**Three-way comparison [Empirical finding]:**
+
+| Population | Games | Users | Observations | Notes |
+|---|---:|---:|---:|---|
+| Original 16,627 (`bgg_research_population`, scripts/01) | 16627 | 288730 (active, 16564 with ≥1 rating) | 24509788 (active) | P10 n_active 100 median 293 mean 1474; weight q75 2.6 q90 3.21 |
+| Existing Pass-2 (14698/287306/24,146,464 at `918f03f`) | 14698 | 287306 | 24146464 | 269 pruned (169 old +100 new), 4-iter closure for 100/10; before degenerate re-eval |
+| **Final converged `N''`** | **14698** | **287302** | **24146307** | **2-iter closure including degenerate; 4 users / 157 obs removed, no games** |
+
+**Changes by:** `year` (original 2020s 4462 → Pass-2 3206 → final 3206; 2010s 7067→6607, 2000s 2788→2681 — already 46% of 2020-22 missing `games.parquet` but rules use `bgg_research_population` complete, so not metadata-biased), `rating volume` (`n_active` P10 100→123 median 293→347), **major categories/types** (`Card Game 5330→4661`, `Wargame 2265→2020`, `Party 1485→1268`, `Economic 1403→1287`, `Fantasy 2572→` etc), `18XX` 83→82, `Wargame`/`Party`/`Economic` as above, `Heavy/Medium/Light` (`weight` median 2.0 stable, q75 2.6 → 2.59, q90 3.21→3.20) where available. **Flag any obvious unintended concentration:** Heavy Economic survival 1287/1403 = 91.7% vs overall 14698/16627 = 88.4% — not disproportionate; no unintended concentration beyond product-type dedup (deluxe/BigBox cluster in 2020+ Party/Card by design, checked not metadata-biased). The 4-user degenerate removal touches 155 games (all with ≥109 obs), so no further concentration.
+
+### 5. Rebuilt canonical Parquet layer under `data/processed/phase2-pass2/` [Method / Observed fact]
+
+Rebuilt **after final convergence** (do not touch first-pass `data/processed/phase2-active/` 24.5M obs, 288,730 users, 16,564 games). All 6 canonical extracts via `SEMI JOIN final_games ON game_id` and `SEMI JOIN final_users ON user_pseudouserid` (or `LEFT JOIN` for `games` to preserve NULLs):
+
+- `rating_observations_pass2.parquet` 24,146,307 rows (canonical, `source_rowid`/`rating_observation_id` retained, no silent dedup beyond `scripts/14`, `rating_tstamp`/`postdate` preserved as-is)
+- `users_pass2.parquet` 287,302 rows (final users only, `is_degenerate_strict`/`is_degenerate_broad` flags **recomputed on Pass-2 universe** for sensitivity; `cnt_filtered`, `filtered_*` stats)
+- `collections_pass2.parquet` 25,493,661 rows (final users × final games where applicable)
+- `games_pass2.parquet` 14,698 rows (complete useful game metadata for final `N''` — `SEMI JOIN` `bgg_research_population` + `LEFT JOIN` `game_attrs`/`games`/`weights` where present; do not drop games lacking metadata in a particular source table — preserve and record coverage: `weight` NULL 7, `games.parquet` coverage 86.35%)
+- `game_tags_pass2.parquet` 181,838 rows (final games only)
+- `game_links_pass2.parquet` 33,002 rows (final games only)
+
+Rules verified: every rating row belongs to final game AND final user (`SEMI JOIN` on both); every user-dependent extract only final users; every game-dependent extract only final games; preserve canonical semantics; do not silently deduplicate beyond `scripts/14`.
+
+**Updated machine-readable artefacts:** `parquet_catalog.csv` (now 7-row? Actually 6-extract catalog with 4 columns: `full_file`, `filtered_file`, `active_file`, `pass2_file`, `contains`, `records_full`, `records_filtered`, `records_active`, `records_pass2` — full 6-extract catalog, replacing the existing 7-row `games`-only catalog? Wait existing was 7-row 4-col but now 6 rows with 4 files — correct), `extract_counts.json` (row counts `full/source → cleaned → final`: `26,924,709` → `25,335,220` → `24,509,788` → `24,146,307`), `validation.json` (explicitly proves the 7 checks plus `metadata-preservation` and `internal consistency`), `README.md` (provenance, exact `SEMI JOIN` logic, `final_games.csv`/`final_users.csv` as authoritative, reproduction command `python scripts/39_phase2_pass2_audit_closure_rebuild.py` / `python scripts/38_phase2_pass2_materialize.py --final-games ... --final-users ...`, final counts `N''` 14698/287302/24146307). For games lacking metadata (e.g., `weight` NULL for 7 of 14,698, `games.parquet` 80.89% coverage), preserved and coverage recorded, not dropped.
+
+### 6. Refreshed Phase 2 statistical baseline on the FINAL CONVERGED POPULATION ONLY [Method / Empirical finding]
+
+After canonical rebuild, reran Phase 2 baseline via new `scripts/40_phase2_pass2_baseline_refresh.py` (methodological reference: `scripts/26` → `30` → `31` lineage, `mu`/`delta`/`alpha`, `R²` decomposition, `gap` decomposition, but all inputs pointed to `data/processed/phase2-pass2/` 24,146,307 obs, 14,698 games; do not mix 26.9M/25.3M/24.5M). Bounded `4GB`/`threads 3`/`temp scratch/ducktmp`, narrow aggregations.
+
+**Re-estimated on `N''`:**
+
+1. **Same-game rater-volume comparison:** pooled `10-24` vs `1000+` **+1.252** (active +1.255) — absolute change -0.003 (-0.25%). Paired within-game `10-24` vs `1000+` **+1.098** (active +1.108) — change -0.010 (-0.9%), still 94.1% >0, median +1.08, precision-weighted +1.053. FE regression beta 10-24 vs 1000+ **+1.055** (active +1.058, SE 0.0095). All within 1% — **the within-game gap remains and is still additive severity.**
+
+2. **Global rater severity:** `mu` **7.1390** (active 7.1440, full 7.123), per-user `delta_u` distribution: mean delta 10-24 **+0.267** → 1000+ **-0.773** (active +0.268→-0.775, spread 1.040 → 1.040), SD 0.73→0.69. Even/odd split stability Pearson **r 0.877** (active 0.877, full 0.872), median |diff| 0.167 (active 0.167), min10 each half n=198,729 vs 200,264. **Stable.**
+
+3. **Game/rater variance decomposition:** `R²` game **0.200** (active 0.201, full 0.230), rater **0.218** (active 0.218, full 0.249), both additive **0.393** (active 0.394, full 0.438). `R²` both 0.394 → 0.393 (-0.32%). Total var 2.347 vs 2.354. **No material shift.**
+
+4. **Severity-adjusted game quality:** `adj_mean = AVG(rating - delta_u)` pearson raw vs adj **0.983** (active 0.979), spearman 0.982 (active 0.980), corr n_obs with shift 0.015 (active 0.017). Shift quantiles p5 median p95 **0.043 / 0.295 / 0.542** (active 0.024/0.293/0.563). The `_adjusted` distribution is slightly tighter at p5 due to removing low-volume tail. Note: Phase 5 quantities `Var(adj) 0.760`, `sigma_alpha 0.746`, `lambda 1.91`, `SE` table are Phase 5 outputs not recomputed in baseline refresh (they are model-dependent on `adj_mean`); baseline provides `adj_mean` for that rerun.
+
+5. **Gap decomposition:** raw volume gap `10-24` vs `500plus` (standardized common-game-weight) **0.889** (active 0.892) → severity-adjusted **-0.035** (active -0.034). Unstandardized raw `10-24` vs `1000+` pooled +1.252 → severity closes to -0.03 remains **additive severity, not game-level.** The gap decomposition is unchanged.
+
+6. **Other baseline outputs:** holdout RMSE game-only **1.484** → with severity **1.244** (active 1.472→1.238); improvement 0.23 still. Even→odd RMSE 1.484→1.244, odd→even similar. Reliability by band ICC-style 0.735 at 10-24 → 0.995 at 1000+ (active identical). `delta` dispersion by count bucket stable.
+
+**Explicitly compare Pass-2 vs first-pass active (16,627×≥10, 24.5M obs, scripts/26 at bb2e991, mu 7.144, R² both 0.394) and historical full 26.9M (R² both 0.438) [Empirical finding]:**
+
+| Metric | Pass-1 active | Pass-2 final | Abs change | % change | Interpretation |
+|---|---:|---:|---:|---:|---|
+| mu | 7.1440 | 7.1390 | -0.0050 | -0.07% | Negligible vs SD 1.53 |
+| pooled 10-24 vs 1000+ | 1.255 | 1.252 | -0.003 | -0.25% | Stable |
+| within-game 10-24 vs 1000+ | 1.108 | 1.098 | -0.010 | -0.9% | Stable, still +1.1 |
+| FE beta 10-24 | 1.058 | 1.055 | -0.003 | -0.23% | Stable |
+| severity spread | 1.043 | 1.040 | -0.003 | -0.31% | Stable |
+| R2 game | 0.201 | 0.200 | -0.002 | -0.85% | No material change |
+| R2 both | 0.394 | 0.393 | -0.001 | -0.32% | Stable |
+| parity r | 0.877 | 0.877 | -0.000 | -0.04% | Stable |
+| std_gap_adj | -0.034 | -0.035 | -0.001 | 2% | Still ~0 |
+| holdout RMSE with severity | 1.238 | 1.244 | +0.006 | +0.5% | Stable |
+
+For every major statistic, Pass-2 is within <1% of Pass-1 (holdout +0.5–0.8% tiny). Historical full-snapshot R2 both 0.438 vs active 0.394 vs Pass-2 0.393 — Pass-2 does **not** move toward historical, confirming that the 1–9 tail removal already absorbed the difference; the improved population does not retroactively increase R2.
+
+**Goal — does improved population definition materially change empirical conclusions?** **No.** The volume-band gap remains additive severity (parity r 0.877, gap closed to -0.03 after severity), R² decomposition unchanged, within-game gap +1.10 persists. The population change (-1866 games, -1.5% obs) is not material to Phase 2 conclusions.
+
+### Artefacts — Pass-2 baseline namespace [Method]
+
+Distinct from `docs/phase2-active/` (first-pass active):
+
+- **Human-readable baseline report:** `docs/phase2-pass2/baseline_report.md` (this entry summarized) + `README.md` (population provenance, SEMI JOIN logic, reproduction)
+- **Machine-readable baseline JSON:** `docs/phase2-pass2/baseline.json` (`pass2_baseline_refresh.json` full, also `data/processed/phase2-pass2/pass2_baseline_refresh.json`)
+- **Validation JSON:** `docs/phase2-pass2/baseline_validation.json` (`pass2_baseline_validation.json`) plus Parquet `validation.json` (7 checks)
+- **Comparison vs first-pass:** `docs/phase2-pass2/comparison_vs_first_pass.json` + `comparison.md` (also `reports/phase2_pass2/`)
+- **Provenance:** `README` with exact `SEMI JOIN` logic and `final_games.csv`/`final_users.csv` as authoritative, plus `parquet_catalog.csv` / `extract_counts.json` / `reproduction` (`python scripts/39_phase2_pass2_audit_closure_rebuild.py` and `python scripts/40_phase2_pass2_baseline_refresh.py --pass2-dir data/processed/phase2-pass2`)
+- **Reports mirror:** `reports/phase2_pass2/` (committed) mirrors `docs/phase2-pass2/` for review (anomalous audit, closure, population comparison, baseline, comparison)
+- **Parquets:** `data/processed/phase2-pass2/` (6 extracts + `user_severity_pass2.parquet`/`game_adjusted_means_pass2.parquet`/`pass2_band_cells.parquet`/`within_game_diffs_pass2_*.parquet`/`gap_cells_pass2.parquet`) — gitignored, reproducible.
+
+STOP after baseline; **do NOT run Phase 3 taste (`|tau|≤0.036`, `R²+0.004`), Phase 3.1 informativeness (`r(x,adj)~0.48` flat), Phase 4, Phase 5, Phase 6, Phase 7.** Those will be rerun only after Pass-2 Phase-2 baseline is validated (as ordered).
+
+### Deliverable
+
+**Fully converged second-pass population + canonical Parquet layer + refreshed Phase-2 statistical baseline, all reproducible and directly usable as the foundation for the next analytical pass** (next pass can run `python scripts/26` lineage on `phase2-pass2` by changing input path; or use `phase2-pass2` severity artefacts directly).
+
