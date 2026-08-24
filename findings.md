@@ -1814,6 +1814,84 @@ CV = 5-fold out-of-fold, unweighted metrics predicting `adj_mean` (seed 20260824
 
 Tagging per AGENTS.md: observed facts (counts, band means, sample sizes), empirical findings (slopes, CV metrics, shifts, overlaps, stability), model-dependent (all spec outputs, residual, preferred spec), supported conclusions (classification c; WLS not material; preferred spec), limitations as listed.
 
+<<<<<<< HEAD
+## 2026-08-24: Sensitivity — do `1–99` active-rating games materially affect Phase 5/6? (scripts/32)
+
+### Scope [Method]
+
+Focused sensitivity study only — **do not alter primary results** (`data/processed/phase2-active/` `24.5M obs, mu 7.144, game_adjusted_means_active, phase6_residuals_active` on `16,564` games). Compares **existing active analysis** (`16,564` games with `≥1` active rating, including the `1–99` bucket — `1,612` games, **9.73%** of active, `P10=100` threshold) against a **sensitivity universe `n_active ≥100` for games** (`14,952` games in `GM`, `14,945` in Phase 6 complete cases) while retaining the existing user definition (`≥10` in-universe ratings, excluding `degenerate_strict` — **not** the deferred recursive closure from `docs/second-pass-methodology-review.md:1`; this is a single-filter study). Reuse, not rebuild: copy-once `scratch/phase2-active`, `SEMI JOIN` on `≥100` game list, bounded `memory 4GB/threads 3/temp scratch/ducktmp`, no wide-table bug, no full-snapshot rescans. Rerunnable `python scripts/32_sensitivity_n100_games.py` → `reports/sensitivity_n100_games/` (CSV/JSON) + `docs/phase6-intermediate/sensitivity_n100.{md,json}` (see `docs/phase6-intermediate/sensitivity_n100.md` for the full sensitivity report with tables).
+
+### Headline finding — explicitly concluded among the three pre-stated cases [Supported conclusion / Model-dependent conclusion]
+
+**Case 3 holds [Model-dependent conclusion — preferred `Q3b/OLS`]: the answer differs between model estimation and candidate screening.**
+
+| Case | Decision rule (per task) | Observed (preferred `Q3b/OLS`) | Met? [Empirical finding] |
+|---|---:|---:|---:|
+| 1 — harmless | `beta` shift `≤10%` **and** `R²` change `≤0.02` **and** `Jaccard ≥0.70` top-1% **and** top not dominated by `n<100` | `beta_weight +3.0%`, `CV R² +0.0139 <0.02`, **overlap `Jaccard 0.973`** but **cross `Jaccard 0.57`**, **top-20 `55%` `n<100`** (`11/20`) | no (screening fails) |
+| 2 — material → rerun with `n≥100` | `beta >10%` **or** `R² >0.02` **or** `Jaccard <0.70` (top-1%) **or** top dominated → `n≥100` for estimation/screening | Preferred model fails `beta`/`R²`; linear-volume `Q3` would hit (`beta_logn +25.6%`, `R² +0.028`) but `Q3b` band-volume is immune | no for preferred model |
+| **3 — split** | **Model stable, candidate lists noisy at low `n` → `n≥100` screening floor for candidates, not population redefinition** | **Pref `beta +3.0%`, `R² +0.014`, residual `pearson 0.9995 / spearman 0.9992` on overlap, `Jaccard_overlap 0.973/0.948`, but top-20 `55%` low-`n` (`SE 0.69–1.19`), top-1% `31%` low-`n` vs `9.7%` population, cross `Jaccard 0.57`** [Empirical finding] | **YES** |
+
+**Implication [Supported conclusion]: keep primary pipeline as is (no population redefinition, no rerun of Phase 5/6 with `n≥100` for estimation); add an `n≥100` (equivalently `SE ≤0.119`) screening floor for Phase 7 candidate lists, or rank by `lower = adj − 1.96·SE`.** Linear-volume specs (`Q3/Q1/Q0`) are more tail-sensitive (`beta_logn +18–26%`); retain `Q3b` bands as preferred precisely because bands neutralise the `1–99` hump. Matches the existing Phase 6 preview practice (`top_residuals_preview_nmin100.csv`).
+
+### Evidence by comparison dimension [Empirical findings / Observed facts]
+
+**1. Phase 5 quality-estimator — `Var(adj)`, `sigma_e`, `sigma_alpha`, `lambda`, `SE`, shrinkage table, held-out `adj_odd` [Empirical finding]:**
+
+| Quantity | Active (`16,564`) | `n≥100` (`14,952`) | Delta |  |
+|---|---:|---:|---:|---|
+| `Var(adj)` | `0.7596` | `0.7275` | `−0.0321` | `−4.22%` — low-`n` excess variance only [Empirical finding] |
+| `sigma_e` | `1.19407` | `1.19335` | `−0.0007` | `−0.06%` |
+| `sigma_alpha (MM)` | `0.8638` | `0.8500` | `−0.0139` | `−1.60%` |
+| `lambda_MM` | `1.9107` | `1.9712` | `+0.0605` | `+3.17%` |
+| `lambda_cov` | `1.9229` | `1.9735` | `+0.0506` | `+2.63%` |
+| `harmonic mean n` | `106.5` | `280.0` | — | `mean 1/n 0.00939→0.00357` [Observed fact] |
+| Held-out `adj_adj RMSE` (`16,512→14,952` games) | `0.2166` `R² 0.9385` | `0.1539` `R² 0.9677` | `−0.0628` | sampling-noise reduction, not bias [Empirical finding] |
+| Held-out `shrunk RMSE` | `0.2052` | `0.1529` | — | — |
+| Shrinkage `w=n/(n+lambda)` median `n=293` | `0.9935` | `0.9933` | `−0.0002` | negligible [Model-dependent] |
+
+**2. Phase 6 expected-quality — preferred `Q3b/OLS` (band-volume, `46` feat; `R²`/`RMSE CV`, `beta`, `corr(resid,log n)`, band-flatness) [Empirical finding; Model-dependent]:**
+
+| | Active | `n≥100` | Delta | Threshold (case 2) | Material? |
+|---|---:|---:|---:|---|---:|
+| `CV R²` | `0.5819 ±0.023` | `0.5958` | `+0.0139` | `>0.02` | no |
+| `R²` in-sample | `0.5844` | `0.5989` | `+0.0145` | — | — |
+| `beta_weight` | `0.461346` | `0.475010` | `+2.96%` | `>10%` | no |
+| `beta_year` (spline `ns_year_*`) | Δ `<3%` in practice | — | — | — | — |
+| `corr(resid, log n)` | `−0.0042` | `+0.0128` | — | `≈0` for `Q3b` by bands | no |
+| `max |band mean resid|` | `≈0` (by construction) | `≈0` | — | — |
+| Residual `SD` | `0.5620` | `0.5403` | `−3.9%` | — | — |
+
+Linear-volume contrast (not preferred): `Q3/OLS beta_logn +25.6%` (`0.352→0.442`), `CV R² +0.0277`; `Q1 +24.0%`; `Q0 +18.3%` — functional-form dependence on the convex bottom tail (`1–99` mean `adj 7.169` > `100–199` `6.637` convex hump), which `Q3b` absorbs via dummies. WLS variants shift `beta_logn +0.3–0.9%` under `Q3b` (irrelevant — `Q3b` has no linear `log n`) and `w=n` `CV R²` is `−0.022` below OLS in both universes (same harm).
+
+**3. Residual distribution (`underratedness_g = adj − expected`) [Empirical finding]:**
+
+Mean `≈0` both universes [Model-dependent]; `SD 0.562→0.540`, `P05 −0.922→−0.896`, `P95 0.856→0.825`, `P01 −1.552→−1.522`, `P99 1.298→1.219`, `maxabs 5.963→5.907` (active positive max `3.937` at `n=1` `SE=1.19` Pondscape vs `n≥100` max `2.276` Monikers: More Monikers `n=452` `SE=0.056`; negative max `−5.963→−5.907` Wonders of The First CCG `n=186` stable). Histogram identical; low-`n` tail fattens extremes.
+
+**4. Residual rank stability — `spearman` / `Jaccard` top-1%/top-5% between active and `≥100` residuals [Empirical finding]:**
+
+- On overlap (`14,945` retained games ranked by each fit): `pearson 0.9995`, `spearman 0.9992`, `Jaccard_top1 0.973` (`k=149`), `Jaccard_top5 0.948` (`k=747`) — **essentially unchanged** [Empirical finding].
+- Cross-universe candidate sets (includes `n<100` games absent from `n≥100` ranking): `Jaccard_top1 0.57`, `Jaccard_top5 0.747` — below `0.70` at `top-1%` precisely because `1–99` candidates are structurally absent, not because the model re-ranked the retained games [Empirical finding; Model-dependent]. Per-spec overlap `Jaccard_top1` `0.85–0.97` (see `residual_stability_by_spec.csv`).
+
+**5+6. Top-1%/top-5% candidate overlap — strongest residuals [Observed fact / Empirical finding]:**
+
+Top-1% active `165` games contains `51` low-`n` (`30.9%`) vs `9.7%` population → `3.2×` enrichment; top-5% `827` contains `153` (`18.5%`, `1.9×`) [Empirical finding]. Cross `Jaccard` above shows screening instability despite model stability. (See `docs/phase6-intermediate/sensitivity_n100.md:4-5` for tables.)
+
+**7. Strongest positive and negative residuals — top 20 per universe [Observed fact]:**
+
+Active top-20 positive: **11/20 `n<100`** (`n=1,2,3,61,81,86` among them; `SE 0.69–1.19`, `resid 2.12–3.94`) — dominated by high-`SE` noise. `n≥100` top-20 positive: none `n<100`; top is Monikers: More Monikers `2.276` (`n=452`) then Small World `2.180` (`n=246`) — party-game series remains on top in both, extreme `>2.5` tail vanishes. Bottom-20 negative largely stable (`Wonders −5.96→−5.91` `n=186`; only ERA `n=40` `−5.19` disappears in `n≥100`). Machine-readable `top20_positive_{active,n100}.csv` / `top20_negative_{active,n100}.csv` in `reports/sensitivity_n100_games/`.
+
+### Why the preferred model is stable but screening is not [Supported conclusion]
+
+`Q3b` uses **volume-band dummies** (`1–99`, `100–199`, `200–499`, `500–999`, `1k–2.5k`, `2.5k–5k`, `5k–10k`, `10k–25k`, `25k+`) **plus** spline year — the `1–99` hump (`adj 7.169` > `100–199` `6.637`) is absorbed as a band level, so `beta_weight` and `CV R²` barely move when the band is dropped. Linear-`log n` specs must bend the line through that hump, so `beta_logn` jumps `+18–26%` when the hump is removed — a **functional-form artefact**, not evidence that `n≥100` should be the estimation floor. The screening noise is a separate fact: any residual at `n=1–3` has `SE = sigma_e/√n = 0.69–1.19` points — wider than the entire `SD(resid)=0.56` — so the positive-tail extremes are disproportionately sampling noise, not model misranking of the `n≥100` population (overlap `r>0.999` proves the latter is stable).
+
+### Deliverables [Method]
+
+One new rerunnable script `scripts/32_sensitivity_n100_games.py` (efficient: copy-once, `SEMI JOIN` on `≥100` game list, single grouped even/odd pass reused, `4GB/3threads`, no full-snapshot rescan, narrow aggregates) + sensitivity report `reports/sensitivity_n100_games/` / `docs/phase6-intermediate/sensitivity_n100.md` + machine-readable `sensitivity_n100_summary.json` (`phase5_comparison_active_vs_n100.csv`, `phase6_beta_cv_comparison.csv`, `phase6_comparative_{active,n100}.csv`, `residual_distribution.csv`, `residual_stability_by_spec.csv`, `top20_*_{active,n100}.csv`, `shrinkage_{active,n100}.csv`).
+
+### Tagging
+
+Counts/`n`/`mu`/`harmonic`/`top-20 n/SE/resid` = **observed facts**; `Var/sigma/lambda/beta/R²/corr/Jaccard/SD/P05/P95/shrinkage/cross-Jaccard enrichment` = **empirical findings**; `beta/R²/shrinkage interval/resid` = **model-dependent conclusions**; case-3 verdict + "no rerun / `n≥100` screening floor" = **supported conclusion / model-dependent conclusion**; scope/recursive-closure disclaimer = **limitation**; `single-filter` semantics advisory = **assumption**.
+=======
 ## 2026-08-24: Phase 7 — robust candidate screening for potential hidden gems (scripts/32)
 
 ### Scope and method
@@ -1893,4 +1971,5 @@ Used only defensible within-BGG evidence, explicitly distinguished per `broad_ap
 *Record:* `scripts/32_phase7_candidate_screening.py` (bounded 4GB/threads3 `temp_directory scratch/ducktmp` `scratch/phase2-active` copy-once, uses `phase6_residuals_active.parquet` `bgg_research_population` `selection_diagnostic.csv` `within_game_diffs_active*` `game_tags/links_filtered`) → `docs/phase7-candidate-screening/{README.md, underrated_candidates.md, underrated_candidates.csv (16549×44), broad_appeal_evidence.md (80 excerpt of 910), exclusions_and_deduplication.md, screening_summary.json}` + `reports/phase7_candidate_screening/screening_summary.json`. Rerunnable: `python scripts/32_phase7_candidate_screening.py --active-dir scratch/phase2-active --population scratch/phase2-active/bgg_research_population.parquet --out-dir docs/phase7-candidate-screening`.
 
 Tagging per AGENTS.md: observed facts (counts 7754/910/361/530/206/136, n medians, mu 7.144 SE 1.194, Jaccard .675/.579/.737, CV .582/.570/.585, band counts), empirical findings (stability .962, corr +0.18, band flatness, pool composition SDs), model-dependent (all residuals, Q3b/Q3/Q4/WLS, robust rule), supported conclusions (preferred spec, WLS not material, no broad proof from popularity/residual, niche preservation), assumptions (severity descriptive level), limitations as above, hypothesis/speculation flagged, implications as method discipline.
+>>>>>>> origin/main
 
