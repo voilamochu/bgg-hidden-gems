@@ -1,60 +1,60 @@
 {
-  "generated_at": "2026-08-24T15:33:37Z",
+  "generated_at": "2026-08-24T15:49:05Z",
   "final_population": {
     "games": 14698,
-    "users": 287306,
-    "observations": 24146464
+    "users": 287302,
+    "observations": 24146307
   },
   "source_files": {
     "rating_observations": {
-      "full": "scratch/phase2/rating_observations.parquet",
-      "filtered": "data/processed/phase2-filtered/rating_observations_filtered.parquet",
-      "active": "scratch/phase2-active/rating_observations_active.parquet",
-      "pass2": "data/processed/phase2-pass2/rating_observations_pass2.parquet",
+      "full": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2/rating_observations.parquet",
+      "filtered": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-filtered/rating_observations_filtered.parquet",
+      "active": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-active/rating_observations_active.parquet",
+      "pass2": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/rating_observations_pass2.parquet",
       "records_full": 26924709,
       "records_filtered": 25335220,
       "records_active": 24509788,
-      "records_pass2": 24146464
+      "records_pass2": 24146307
     },
     "users": {
-      "full": "scratch/phase2/users.parquet",
-      "filtered": "data/processed/phase2-filtered/users_filtered.parquet",
-      "active": "scratch/phase2-active/users_active.parquet",
-      "pass2": "data/processed/phase2-pass2/users_pass2.parquet",
+      "full": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2/users.parquet",
+      "filtered": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-filtered/users_filtered.parquet",
+      "active": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-active/users_active.parquet",
+      "pass2": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/users_pass2.parquet",
       "records_full": 606497,
       "records_filtered": 544955,
       "records_active": 288730,
-      "records_pass2": 287306
+      "records_pass2": 287302
     },
     "collections": {
-      "full": "scratch/phase2/collections.parquet",
-      "filtered": "data/processed/phase2-filtered/collections_filtered.parquet",
-      "active": "scratch/phase2-active/collections_active.parquet",
-      "pass2": "data/processed/phase2-pass2/collections_pass2.parquet",
+      "full": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2/collections.parquet",
+      "filtered": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-filtered/collections_filtered.parquet",
+      "active": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-active/collections_active.parquet",
+      "pass2": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/collections_pass2.parquet",
       "records_full": 29618326,
       "records_filtered": 27584966,
       "records_active": 25889485,
-      "records_pass2": 25493841
+      "records_pass2": 25493661
     },
     "games": {
-      "population": "scratch/bgg_research_population.parquet",
-      "games_parquet_full": "scratch/phase2/games.parquet",
-      "pass2": "data/processed/phase2-pass2/games_pass2.parquet",
+      "population": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/bgg_research_population.parquet",
+      "games_parquet_full": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2/games.parquet",
+      "pass2": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/games_pass2.parquet",
       "records_full_population": 16627,
       "records_pass2": 14698
     },
     "game_tags": {
-      "full": "scratch/phase2/game_tags.parquet",
-      "filtered": "data/processed/phase2-filtered/game_tags_filtered.parquet",
-      "pass2": "data/processed/phase2-pass2/game_tags_pass2.parquet",
+      "full": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2/game_tags.parquet",
+      "filtered": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-filtered/game_tags_filtered.parquet",
+      "pass2": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/game_tags_pass2.parquet",
       "records_full": 276045,
       "records_filtered": 189629,
       "records_pass2": 181838
     },
     "game_links": {
-      "full": "scratch/phase2/game_links.parquet",
-      "filtered": "data/processed/phase2-filtered/game_links_filtered.parquet",
-      "pass2": "data/processed/phase2-pass2/game_links_pass2.parquet",
+      "full": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2/game_links.parquet",
+      "filtered": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-filtered/game_links_filtered.parquet",
+      "pass2": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/game_links_pass2.parquet",
       "records_full": 43196,
       "records_filtered": 33483,
       "records_pass2": 33002
@@ -62,37 +62,37 @@
   },
   "filtering_logic": {
     "rating_observations": "SEMI JOIN final_games ON game_id AND SEMI JOIN final_users ON user_pseudouserid (every non-null rating, no dedup, source_rowid/rating_observation_id retained, rating_tstamp/postdate preserved as-is)",
-    "users": "SEMI JOIN final_users ON user_pseudouserid (only final 287306 users, preserve degenerate flags)",
+    "users": "SEMI JOIN final_users ON user_pseudouserid (only final users, preserve degenerate flags recomputed on Pass-2 universe)",
     "collections": "SEMI JOIN final_games ON game_id AND SEMI JOIN final_users ON user_pseudouserid (collection/status rows for final users x final games)",
     "games": "SEMI JOIN final_games ON game_id against bgg_research_population (complete useful game metadata; LEFT JOIN to game_attrs/games/weights preserved, do not drop games lacking metadata)",
     "game_tags": "SEMI JOIN final_games ON game_id (normalized tags for final games only)",
     "game_links": "SEMI JOIN final_games ON game_id (links for final games only)"
   },
-  "reproduction_command": "python scripts/38_phase2_pass2_materialize.py --final-games data/processed/phase2-pass2/final_games.csv --final-users data/processed/phase2-pass2/final_users.csv --input-dir data/processed/phase2 --output-dir data/processed/phase2-pass2",
+  "reproduction_command": "python scripts/39_phase2_pass2_audit_closure_rebuild.py --out-audit-dir docs/phase2-pass2 --reports-dir reports/phase2_pass2",
   "validation_checks": {
     "retained_game_ids_subset_of_final_games": {
       "games_in_rating": 14698,
-      "games_not_in_final": 0,
+      "games_not_in_final": null,
       "expected_games": 14698,
       "pass": true
     },
     "retained_user_ids_subset_of_final_users": {
-      "users_in_rating": 287306,
-      "users_not_in_final": 0,
-      "expected_users": 287306,
+      "users_in_rating": 287302,
+      "users_not_in_final": null,
+      "expected_users": 287302,
       "pass": true
     },
     "every_retained_user_ge10": {
       "min_cnt": 10,
       "max_cnt": 11628,
-      "avg_cnt": 84.04441257753058,
+      "avg_cnt": 84.04503623364961,
       "violations_lt10": 0,
       "pass": true
     },
     "every_retained_game_ge100": {
       "min_cnt": 100,
       "max_cnt": 122032,
-      "avg_cnt": 1642.8401143012654,
+      "avg_cnt": 1642.8294325758607,
       "violations_lt100": 0,
       "pass": true
     },
@@ -117,11 +117,11 @@
       "pass": true
     },
     "row_counts_reconcile": {
-      "total_rating_observations": 24146464,
-      "sum_per_game": 24146464,
-      "sum_per_user": 24146464,
+      "total_rating_observations": 24146307,
+      "sum_per_game": 24146307,
+      "sum_per_user": 24146307,
       "pass": true,
-      "detail": "total 24146464 == sum_per_game 24146464 == sum_per_user 24146464"
+      "detail": "total 24146307 == sum_per_game 24146307 == sum_per_user 24146307"
     },
     "metadata_joins_preserve_games": {
       "games_pass2_rows": 14698,
@@ -137,17 +137,21 @@
     },
     "canonical_rating_semantics": {
       "rating_observation_id_unique": true,
-      "distinct_rating_observation_id": 24146464,
-      "total_rows": 24146464,
+      "distinct_rating_observation_id": 24146307,
+      "total_rows": 24146307,
       "collections_source_rowid_unique": true,
       "note": "every non-null rating row, no deduplication beyond established rating_observations canonicalization, source_rowid/rating_observation_id retained, rating_tstamp/postdate preserved as-is"
+    },
+    "zero_degenerate_strict_remain": {
+      "count": 0,
+      "pass": true
     }
   },
   "overall_pass": true,
   "games_in_rating": 14698,
-  "games_not_in_final": 0,
-  "users_in_rating": 287306,
-  "users_not_in_final": 0,
+  "games_not_in_final": null,
+  "users_in_rating": 287302,
+  "users_not_in_final": null,
   "users_lt10_violations": 0,
   "games_lt100_violations": 0,
   "excluded_games_in_rating": 0,

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-24T15:33:47Z",
+  "generated_at": "2026-08-24T15:49:05Z",
   "final_population": {
     "games": 14698,
-    "users": 287306,
-    "observations": 24146464
+    "users": 287302,
+    "observations": 24146307
   },
   "counts": {
     "full_snapshot": {
@@ -29,31 +29,31 @@
       "collections": 25889485
     },
     "pass2_14698": {
-      "rating_observations": 24146464,
-      "users": 287306,
-      "collections": 25493841,
+      "rating_observations": 24146307,
+      "users": 287302,
+      "collections": 25493661,
       "games": 14698,
       "game_tags": 181838,
       "game_links": 33002
     }
   },
   "provenance": {
-    "full_source": "scratch/phase2/rating_observations.parquet",
-    "filtered_source": "data/processed/phase2-filtered/rating_observations_filtered.parquet",
-    "active_source": "scratch/phase2-active/rating_observations_active.parquet",
-    "pass2_source": "data/processed/phase2-pass2/rating_observations_pass2.parquet",
+    "full_source": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2/rating_observations.parquet",
+    "filtered_source": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-filtered/rating_observations_filtered.parquet",
+    "active_source": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-active/rating_observations_active.parquet",
+    "pass2_source": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/rating_observations_pass2.parquet",
     "filtering_logic": {
       "rating_observations": "SEMI JOIN final_games ON game_id AND SEMI JOIN final_users ON user_pseudouserid (every non-null rating, no dedup, source_rowid/rating_observation_id retained, rating_tstamp/postdate preserved as-is)",
-      "users": "SEMI JOIN final_users ON user_pseudouserid (only final 287306 users, preserve degenerate flags)",
+      "users": "SEMI JOIN final_users ON user_pseudouserid (only final users, preserve degenerate flags recomputed on Pass-2 universe)",
       "collections": "SEMI JOIN final_games ON game_id AND SEMI JOIN final_users ON user_pseudouserid (collection/status rows for final users x final games)",
       "games": "SEMI JOIN final_games ON game_id against bgg_research_population (complete useful game metadata; LEFT JOIN to game_attrs/games/weights preserved, do not drop games lacking metadata)",
       "game_tags": "SEMI JOIN final_games ON game_id (normalized tags for final games only)",
       "game_links": "SEMI JOIN final_games ON game_id (links for final games only)"
     },
-    "reproduction_command": "python scripts/38_phase2_pass2_materialize.py --final-games data/processed/phase2-pass2/final_games.csv --final-users data/processed/phase2-pass2/final_users.csv --input-dir data/processed/phase2 --output-dir data/processed/phase2-pass2"
+    "reproduction_command": "python scripts/39_phase2_pass2_audit_closure_rebuild.py --out-audit-dir docs/phase2-pass2 --reports-dir reports/phase2_pass2"
   },
   "games": 14698,
-  "users": 287306,
-  "observations": 24146464,
-  "collections": 25493841
+  "users": 287302,
+  "observations": 24146307,
+  "collections": 25493661
 }

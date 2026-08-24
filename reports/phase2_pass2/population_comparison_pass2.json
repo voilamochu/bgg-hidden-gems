@@ -1,0 +1,165 @@
+{
+  "generated_at": "2026-08-24T15:48:39Z",
+  "populations": {
+    "original_16627": {
+      "games": 16627,
+      "users_active": 288730,
+      "obs_active": 24509788,
+      "year_counts": {
+        "1990s": 1098,
+        "2000s": 2788,
+        "2010s": 7067,
+        "2020s": 4462,
+        "1950s": 37,
+        "1970s": 434,
+        "1980s": 624,
+        "1960s": 117
+      },
+      "volume": {
+        "p10": 99.0,
+        "median": 291.0,
+        "p90": 2783.3999999999996,
+        "mean": 1474.095627593673
+      },
+      "top_cats": {
+        "Card Game": 5330,
+        "Fantasy": 2572,
+        "Wargame": 2265,
+        "Science Fiction": 1490,
+        "Party Game": 1485,
+        "Dice": 1478,
+        "Fighting": 1436,
+        "Economic": 1403,
+        "Animals": 1381,
+        "Adventure": 1179
+      },
+      "cnt_18xx": 83,
+      "weight": {
+        "q75": 2.6,
+        "q90": 3.2143,
+        "median": 2.0,
+        "mean": 2.08912741391765
+      }
+    },
+    "existing_pass2_14698": {
+      "games": 14698,
+      "users": 287306,
+      "observations": 24146464,
+      "year_counts": {
+        "1990s": 1051,
+        "2000s": 2681,
+        "2010s": 6607,
+        "2020s": 3206,
+        "1950s": 37,
+        "1970s": 416,
+        "1980s": 587,
+        "1960s": 113
+      },
+      "volume": {
+        "p10": 123.0,
+        "median": 347.0,
+        "p90": 3184.600000000002,
+        "mean": 1643.6966934276772
+      },
+      "top_cats": {
+        "Card Game": 4661,
+        "Fantasy": 2260,
+        "Wargame": 2020,
+        "Science Fiction": 1318,
+        "Dice": 1295,
+        "Fighting": 1289,
+        "Economic": 1287,
+        "Party Game": 1268,
+        "Animals": 1189,
+        "Adventure": 1020
+      },
+      "cnt_18xx": 82,
+      "weight": {
+        "q75": 2.6,
+        "q90": 3.2143,
+        "median": 2.0,
+        "mean": 2.0925023415696686
+      }
+    },
+    "final_converged_Npp": {
+      "games": 14698,
+      "users": 287302,
+      "observations": 24146307,
+      "year_counts": {
+        "1990s": 1051,
+        "2000s": 2681,
+        "2010s": 6607,
+        "2020s": 3206,
+        "1950s": 37,
+        "1970s": 416,
+        "1980s": 587,
+        "1960s": 113
+      },
+      "volume": {
+        "p10": 123.0,
+        "median": 347.0,
+        "p90": 3183.9000000000033,
+        "mean": 1642.8294325758607
+      },
+      "top_cats": {
+        "Card Game": 4661,
+        "Fantasy": 2260,
+        "Wargame": 2020,
+        "Science Fiction": 1318,
+        "Dice": 1295,
+        "Fighting": 1289,
+        "Economic": 1287,
+        "Party Game": 1268,
+        "Animals": 1189,
+        "Adventure": 1020
+      },
+      "cnt_18xx": 82,
+      "weight": {
+        "q75": 2.6,
+        "q90": 3.2143,
+        "median": 2.0,
+        "mean": 2.0925023415696686
+      },
+      "closure_iterations": 2,
+      "converged": true
+    }
+  },
+  "changes": {
+    "original_to_initial_pass2": {
+      "games_removed": 1929,
+      "users_removed": 1424,
+      "obs_removed": 363324
+    },
+    "initial_to_final": {
+      "games_removed": 0,
+      "users_removed": 4,
+      "obs_removed": 157
+    },
+    "original_to_final": {
+      "games_removed": 1929,
+      "users_removed": 1428,
+      "obs_removed": 363481
+    }
+  },
+  "heavy_tail_1000plus_note": "Check whether 0.28% at 1000+ persists on 14698; from audit bands, see anomalous_audit_pass2.json",
+  "weight_q75_q90": {
+    "orig": {
+      "q75": 2.6,
+      "q90": 3.2143,
+      "median": 2.0,
+      "mean": 2.08912741391765
+    },
+    "pass2_initial": {
+      "q75": 2.6,
+      "q90": 3.2143,
+      "median": 2.0,
+      "mean": 2.0925023415696686
+    },
+    "final": {
+      "q75": 2.6,
+      "q90": 3.2143,
+      "median": 2.0,
+      "mean": 2.0925023415696686
+    }
+  }
+}

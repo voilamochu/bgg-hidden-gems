@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-08-24T15:48:26Z",
+  "iterations": [
+    {
+      "iteration": 0,
+      "game_count": 14698,
+      "user_count": 287306,
+      "rating_observation_count": 24146464,
+      "games_removed_for_lt100": 0,
+      "users_removed_for_lt10": 0,
+      "users_removed_as_degenerate_strict": 0,
+      "cumulative_removals_games": 0,
+      "cumulative_removals_users": 0,
+      "cumulative_removals_obs": 0,
+      "convergence": false
+    },
+    {
+      "iteration": 1,
+      "game_count": 14698,
+      "user_count": 287302,
+      "rating_observation_count": 24146307,
+      "games_removed_for_lt100": 0,
+      "users_removed_for_lt10": 0,
+      "users_removed_as_degenerate_strict": 4,
+      "cumulative_removals_games": 0,
+      "cumulative_removals_users": 4,
+      "cumulative_removals_obs": 157,
+      "convergence": false
+    },
+    {
+      "iteration": 2,
+      "game_count": 14698,
+      "user_count": 287302,
+      "rating_observation_count": 24146307,
+      "games_removed_for_lt100": 0,
+      "users_removed_for_lt10": 0,
+      "users_removed_as_degenerate_strict": 0,
+      "cumulative_removals_games": 0,
+      "cumulative_removals_users": 4,
+      "cumulative_removals_obs": 157,
+      "convergence": true
+    }
+  ],
+  "final_population": {
+    "games": 14698,
+    "users": 287302,
+    "observations": 24146307
+  },
+  "initial_population": {
+    "games": 14698,
+    "users": 287306,
+    "observations": 24146464
+  },
+  "converged": true,
+  "total_iterations": 2
+}
