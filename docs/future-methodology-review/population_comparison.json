@@ -1,0 +1,175 @@
+{
+  "generated_at": "2026-08-24T15:05:10Z",
+  "populations": {
+    "original_16627": {
+      "games": 16627,
+      "users_active": 288730,
+      "obs_active": 24509788,
+      "year_counts": {
+        "1990s": 1098,
+        "2000s": 2788,
+        "2010s": 7067,
+        "2020s": 4462,
+        "1950s": 37,
+        "1970s": 434,
+        "1980s": 624,
+        "1960s": 117
+      },
+      "volume": {
+        "p10": 99.0,
+        "median": 291.0,
+        "p90": 2783.3999999999996,
+        "mean": 1474.095627593673
+      },
+      "top_cats": {
+        "Card Game": 5330,
+        "Fantasy": 2572,
+        "Wargame": 2265,
+        "Science Fiction": 1490,
+        "Party Game": 1485,
+        "Dice": 1478,
+        "Fighting": 1436,
+        "Economic": 1403,
+        "Animals": 1381,
+        "Adventure": 1179
+      },
+      "cnt_18xx": 83
+    },
+    "after_current_cleanup_16458": {
+      "games": 16458,
+      "games_removed": 169,
+      "users": 288730,
+      "obs": 24509788,
+      "year_counts": {
+        "1990s": 1097,
+        "2000s": 2770,
+        "2010s": 6989,
+        "2020s": 4390,
+        "1950s": 37,
+        "1970s": 434,
+        "1980s": 624,
+        "1960s": 117
+      },
+      "volume": {
+        "p10": 99.0,
+        "median": 290.0,
+        "p90": 2791.9000000000033,
+        "mean": 1480.7094422165512
+      },
+      "top_cats": {
+        "Card Game": 5295,
+        "Fantasy": 2539,
+        "Wargame": 2255,
+        "Science Fiction": 1477,
+        "Party Game": 1460,
+        "Dice": 1458,
+        "Fighting": 1423,
+        "Economic": 1380,
+        "Animals": 1376,
+        "Adventure": 1169
+      }
+    },
+    "after_new_cleanup_16358": {
+      "games": 16358,
+      "games_removed_total": 269,
+      "year_counts": {
+        "1990s": 1093,
+        "2000s": 2752,
+        "2010s": 6957,
+        "2020s": 4347,
+        "1950s": 37,
+        "1970s": 433,
+        "1980s": 622,
+        "1960s": 117
+      },
+      "volume": {
+        "p10": 99.0,
+        "median": 290.0,
+        "p90": 2795.300000000001,
+        "mean": 1483.3943636141337
+      }
+    },
+    "final_converged": {
+      "games": 14698,
+      "users": 287306,
+      "observations": 24146464,
+      "year_counts": {
+        "1990s": 1051,
+        "2000s": 2681,
+        "2010s": 6607,
+        "2020s": 3206,
+        "1950s": 37,
+        "1970s": 416,
+        "1980s": 587,
+        "1960s": 113
+      },
+      "volume": {
+        "p10": 123.0,
+        "median": 347.0,
+        "p90": 3184.600000000002,
+        "mean": 1643.6966934276772
+      },
+      "top_cats": {
+        "Card Game": 4661,
+        "Fantasy": 2260,
+        "Wargame": 2020,
+        "Science Fiction": 1318,
+        "Dice": 1295,
+        "Fighting": 1289,
+        "Economic": 1287,
+        "Party Game": 1268,
+        "Animals": 1189,
+        "Adventure": 1020
+      },
+      "cnt_18xx": 82,
+      "closure_iterations": 4,
+      "converged": true
+    }
+  },
+  "removal_by_reason": {
+    "old_169": {
+      "edition_bigbox": 153,
+      "family_monikers_timesup": 17,
+      "overlap": 1
+    },
+    "new_100": {
+      "base_set_starter_set": 1,
+      "bundle_collection": 1,
+      "edition_extended": 97,
+      "reprint_alternate_version": 1
+    },
+    "closure_games_lt100": 1649,
+    "closure_users_lt10": 946
+  },
+  "diagnostics": {
+    "active": {
+      "total_users": 288730,
+      "avg_n": 84.8882623904686,
+      "median_n": 39.0,
+      "strict_n20": 0,
+      "broad_n10": 3325,
+      "total_n20": 216435,
+      "total_n10": 288730
+    },
+    "converged": {
+      "total_users": 287306,
+      "avg_n": 84.04441257753058,
+      "median_n": 39.0,
+      "p10_n": 13.0,
+      "p90_n": 193.0,
+      "avg_mean": 7.473109608349419,
+      "sd_mean": 0.7327855970640427,
+      "avg_sd": 1.3065560686157822,
+      "median_sd": 1.2544983241041807,
+      "avg_modal": 0.37980173942882245,
+      "median_modal": 0.36363636363636365,
+      "strict_n20": 4,
+      "broad_n10": 3263,
+      "total_n20": 214965,
+      "total_n10": 287306,
+      "single_value_total": 610,
+      "single_value_n1": 0,
+      "single_value_n3": 610
+    }
+  }
+}

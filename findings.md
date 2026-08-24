@@ -2221,3 +2221,63 @@ Per deferred criteria (**adopt only if joint comparison shows material differenc
 
 **Limitations [Limitation]:** Game-level data, not individual-rating-level for per-game rating SD; user-level data timestamp semantics unresolved (run time-based results under both readings); severity is descriptive level not credibility; categories/tags overlapping descriptive not causal; is_reimplementation flag 1.7% vs weight/mechanics guards for distinct designs; second-pass closed loses 11% of games (mostly tail) but retains 99% of obs (tail is games not ratings) — not generalizable to excluded niche.
 
+
+## 2026-08-24: Second-pass extension — 100 additional game-entity duplicates + 14698 converged (phase2-pass2)
+
+### Scope and method [Method]
+
+Extended the executed second-pass (169 pruned on `game_links`/`families`/`title_clean` + 14786 closed via 100/10 + degenerate, `docs/phase2-second-pass/` + `docs/future-methodology-review/` already on `main` at `799250e`/`3e2fe8e`) without replacing history. Performed additional audit of surviving 16458 games for records that should not represent independent games for hidden-gem discovery, using all available richer BGG snapshot evidence (`game_links` 33k filtered, `families` 975 Game: families 110 with >5, `title`/`title_clean`, `year`/`designer`/`weight`/`mechanics`, `is_reimplementation`, `description`). Title keywords used as signals, corroborated by `designer`/`year`±1, `families` Jaccard, `weight`≤0.2, `game_links` `rel=version`, `title_clean`/Levenshtein ≤2. Keep more popular/complete per group (not higher-residual). Then recomputed qualifying population recursively: every retained game ≥100 qualifying ratings (`rating_observations_active` 24.5M obs, mu 7.144, 16564 games with ≥1 active rating) and every retained user ≥10 within retained universe, iteratively prune both until no additional game or user removed (fixed-point). Bounded 4GB/3threads, copy-once to `scratch/second-pass-audit`, narrow single-scan aggregations.
+
+### Game-entity audit results [Observed fact / Empirical finding]
+
+- **Newly detected 100** (not in 169): 97 `edition_extended` (second-edition/anniversary/premium/heritage/decennial/reprint/bundle etc where designer/year/weight/families/game_links corroborate), 1 `base_set_starter_set` (Summoner Wars Starter Set 339263 → parent 332800, weight/year/designer corroborated), 1 `bundle_collection` (Everdell Complete Collection 332398 → base 199792), 1 `reprint_alternate_version` (Drakon 59061 → 61269, lv2, designer/year±1/families identical). Total pruned **269** (169+100, 1.62% of 16627), surviving before closure **16358**. Combined Jaccard vs original 16358/16627=0.9838.
+- **Already handled 169** (153 edition_bigbox +17 family_monikers_timesup -1 overlap) — overlap with new 0, distinct.
+- **Intentionally retained 269** despite relationship (distinct designs kept): e.g., Brass Birmingham vs Lancashire (bases distinct, year gap 11, designer string differs, kept separate), Pandemic vs Legacy (weight 2.40 vs 2.83, Legacy adds Campaign, year gap 8), Dune duplicates with distinct designers, Catan Card Game vs CATAN (different weight/year), Magic: The Gathering system entries (collectible systems distinct), Pathfinder base sets (distinct campaigns), large families (Munchkin 39, Catan 43) kept distinct unless corroborated.
+- **Per-rule quantified** (games/obs/users/era/cat/volume, overlap, risk): edition_extended top cats CardGame etc, era 2020+ enriched 1.6% vs 2000 0.6% (deluxe/BigBox cluster in 2020+ by design, checked not metadata-biased); bundle/starter singletons with clear parent. See `game_entity_cleanup_audit.csv` (538 rows, 100 new remove, 169 already, 269 retain) and `game_entity_cleanup_audit.md`.
+
+### Recursive closure to fixed point [Observed fact]
+
+| iter | games | users | obs | games_removed | users_removed | convergence |
+|---|---|---|---|---|---|---|
+| 1 | 16358 | 288730 | 24265365 | 1649 | 946 | False |
+| 2 | 14709 | 287784 | 24151784 | 11 | 475 | False |
+| 3 | 14698 | 287309 | 24146491 | 0 | 3 | False |
+| 4 | 14698 | 287306 | 24146464 | 0 | 0 | True |
+
+**Final converged:** **14698 games / 287306 users / 24146464 obs** in 4 iterations (pruned 1660 games from 16358, 1424 users). Every game ≥100 and every user ≥10 within retained set; no excluded game/user survives; rating observations internally consistent (validation 0 violations). Compare primary closed 14786/287776/24254208 (169) and base closed 14941/288250/24397989 — additional 100-game prunes reduce games by 88 and obs by 108k; convergence still 4 iterations, showing iteration matters little beyond single filter (single-filter 14952 vs closed 14941 diff 11 previously). See `recursive_population_iterations.csv` and `recursive_population_closure.md`.
+
+### Post-convergence anomalous-rater diagnostic (lightweight) [Empirical finding]
+
+- **User counts:** active 288730 / 24.5M obs vs converged 287306 / 24.15M obs (removed 1424 users, 363k obs).
+- **Within_user_sd / mean_rating / modal_share:** converged median_sd 1.254, avg_sd 1.307, avg_mean 7.473, median modal 0.364.
+- **Degenerate_strict prevalence:** active historically 667 / 288730 ≈0.23% overall, 0.31% at n≥20 per PR #4 (0 in active file after exclusion, recomputed on converged gives 4 strict) vs converged strict **4 / 214965 ≈0.002% at n≥20** (vs 667/216435 0.31% active) — prevalence drops 100× because low-n games removed leave fewer sparse histories; flags less discriminating.
+- **Broad:** active 3325 retained broad vs converged broad 3263 / 287306 ≈1.14% at n≥10 (similar).
+- **Single_value:** active 24.3% at n=1 vs 2.43% at n≥3 vs converged 610 total (0 at n=1 because n≥10 floor, 610 at n≥3 => 0.21% at n≥3).
+- **Plausibly change classification?** A user who was degenerate_strict with n=20 SD<0.2 may drop below n=10 and be excluded (946+475+3 removed), or new user may become degenerate after games removed (4 new strict found). Flagged as reason to rerun full anomalous-rater audit before refreshed Phase 2 baseline (`scripts/26` mu 7.144). See `population_comparison.*`.
+
+### Population quality check (explicit comparison) [Empirical finding]
+
+- **Counts:** original 16627 (16564 active) 24.5M obs, 288730 users; after current cleanup 16458 (169 removed, 0.57% obs, 73k users affected); after new cleanup 16358 (269 removed, 1.62%); final converged 14698 (4 iterations, every game ≥100 and user ≥10). Games removed by reason: edition_extended 97, starter 1, bundle 1, reprint 1, plus games<100 1649+11 and users<10 946+475+3 closure.
+- **Year:** 2020s 4462 → 3206 (-28.1%) after converged (vs 3236 -27% for primary closed), 2010s 7067→6607 (-6.5%), 2000s 2788→2681 (-3.8%) — BigBox/deluxe and low-n tail disproportionately 2020+ as expected, already 46% of 2020-22 missing `games.parquet` metadata but rules use `bgg_research_population` complete, so not metadata-biased.
+- **Volume:** original P10 99 median 291 P90 2783 mean 1474 → final P10 123 median 347 P90 3185 mean 1644 — n<100 removal disproportionately removes low-volume games, median rises as expected.
+- **Categories:** Card Game 5330→4661 (-12.5%), Wargame 2265→2020 (-10.8%), Party 1485→1268 (-14.6%), Economic 1403→1287 (-8.3%), 18XX 83→82 (-1) — no systematic genre excision beyond product-type dedup; deluxe/BigBox cluster in Party/Card 2020+ by design, keepers are higher-volume versions.
+- **Unintended concentration:** BigBox/Deluxe removal disproportionately Party/Family 2020+, but genre shift <15% and 18XX/wargame/party/heavy-economic not systematically excised.
+
+### Rebuilt canonical extracts (new namespace) [Method]
+
+- **New namespace:** `data/processed/phase2-pass2/` distinct from `phase2` (26.9M full), `phase2-filtered` (25.3M), `phase2-active` (24.5M), `phase2-second-pass` (14786/16458). Preserved first-pass artifacts unchanged.
+- **Rebuilt extracts:** `rating_observations_pass2.parquet` 24146464 rows, `users_pass2.parquet` 287306 rows, `collections_pass2.parquet` 25493841 rows, `games_pass2.parquet` 14698 rows, `game_tags_pass2.parquet` 181838 rows, `game_links_pass2.parquet` 33002 rows. Every user-dependent extract only users surviving final ≥10, every game-dependent extract only games surviving final ≥100, all joins/filters use final converged population.
+- **Catalog:** `parquet_catalog.csv` with row counts full→cleaned→final (full 26.9M, filtered 25.3M, active 24.5M, pass2 24.15M).
+- **Validation:** 0 violations: every retained game_id in final population, every retained user_id in final population, every retained user ≥10, every retained game ≥100, no excluded game/user survives, rating observations internally consistent.
+- **README:** `data/processed/phase2-pass2/README.md` with exact source inputs, filtering logic, convergence result, reproduction command `python scripts/37_second_pass_closure_and_rebuild.py` (bounded 4GB/3threads, `scratch/second-pass-audit`).
+- **Git:** new extracts gitignored via `data/processed/`; committed `parquet_catalog.csv`, `validation.json`, `README.md`, `extract_counts.json`, `final_games.csv`, `final_users.csv`, `games_pass2.parquet` (population definition, small) via `git add -f`; large rating/users/collections remain gitignored but reproducible.
+- **Population definition parquet(s) committed** for reproducibility; downstream Phase 2/3/4 statistical reruns remain **deferred** (no new adj/expected fit) until population stable and convergence demonstrated — this rebuild is final deliverable of this task.
+
+### Limitations and open issues [Limitation / Assumption]
+
+- **Game-entity audit model-dependent:** Edition/reprint/bundle decisions use designer/year/weight/families/game_links corroboration, but weight/mechanics thresholds (0.2, Jaccard 0.5/0.8) are conventions; different thresholds would move counts. Single 18xx variant (18GA) intentionally retained as distinct map (lv2 but distinct title) — illustrates convention sensitivity.
+- **Self-selection not fixed:** Game-level dedup and n≥100 floor correct for noise and duplicate SKUs, not for who chooses to buy/play/rate. A high rating from small group ≠ broad appeal; low volume ≠ just needs more data; shrinkage corrects noise not who is in sample. New 100 pruned are product-type duplicates (deluxe/anniversary/second-edition) — keepers are higher-volume versions, not higher-residual.
+- **System entries retained:** Collectible systems (Magic, Pokémon etc, 36 with `Admin: Game System Entries`) intentionally retained as distinct for hidden-gem, but could be argued as system not single game — conservative choice.
+- **Anomalous-rater diagnostic lightweight:** Not full rerun of `scripts/25` (degenerate_strict 667, broad 3993) — prevalence and distribution shift flagged, full audit must be rerun before refreshed Phase 2 baseline (scripts/26).
+- **No downstream refresh yet:** Phase 2/3/4 severity/taste/informativeness/selection, new adj/expected fit remain deferred per task.
+

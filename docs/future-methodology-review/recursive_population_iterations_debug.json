@@ -1,0 +1,122 @@
+[
+  {
+    "iteration": 1,
+    "games": 16358,
+    "users": 288730,
+    "users_keep": 287784,
+    "observations": 24265365,
+    "games_removed": 1649,
+    "users_removed": 946,
+    "convergence": false,
+    "games_keep": 14709,
+    "obs_keep": 24151784
+  },
+  {
+    "iteration": 2,
+    "games": 14709,
+    "users": 288730,
+    "users_keep": 287309,
+    "observations": 24160156,
+    "games_removed": 11,
+    "users_removed": 1421,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146491
+  },
+  {
+    "iteration": 3,
+    "games": 14698,
+    "users": 288730,
+    "users_keep": 287306,
+    "observations": 24159054,
+    "games_removed": 0,
+    "users_removed": 1424,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146464
+  },
+  {
+    "iteration": 4,
+    "games": 14698,
+    "users": 288730,
+    "users_keep": 287306,
+    "observations": 24159054,
+    "games_removed": 0,
+    "users_removed": 1424,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146464
+  },
+  {
+    "iteration": 5,
+    "games": 14698,
+    "users": 288730,
+    "users_keep": 287306,
+    "observations": 24159054,
+    "games_removed": 0,
+    "users_removed": 1424,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146464
+  },
+  {
+    "iteration": 6,
+    "games": 14698,
+    "users": 288730,
+    "users_keep": 287306,
+    "observations": 24159054,
+    "games_removed": 0,
+    "users_removed": 1424,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146464
+  },
+  {
+    "iteration": 7,
+    "games": 14698,
+    "users": 288730,
+    "users_keep": 287306,
+    "observations": 24159054,
+    "games_removed": 0,
+    "users_removed": 1424,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146464
+  },
+  {
+    "iteration": 8,
+    "games": 14698,
+    "users": 288730,
+    "users_keep": 287306,
+    "observations": 24159054,
+    "games_removed": 0,
+    "users_removed": 1424,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146464
+  },
+  {
+    "iteration": 9,
+    "games": 14698,
+    "users": 288730,
+    "users_keep": 287306,
+    "observations": 24159054,
+    "games_removed": 0,
+    "users_removed": 1424,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146464
+  },
+  {
+    "iteration": 10,
+    "games": 14698,
+    "users": 288730,
+    "users_keep": 287306,
+    "observations": 24159054,
+    "games_removed": 0,
+    "users_removed": 1424,
+    "convergence": false,
+    "games_keep": 14698,
+    "obs_keep": 24146464
+  }
+]

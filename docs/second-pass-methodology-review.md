@@ -1,6 +1,8 @@
-# Second-Pass Methodology Review (Deferred → EXECUTED 2026-08-24)
+# Second-Pass Methodology Review (Deferred → EXECUTED 2026-08-24, Extended 2026-08-24)
 
 **Status:** `EXECUTED` — recursively closed to fixed point (see `docs/future-methodology-review/README.md:1` and `data/processed/phase2-second-pass/` for logs; 4 iterations, base 14941 vs primary 14786, vs single-filter 14952 diff 11, estimation stable per `model_comparison.json`). Requires explicit comparison before adoption — now done.
+
+**Update 2026-08-24 Extension:** After initial 169 pruned (153 edition +17 family), additional **100** game-entity duplicates audited with corroboration (97 second-edition/anniversary/premium/heritage/decennial etc, 1 starter-set component, 1 bundle, 1 reprint) => **269 total pruned** => 16358 before closure => **14698 converged** in 4 iterations (1649+11 games, 946+475+3 users, 24.65M→24.15M obs). New namespace `data/processed/phase2-pass2/` built with validation 0 violations, every game ≥100 and user ≥10. Downstream Phase 2/3/4 refresh remains deferred. See `docs/future-methodology-review/game_entity_cleanup_audit.md`, `recursive_population_iterations.csv`, `population_comparison.*`, `phase2-pass2/README.md`.
 
 **Status (original):** `DEFERRED` — **not part of the current primary pipeline**. To be reconsidered only after the current full Phase 1–7 pass is complete. Requires explicit comparison of the current and recursively cleaned populations before adoption. Do not implement now.
 

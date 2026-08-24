@@ -1,0 +1,5 @@
+iteration,games,users,observations,games_removed,users_removed,convergence
+1,16358,288730,24265365,1649,946,False
+2,14709,287784,24151784,11,475,False
+3,14698,287309,24146491,0,3,False
+4,14698,287306,24146464,0,0,True

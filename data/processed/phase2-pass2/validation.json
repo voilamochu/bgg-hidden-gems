@@ -1,0 +1,10 @@
+{
+  "games_in_rating": 14698,
+  "games_not_in_final": 0,
+  "users_in_rating": 287306,
+  "users_not_in_final": 0,
+  "users_lt10_violations": 0,
+  "games_lt100_violations": 0,
+  "excluded_games_in_rating": 0,
+  "rating_observations_internal_consistent": true
+}

@@ -1,10 +1,10 @@
-# Second-Pass Methodology Review — Executed
+# Second-Pass Methodology Review — Executed (Extended)
 
-**Status:** `EXECUTED` — second-pass population built for direct comparison before adoption (deferred review now authorized). Current **16,627-game research population** (`data/processed/bgg_research_population.parquet`, `scripts/01_clean_population.py`) remains **primary first-pass record**; second-pass is refinement enabled by newly available 9 GB SQLite snapshot (`data/processed/phase2-second-pass/`).
+**Status:** `EXECUTED` — second-pass population built for direct comparison before adoption (deferred review now authorized). Current **16,627-game research population** (`data/processed/bgg_research_population.parquet`, `scripts/01_clean_population.py`) remains **primary first-pass record**; second-pass is refinement enabled by newly available 9 GB SQLite snapshot (`data/processed/phase2-second-pass/` + extension `data/processed/phase2-pass2/`).
 
-**Date executed:** 2026-08-24
-**Scripts:** `scripts/34_second_pass_population.py` (game-level dedup + recursive closure, bounded 4GB/3threads, copy-once to `scratch/second-pass`) and `scripts/35_second_pass_model_comparison.py` (Phase5/6 refit on closed populations).
-**Outputs:** `data/processed/phase2-second-pass/` (see its `README.md`), comparison `comparison_table.json`, model `model_comparison.json`, pruned lists `pruned_lists/`, closure logs `*_closure_log.csv`, populations `bgg_population_second_pass*.parquet`.
+**Date executed:** 2026-08-24 (initial 169 + 14786 closed) and **2026-08-24 extension (100 additional + 14698 converged, `phase2-pass2`)**
+**Scripts:** `scripts/34_second_pass_population.py` (game-level dedup + recursive closure, bounded 4GB/3threads, copy-once to `scratch/second-pass`) and `scripts/35_second_pass_model_comparison.py` (Phase5/6 refit) — plus extension `scripts/36_second_pass_audit_extension.py` (100 new audited with corroboration: second-edition/anniversary/premium/heritage/decennial/reprint/bundle/starter where designer/year/weight/families/game_links corroborate) and `scripts/37_second_pass_closure_and_rebuild.py` (mutual `≥100`/`≥10` closure to 14698, 4 iterations, and rebuild `phase2-pass2` extracts).
+**Outputs:** `data/processed/phase2-second-pass/` (see its `README.md`, 169 pruned, 14786 closed) plus extension `data/processed/phase2-pass2/` (269 total pruned =169+100, 14698 converged, see `docs/future-methodology-review/game_entity_cleanup_audit.*`, `recursive_population_iterations.csv`, `population_comparison.*`), comparison `comparison_table.json`, model `model_comparison.json`, pruned lists `pruned_lists/`, closure logs `*_closure_log.csv`, populations `bgg_population_second_pass*.parquet` and `phase2-pass2/games_pass2.parquet`.
 
 ## What was deferred and why it is now executed
 
