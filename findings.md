@@ -1813,3 +1813,84 @@ CV = 5-fold out-of-fold, unweighted metrics predicting `adj_mean` (seed 20260824
 *Record:* `scripts/31_phase6_expected_quality_underratedness.py` → `reports/phase6_underratedness/` (comparative_table.csv, coefficient_table.csv, residual_overlap.csv, low_n_residual_stability.csv, volume_diagnostic_{band,decile}_table.csv, 2 PNGs, 2 preview CSVs) + `docs/phase2-active/phase6_comparative.json` + `docs/phase2-active/phase6_volume_diagnostic.json` (both committed, strict JSON) + gitignored per-game parquet. Rerunnable: `python scripts/31_phase6_expected_quality_underratedness.py`.
 
 Tagging per AGENTS.md: observed facts (counts, band means, sample sizes), empirical findings (slopes, CV metrics, shifts, overlaps, stability), model-dependent (all spec outputs, residual, preferred spec), supported conclusions (classification c; WLS not material; preferred spec), limitations as listed.
+
+## 2026-08-24: Phase 7 — robust candidate screening for potential hidden gems (scripts/32)
+
+### Scope and method
+
+**[Method]** New `scripts/32_phase7_candidate_screening.py` on the **fixed active population** 16,627 × ≥10 ¬strict (24.5M obs, mu 7.144, SE 1.194/√n, sigma_alpha² 0.746, sigma_e² 1.426 from scripts/30). Carries **Phase 6 primary estimator** `underratedness_g = adj_mean_g − expected_quality_g` where `expected_quality_g` comes from **preferred `Q3b` flexible-volume / OLS** (scripts/31, `docs/phase2-active/phase6_comparative.json`; 46 features: 8 volume-band dummies + spline year (4 knots .05/.35/.65/.95) + weight + playtime/players/reimplementation + 28 category flags; CV R² .582 vs Q3 .570 vs Q4 .585). Screening stage only — no final hidden-gem score built; keeps **underratedness (conditional anomaly) vs broad appeal (audience breadth beyond niche)** distinct per AGENTS.md central problem (self-selection). Copy-once to `scratch/phase2-active`, DuckDB bounded 4GB/3 threads `scratch/ducktmp`, uses `phase6_residuals_active.parquet` + `bgg_research_population` (complete 16,627) + `selection_diagnostic.csv` + `within_game_diffs_active*` + `game_tags/links_filtered` (no wide-table bug, no full-snapshot rescan).
+
+Phase 7 has **two distinct objectives kept separate** — does not collapse into one score.
+
+### A. Underratedness screen — method and thresholds [Method / Assumption]
+
+Every candidate reports **magnitude vs evidence strength alongside**: `residual`, `SE=1.194/√n`, `post_SD=1/√(1/0.746+n/1.426)`, `n`, `z=resid/SE`, `lb_adj=adj−1.96·SE`, `resid_lb`. Preserves that `+0.3` at `n=50` `SE 0.169` ≠ `+0.3` at `n=3000` `SE 0.022` (P10 100 SE 0.119, median 293 SE 0.070, P90 2796 SE 0.023, 10×; 23.4% of games `|resid|<2·SE`). Added robustness `min_alt = min(cv_pref,wls_pref,ols_Q3,wls_Q3)` and `cv_diff`, `n_decile` (D1-D10 p10 100 median 293 p90 2796, not arbitrary groups) / `vol_band_label` (1-99 … 25k+) / `n_tertile`, release flag, `is_reimplementation`/`title_clean`/`game_links` dedup.
+
+**Broad pool — explicit definition [Method choice]:** `n≥100` (P10 floor, matches Phase 6 preview `top_residuals_preview_nmin100.csv`; SE ≤0.119) **AND** `resid>0` (better than expected given X, not quality proof). Yields **7,754** games (46.9% of 16,549 estimation sample). Nested tiers for review: `resid>0.2` → **5,131**; top 5% among n≥100 `resid≥0.828` → **748**; top 1% `≥1.225` → **150**.
+
+**Robust subset — explicit rule (evidence-aware, method choice) [Model-dependent / Assumption]:**
+
+```
+robust :=
+  n ≥200                      // >P40 (215), tertile low (<163) fully excluded, SE ≤0.084
+  & resid_pref ≥0.60          // ≈1.07 SD of resid SD 0.562; p91 among n≥200;
+                              // top 10% among n≥100 is 0.626; large effect
+  & min_alt ≥0.30             // stable positive across Q3b/Q4/WLS: cv,wls,ols_Q3,wls_Q3 ≥0.30
+                              // (Jaccard Q3b vs Q3 .675/.985, Q3b vs Q4 .579/.958, WLS vs OLS .737/.963;
+                              // CV .582/.570/.585; median cv_diff 0.009)
+  & z = resid/SE ≥5           // at n=200 SE 0.084 → z 7.1 for 0.60; min z among robust 7.2
+  & year <2025                // exclude unreleased/upcoming (already filtered but flag 2025+ edge)
+  & NOT duplicate-shadowed    // not less-popular edition where more popular related exists (4× users rule)
+```
+
+**Explicit exclusion / dedup decisions [Method]:** `excluded_low_evidence` (n<100 weak evidence; e.g. `game_id 12345 n=12 SE 0.345 resid 0.45 z=1.3 weak`), `excluded_unreleased` (year≥2025 even if resid large), `flagged_duplicate_title` (`title_clean` duplicate — keep most popular, 206 flagged, e.g. Dominion Big Box 142132 vs 142131), `flagged_shadowed_by_more_popular_related` (reimplementation/version with 4× users, 136 flagged, e.g. Twilight Struggle Red Sea 300192 vs base 12333), `flagged_wellknown` (users≥20000 or rank<500 widely established, 530 flagged, e.g. Catan base vs Seafarers — conflicts with hidden-gem objective), `not_underrated` (resid≤0 with n≥100, 6,800). All decisions preserve `screening_disposition` + `reason` plus `related_game_id` for later manual review — not collapsed to binary pass/fail.
+
+### A. Results [Observed facts / Empirical findings]
+
+- **Counts [Observed fact]:** 16,549 estimation sample (16,627 population minus 15 with missing weight/playtime) → broad `>0` **7,754** (`>0.2` 5,131, top5% 748) → robust **910** (plus 67 meeting robust criteria but flagged wellknown separately; 530 wellknown total). Excluded/dedup: unreleased **361** (population has 361 games 2025+ in estimation sample; 211 with positive residual; population overall 396 in 2025 +27 in 2026), low evidence `n<100` 1,272 (729 excluded_low_evidence +543 negative), duplicate 206, shadowed 136, not_underrated 6,800.
+
+- **N and uncertainty distribution [Observed fact]:** p10 100 median 293 p90 2796 mean 1481. Per disposition median n: robust 474 mean 913, broad_gt02 median 261, flagged_wellknown median **15,206** (mean 20,467 — popularity premium territory), excluded_unreleased median 11, excluded_low median 86. SE spans 1.19 at n=1 →0.003 at max 122k; `corr(|resid|,SE)=+0.18` modest (larger absolute residuals more common where precision low, but between-game signal dominates).
+
+- **Stability [Empirical finding]:** min_alt ≥0.30 holds for 910 robust; Q3b vs Q3 spearman .985 Jaccard .675, Q3b vs Q4 .958/.579, WLS vs OLS Q3b .963/.737 (from `residual_overlap.csv`). WLS degrades CV for every spec (Q3b .5822→.5599) and leaks volume `corr(resid,log n) −0.08..−0.13` plus +0.32 mean residual sub-100 — OLS preferred (Phase 6). Low-n residual stability even-half vs full `corr .962` at lowest quartile (mean n=100) — residuals dominated by between-game signal, not sampling noise, yet `z`/`lb_adj` still matters for certainty (median `|resid|/SE` 5.0, P25 2.2).
+
+- **Top of robust screen [Observed fact / Model-dependent]:** dominated by Monikers/ Time's Up! series party games — highly rated well beyond what characteristics predict, pending broad-appeal screen. Illustrative robust top: Monikers: More Monikers 255249 (2018 n452 adj 8.58 E6.30 resid **2.27** SE 0.056 z 40.5 min_alt 2.18), Small World Designer Edition 140135 (n246 resid **2.20**), Monikers Shmonikers 179448 (**2.05**), Something Something 195709 (**2.03**), Time's Up! Title Recall! 36553 (n3629 resid **1.93** SE 0.020 z 97). Small World Designer Edition (266 users, unranked) vs base Small World 40692 (75,285 users rank 410 resid −0.17) — edition shadowed case; Red Sea 300192 resid −0.24 not underrated vs base Twilight Struggle 12333 wellknown flagged_wellknown (resid 0.02) despite rank 16.
+
+- **What robust is NOT [Supported conclusion]:** residual is model-dependent conditional anomaly (Q3b/OLS additive linear-in-parameters; tags overlap descriptive contrasts, not causal; measurement error in X not modeled). It is not latent quality, not broad appeal, not external validation. Volume on right side “expected given popularity” so residual has no volume gradient by construction (`corr resid, log n −0.004` band-flat).
+
+### B. Hidden-gem / broad-appeal screen — method and results [Method / Supported conclusion]
+
+For the **910 robust candidates** from A, **separately** assess what evidence exists that appeal extends beyond niche — **does not combine into hidden-gem score** (screening stage only).
+
+Used only defensible within-BGG evidence, explicitly distinguished per `broad_appeal_evidence.md` (80 full per-candidate assessments in markdown excerpt; all 910 reproducible from CSV + taxonomy):
+
+- **Evidence of reach / recognition [Observed fact / Assumption]:** `users_rated` (popularity, not broad appeal; R² game 0.201 includes popularity premium), `num_weights` attention proxy (median 20, max 8660), `is_reimplementation` family reach (mean 7,338 vs 1,619 non-reimpl), `rank_current` — but *not* proof of broad appeal. Caveat: popularity confounded with quality-driven popularity + visibility (+0.26/10× on n_active, +0.51 on users_rated survives severity adjustment).
+
+- **Evidence about audience composition [Observed fact]:** `mean(delta)_pool` −0.293±0.177, `share_heavy_500plus` median 0.271 (plus share_light 10-24, chi2_volume_band), country where non-missing (209,753/288,730 =72.7% have country, 27.3% missing — US 77k Canada 14.7k Germany 13.5k), `collections` `share_own` 0.571±0.145 snapshot-time 15M own=1 /10.8M NaN (`PR #4` not longitudinal). All 910 robust have share_heavy/mean_delta/share_own available [Observed fact].
+
+- **Evidence of cross-audience consistency [Empirical finding / Limitation]:** heavy vs light rater means on same game where both groups rated it — available for **902/910** robust (three slices `10-24 vs 1000+` 14,473 rows, `10-49 vs 500+` 16,037, `25-49 vs 1000+` 15,447); rare overlap but when present light raters rated higher by +0.5–1.0 (severity level, not taste; Phase 4 heavy vs light gap closed after severity). `game_tags` category breadth mean 2.77 (tag overlap, not diversity). Low volume is *less* evidence, not more.
+
+- **Evidence that is merely proxy and cannot establish broad appeal [Supported conclusion / Limitation]:** high `raw`/`adj`, residual itself, low `n`, ownership prevalence (`own 58%` everywhere snapshot), category breadth, `users_rated` — all correctly distinguished as proxies with caveats per candidate. No external broad-appeal validation (sales/plays/non-BGG) exists — cannot establish counterfactual broad-audience quality from within-BGG data alone [Limitation].
+
+- **Key finding: niche preservation [Supported conclusion]:** A niche game can remain an excellent underrated candidate without being promoted to hidden-gem status. Roughly half of robust party-game series (Monikers, Time's Up! editions) have high `share_own 0.84–0.87` and `share_light 0.02–0.03` but `users_rated` 255–609 (D5-D7) — underrated conditional anomaly with limited reach, not proof of broad appeal. Well-known flagged among robust criteria 67 games (e.g. Pandemi Legacy Season 1 n51174 users 57680 rank 3 resid 0.65) illustrate that high residual alone is not hidden-gem.
+
+### Limitations [Limitation / Assumption]
+
+- **No external broad-appeal validation** — residual and all broad-appeal evidence are within-BGG; volume premium and self-selection (people choose what to buy/play/rate) confound popularity and broad appeal; do not conflate measurement noise (SE correction) with selection into measured population [Assumption / Limitation].
+- **Tags overlap; indicators descriptive contrasts not causal; measurement error in X not modeled.**
+- **Severity adjustment removes additive rater level only** (`delta_u` global severity `r 0.877` gap −0.03; Phase 4 beyond-additive ≈0 SD 0.015); non-additive forms untested [Assumption].
+- **Timestamps unresolved** — `postdate`/`rating_tstamp` semantics dual readings, no temporal split validation [Limitation].
+- **Country 27.3% missing; own snapshot-time PR #4; within-game heavy/light overlap rare; even/odd stability within-snapshot.**
+- **Thresholds (`n≥100`/`≥200`/`≥0.60`/`≥0.30`) are method choices for auditable screen, not ground-truth hidden-gem truth — different reasonable thresholds move counts substantially (sensitivity in screening_summary.json).**
+
+### Implications for next phase [Supported conclusion / Method]
+
+- **Underratedness vs broad appeal must stay distinct [Supported conclusion]:** Phase 7 turns Phase 6 residual + uncertainty (SE/n/post_SD + stability Jaccard + deciles + release/family audit) into an auditable evidence-aware screen — 7,754 broad-positive → 910 robust-underrated (evidence strength preserved) → separately assess broad-appeal evidence (902 with heavy/light, all with pool composition). A game can stay `robust_but_niche` without promotion.
+
+- **Do not build hidden-gem score yet [Method discipline]:** next phase should use the four evidence types distinguished per candidate (reach / composition / cross-audience / proxy caveats) for **manual review** with `screening_disposition` + `reason` preserved in `underrated_candidates.csv` (all 16,549 rows), not a combined proxy. Any hidden-gem ranking must survive stability (Jaccard .58-.74) and SE-aware checks and acknowledge that `users_rated` and residual are not broad-appeal proofs.
+
+- **Carry forward [Supported conclusion]:** preferred `Q3b/OLS` `underratedness_pref` with `se_adj`/`lb_adj`/`z`/`post_SD` and alternative specs (`cv`, `wls`, `Q3`, `wls_Q3`, `min_alt`) for robustness; population metadata complete via `bgg_research_population` (80.89% `games` gap handled); keep `degenerate_broad` flag for sensitivity; do not mix full-snapshot parameters.
+
+*Record:* `scripts/32_phase7_candidate_screening.py` (bounded 4GB/threads3 `temp_directory scratch/ducktmp` `scratch/phase2-active` copy-once, uses `phase6_residuals_active.parquet` `bgg_research_population` `selection_diagnostic.csv` `within_game_diffs_active*` `game_tags/links_filtered`) → `docs/phase7-candidate-screening/{README.md, underrated_candidates.md, underrated_candidates.csv (16549×44), broad_appeal_evidence.md (80 excerpt of 910), exclusions_and_deduplication.md, screening_summary.json}` + `reports/phase7_candidate_screening/screening_summary.json`. Rerunnable: `python scripts/32_phase7_candidate_screening.py --active-dir scratch/phase2-active --population scratch/phase2-active/bgg_research_population.parquet --out-dir docs/phase7-candidate-screening`.
+
+Tagging per AGENTS.md: observed facts (counts 7754/910/361/530/206/136, n medians, mu 7.144 SE 1.194, Jaccard .675/.579/.737, CV .582/.570/.585, band counts), empirical findings (stability .962, corr +0.18, band flatness, pool composition SDs), model-dependent (all residuals, Q3b/Q3/Q4/WLS, robust rule), supported conclusions (preferred spec, WLS not material, no broad proof from popularity/residual, niche preservation), assumptions (severity descriptive level), limitations as above, hypothesis/speculation flagged, implications as method discipline.
+
