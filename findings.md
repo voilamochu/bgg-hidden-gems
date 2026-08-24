@@ -853,3 +853,166 @@ The even/odd partition difference declines with count, from a median **0.374** a
 **[Limitation]** This is descriptive only. There is no external quality target, repeated independent rating task, user exposure denominator, or non-rater population with which to validate accuracy or separate rater severity from game-selection composition. The split measure is deliberately non-temporal, and duplicate/revision semantics remain unresolved.
 
 **[Implication / next question]** Do not use rating count alone as a credibility weight or rater debiasing rule. The next analysis should examine user-game selection and cross-game participation—especially whether high- and low-volume users rate systematically different game types and whether user-level severity persists after conditioning on overlapping games—before any debiasing model is considered.
+
+## 2026-08-23: Phase A step 1 — the volume-level gap survives within games
+
+### Scope and method
+
+**[Method]** Ran new `scripts/15_phase2_same_game_volume_comparison.py` against the canonical `rating_observations.parquet` extract (26,924,709 observations, 571,248 raters, 95,540 games in the SQLite snapshot). Users were grouped by lifetime rating count into the established volume bands (`rater_behavior_by_volume.parquet`). Four complementary designs, simplest first: (1) raw band means; (2) shared-ground overlap between band rater pools; (3) paired within-game contrasts (games with >=3 distinct raters in each compared group); (4) a game fixed-effects regression `rating ~ band dummies + game FE` on all 26.9M observations (exact within-game demeaning, SEs clustered by game). Timestamps not used. Outputs: `data/processed/phase2/game_band_cells.parquet`, `within_game_diffs_*.parquet`, `same_game_volume_contrast.json`.
+
+### Results
+
+1. **The raw band gradient reproduces on canonical observations [Observed fact]:** pooled mean rating falls monotonically from **8.854** (band '1', 124,374 users) to **6.397** (band '1000+', 1,344 users); restricting to games with >=100 snapshot ratings barely changes it (**8.824 -> 6.448**).
+
+2. **Shared ground exists mainly through popularity [Empirical finding]:** band-'1' users collectively rated 21,297 games; **17,021** of these were also rated by >=1 band-'1000+' user (Jaccard 0.247), and **5,881** games have >=3 distinct raters on each side. Low-band users concentrate heavily on popular games: **95.8%** of band-'2-24' *observations* fall on games having >=3 band-'1000+' raters (per-user shares are bimodal {0,1} because most low-band users rate few games; observation-weighted shares are the informative form).
+
+3. **The gap survives within games almost intact — the central result [Empirical finding]:**
+   - Paired contrast band '1' vs '1000+' (>=3 raters each side, **5,881 games**, median 744 total raters/game): mean within-game gap **+2.28** points (median **+2.27**, IQR +1.61 to +2.99), **96.4% of games positive**, precision-weighted pooled **+2.08**. The unconditional gap is **2.42** points.
+   - Paired contrast bands '2-24' vs '500+' (**23,664 games**): mean **+1.28** (median +1.20), **93.4% positive**. Not a singleton-user artifact.
+   - Sensitivities leave conclusions unchanged: dropping sub-1.0 junk ratings and repeated user-game extras gives +2.28 / +1.28; restricting to >=100-rating games gives **+2.19 / +1.13**.
+   - Game-FE regression across all ten bands (reference '1000+'): coefficients decline smoothly **+2.066 (band 1), +1.663 (2-4), +1.343 (5-9), +1.053 (10-24), +0.837 (25-49), +0.679 (50-99), +0.504 (100-249), +0.314 (250-499), +0.173 (500-999)** with cluster SEs 0.002–0.018. Both statistically and practically significant throughout.
+
+### Interpretation
+
+**[Supported conclusion]** Different game mixes explain almost none of the low-vs-high-volume rating-level gap. Conditional on rating the *same game*, lighter BGG participants rate roughly 1–2 points higher, and the conditional gap nearly equals the unconditional one. Under AGENTS.md's classification this behaves like a rater-level level difference (severity/scale anchoring or enthusiasm-state differences), not measurement noise and not primarily composition.
+
+**[Unidentified remaining confounds]** This does NOT prove pure severity:
+- *Within-game selection*: among a game's raters, those who go on to become heavy BGG users may differ in enthusiasm-for-that-game from one-shot raters; lifetime volume is itself partly an outcome of enthusiasm trajectories.
+- *Timing*: heavy users' ratings may be older or newer on average; platform-era drift could contribute to the same pattern. Untested here (timestamp semantics unresolved; see next steps).
+- The paired universe skews toward popular games by construction.
+
+### Implications
+
+- Any correction that treats the low-volume-user mean (e.g., 8.85 for single-rating users) as an unbiased estimate of game quality is unsupported: on identical games these users sit ~2 points above 1,000+-rating users.
+- Next: estimate per-user severity conditioned on games and test its stability (even/odd, time periods), then decompose the residual gap into experience/exposure components.
+
+## 2026-08-23: Phase A steps 2-3 — severity offsets are real, stable, and close the gap
+
+### Scope and method
+
+**[Method]** Ran new `scripts/16_phase2_user_severity_stability.py` (two-way additive fit `rating = mu + game_alpha + user_delta` over all 26,924,709 canonical observations by alternating projections; 95,540 games x 571,248 raters) and `scripts/17_phase2_gap_decomposition.py` (game-mix standardization and era-controlled contrasts). Outputs: `user_severity.parquet`, `game_adjusted_means.parquet`, `user_severity_stability.json`, `gap_decomposition.json`, `gap_cells_low_high.parquet`. Timestamps used only as labeled sensitivities because their semantics remain unresolved.
+
+### Severity offsets conditioned on games (step 2)
+
+1. **User severity offsets are large and ordered by lifetime volume [Empirical finding]:** mean delta falls monotonically from **+0.84** (band '1') to **-1.25** (band '1000+') — a **2.09-point** spread conditional on the games each band rates. This matches the within-game FE gradient from script 15 almost exactly.
+
+2. **Severity is a stable rater trait, not fitting noise [Empirical finding]:**
+   - Even/odd parity halves (independent observation splits; users with >=20 obs per half, n=223,069): Pearson **r=0.872**, Spearman **0.844**, median |delta_even - delta_odd| = **0.175**, SD of difference 0.356 vs SD of each half ~0.704. A placebo correlation across mismatched users is **~0.003**.
+   - Across time periods (median split, >=10 obs per period): postdate reading r=**0.533** (n=110,826), rating_tstamp reading r=**0.478** (n=113,177). Moderately stable under both readings; lower than parity stability, consistent with some genuine drift and/or period-composition differences. Which timestamp field applies barely changes the conclusion.
+   - ICC-style reliability by band (script 18, `rater_credibility.json`): **0.74** at 10-24 observations, **0.89** at 50-99, **0.95** at 100-249, **0.995** at 1000+. Signal SD ~0.61-0.70 throughout.
+
+3. **How much rating variance does identity explain? [Empirical finding]** Nested-model R2 on all observations: game identity alone explains **R2=0.230** of rating variance; rater identity alone explains **R2=0.249**; the additive two-way fit explains **R2=0.438**. The two are nearly complementary (sampled corr(alpha, delta) ~ -0.05). Under this data's conditions, *who rates matters about as much as what is rated* for individual rating variation.
+
+### Decomposition of the low-vs-high gap (step 3)
+
+Low group = lifetime bands 1-9 (802,335 observations); high group = bands 500+ (5,594,821).
+
+4. **Game mix explains little; severity explains essentially all the rest [Empirical finding]:**
+   - Raw pooled gap: low **8.291** vs high **6.602** = **+1.689**.
+   - Standardized to identical game weights (Kitagawa-style over shared games; support overlap is 98.7% of low-group observations): gap **+1.389** — game-mix composition accounts for only ~0.30 points (~18%).
+   - After additionally subtracting fitted user severity offsets: gap **+0.012** — statistically and practically indistinguishable from zero. The entire standardized gap is an additive rater-level level difference; no low-volume-x-game-type interaction is needed.
+
+5. **Calendar-era composition cannot produce the gap [Empirical finding / sensitivity]:** mean ratings rise strongly over the snapshot (e.g., 6.39 in 2003 to 7.31 in 2023 by postdate reading). But recomputing paired within-game contrasts inside era windows gives +1.60 (<=2010), +1.77 (2011-2017), +1.70 (2018-2025) under postdate and +1.56/+1.74/+1.69 under rating_tstamp — the gap persists in every window under both readings. Light-volume users actually rate *newer* games on average (mean year 2018.8 vs 2016.6), the opposite direction from what an era-inflation artifact would require.
+
+6. **No experience-hardening within raters [Hypothesis-grade empirical finding]:** among users with >=50 lifetime observations, last-decile ratings sit slightly HIGHER than first-decile (+0.055 by postdate order, +0.234 by rating_tstamp order). If heavy raters became harsher with experience we would see the opposite sign; ordering uses unresolved-semantics timestamps, so this remains hypothesis-grade.
+
+### What severity adjustment does and does not buy (RQ1 relevance)
+
+7. **Adjusted game estimates answer a different question, not a better predictor of observed ratings [Model-dependent conclusion]:** held-out prediction of individual odd-half ratings from even-half fits: raw train game-mean RMSE **1.417**; game-FE-only prediction (mu + alpha) RMSE **1.563**; adding user deltas **1.253** (-11.6% vs raw). Interpretation: severity-adjusted game means deliberately remove who-rated effects, so they predict the *observed* rating stream worse than raw means when rater mixes repeat; knowing the rater helps predict individuals. Adjusted estimates target "level net of rater composition," which must not be marketed as higher-fidelity measurement of the same quantity.
+
+8. **Magnitude of adjustment at game level [Observed fact]:** adjusted minus raw game means have median **+0.67**, P5-P95 [-0.56, +1.47]; shifts are similar across snapshot volume bands (medians 0.64-0.82), i.e., adjustment is not simply a low-volume-game boost.
+
+### Classification per AGENTS.md
+
+- **Measurement noise:** cannot explain these patterns (parity stability, holdout gains, era-window persistence).
+- **Selection into what users rate:** accounts for only ~18% of the raw gap (standardization step).
+- **Rater-level level differences (severity/scale anchoring):** account for essentially everything that remains, and are stable enough to estimate (reliability >=0.74 with >=10 obs/half).
+- **Caveat kept open [Unidentified]:** delta_u itself may partially encode enthusiasm trajectories (users whose enthusiasm faded rate more games and more harshly); "severity" here is descriptive level, not a causal disposition. Distinguishing those requires data this snapshot lacks.
+
+### Implication for the debiasing premise
+
+The friend-style premise that harsh/generous patterns reflect *who rates what* is mostly wrong in this data: who-rates-what explains little once you condition on games, while *who rates them at all* — captured by stable per-user offsets — explains nearly all of it. Any correction aimed only at game-mix or noise will therefore leave a ~1.4-point rater-level gradient untouched.
+
+## 2026-08-23: Phase B — temporal drift, audience/self-selection, cross-audience consistency
+
+### Scope and method
+
+**[Method]** Ran new `scripts/19_phase2_temporal_drift.py` (`temporal_drift.json`), `scripts/20_phase2_audience_selection.py` (`audience_selection.json`), and `scripts/21_phase2_cross_audience_consistency.py` (`cross_audience_consistency.json`). All time questions are run under BOTH timestamp readings (`postdate`, `rating_tstamp`; semantics unresolved). Audiences are geography (top countries; country missing for 195,460 of 606,497 users) and per-observation ownership status from `collections.own`.
+
+### Temporal drift (Phase B item 5)
+
+1. **Aggregate era rise is composition, not within-game inflation [Empirical finding]:** mean ratings rise ~+0.9 points across calendar years under both readings (e.g., 6.39 in 2003 to 7.31 in 2023, postdate). But within fixed games (>=30 observations in own early and late observation terciles, n=16,718 games), later terciles rate **lower**: late-minus-early **-0.143** (postdate) / **-0.256** (rating_tstamp). Newer-rated games and changing rater cohorts drive the aggregate rise.
+
+2. **Game-age effect at rating time [Empirical finding]:** ratings fall monotonically with game age at rating: ~**7.4** at release year, **7.0** at 10 years, **6.8** at 20 years, **5.95** at 40 years (both readings agree). Confounded with which old games still attract raters.
+
+3. **Severity tracks career stage, not join cohort [Empirical finding]:** within lifetime-volume bands, severity deltas are nearly identical across first-activity cohorts (e.g., band 100-249: -0.74 for <=2010 starters vs -0.79 for 2016+ starters). Cohort gaps in script 18 were volume composition, not cohort effects.
+
+### Audience differences and self-selection (Phase B item 6)
+
+4. **Geographic audiences differ only marginally in level [Empirical finding]:** raw country means sit in a narrow 7.00-7.26 band; paired within-game contrasts versus the US (n>=3 raters each side) range from **-0.12** (Poland) to **+0.20** (France) - an order of magnitude smaller than the volume-band gradient (+2.1).
+
+5. **Audiences select different games [Empirical finding]:** Germany's co-rated game universe skews toward Card Game (19.7% vs 13.8% of US-rated games), Strategy (10.2% vs 5.5%), Family, Dice Rolling, Hand Management; the US universe covers more niche wargame publishers (SPI, Decision Games) and uncredited designers. Participation is audience-specific even when rating levels agree.
+
+6. **Ownership is the big audience split [Empirical finding]:** raters whose snapshot collection row does NOT show `own` rate the same games **-0.95 points** lower than owner-raters (44,884 paired games, median -0.93; raw levels 6.53 vs 7.54 across 26.9M observations). This is the largest audience-level gap found in the snapshot. Caveats: status is snapshot-time, not event history; non-owner raters mix wishlist, app/library players, and past owners.
+
+### Cross-audience consistency (Phase B item 7)
+
+7. **Geographic audiences largely agree on which games are good [Empirical finding]:** US-Germany game means correlate r=0.87 (median |diff| 0.23, P90 0.69); other pairs similar (r 0.85-0.86). Divergent extremes exist but are mostly small-sample (examples: an 18xx title rated +1.51 by Germans; a dexterity children's title rated +1.38).
+
+8. **Owner vs non-owner disagreement dwarfs geographic disagreement [Empirical finding]:** same-game means correlate r=0.854, but median |diff| is **0.95** and P90 **1.54** (27,849 games). Where "different audiences disagree," ownership status - a selection/commitment signal - is where it lives, not country.
+
+## 2026-08-23: Phase B item 8 — what each correction targets; friend-method revisit
+
+### Scope and method
+
+**[Method]** Ran new `scripts/22_phase2_baseline_comparison.py`. Added a residual export to `scripts/05_rq2_expected_rating_baseline.py` (unchanged specifications) writing `data/processed/rq2_residuals.parquet` (16,612 complete-case games). Matched 16,552 games between the user-level SQLite snapshot (scripts 15-17 estimates) and the current game-level population; 16,124 also matched the friend file. Raw means agree across snapshots (Pearson 0.979, median diff -0.012), so comparisons are meaningful though snapshot-mismatch noise (~SD 0.17) applies to all correlations as attenuation.
+
+### Findings
+
+1. **Removing rater-level offsets does NOT shrink the volume-rating gradient - it grows [Empirical finding]:** pooled game-level slope on log10(users_rated): raw mean **+0.444**, severity-adjusted mean **+0.513** per tenfold increase; weight/year-adjusted: +0.297 raw vs **+0.361** adjusted. High-volume games' rater pools skew *harsher*, so composition works against the observed popularity premium. The RQ1 volume gradient cannot be explained by who-is-harsher composition; it must reflect selection into which games accumulate volume (including quality-driven popularity) or within-game rater selection - not additive rater-level differences.
+
+2. **The friend's `debiased_rating` behaves like a shrunken version of our severity adjustment [Empirical finding / model-dependent conclusion]:**
+   - Levels: friend_debiased correlates **0.996** with our adjusted mean (Pearson and Spearman); top-5% sets overlap Jaccard **0.70**.
+   - Corrections: friend_shift = debiased - current_avg regresses on our severity shift as **-0.485 + 0.669 x our_shift**, r=**0.836** (70% of variance explained).
+   - Magnitudes/conventions: friend shifts average +0.02 (SD 0.15) vs our +0.75 (SD 0.21) over this population - the friend re-centers near zero and applies roughly two-thirds of the per-game adjustment slope.
+   - Classification per AGENTS.md: the friend's output targets the same phenomenon our deltas identify - **rater-level level differences conditioned on games (selection-into-rating severity/scale anchoring)** - not measurement noise (parity stability shows these offsets are real signal, not error) and not game-mix composition (which explains little anywhere).
+   - Still unknown: whether the friend's method addresses *within-game* selection (enthusiasm trajectories) or only additive level; its magnitude convention is undocumented; snapshot mismatch adds noise.
+
+3. **Estimate families remain distinct [Observed fact]:** RQ2 S3 residual correlates 0.63 with friend_debiased and Jaccard-overlaps its top-5% by only 0.15; Bayes remains its own shrinkage transform (Jaccard with RQ2 residual 0.02).
+
+### Implications
+
+- A severity-adjusted game estimate is now implementable and reproducible from committed scripts (adj_mean in `game_adjusted_means.parquet`). It removes measured rater-level composition. It does NOT measure broad appeal, does not fix within-game self-selection, and is not a better predictor of observed ratings than raw averages (script 16 holdout).
+- For any underratedness analysis, severity adjustment and the RQ2 conditional residual answer different questions (who-vs-what level vs expected-given-characteristics); both remain model-dependent screens rather than quality estimates.
+
+## 2026-08-23: Session summary — Phase 2 user-level program complete through first pass
+
+### What was established this session
+
+Scripts 15-22 built the user-level evidence base (all rerunnable against `data/processed/phase2/` extracts; derived extracts under the same directory; DuckDB engine):
+
+1. The low-vs-high lifetime-volume rating gap (+2.42 pooled) survives within games (+2.28 paired) and is closed to +0.01 by game-mix standardization plus stable per-user severity offsets.
+2. Per-user severity is estimable (reliability >=0.89 at >=50 observations), stable across independent halves (r=0.87), only moderately stable across time periods (r~0.5), and not a cohort or career-drift artifact.
+3. Rating variance decomposition: game identity R2=0.230, rater identity R2=0.249, additive both 0.438.
+4. Severity adjustment raises, not lowers, the game-level volume gradient (+0.44 -> +0.51 per tenfold ratings): rater-level composition works against the popularity premium.
+5. Era composition does not produce the gap (persists in all era windows under both timestamp readings); aggregate era rise is composition; within-game era trend is slightly negative.
+6. Geographic audiences agree closely (r~0.86); ownership status is the largest audience split found (median same-game gap 0.95).
+7. The friend's `debiased_rating` is behaviorally a shrunken severity adjustment of ours (level corr 0.996; shift corr 0.836, slope 0.67): it targets rater-level level differences - selection into rating, not measurement noise.
+8. No accuracy criterion exists for raters; volume/severity/tenure/spread are entangled activity measures. "Credibility weighting" is not identifiable from this data.
+
+### Final refit note
+
+The committed `scripts/16` was rerun end-to-end at full convergence (100 alternating-projection iterations, final max change 0.0028). All headline numbers were unchanged from the reported values (R2 decomposition, parity stability, band means identical to 3 decimals; downstream scripts 17/18/22 regenerated with no material diffs).
+
+### Still open / next highest-value questions
+
+1. **Within-game self-selection** remains unidentified: additive deltas capture who-is-harsher, but not whether a game's *rater pool composition within an audience* biases its mean (e.g., only enthusiasts rate niche games at all). This needs exposure-denominator data or panel structure; no proxy in this snapshot identifies it.
+2. **Timestamp semantics** still unresolved; temporal results carry both readings but provenance would sharpen drift conclusions.
+3. **Ownership history**: snapshot-time `own` flags show a 0.95-point split; longitudinal collection data would turn this into a real selection test.
+4. **Validation target for corrections**: whether severity-adjusted estimates predict held-out future ratings or external outcomes better than raw averages is untestable here beyond parity splits; a second time-period scrape would enable true out-of-time validation.
+
+### Deliverables index
+
+- Scripts: `15_phase2_same_game_volume_comparison.py`, `16_phase2_user_severity_stability.py` (`--reuse` mode available), `17_phase2_gap_decomposition.py`, `18_phase2_rater_credibility.py`, `19_phase2_temporal_drift.py`, `20_phase2_audience_selection.py`, `21_phase2_cross_audience_consistency.py`, `22_phase2_baseline_comparison.py`; residual export added to `05`.
+- Derived extracts (gitignored, reproducible): `game_band_cells.parquet`, `within_game_diffs_*.parquet`, `user_severity.parquet`, `game_adjusted_means.parquet`, `gap_cells_low_high.parquet`, `era_mix_by_group.parquet`, comparison tables.
+- JSON result summaries beside each script's outputs under `data/processed/phase2/`.

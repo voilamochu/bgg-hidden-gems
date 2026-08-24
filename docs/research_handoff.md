@@ -1,12 +1,15 @@
 # Research Handoff
 
-Source of truth: [findings.md](../findings.md), through 2026-08-23. This is a handoff of established results, not a new analysis or ranking.
+Source of truth: [findings.md](../findings.md), through 2026-08-23 (including the Phase 2 user-level entries). This is a handoff of established results, not a new analysis or ranking.
 
 ## Dataset status
 
-The current research population contains **16,627 games** from a game-level BGG snapshot, after also excluding exact BGG `Admin: Upcoming Releases` and `Admin: Unreleased Games` statuses. The RQ2 candidate report uses **16,612 complete cases**. Earlier findings summarized below used the pre-correction 16,726-game population and should be rerun before being treated as current numerical estimates.
+Two layers:
 
-The central limitation is unchanged throughout: the data contain game-level aggregates, not individual ratings, rater identities, exposure/non-rater information, or rating histories. Rating counts therefore describe participation in a selected BGG population, not audience breadth.
+- **Game-level snapshot:** research population of **16,627 games** (`data/processed/bgg_research_population.parquet`); RQ2 complete cases **16,612**.
+- **User-level SQLite snapshot (Phase 2):** canonical extract `data/processed/phase2/rating_observations.parquet` with **26,924,709 individual ratings**, **571,248 raters**, **95,540 games**, plus per-user volume bands/severity offsets and collection status. Different scrape from the game-level file; raw means agree (Pearson 0.979 matched). Timestamp semantics remain unresolved; all time-based conclusions are sensitivity-tested across `postdate` and `rating_tstamp`.
+
+The earlier central limitation (no rater identities) is resolved for additive level effects: scripts 15–22 quantify them. Remaining limitations: no exposure denominator, no plays/sales, no longitudinal ownership, unresolved timestamp provenance.
 
 ## RQ1 — Rating estimate
 
@@ -65,19 +68,23 @@ The central limitation is unchanged throughout: the data contain game-level aggr
 1. The underlying quality of individual games after separating measurement noise from selected-rater composition.
 2. Whether any low-volume positive residual reflects broad latent appeal or a well-matched niche audience.
 3. Whether robust residual candidates would perform similarly among people who did not select them on BGG.
-4. Whether the observed game-level corrections from the friend output reflect useful correction of measurement noise, selection, or both; the current data do not validate the underlying method.
-5. Whether any proposed correction addresses measurement noise, selection into the rated population, or both.
+4. Within-game self-selection: additive user severity explains the volume-band gradient almost exactly, but "severity" may partially encode enthusiasm trajectories that this snapshot cannot separate from scale anchoring.
+5. Timestamp semantics: `postdate` and `rating_tstamp` provenance is still unresolved; all temporal results carry both readings.
 
 These are unresolved questions, not conclusions that the current results failed to find an effect.
 
-## Questions requiring a richer user-level dataset
+## Phase 2 user-level results (scripts 15–22; details in findings.md)
 
-- **Rating estimation:** Can per-game uncertainty be estimated from individual ratings, rating timestamps, and user histories rather than assumed benchmarks?
-- **Selection versus noise:** Are high or low game-level averages driven by the composition of raters who chose each game, and how does that composition change with rating volume?
-- **RQ2 validation:** Do residuals remain predictive or stable out of time and across user/game populations that are not the same retained BGG snapshot?
-- **RQ3 measurement:** What exposure denominator and audience-stratified outcome can distinguish “many people encountered and liked the game” from “a narrow group rated it highly”?
-- **Friend-method audit:** With the available friend output, user-game ratings, timestamps, and method metadata, what does the correction actually target? That would be a separate methodology audit; it cannot be performed from the current aggregates alone.
+- **[Empirical finding]** The 2.42-point pooled rating gap between one-rating and 1,000+-rating users survives within games (+2.28 paired mean gap, 96% of games positive). Game-mix standardization removes only ~18%; subtracting stable per-user severity offsets closes the standardized gap to +0.01.
+- **[Empirical finding]** Severity offsets are stable (parity-half r=0.87; reliability ≥0.89 at ≥50 obs), ordered by lifetime volume (~+0.84 to −1.25), and not explained by join cohort or within-user career drift. Nested-model R²: game identity 0.230, rater identity 0.249, both additive 0.438.
+- **[Empirical finding]** Severity adjustment *increases* the game-level volume gradient (+0.44 → +0.51 per tenfold ratings): popular games' rater pools skew harsher, so composition works against the observed popularity premium.
+- **[Empirical finding]** Geographic audiences agree closely on game quality (r≈0.86); owner vs non-owner raters disagree hugely on the same games (median gap 0.95).
+- **[Empirical finding / model-dependent]** The friend's `debiased_rating` correlates 0.996 with our severity-adjusted means; its shifts align with ours (r=0.836, slope ~0.67) at a different centering/magnitude convention. It targets rater-level level differences — selection into rating, not measurement noise.
+
+## Baselines
+
+Compare any game estimate against: raw BGG average, BGG Bayesian rating, the RQ2 residual family (`data/processed/rq2_residuals.parquet`, regenerated by `scripts/05`), severity-adjusted means (`data/processed/phase2/game_adjusted_means.parquet`, script 16), and the friend's `debiased_rating`. These are baselines/hypotheses, not ground truth; see `scripts/22_phase2_baseline_comparison.py` for the comparison harness.
 
 ## Handoff recommendation
 
-Treat the current state as: **RQ1 establishes that volume patterns are not explained by sampling noise alone; RQ2 provides a transparent, model-dependent residual signal with meaningful but incomplete robustness; RQ3 is not identifiable from this game-level dataset.** Continue to use residuals as descriptive screening context only. The next substantive step should be acquisition and provenance design for user-level ratings, exposure, and audience-segment evidence—not a more complex ranking formula.
+Treat the current state as: **RQ1 establishes that volume patterns are not explained by sampling noise alone, and the user-level data now show the low-vs-high-volume rater gap is almost entirely stable additive rater-level level differences; RQ2 provides a transparent, model-dependent residual signal with meaningful but incomplete robustness; severity-adjusted game estimates are implementable and reproducible; RQ3 remains not identified — geographic audiences agree and ownership status is the strongest audience split, but no field measures appeal beyond the existing rater pool.** Continue to treat residuals and adjusted means as descriptive screens only. The next substantive step is within-game selection identification (enthusiasm trajectories vs scale anchoring) and acquisition of exposure/audience-stratified evidence — not a more complex ranking formula.

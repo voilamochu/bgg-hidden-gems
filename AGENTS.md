@@ -32,6 +32,9 @@ When evaluating any proposed correction (yours or a prior one, e.g. the friend-p
 - The current data is **game-level**, not individual-rating-level. Don't assume user-level bias, rating drift, or rater credibility can be estimated unless you've confirmed the data actually supports it.
 **Starting population — treat as candidate filters to test, not a fixed spec:** one record per game, non-expansion, published, non-future, some minimum rating-count floor. Before applying any of these, inspect their actual effect on the dataset (how many games excluded, any lopsided exclusion by genre/weight/year) and record it. Don't add further filters without a stated reason.
 
+## User-level data (Phase 2)
+The user-level layer lives in `data/processed/phase2/` (parquet extracts of `data/raw/bgg.sqlite`, built read-only by `scripts/13`; see its README). Query with DuckDB. Key facts: `rating_observations.parquet` is the canonical 26.9M-row rating table (no deduplication; repeated user-game rows are rare but real); `user_ratings.parquet` does not join to `users`; timestamp semantics for `postdate`/`rating_tstamp` are unresolved — run every time-based result under both readings. Per-user volume bands, severity offsets (`user_severity.parquet`), and severity-adjusted game means (`game_adjusted_means.parquet`) come from `scripts/15`–`16`. Established: the low-vs-high-volume rater gap is almost entirely additive rater-level level differences (see findings.md Phase A entries); treat "severity" as descriptive level, not credibility or causal disposition.
+
 ## Baselines
 Treat as reference points, not ground truth to be "fixed": raw average rating, BGG Geek/Bayesian rating, rating count, BGG rank. The friend-provided debiased ranking is also a baseline/hypothesis to investigate, not a correct or incorrect prior.
 
@@ -68,3 +71,10 @@ Before a substantial change:
 
 ## Definition of success
 Determining, as rigorously as the data permits: **which games appear genuinely underrated, and which of those show evidence of appeal beyond their existing niche.** A well-supported "we can't tell" beats an elaborate ranking that can't survive scrutiny.
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.
