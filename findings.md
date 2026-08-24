@@ -1033,3 +1033,43 @@ The committed `scripts/16` was rerun end-to-end at full convergence (100 alterna
 ### Implication
 
 Phase 3 restarts on `data/processed/phase2-filtered/rating_observations_filtered.parquet`. Full-snapshot extracts and scripts 15–22 fit artifacts (`user_severity.parquet`, `game_adjusted_means.parquet`) are historical reference only; re-estimating taste/type quantities on the filtered universe is the next task's deliverable.
+## 2026-08-24: Primary analytical user population — minimum lifetime rating-count threshold study
+
+### Scope and method
+
+**[Method]** Ran new `scripts/23_user_threshold_study.py`: compared candidate minimum lifetime rating-count thresholds t ∈ {1, 3, 5, 10, 20, 50, 100} for the primary Phase 3 user population, with the game universe fixed at the corrected **16,627-game research population**. Lifetime counts are computed **within that universe** unless labeled otherwise (canonical `rating_observations` restricted to population games: **25,335,220 observations, 544,955 users; 16,567 of 16,627 games carry ≥1 snapshot rating**). Reused the established even/odd `rating_observation_id` parity design (scripts 14/16) for split-half stability of user means, and the script-18 signal/noise decomposition for ICC-style reliability (`noise_sd(half)=sd(diff)/√2`). Severity stability is proxied by a one-sweep game-adjusted offset (user mean of rating − own-half game mean — step 1 of script 16's alternating projections), not a refit. Duplicates preserved per canonical definition (~0.007% repeated user-game rows); timestamps unused. Outputs: `reports/user_population_thresholds.{csv,json}` (committed).
+
+### Results
+
+| t | users kept | ratings kept | share ratings | ICC-style reliability of user mean | median abs half-diff | severity-proxy r |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 544,955 | 25,335,220 | 100.0% | 0.617* | 0.317 | 0.614 |
+| 3 | 399,320 | 25,151,346 | 99.3% | 0.647 | 0.311 | 0.650 |
+| 5 | 353,841 | 24,995,190 | 98.7% | 0.699 | 0.285 | 0.710 |
+| 10 | 289,397 | 24,558,361 | 96.9% | 0.780 | 0.245 | 0.795 |
+| 20 | 217,102 | 23,547,280 | 92.9% | 0.850 | 0.201 | 0.864 |
+| 50 | 121,497 | 20,487,136 | 80.9% | 0.918 | 0.150 | 0.928 |
+| 100 | 64,411 | 16,478,175 | 65.0% | 0.952 | 0.115 | 0.959 |
+
+*t=1 split statistics come from the 407,932 retained users with ≥2 observations (a parity split needs both halves non-empty); single-rating users contribute scale but no stability information by construction.
+
+1. **Scale [Observed fact]:** rating mass is insensitive up to t=20 (>92.9% retained) because low-volume users hold few ratings each; user count is the binding cost (100% → 53% at t=10 → 22% at t=50). Full-snapshot reference (lifetime = all phase-2 ratings): t=10 keeps 295,442 users / 97.0% of 26.9M ratings; t=20 keeps 223,069 / 93.3%.
+
+2. **Stability rises smoothly, flattening after t≈20–50 [Empirical finding]:** ICC-style reliability of the user mean goes 0.62 → 0.70 (t=5) → 0.78 (t=10) → 0.85 (t=20) → 0.92 (t=50); per-step gains shrink from ~+0.08 to ~+0.03 after t=50. The game-adjusted severity proxy tracks raw means within ±0.02 throughout. These are within-threshold compositional comparisons (higher t also shifts the pool toward high-n users), not causal effects of forcing more ratings.
+
+3. **The low tail is qualitatively different, not just noisier [Empirical finding], recomputed on the filtered universe:** band-'1' users (107,396) average **8.83** (+2.33 vs the 1,000+ band), with between-user SD **1.70** vs 0.63–0.70 at ≥50 ratings; **45.3%** of their ratings are 10s and **69.4%** are ≥9, versus **1.7%** / **6.4%** among 1,000+-rating users — a distribution-shape difference (mass spike at 10), not merely higher variance. Consistent with the Phase A severity gradient; the pattern matches the full-snapshot bands closely, so it is not an artifact of universe filtering.
+
+4. **Game coverage is non-binding at every threshold [Observed fact]:** even at t=100, 16,344 games retain ≥10 raters (vs 16,406 at t=1). The threshold choice affects per-user statistic quality and taste-analysis sample sizes, not which games remain analyzable at coarse granularity.
+
+### Recommendation
+
+**[Supported decision, model-dependent]** Adopt **t = 10 (≥10 lifetime ratings within the 16,627-game universe)** as the primary analytical user population, with **t = 20** as the high-confidence sensitivity tier:
+
+- t=10 matches the established viability floor for severity estimation (script 18: ICC ≈0.74 in the 10–24 band, treated as estimable; strong at ≥50); here ICC(mean)=0.78, severity proxy 0.79.
+- It discards exactly the users whose level cannot be split-validated or whose discernment/taste statistics are undefined or noise-dominated (bands '1'/'2-4'/'5-9' plus part of '10-24'; under filtered-universe counts, t≥20 excludes all full-snapshot bands '1', '2-4', '5-9' by construction).
+- Cost is minimal: 96.9% of ratings retained; game coverage unchanged (16,390 games with ≥10 raters).
+- Going to t=20 buys +0.07 ICC for 26% of remaining users and 1M more ratings; going to t=50 costs another 12 points of rating mass — reserve t=20 (ICC 0.85) and t=50 (ICC 0.92) as sensitivity tiers rather than the primary.
+
+**Phase 3 availability under the recommended primary (t=10, filtered universe): 289,397 users and 24,558,361 ratings (96.9% of the 25.34M in-universe ratings; 16,390 of 16,567 rated games still have ≥10 retained raters). Sensitivity tier t=20: 217,102 users / 23,547,280 ratings.**
+
+**[Limitation / classification]** This threshold defines where *per-user statistics become statistically usable*; it is NOT a credibility finding — excluded users are not worse raters (AGENTS.md: volume is entangled activity/exposure, and the low-volume level gap is stable additive severity, not error). Their ratings still inform game-level aggregates in pooled analyses; the threshold binds only analyses that condition on per-user quantities (severity estimation, calibration/discernment, taste profiles). Thresholds must always be stated with their lifetime-count definition (filtered-universe counts here; full-snapshot counts would be more inclusive for the same numeric t).
