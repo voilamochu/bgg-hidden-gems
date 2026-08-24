@@ -1,0 +1,181 @@
+{
+ "volume_measure_primary": "n_obs = active ratings per game (same n that drives SE; measured in the same active universe as adj_mean)",
+ "volume_measure_sensitivity": "users_rated (population scrape)",
+ "band_table": [
+  {
+   "vol_band": "1-99",
+   "games": 1612,
+   "mean_n": 65.9925558312655,
+   "raw_mean": 6.898870015433754,
+   "adj_mean": 7.168813406130749
+  },
+  {
+   "vol_band": "100-199",
+   "games": 4617,
+   "mean_n": 142.36538878059346,
+   "raw_mean": 6.3694856434161755,
+   "adj_mean": 6.636731786509956
+  },
+  {
+   "vol_band": "200-499",
+   "games": 4325,
+   "mean_n": 316.1745664739884,
+   "raw_mean": 6.483189526987854,
+   "adj_mean": 6.771090119154959
+  },
+  {
+   "vol_band": "500-999",
+   "games": 2252,
+   "mean_n": 704.2357904085258,
+   "raw_mean": 6.675192021409246,
+   "adj_mean": 6.990044945039885
+  },
+  {
+   "vol_band": "1k-2.5k",
+   "games": 1919,
+   "mean_n": 1569.4700364773319,
+   "raw_mean": 6.8320930761034795,
+   "adj_mean": 7.159735254788348
+  },
+  {
+   "vol_band": "2.5k-5k",
+   "games": 893,
+   "mean_n": 3496.006718924972,
+   "raw_mean": 7.04034409929834,
+   "adj_mean": 7.375433686624427
+  },
+  {
+   "vol_band": "5k-10k",
+   "games": 476,
+   "mean_n": 6933.995798319328,
+   "raw_mean": 7.173933393319595,
+   "adj_mean": 7.509897927038888
+  },
+  {
+   "vol_band": "10k-25k",
+   "games": 332,
+   "mean_n": 15648.846385542169,
+   "raw_mean": 7.303631957580051,
+   "adj_mean": 7.619354904446989
+  },
+  {
+   "vol_band": "25k+",
+   "games": 138,
+   "mean_n": 44659.18115942029,
+   "raw_mean": 7.489364190547263,
+   "adj_mean": 7.75669063968934
+  }
+ ],
+ "decile_table": [
+  {
+   "decile": "(-0.001, 2.0]",
+   "games": 1695,
+   "median_n": 82.0,
+   "raw_mean": 6.873441357450862,
+   "adj_mean": 7.143423885091912
+  },
+  {
+   "decile": "(2.0, 2.104]",
+   "games": 1630,
+   "median_n": 113.0,
+   "raw_mean": 6.327850840852942,
+   "adj_mean": 6.594574178036824
+  },
+  {
+   "decile": "(2.104, 2.212]",
+   "games": 1661,
+   "median_n": 144.0,
+   "raw_mean": 6.37660002097131,
+   "adj_mean": 6.644226226697919
+  },
+  {
+   "decile": "(2.212, 2.332]",
+   "games": 1658,
+   "median_n": 187.0,
+   "raw_mean": 6.410308410509474,
+   "adj_mean": 6.67994753659806
+  },
+  {
+   "decile": "(2.332, 2.467]",
+   "games": 1646,
+   "median_n": 250.0,
+   "raw_mean": 6.44719494079402,
+   "adj_mean": 6.725614050450336
+  },
+  {
+   "decile": "(2.467, 2.63]",
+   "games": 1648,
+   "median_n": 350.0,
+   "raw_mean": 6.518906243500025,
+   "adj_mean": 6.8120306151310785
+  },
+  {
+   "decile": "(2.63, 2.822]",
+   "games": 1658,
+   "median_n": 530.0,
+   "raw_mean": 6.599277463022027,
+   "adj_mean": 6.908515426989653
+  },
+  {
+   "decile": "(2.822, 3.075]",
+   "games": 1655,
+   "median_n": 872.0,
+   "raw_mean": 6.735073620988893,
+   "adj_mean": 7.052773056096654
+  },
+  {
+   "decile": "(3.075, 3.446]",
+   "games": 1656,
+   "median_n": 1743.0,
+   "raw_mean": 6.853651964864327,
+   "adj_mean": 7.184982447284321
+  },
+  {
+   "decile": "(3.446, 5.087]",
+   "games": 1657,
+   "median_n": 5701.0,
+   "raw_mean": 7.178288612619783,
+   "adj_mean": 7.504387666607238
+  }
+ ],
+ "gap_top_bottom_decile": {
+  "raw": 0.3048472551689203,
+  "adj": 0.36096378151532615
+ },
+ "slopes_per_tenfold": {
+  "raw_on_log_n_active": 0.2300687008776984,
+  "adj_on_log_n_active": 0.2607036999476502,
+  "raw_on_log_users_rated": 0.4728500535692234,
+  "adj_on_log_users_rated": 0.5148763324313755,
+  "raw_partial_weight_year": 0.28799737013505744,
+  "adj_partial_weight_year": 0.3228778665865427
+ },
+ "ratio_adj_over_raw": {
+  "simple": 1.1331558745413048,
+  "partial_weight_year": 1.1211139408499735
+ },
+ "even_odd_split_slopes": {
+  "n_games_both_halves": 16512,
+  "slope_raw_even": 0.26590407960509066,
+  "slope_raw_odd": 0.2649178117547856,
+  "slope_adj_even": 0.2977352929856666,
+  "slope_adj_odd": 0.29474589972301823
+ },
+ "classification": "c) broadly unchanged or grows - severity adjustment does NOT explain the volume gradient",
+ "prior_filtered_population_reference": "findings.md 2026-08-23 (scripts/22): raw +0.444 -> adj +0.513 per tenfold",
+ "claim_tags": {
+  "slopes/gaps/band means": "empirical finding (descriptive, not causal)",
+  "classification": "empirical finding among pre-stated categories a/b/c",
+  "even_odd": "empirical finding (split-sample stability)"
+ },
+ "params": {
+  "mu": 7.144007675729632,
+  "sigma_e": 1.1940701083513163,
+  "sigma_alpha": 0.8638400936541095
+ },
+ "method_discipline": {
+  "copy_once": "scratch/phase2-active",
+  "bounded": "duckdb 4GB/threads3/temp scratch/ducktmp; single grouped even-odd pass over rating_observations_active",
+  "independent": "recorded separately; expected-quality specs do not absorb this diagnostic"
+ }
+}

@@ -1758,3 +1758,58 @@ Actual game quantiles: `SE median 0.070` `P10 0.023` `P90 0.119` (swap of n quan
 Tagging per AGENTS.md: observed facts (counts, n dist, mu, raw agreement), empirical findings (held-out RMSE/R2/corr/bias, Var components, stratified, individual holdout, coverage), model-dependent (EB lambda/SE/shrunk/R2/post_SD, interval), supported conclusions (preferred adj, bayes overshrinks, weighting needed), assumption (delta descriptive), limitation (no external validation), implication (RQ2 y and weighting).
 
 
+
+## 2026-08-24: Phase 6 — expected-quality model and operational underratedness (scripts/31)
+
+### Scope and method
+
+**[Method]** New `scripts/31_phase6_expected_quality_underratedness.py` on the active population (16,627 × ≥10 ¬strict; 16,564 games with `adj_mean`, mu=7.144, sigma_e=1.194 from scripts/30). Two parts: (A) the required steer diagnostic — volume-rating relationship under BOTH targets, recorded independently; (B) transparent OLS/WLS expected-quality specifications for `adj_mean` with 5-fold CV, residual robustness, adj-vs-raw contrast. Copy-once `scratch/phase2-active`; single grouped even/odd pass over 24.5M observations (DuckDB 4GB/3 threads); all fits are explicit numpy WLS (`min Σ w_i (y_i − x_i'b)²`), no black-box. Estimation sample 16,549 games (15 dropped: weight/playtime nulls). Features from `bgg_research_population` (complete): log10(n_obs), natural-spline year (4 knots at .05/.35/.65/.95 quantiles), weight, log1p playtime, min/max players, is_reimplementation, log1p(times reimplemented, from game_links), 28 category + 34 mechanic flags (≥500 games), volume-band and decade dummies.
+
+### Part A — steer diagnostic: volume gradient after severity adjustment [Empirical findings]
+
+Primary volume measure **n_obs (active ratings)** — same n that drives SE, same universe as adj_mean; `users_rated` (scrape) as sensitivity.
+
+| Slope per 10× volume | raw_mean | adj_mean | adj/raw |
+|---|---:|---:|---:|
+| on log10(n_active) | **+0.230** | **+0.261** | 1.13 |
+| partial (weight + spline year) | +0.288 | +0.323 | 1.12 |
+| on log10(users_rated) sens. | +0.473 | +0.515 | 1.09 |
+
+- Top-vs-bottom log-volume decile gap: raw **+0.305** → adj **+0.361** [Empirical finding].
+- Even/odd rating split: slopes stable (raw .266/.265, adj .298/.295) [Empirical finding].
+- **Classification (c): broadly unchanged or grows** — removing rater-pool severity does NOT shrink the volume gradient; it grows ~9-13% on the active population, replicating the filtered-population finding (+0.444→+0.513, scripts/22) [Supported conclusion]. High-volume games' rater pools skew harsher, so composition works against the premium; the gradient is selection into volume (quality-driven popularity and visibility), not who rates.
+- New nuance [Empirical finding]: the curve is **non-monotonic at the bottom** — sub-100-rating games (1,612) average raw 6.899 / adj 7.169, ABOVE the 100-199 band (6.369/6.637); the relationship is convex (top-decade slope ~+0.5 vs +0.23 average).
+
+### Part B — expected-quality specifications [Model-dependent empirical findings]
+
+CV = 5-fold out-of-fold, unweighted metrics predicting `adj_mean` (seed 20260824). Spec ladder (CV R²): Q0 linear vol+year .196 → **flexible year (spline) +.099** → Q1 +weight .540 (**weight is the single largest control, +.245**) → +structure .546 → +categories .570 → **Q3b band-volume .582** → +mechanics .585.
+
+**Weighting comparison (the core question): WLS is NOT material as a noise correction — and is harmful for the residual.**
+- `w_g = n_g` (=1/SE² up to constant sigma_e²; SE P10-P90 spans 0.119→0.023, order-of-magnitude heteroscedasticity confirmed): WLS **degrades CV for every spec** (Q3b .5822→.5599; Q4 .5849→.5514), shifts beta_logn **+28-48%** (.352→.450 at Q3), rank-residual spearman vs OLS .95-.99, top-1% Jaccard .60-.74.
+- Why [Supported conclusion]: efficiency weights `1/(sigma_alpha² + SE²)` with sigma_alpha=0.746 are ≈ uniform (measurement noise ≪ between-game variance) and perform identically to OLS (CV R² .5701 vs .5704). So `w=n` is mostly **population reweighting toward popular games, not noise correction**.
+- WLS residuals leak volume in the unweighted metric: corr(resid, log n) **−0.08..−0.13** (vs ~0 for OLS) and a **+0.32 mean residual for sub-100-rating games** — exactly where low-n candidates would live [Empirical finding]. OLS carried forward.
+- Low-n residual stability (residual evaluated at full vs even-half `adj`): corr **.962 even in the lowest n-quartile** (mean n=100), .988+ elsewhere, nearly identical across weightings — residuals are dominated by stable between-game signal, not per-game measurement noise [Empirical finding]. This is also why weighting can't help prediction much.
+
+**Specification choice: preferred = Q3b_flex_volume / OLS** (8 volume-band dummies + spline year + weight + playtime/players/reimplementation + 28 category flags; 46 features): CV R² **.5822 ± .0234**, RMSE .5633, corr(CV resid, log n) −.004, **band-flat residuals by construction** (linear log_n leaves a U-shaped banded pattern, max |band mean| 0.128 — bottom band high, mid bands −0.05, top bands +0.10-0.13). Q3 (linear volume, 39 feat) .5704; Q4 (+34 mechanic flags, 73 feat) .5849 — mechanics add only +.003 over Q3b at 1.6× features; kept as sensitivity. Residual agreement: Q3b vs Q3 spearman .985 / top1% Jaccard .675; Q3b vs Q4 .958/.579.
+
+**adj vs raw target (same rows/design, OLS):** R² .584 (adj) vs .574 (raw) at Q3b; beta_logn .352 vs .318 (Q3); residual spearman .92-.95 but **top-1% Jaccard only .36-.42** — switching to adj materially changes the candidate set (≈60% turnover at the top 1%) [Empirical finding].
+
+### Operational output for next phase [Method / Supported conclusion]
+
+`underratedness_g = adj_mean_g − expected_quality_g` (Q3b/OLS fit; per-game values in `data/processed/phase2-active/phase6_residuals_active.parquet` with `se_adj`, CV residuals, and Q3/Q4/WLS variants). **Model-dependent screen, not latent quality or broad appeal.** Top-1% sets are 65-75% Jaccard-stable across reasonable spec/weighting variants; the n≥100 preview is dominated by party-game series (Monikers, Time's Up!) — highly rated well beyond what their characteristics predict, pending the Phase 7 broad-appeal screen. For candidate screening: combine residual with `se_adj` (e.g., n≥100 floor or lower-bound `adj − 1.96·SE`) — raw top residuals are otherwise dominated by n≤3 noise.
+
+### Limitations
+
+- No external broad-appeal validation; residual identifies conditional anomalies only. Volume is an RQ2 input here, not a broad-appeal proxy — but volume remains on the RIGHT side of the equation; its convex shape is now absorbed by bands, so the residual no longer contains any volume gradient by construction (this is a modeling choice: "expected given popularity").
+- Tags overlap; indicators are descriptive contrasts, not causal effects. Measurement error in X (e.g., weight) not modeled. Metadata from `bgg_research_population` (complete); raw `games` 80.89% coverage avoided.
+- Severity adjustment removes additive rater level only (Phase 4: beyond-additive selection ≈ 0); non-additive forms untested.
+- Even/odd stability is within-snapshot; timestamps still unresolved (no temporal validation).
+
+### Implications for Phase 7
+
+- Carry `underratedness_pref` (Q3b/OLS) as the primary underratedness measure with `underratedness_cv_pref` for robustness; use `se_adj`/lower-bound for candidate screening; treat WLS variants as sensitivity only.
+- The volume gradient itself (+0.26/10× on n_active, +0.51 on users_rated) is a Phase-1-style popularity premium that survives severity adjustment — a game popular *because* good is confounded with popularity premium; broad-appeal evidence (RQ3) cannot come from this gradient alone.
+
+*Record:* `scripts/31_phase6_expected_quality_underratedness.py` → `reports/phase6_underratedness/` (comparative_table.csv, coefficient_table.csv, residual_overlap.csv, low_n_residual_stability.csv, volume_diagnostic_{band,decile}_table.csv, 2 PNGs, 2 preview CSVs) + `docs/phase2-active/phase6_comparative.json` + `docs/phase2-active/phase6_volume_diagnostic.json` (both committed, strict JSON) + gitignored per-game parquet. Rerunnable: `python scripts/31_phase6_expected_quality_underratedness.py`.
+
+Tagging per AGENTS.md: observed facts (counts, band means, sample sizes), empirical findings (slopes, CV metrics, shifts, overlaps, stability), model-dependent (all spec outputs, residual, preferred spec), supported conclusions (classification c; WLS not material; preferred spec), limitations as listed.
