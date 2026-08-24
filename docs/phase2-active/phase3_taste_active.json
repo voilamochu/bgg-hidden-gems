@@ -1,0 +1,720 @@
+{
+  "active_dir": "scratch/phase2-active",
+  "population": "scratch/phase2-active/bgg_research_population.parquet",
+  "generated_at": "2026-08-24T04:50:04Z",
+  "validation": {
+    "n_obs": 24509788,
+    "n_users": 288730,
+    "n_games": 16564,
+    "mu": 7.144007675729622,
+    "expected_n_obs": 24509788,
+    "expected_n_users": 288730,
+    "expected_n_games": 16564,
+    "delta_obs_vs_expected": 0,
+    "delta_users_vs_expected": 0
+  },
+  "mu": 7.144007675729622,
+  "active_band_order": [
+    "10-24",
+    "25-49",
+    "50-99",
+    "100-249",
+    "250-499",
+    "500-999",
+    "1000+"
+  ],
+  "method": {
+    "min_cell": 5,
+    "min_cell_parity": 3,
+    "weight_bands": {
+      "light": "weight<1.62",
+      "medium": "1.62-2.33",
+      "heavy": ">2.33",
+      "note": "tertiles of population weight (1.62/2.33)"
+    },
+    "top_cats": [
+      "Card Game",
+      "Fantasy",
+      "Wargame",
+      "Science Fiction",
+      "Party Game",
+      "Dice"
+    ],
+    "top_mechs": [
+      "Dice Rolling",
+      "Hand Management",
+      "Set Collection",
+      "Variable Player Powers",
+      "Open Drafting",
+      "Cooperative Game"
+    ],
+    "note": "descriptive tau = per-user mean_in - mean_out; resid tau = (mean_in - mean_alpha_in) - (mean_out - mean_alpha_out) after mu+alpha+delta; stability via even/odd parity correlation; distinctness vs delta/logvol; materiality via user x weight band shrinkage (lambda per band) predicting ratings beyond mu+alpha+delta"
+  },
+  "descriptive_tau_raw": {
+    "weight_bands": [
+      {
+        "type": "heavy",
+        "n_users": 228939,
+        "tau_raw": 0.6897896140985033,
+        "sd_diff": 0.618743417490742,
+        "p10": -0.014876122862938228,
+        "p50": 0.6786600496277915,
+        "p90": 1.4276783725845996,
+        "share_pos": 0.893928076911317,
+        "mean_n_in": 45.595534181594225
+      },
+      {
+        "type": "light",
+        "n_users": 181521,
+        "tau_raw": -0.7227890903943981,
+        "sd_diff": 0.6398703018250327,
+        "p10": -1.5,
+        "p50": -0.692342342342342,
+        "p90": 0.0060538670620209345,
+        "share_pos": 0.10105166895290352,
+        "mean_n_in": 28.71595022063563
+      },
+      {
+        "type": "medium",
+        "n_users": 240346,
+        "tau_raw": -0.17128787075032603,
+        "sd_diff": 0.5949746703220434,
+        "p10": -0.8666666666666663,
+        "p50": -0.17499999999999982,
+        "p90": 0.5277777777777777,
+        "share_pos": 0.3536152047464905,
+        "mean_n_in": 33.56325880189394
+      }
+    ],
+    "categories": [
+      {
+        "type": "Card Game",
+        "n_users": 236969,
+        "tau_raw": -0.20241743668869872,
+        "sd_diff": 0.5454468492993094,
+        "p10": -0.8251774541248224,
+        "p50": -0.204081632653061,
+        "p90": 0.42323585858585866,
+        "share_pos": 0.3099223949124147,
+        "mean_n_in": 32.77725778477354
+      },
+      {
+        "type": "Dice",
+        "n_users": 104483,
+        "tau_raw": -0.12813211561328658,
+        "sd_diff": 0.505064425871906,
+        "p10": -0.7218045112781954,
+        "p50": -0.11138613861386126,
+        "p90": 0.44826025009473286,
+        "share_pos": 0.3838136347539791,
+        "mean_n_in": 16.67890470220036
+      },
+      {
+        "type": "Fantasy",
+        "n_users": 196489,
+        "tau_raw": 0.08255095563026182,
+        "sd_diff": 0.5641139488647288,
+        "p10": -0.5622236652236652,
+        "p50": 0.08187134502923943,
+        "p90": 0.7314446280303007,
+        "share_pos": 0.5746581233555059,
+        "mean_n_in": 22.824850246069754
+      },
+      {
+        "type": "Party Game",
+        "n_users": 117604,
+        "tau_raw": -0.43299443953423944,
+        "sd_diff": 0.6570018800147115,
+        "p10": -1.2297369617323752,
+        "p50": -0.40840840840840764,
+        "p90": 0.3299642852274434,
+        "share_pos": 0.22734770926158973,
+        "mean_n_in": 15.564419577565388
+      },
+      {
+        "type": "Science Fiction",
+        "n_users": 150311,
+        "tau_raw": 0.24907731662956642,
+        "sd_diff": 0.5545898131509451,
+        "p10": -0.38596491228070207,
+        "p50": 0.24863445378151106,
+        "p90": 0.9027777777777777,
+        "share_pos": 0.7107996088110651,
+        "mean_n_in": 17.278149969064142
+      },
+      {
+        "type": "Wargame",
+        "n_users": 79566,
+        "tau_raw": 0.2734138240961874,
+        "sd_diff": 0.7034069855486438,
+        "p10": -0.5647603485838784,
+        "p50": 0.2985713545860409,
+        "p90": 1.0912785928673965,
+        "share_pos": 0.6908478495839931,
+        "mean_n_in": 17.230864942312042
+      }
+    ],
+    "mechanics": [
+      {
+        "type": "Cooperative Game",
+        "n_users": 159361,
+        "tau_raw": 0.14581398407091342,
+        "sd_diff": 0.6378667562667099,
+        "p10": -0.5952380952380958,
+        "p50": 0.15454378219278908,
+        "p90": 0.8888888888888893,
+        "share_pos": 0.6178236833353205,
+        "mean_n_in": 18.85087944980265
+      },
+      {
+        "type": "Dice Rolling",
+        "n_users": 225526,
+        "tau_raw": 0.031244487695510713,
+        "sd_diff": 0.5517121329616432,
+        "p10": -0.6003243253457256,
+        "p50": 0.03657129749297727,
+        "p90": 0.6617647058823533,
+        "share_pos": 0.5329185991859032,
+        "mean_n_in": 28.51941682998856
+      },
+      {
+        "type": "Hand Management",
+        "n_users": 260351,
+        "tau_raw": 0.09934514308070261,
+        "sd_diff": 0.5320285208387451,
+        "p10": -0.49523809523809526,
+        "p50": 0.0912500000000005,
+        "p90": 0.7050000000000001,
+        "share_pos": 0.5942976981075548,
+        "mean_n_in": 37.31279695488014
+      },
+      {
+        "type": "Open Drafting",
+        "n_users": 202414,
+        "tau_raw": 0.23391907973901227,
+        "sd_diff": 0.518636014580403,
+        "p10": -0.3522862324432779,
+        "p50": 0.2196969696969715,
+        "p90": 0.84375,
+        "share_pos": 0.7085824103075874,
+        "mean_n_in": 26.356121612141454
+      },
+      {
+        "type": "Set Collection",
+        "n_users": 215860,
+        "tau_raw": 0.0017031834634973026,
+        "sd_diff": 0.5243474275719405,
+        "p10": -0.6071428571428568,
+        "p50": 0.01005891671870307,
+        "p90": 0.5999999999999996,
+        "share_pos": 0.5083202075419253,
+        "mean_n_in": 27.93858519410729
+      },
+      {
+        "type": "Variable Player Powers",
+        "n_users": 228790,
+        "tau_raw": 0.28361610167357204,
+        "sd_diff": 0.5904857894338001,
+        "p10": -0.3862785810680552,
+        "p50": 0.2732258817505495,
+        "p90": 0.9823594053005821,
+        "share_pos": 0.7198828620131998,
+        "mean_n_in": 27.65235805760741
+      }
+    ]
+  },
+  "residual_tau": {
+    "weight_bands": [
+      {
+        "type": "heavy",
+        "n_users": 228939,
+        "tau_resid_diff": 0.026311162624615154,
+        "sd_diff": 0.5624345814799497,
+        "p10": -0.6198107079224188,
+        "p50": 0.0349276761863031,
+        "p90": 0.673468220439574,
+        "share_pos": 0.5313555139141868,
+        "mean_resid_in": -0.2085763014041265
+      },
+      {
+        "type": "light",
+        "n_users": 181521,
+        "tau_resid_diff": -0.018611022343099526,
+        "sd_diff": 0.5614922793072133,
+        "p10": -0.673018065223812,
+        "p50": -0.01805947548691922,
+        "p90": 0.6283990992927917,
+        "share_pos": 0.48436269081814226,
+        "mean_resid_in": -0.23262735930419245
+      },
+      {
+        "type": "medium",
+        "n_users": 240346,
+        "tau_resid_diff": -0.016559632864876037,
+        "sd_diff": 0.4742107254694266,
+        "p10": -0.5523860112323531,
+        "p50": -0.01492873115971216,
+        "p90": 0.512745756121896,
+        "share_pos": 0.4819926272956488,
+        "mean_resid_in": -0.23175141132020605
+      }
+    ],
+    "categories": [
+      {
+        "type": "Card Game",
+        "n_users": 236969,
+        "tau_resid_diff": 0.009606762464014096,
+        "sd_diff": 0.4807912844380125,
+        "p10": -0.5214003189203162,
+        "p50": 0.0026772773234515768,
+        "p90": 0.5529561265902909,
+        "share_pos": 0.5031670809261971,
+        "mean_resid_in": -0.21563643957200312
+      },
+      {
+        "type": "Dice",
+        "n_users": 104483,
+        "tau_resid_diff": 0.002332299978184303,
+        "sd_diff": 0.44170900222223947,
+        "p10": -0.5006511622498342,
+        "p50": 0.00806886816038066,
+        "p90": 0.5034131321682653,
+        "share_pos": 0.5095278657772078,
+        "mean_resid_in": -0.21802476286569686
+      },
+      {
+        "type": "Fantasy",
+        "n_users": 196489,
+        "tau_resid_diff": 0.01373915320589982,
+        "sd_diff": 0.4949217814905503,
+        "p10": -0.5434728302161039,
+        "p50": 0.02194421370840871,
+        "p90": 0.5621350190951926,
+        "share_pos": 0.5250879184076462,
+        "mean_resid_in": -0.21425942354042102
+      },
+      {
+        "type": "Party Game",
+        "n_users": 117604,
+        "tau_resid_diff": -0.01240303191793969,
+        "sd_diff": 0.583895684195664,
+        "p10": -0.7020961749037353,
+        "p50": -0.002847880402598424,
+        "p90": 0.6642731083981395,
+        "share_pos": 0.49766164416176323,
+        "mean_resid_in": -0.2314850590624788
+      },
+      {
+        "type": "Science Fiction",
+        "n_users": 150311,
+        "tau_resid_diff": 0.016461334877812903,
+        "sd_diff": 0.49426435849104544,
+        "p10": -0.5489376711235918,
+        "p50": 0.028099623073339686,
+        "p90": 0.5767216754475957,
+        "share_pos": 0.5294955126371323,
+        "mean_resid_in": -0.20823334321092996
+      },
+      {
+        "type": "Wargame",
+        "n_users": 79566,
+        "tau_resid_diff": 0.009870076056885318,
+        "sd_diff": 0.6349580040517699,
+        "p10": -0.722447389103507,
+        "p50": 0.03579178513852943,
+        "p90": 0.7258928866779679,
+        "share_pos": 0.5297111831686901,
+        "mean_resid_in": -0.21941365554628467
+      }
+    ],
+    "mechanics": [
+      {
+        "type": "Cooperative Game",
+        "n_users": 159361,
+        "tau_resid_diff": -0.01838790294694481,
+        "sd_diff": 0.564421430844124,
+        "p10": -0.6695814636677557,
+        "p50": 0.009276481109142587,
+        "p90": 0.6084278391773168,
+        "share_pos": 0.5085748708906194,
+        "mean_resid_in": -0.24245887715469763
+      },
+      {
+        "type": "Dice Rolling",
+        "n_users": 225526,
+        "tau_resid_diff": 0.020573068710795585,
+        "sd_diff": 0.4909784386916482,
+        "p10": -0.5332812262691484,
+        "p50": 0.026382878194018744,
+        "p90": 0.5699568838068845,
+        "share_pos": 0.5295531335633142,
+        "mean_resid_in": -0.21036083890096965
+      },
+      {
+        "type": "Hand Management",
+        "n_users": 260351,
+        "tau_resid_diff": 0.016982093650105716,
+        "sd_diff": 0.46746880779670713,
+        "p10": -0.49040116737969264,
+        "p50": 0.014569373277359077,
+        "p90": 0.5349494463978095,
+        "share_pos": 0.5187880976066925,
+        "mean_resid_in": -0.21066685217758355
+      },
+      {
+        "type": "Open Drafting",
+        "n_users": 202414,
+        "tau_resid_diff": -0.006848381266643098,
+        "sd_diff": 0.44235759439726663,
+        "p10": -0.5040359079621751,
+        "p50": -0.0022461011601482284,
+        "p90": 0.4899143977539461,
+        "share_pos": 0.49717410851028093,
+        "mean_resid_in": -0.22507046489568602
+      },
+      {
+        "type": "Set Collection",
+        "n_users": 215860,
+        "tau_resid_diff": -0.01600566430816243,
+        "sd_diff": 0.4566270878324687,
+        "p10": -0.5364404945934003,
+        "p50": -0.007454718303181451,
+        "p90": 0.49235499650769315,
+        "share_pos": 0.4907301028444362,
+        "mean_resid_in": -0.23408732076289165
+      },
+      {
+        "type": "Variable Player Powers",
+        "n_users": 228790,
+        "tau_resid_diff": 0.035812789668605974,
+        "sd_diff": 0.5224992476403599,
+        "p10": -0.5549634475412104,
+        "p50": 0.042282124245299535,
+        "p90": 0.6266863932901198,
+        "share_pos": 0.5431181432754928,
+        "mean_resid_in": -0.2011747669980168
+      }
+    ]
+  },
+  "stability": {
+    "weight_bands": [
+      {
+        "type": "heavy",
+        "n_both": 186791,
+        "pearson_even_odd": 0.3545379014962669,
+        "spearman_even_odd": 0.3666320218787985,
+        "median_abs_diff": 0.34972548776637336
+      },
+      {
+        "type": "light",
+        "n_both": 143708,
+        "pearson_even_odd": 0.35598177484466575,
+        "spearman_even_odd": 0.36056337599414656,
+        "median_abs_diff": 0.36074001548992785
+      },
+      {
+        "type": "medium",
+        "n_both": 195570,
+        "pearson_even_odd": 0.16206297593026164,
+        "spearman_even_odd": 0.1677622476101706,
+        "median_abs_diff": 0.3508269276770317
+      }
+    ],
+    "categories": [
+      {
+        "type": "Card Game",
+        "n_both": 193518,
+        "pearson_even_odd": 0.15576980392526554,
+        "spearman_even_odd": 0.1627786371491814,
+        "median_abs_diff": 0.36335250749898407
+      },
+      {
+        "type": "Dice",
+        "n_both": 73633,
+        "pearson_even_odd": 0.1595149572388996,
+        "spearman_even_odd": 0.15709599971032945,
+        "median_abs_diff": 0.34734880652345446
+      },
+      {
+        "type": "Fantasy",
+        "n_both": 152004,
+        "pearson_even_odd": 0.18015288025486256,
+        "spearman_even_odd": 0.17384024431466732,
+        "median_abs_diff": 0.37684636587163256
+      },
+      {
+        "type": "Party Game",
+        "n_both": 83589,
+        "pearson_even_odd": 0.34259718845096654,
+        "spearman_even_odd": 0.33265339700100166,
+        "median_abs_diff": 0.40824472382917065
+      },
+      {
+        "type": "Science Fiction",
+        "n_both": 109635,
+        "pearson_even_odd": 0.1780475518486541,
+        "spearman_even_odd": 0.1742185332770348,
+        "median_abs_diff": 0.39184255981624627
+      },
+      {
+        "type": "Wargame",
+        "n_both": 53288,
+        "pearson_even_odd": 0.3668771895126434,
+        "spearman_even_odd": 0.34410700297006935,
+        "median_abs_diff": 0.42613738108745824
+      }
+    ],
+    "mechanics": [
+      {
+        "type": "Cooperative Game",
+        "n_both": 117596,
+        "pearson_even_odd": 0.2949394104933805,
+        "spearman_even_odd": 0.2780879536950187,
+        "median_abs_diff": 0.39602379457960923
+      },
+      {
+        "type": "Dice Rolling",
+        "n_both": 179233,
+        "pearson_even_odd": 0.17878323316212152,
+        "spearman_even_odd": 0.18442634292802684,
+        "median_abs_diff": 0.36707992260341715
+      },
+      {
+        "type": "Hand Management",
+        "n_both": 215227,
+        "pearson_even_odd": 0.09403789567849027,
+        "spearman_even_odd": 0.09726501581664763,
+        "median_abs_diff": 0.36375870443843983
+      },
+      {
+        "type": "Open Drafting",
+        "n_both": 159574,
+        "pearson_even_odd": 0.1354922526661979,
+        "spearman_even_odd": 0.14878047584428858,
+        "median_abs_diff": 0.33960686807165485
+      },
+      {
+        "type": "Set Collection",
+        "n_both": 171946,
+        "pearson_even_odd": 0.1533962502351121,
+        "spearman_even_odd": 0.16042745594327693,
+        "median_abs_diff": 0.34529252133491317
+      },
+      {
+        "type": "Variable Player Powers",
+        "n_both": 183210,
+        "pearson_even_odd": 0.23013662643374164,
+        "spearman_even_odd": 0.23733943889440057,
+        "median_abs_diff": 0.3747400705804731
+      }
+    ],
+    "median_pearson_wband": 0.3545379014962669,
+    "median_pearson_cat": 0.17910021605175833,
+    "median_pearson_mech": 0.16608974169861682
+  },
+  "distinctness": {
+    "weight_bands": [
+      {
+        "type": "heavy",
+        "n_users": 228939,
+        "corr_diff_vs_delta": -0.0729797347724216,
+        "corr_diff_vs_logvol": -0.022409844031423334
+      },
+      {
+        "type": "light",
+        "n_users": 181521,
+        "corr_diff_vs_delta": 0.07823221801551357,
+        "corr_diff_vs_logvol": 0.004467548449832192
+      },
+      {
+        "type": "medium",
+        "n_users": 240346,
+        "corr_diff_vs_delta": 0.019940052128186583,
+        "corr_diff_vs_logvol": 0.0061549544864787295
+      }
+    ],
+    "categories": [
+      {
+        "type": "Card Game",
+        "n_users": 236969,
+        "corr_diff_vs_delta": 0.051678699298935954,
+        "corr_diff_vs_logvol": -0.044186192246225914
+      },
+      {
+        "type": "Dice",
+        "n_users": 104483,
+        "corr_diff_vs_delta": 0.07601464728406282,
+        "corr_diff_vs_logvol": -0.04877084332900621
+      },
+      {
+        "type": "Fantasy",
+        "n_users": 196489,
+        "corr_diff_vs_delta": 0.05641173724669027,
+        "corr_diff_vs_logvol": -0.07162846976721976
+      },
+      {
+        "type": "Party Game",
+        "n_users": 117604,
+        "corr_diff_vs_delta": 0.04226107642456582,
+        "corr_diff_vs_logvol": -0.0274918045286716
+      },
+      {
+        "type": "Science Fiction",
+        "n_users": 150311,
+        "corr_diff_vs_delta": 0.02155438830353104,
+        "corr_diff_vs_logvol": -0.0797978711786479
+      },
+      {
+        "type": "Wargame",
+        "n_users": 79566,
+        "corr_diff_vs_delta": 0.013066369798760687,
+        "corr_diff_vs_logvol": -0.14874120544413605
+      }
+    ],
+    "mechanics": [
+      {
+        "type": "Cooperative Game",
+        "n_users": 159361,
+        "corr_diff_vs_delta": 0.06023261896558913,
+        "corr_diff_vs_logvol": -0.05492664508190596
+      },
+      {
+        "type": "Dice Rolling",
+        "n_users": 225526,
+        "corr_diff_vs_delta": 0.07395674891875452,
+        "corr_diff_vs_logvol": -0.06097421801501702
+      },
+      {
+        "type": "Hand Management",
+        "n_users": 260351,
+        "corr_diff_vs_delta": 0.009661732539330867,
+        "corr_diff_vs_logvol": -0.03308994954384971
+      },
+      {
+        "type": "Open Drafting",
+        "n_users": 202414,
+        "corr_diff_vs_delta": -0.04331766157464232,
+        "corr_diff_vs_logvol": 0.013420102695239676
+      },
+      {
+        "type": "Set Collection",
+        "n_users": 215860,
+        "corr_diff_vs_delta": 0.0012940289100259969,
+        "corr_diff_vs_logvol": 0.008092270496896075
+      },
+      {
+        "type": "Variable Player Powers",
+        "n_users": 228790,
+        "corr_diff_vs_delta": 0.038316017394699725,
+        "corr_diff_vs_logvol": -0.07929208220352074
+      }
+    ],
+    "median_abs_corr_wband": 0.0729797347724216,
+    "median_abs_corr_cat": 0.04696988786175089,
+    "median_abs_corr_mech": 0.04081683948467102
+  },
+  "materiality": {
+    "sigma_e": 1.1940701083513112,
+    "sigma_e2": 1.425803423658112,
+    "shrinkage_per_band": {
+      "light": {
+        "var_raw": 0.16965614091984543,
+        "mean_inv_n": 0.08186416255895163,
+        "sigma_tau": 0.23007376571088667,
+        "lambda": 26.93552542019935,
+        "mean_shrink": 0.3971465361651701,
+        "median_shrink": 0.3576919532949229,
+        "n_users": 183933
+      },
+      "medium": {
+        "var_raw": 0.09495640529811375,
+        "mean_inv_n": 0.07560892741795812,
+        "sigma_tau": 0.1,
+        "lambda": 142.5803423658112,
+        "mean_shrink": 0.15289704887896574,
+        "median_shrink": 0.10089522926549999,
+        "n_users": 243540
+      },
+      "heavy": {
+        "var_raw": 0.0941012787996681,
+        "mean_inv_n": 0.06487033638813976,
+        "sigma_tau": 0.1,
+        "lambda": 142.5803423658112,
+        "mean_shrink": 0.18078008147487398,
+        "median_shrink": 0.12301610212506094,
+        "n_users": 253189
+      }
+    },
+    "insample": {
+      "n": 24508296,
+      "var_rating": 2.354042785169178,
+      "mse_base": 1.4257923112559632,
+      "mse_full": 1.3957138582933775,
+      "rmse_base": 1.1940654551807297,
+      "rmse_full": 1.1814033427637562,
+      "r2_base": 0.39432183635800155,
+      "r2_full": 0.4070991967152917,
+      "r2_gain": 0.012777360357290157
+    },
+    "heldout_even_to_odd": {
+      "n": 12253911,
+      "mse_base": 1.4253378198605313,
+      "mse_full": 1.4159223091503246,
+      "rmse_base": 1.193875127415146,
+      "rmse_full": 1.1899253376369143
+    },
+    "heldout_odd_to_even": {
+      "n": 12254385,
+      "mse_base": 1.4262467850714413,
+      "mse_full": 1.416899435950943,
+      "rmse_base": 1.1942557452536877,
+      "rmse_full": 1.1903358500654104
+    },
+    "heldout_average": {
+      "mse_base": 1.4257923024659864,
+      "mse_full": 1.416410872550634,
+      "rmse_base": 1.1940654515000366,
+      "rmse_full": 1.1901306115509482,
+      "rmse_gain": 0.003934839949088387,
+      "r2_base": 0.39432184009199345,
+      "r2_full": 0.3983070819807377,
+      "r2_gain": 0.003985241888744273
+    }
+  },
+  "gates": {
+    "stability": {
+      "median_pearson_wband": 0.3545379014962669,
+      "median_pearson_cat": 0.17910021605175833,
+      "median_pearson_mech": 0.16608974169861682,
+      "pass": false,
+      "threshold": "median r>0.5"
+    },
+    "distinctness": {
+      "median_abs_corr_delta_wband": 0.0729797347724216,
+      "median_abs_corr_delta_cat": 0.04696988786175089,
+      "median_abs_corr_delta_mech": 0.04081683948467102,
+      "pass": true,
+      "threshold": "median |r(delta)|<0.3"
+    },
+    "materiality": {
+      "r2_gain_insample": 0.012777360357290157,
+      "rmse_gain_insample": 0.012662112416973459,
+      "r2_gain_heldout": 0.003985241888744273,
+      "rmse_gain_heldout": 0.003934839949088387,
+      "rmse_base_heldout": 1.1940654515000366,
+      "rmse_full_heldout": 1.1901306115509482,
+      "pass": false,
+      "threshold": "heldout R2 gain>0.005 or RMSE gain>0.02"
+    },
+    "interpretation": "gates evaluated on active population; stability checks parity correlation of taste, distinctness checks collapse into severity, materiality checks prediction gain beyond mu+alpha+delta"
+  },
+  "claim_tags": {
+    "validation": "observed fact",
+    "descriptive_tau": "empirical finding",
+    "residual_tau": "empirical finding",
+    "stability": "empirical finding",
+    "distinctness": "empirical finding",
+    "materiality": "model-dependent conclusion",
+    "gates": "supported conclusion / hypothesis"
+  }
+}

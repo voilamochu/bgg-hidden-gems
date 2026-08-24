@@ -122,6 +122,23 @@ Active severity artefacts for Phase 3: `data/processed/phase2-active/user_severi
 and `game_adjusted_means_active.parquet` (one row per active user / per game with ≥1 active rating).
 Committed validation copy: `docs/phase2-active/active_baseline_validation.json`.
 
+## Phase 3 taste investigation on the active population (scripts/27)
+
+Tests whether the large rater-level effect is **global severity** vs **systematic user×game-type taste** on the active extracts (see `findings.md` 2026-08-24 Phase 3 entry and `docs/phase2-active/phase3_taste_active.json`). Two simplest taste tests on frequent types (`cells≥5` per user; weight tertiles light<1.62/medium≤2.33/heavy>2.33 and top 6 categories/mechanics):
+
+- **(a) Descriptive raw gaps** are large (heavy +0.69 vs light -0.72; Wargame +0.27, Party -0.43) but reflect game composition (heavy/Wargame games have higher `adj_mean`), not taste.
+- **(b) Residual gaps after `mu+alpha+delta`** collapse to |tau|≤0.036 across all 15 types (heavy +0.026, light -0.019, Variable Powers +0.036), vs rating SD 1.53 and severity spread 1.04.
+
+Three gates (one even/odd split, no new large parquets):
+
+- **Stability:** even/odd parity `r` median 0.355 weight (0.356 light, 0.355 heavy, 0.162 medium), 0.179 categories, 0.166 mechanics — far below severity `r=0.877`, threshold `>0.5` **fails**.
+- **Distinctness:** `|r(tau,delta)|` median 0.073 weight, 0.047 cats, 0.041 mechs — taste distinct from severity, threshold `<0.3` **passes** but with near-zero mean taste this is moot.
+- **Materiality:** explicit `user×weight` with per-band shrinkage (`lambda 26.9 light /142.6 heavy`) gives in-sample R² +0.0128 (RMSE 1.194→1.181) and **held-out R² +0.0040** (RMSE 1.194→1.190 gain 0.0039), threshold `R²>0.005 or RMSE>0.02` **fails** (vs severity R² +0.193, RMSE gain 0.23).
+
+**Result [Supported conclusion]:** the rater gap is global severity, not stable, material `user×type` taste for frequent types. Do not add taste correction; keep severity / game composition / taste conceptually separate.
+
+Rerunnable: `python scripts/27_phase3_taste_active.py --active-dir scratch/phase2-active --population scratch/phase2-active/bgg_research_population.parquet --out-dir data/processed/phase2-active` (bounded, single-scan aggregates, copy-once to `scratch/phase2-active/`). Output: `phase3_taste_active.json` (22KB).
+
 ## Reproduce
 
 ```bash
