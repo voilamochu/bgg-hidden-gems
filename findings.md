@@ -1016,3 +1016,20 @@ The committed `scripts/16` was rerun end-to-end at full convergence (100 alterna
 - Scripts: `15_phase2_same_game_volume_comparison.py`, `16_phase2_user_severity_stability.py` (`--reuse` mode available), `17_phase2_gap_decomposition.py`, `18_phase2_rater_credibility.py`, `19_phase2_temporal_drift.py`, `20_phase2_audience_selection.py`, `21_phase2_cross_audience_consistency.py`, `22_phase2_baseline_comparison.py`; residual export added to `05`.
 - Derived extracts (gitignored, reproducible): `game_band_cells.parquet`, `within_game_diffs_*.parquet`, `user_severity.parquet`, `game_adjusted_means.parquet`, `gap_cells_low_high.parquet`, `era_mix_by_group.parquet`, comparison tables.
 - JSON result summaries beside each script's outputs under `data/processed/phase2/`.
+
+## 2026-08-24: Filtered Phase 2 universe built (primary analytical layer going forward)
+
+### Method
+
+**[Method]** New `scripts/23_build_filtered_phase2_extracts.py` restricts the Phase 2 parquet extracts to the 16,627-game research population via explicit DuckDB SEMI JOINs on `game_id` (bounded memory 4GB / 4 threads; EXPLAIN-asserted semi joins; no wide tables, no positional pandas). Canonical observation definition unchanged: every non-null review rating, no deduplication, `rating_observation_id`/`source_rowid` retained. Outputs under `data/processed/phase2-filtered/` (rating observations, games metadata, users with ≥1 filtered rating, collections, tags, links) plus validation.json / extract_counts.json / parquet_catalog.csv. Catalog and caveats: `docs/phase2-filtered/PARQUET_CATALOG.md`.
+
+### Results
+
+1. **94.1% of all rating observations fall on population games [Observed fact]:** 25,335,220 of 26,924,709 observations; the excluded ~79k low-volume snapshot games hold only ~1.59M. The brief's 60–70% guess was wrong in an informative direction — popularity concentration puts almost all rating mass inside the research population.
+2. **16,567 of 16,627 population games have ≥1 snapshot rating [Observed fact]:** the 60 absentees are recent high-game_id releases missing from this earlier SQLite scrape (snapshot mismatch, not filter loss).
+3. **Only 13,449 of 16,567 rated games (81.2%) carry a `games.parquet` attrs row [Observed fact]:** game_attrs covers 21,925 of 95,540 snapshot games; weight/player-count analyses on filtered data will miss ~19% of rated population games unless supplemented by the game-level population parquet (complete for all 16,627).
+4. **Validations passed [Observed fact]:** output rows equal an independent source-restricted count (semi join neither duplicated nor dropped); 100% user match; collection triple-join sample 2,567/2,567; shortlist spot checks reproduce findings.md counts exactly (Brightcast 5, Evil Upheaval 140, Goblin Grapple 209, Grasse 111, Abuela Co. 66); repeated user-game pairs preserved (1,465 pairs).
+
+### Implication
+
+Phase 3 restarts on `data/processed/phase2-filtered/rating_observations_filtered.parquet`. Full-snapshot extracts and scripts 15–22 fit artifacts (`user_severity.parquet`, `game_adjusted_means.parquet`) are historical reference only; re-estimating taste/type quantities on the filtered universe is the next task's deliverable.
