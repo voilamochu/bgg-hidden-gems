@@ -1366,5 +1366,78 @@ Reasoning [Supported conclusion]:
 
 - Direct SQLite `SELECT COUNT(*) FROM game_attrs WHERE game_id IN (missing)` would formally close the vintage proof where `bgg.sqlite` is available; Parquet evidence is already decisive that missing = absent, not filtered [Open].
 - Publisher/manufacturer clustering beyond `families` not testable from the complete parquet; would need `games.parquet` mfg fields (NULL for missing) or external source [Limitation].
+## 2026-08-24: Phase 3 taste investigation on the active population — global severity vs user×type taste (scripts/27)
+
+**Primary universe:** 16,627 games × ≥10 in-universe ratings, excluding `degenerate_strict` (`data/processed/phase2-active/`, 24,509,788 obs, 288,730 users, 16,564 games, `rating_observations_active.parquet` copy in `scratch/phase2-active/`). Baseline reused from `scripts/26` (ALS `rating = mu + alpha_g + delta_u`, `mu=7.144`, `delta_full/even/odd` in `user_severity_active.parquet`, `adj_mean = mu+alpha` in `game_adjusted_means_active.parquet` is the unbiased game effect; `mu+alpha` is biased -0.218 vs `adj_mean` due to unweighted centering — materiality uses `adj_mean+delta`). Bounded DuckDB `memory_limit=4GB`/`threads=3`/`temp_directory scratch/ducktmp`. **Method:** (a) descriptive within-type gaps on frequent types with `cells≥5` per user — population `tau_t = mean_u(mean_in - mean_out)`; (b) residual-by-type after `mu+alpha+delta` — `diff_resid = (mean_in - mean_adj_in) - (mean_out - mean_adj_out)` per user (delta/mu cancel, isolates game-adjusted taste). Frequent types: weight bands `light<1.62 / medium1.62-2.33 / heavy>2.33` (population weight tertiles, 1.62/2.33) and top 6 categories/mechanics by game count (categories: Card Game 5330, Fantasy 2572, Wargame 2265, Science Fiction 1490, Party Game 1485, Dice 1478; mechanics: Dice Rolling 4627, Hand Management 4197, Set Collection 2717, Variable Player Powers 2694, Open Drafting 1974, Cooperative 1800). Three gates on one even/odd `rating_observation_id` split: stability (parity correlation of `tau`), distinctness (correlation of `tau` with `delta`/volume), materiality (in-sample and held-out R²/RMSE gain beyond `game+user_delta` with shrunk `user×weight` interaction, `lambda = sigma_e²/sigma_tau²`). Stop adding complexity when gates fail.
+
+### (a) Descriptive gaps — large raw differences are game composition [Empirical finding]
+
+| Type | n_users (≥5 in/out) | tau_raw (rating points) | sd_diff | median diff | share>0 |
+|---|---|---:|---:|---:|---:|
+| weight heavy | 228,939 | **+0.690** | 0.619 | +0.679 | 89.4% |
+| weight light | 181,521 | **-0.723** | 0.640 | -0.692 | 10.1% |
+| weight medium | 240,346 | -0.171 | 0.595 | -0.175 | 35.4% |
+| Card Game | 236,969 | -0.202 | 0.545 |  |  |
+| Fantasy | 196,489 | +0.083 | 0.564 |  |  |
+| Wargame | 79,566 | +0.273 | 0.703 |  |  |
+| Science Fiction | 150,311 | +0.249 | 0.555 |  |  |
+| Party Game | 117,604 | -0.433 | 0.657 |  |  |
+| Variable Player Powers | 228,790 | +0.284 | 0.590 |  |  |
+| Open Drafting | 202,414 | +0.234 | 0.519 |  |  |
+
+**[Observed fact / Empirical finding]** Raw per-user gaps track known game-level rating order (heavy games mean 7.71 vs light 6.65; Wargame/SciFi high, Party low) and therefore conflate `mean_alpha_in - mean_alpha_out` with taste. They are not evidence of systematic taste.
+
+### (b) Residual-by-type after severity — no systematic population taste [Empirical finding]
+
+| Type | n_users | tau_resid_diff (in - out, adj for game) | sd_diff | share>0 |
+|---|---|---:|---:|---:|
+| weight heavy | 228,939 | **+0.026** | 0.562 | 53.1% |
+| weight light | 181,521 | -0.019 | 0.562 |  |
+| weight medium | 240,346 | -0.017 | 0.474 |  |
+| Card Game | 236,969 | +0.010 | 0.481 |  |
+| Fantasy | 196,489 | +0.014 | 0.495 |  |
+| Wargame | 79,566 | +0.010 | 0.635 |  |
+| Science Fiction | 150,311 | +0.017 | 0.494 |  |
+| Party Game | 117,604 | -0.012 | 0.584 |  |
+| Variable Player Powers | 228,790 | +0.036 | 0.523 |  |
+| Hand Management | 260,351 | +0.017 | 0.468 |  |
+| Dice Rolling | 225,526 | +0.021 | 0.491 |  |
+
+**[Empirical finding]** After removing `mu+alpha+delta` (game composition and global severity), population gaps collapse to **|tau| ≤0.036 rating points** across all 15 tested types — an order of magnitude smaller than raw gaps and negligible vs rating SD 1.53 and severity spread 1.04 (`10-24` +0.27 → `1000+` -0.78). Per-user dispersion remains ~0.48-0.64, so the near-zero mean is not due to low variance but to cancellation. No frequent type shows a stable population-level taste offset.
+
+### Gates
+
+**Stability — fails [Empirical finding]:** even/odd `rating_observation_id` parity correlations of `diff_resid` (cells ≥3 per half both sides):
+
+- weight heavy 0.355 (n_both 186,791), light 0.356, medium 0.162; median weight 0.355
+- categories median 0.179 (Wargame max 0.367, Party 0.343, Card Game 0.156, Fantasy 0.180, Dice 0.160, SciFi 0.178)
+- mechanics median 0.166 (Cooperative 0.295, Variable Powers 0.230, Dice Rolling 0.179, Hand Management 0.094)
+
+**[Supported conclusion]** Taste correlations are far below severity stability (active parity Pearson 0.877 min10, 0.922 min20) and below the pre-registered `median r>0.5` threshold. The most stable single type (Wargame 0.367, heavy 0.355) is still less than half as stable as global severity. Therefore per-user taste for these frequent types is not a stable rater trait in this data — it is dominated by sampling noise / transient composition.
+
+**Distinctness — passes (not collapsing) [Empirical finding]:** Pearson `r(diff_resid, delta_full)` median |r| =0.073 weight, 0.047 categories, 0.041 mechanics; all |r|<0.08, p-values irrelevant. `r(diff, log volume)` similarly <0.03. **[Supported conclusion]** Residual taste does **not** collapse into global severity or volume — it is distinct, but being distinct with near-zero mean does not make it material.
+
+**Materiality — fails (statistically detectable, practically negligible) [Model-dependent conclusion]:** explicit `user×weight` interaction with per-band empirical-Bayes shrinkage `tau_shrunk = n/(n+lambda) * mean_resid_in`, `lambda = sigma_e²/sigma_tau²` (sigma_e=1.19, var_raw 0.17 light /0.09 heavy, sigma_tau 0.23 light /0.10 heavy, lambda 26.9 light /142.6 heavy, mean shrink 0.40 light /0.15 medium /0.18 heavy):
+
+- In-sample (24,508,296 obs with weight): `R²(game+user)=0.394` → with `user×weight` **+0.0128**, RMSE 1.1941→1.1814 gain **0.013** points.
+- Held-out (one even/odd split; unbiased `adj_mean+delta` baseline): even→odd RMSE 1.1939→1.1899 gain 0.0040, odd→even 1.1943→1.1903 gain 0.0040, average **R² gain 0.0040**, **RMSE gain 0.0039** points.
+
+**[Supported conclusion]** The `R²` and RMSE gains are an order of magnitude smaller than the severity gain (severity: `R² game 0.201→both 0.394` gain 0.193, RMSE 1.472→1.238 gain 0.23 on active; also holdout RMSE 1.47→1.23). A 0.004-point held-out gain is statistically detectable at 24.5M n but not practically material. Threshold `heldout R²>0.005 or RMSE>0.02` fails. Therefore **taste adds no material predictive value beyond severity** for these types.
+
+### Overall interpretation — global severity is the rater-level effect [Supported conclusion]
+
+The large low-vs-high-volume rater gap (active `10-24` vs `1000+` +1.11 within-game, severity-adjusted gap -0.03) is **almost entirely global severity** (`delta_u` spread 1.04, parity r 0.877). Systematic `user×game-type` taste on frequent weight/category/mechanic types is **near-zero at population level, unstable across halves, and immaterial for prediction**. A well-supported “no material taste beyond severity” is the valid result — do not force a `user×type` model.
+
+**What was not tested [Limitation]:** only frequent, coarse types with `≥5` cells and 3 weight bands / top 6 categories/mechanics were examined; overlapping category membership treated as separate per-type tests (joint `user×type` not modeled); rare/niche types (<500 games) and finer weight gradients not examined — they would have fewer cells and lower stability; shrinkage implementation is empirical-Bayes per band, not a joint hierarchical fit. These limitations make the “no material taste” conclusion conservative for frequent types; a small, very niche taste could still exist below detection for rare types but would not explain the large severity gradient.
+
+### Artefacts and reproduce
+
+**Rerunnable:** `python scripts/27_phase3_taste_active.py --active-dir scratch/phase2-active --population scratch/phase2-active/bgg_research_population.parquet --out-dir data/processed/phase2-active` (bounded `memory_limit=4GB`/`threads=3`/`temp_directory scratch/ducktmp`; single-scan per-user aggregates; no wide-table bug; `COPY` only for small outputs). Outputs: `data/processed/phase2-active/phase3_taste_active.json` (22KB, this entry’s tables) plus `docs/phase2-active/phase3_taste_active.json` committed copy. `data/processed/phase2-active/user_severity_active.parquet` / `game_adjusted_means_active.parquet` reused, not refit.
+
+**Tag every claim** per AGENTS.md: observed facts (counts, means), empirical findings (tau, correlations, R²), model-dependent conclusions (shrinkage, materiality), supported conclusions (stability/materiality gates), hypothesis/speculation (rare-type taste remains open), assumption (severity is descriptive level).
+
+### Implication for hidden-gem work
+
+Do not build a `user×type` taste correction for hidden-gem ranking on this active population — it would add complexity without explanatory or predictive benefit. Keep `severity (global delta)` and `game composition (adj_mean)` separate from `taste`; the selection problem for RQ3 remains within-game enthusiasm trajectories / exposure denominator, not a stable taste interaction for frequent types.
 
 
