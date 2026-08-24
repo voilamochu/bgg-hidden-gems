@@ -2473,3 +2473,88 @@ STOP after baseline; **do NOT run Phase 3 taste (`|tau|≤0.036`, `R²+0.004`), 
 
 **Fully converged second-pass population + canonical Parquet layer + refreshed Phase-2 statistical baseline, all reproducible and directly usable as the foundation for the next analytical pass** (next pass can run `python scripts/26` lineage on `phase2-pass2` by changing input path; or use `phase2-pass2` severity artefacts directly).
 
+
+## 2026-08-24: Rater × Game-Type Taste Interaction — Joint hierarchical test v2 (Stage A + Stage B, provisional + confirmed)
+
+### Question [Method]
+After removing each user's global severity (delta_u), do users systematically rate particular game types differently from their own overall behavior, net of other correlated type flags, and is that user×type interaction stable, distinct from severity, and materially predictive? Explicitly separate from Phase 4 within-game selection audit (resid≈0, SD 0.015) and Phase 3 frequent-type taste (|tau|≤0.036, R²+0.004 — those tested frequent types only; this tests specific categories 18XX/Wargame/Party/Economic/Coop/Legacy which the frequent-type average could have missed). Joint, not marginal: all 6 flags simultaneous, gamma_{u,t} ~ N(0, tau_t²) partially pooled.
+
+### Classification §1 [Method / Assumption]
+- **Type flags (overlapping booleans, a game can carry >1):**
+  - **18XX**: families matches `18\d\d` or `"18XX"` pattern, OR explicit game-link/series evidence. No weight/category proxy. Implemented as `families` contains `Series: 18xx` case-insensitive (strict); history false positives (e.g., `History: La Belle Epoque (1871–1914)`, `History: War of 1812` containing 1871/1812) excluded — naive regex would add 21 false positives. Also checked `game_links` corroboration: 15 games linked to Legacy mechanics, not auto-flagged. Source: `bgg_research_population.parquet` / `games_pass2.parquet` families JSON arrays + `game_links.parquet` (43k). 81 games in pass2 (0.55% of population), 82 in provisional active. Weight mean 3.92 vs 2.08 (Heavy 91% vs 6.3% overall) [Empirical finding].
+  - **Wargame**: category == `"Wargame"` (2020 pass2, 2265 active) [Observed fact]
+  - **Party**: category == `"Party Game"` (1268/1485)
+  - **Economic**: category == `"Economic"` (1287/1403) — 72 of 81 18XX are Economic (89%) [Empirical finding: corr 18XX-Economic 0.21]
+  - **Cooperative**: mechanic == `"Cooperative Game"` only (1543/1800)
+  - **Legacy**: mechanic == `"Legacy Game"` (50/62) OR `"Legacy Versions"` relationship where linked game's mechanics/families already contains Legacy (checked via `game_links` rel version/reimplementation/family; adds minimal). 25 of 50 Legacy are also Coop (50%) [Empirical].
+  - **Other**: none of above (8808 games, 59.9% of pass2)
+- **Explicitly excluded:** Heavy-as-type (redundant with weight axis); Abstract Strategy (no basis in Phase 3/4 instability history).
+- **Weight axis orthogonal (never used to define type flag):** Primary 3-class Light <2.5 (71.2%) / Medium 2.5–3.5 (22.5%) / Heavy ≥3.5 (6.3%); Sensitivity 5-class <1.5 (27.7%) /1.5–2.0 (20.5%) /2.0–2.5 (22.9%) /2.5–3.5 (22.5%) />3.5 (6.3%) in pass2 [Empirical]. Weight missing for 7 games (99.95% present).
+
+### Model — Stage A (joint, hierarchical) [Method]
+```
+r_ug = mu + alpha_g + delta_u + Σ_t gamma_{u,t}·flag_{g,t} + epsilon
+gamma_{u,t} ~ N(0, tau_t²)  partially pooled, not raw fixed effect
+```
+- **All 6 flags simultaneous joint regression.** Marginal gamma_{u,18XX} indistinguishable from generic heavy-economic severity (Phase 3 already killed, |tau|≤0.036). Joint estimates each type net of others — actual question. Overlaps: 18XX-Economic 72, Coop-Party 109, Warg-Econ 60, Coop-Warg 66, Coop-Legacy 25 [Empirical].
+- **Hierarchical shrinkage:** gamma ~ N(0, tau²), sigma² fixed to resid variance (var_resid 1.424 confirmed, 1.426 provisional). Raw joint OLS per user via per-user sufficient stats S= X'X (6×6, counts of co-flagged games) and c= X'y (sum resid·flag), S⁻¹c with ridge 1e-6 for singular; se = sqrt(sigma²·diag(S⁻¹)); tau² via MoM Var(raw)-mean(se²) (floor 1e-6), shrunk = raw·tau²/(tau²+se²) diagonal approximation to joint posterior (joint point estimate net of correlated flags, per-flag shrinkage). Sparse flags (18XX 930 users ≥10, Legacy 1603 ≥10 vs Warg 40k, Party 62k, Economic 105k, Coop 94k) require shrinkage or stability gate fails on noise — shrinkage pulls sparse 18XX toward 0 (tau 0.001).
+- **Populations:** Provisional current active 16,627 games × ≥10 floor, 24,509,788 obs, mu 7.144, 288,730 users (16564 games with ≥1 rating) [provisional, not for conclusions]; Confirmed canonical pass2 14,698 games × 287,302 users × 24,146,307 obs, mu 7.139, after 269 pruned + 4→2 iter closure + 4 degenerate removed, validation 0 violations [confirmed for Stage B]. Reuse mu/delta/alpha from refreshed baseline (scripts/26→40, mu 7.144/7.139, parity r 0.877, R² both 0.393-0.394) but refit gamma on each population.
+- **Gates per flag (BH across 6 before materiality):** 1) Stability even/odd rating_observation_id split median r>0.5 (eligible n≥3 per half, relax to ≥1 for rarest); 2) Distinctness |r(gamma_t, delta_u)|<0.08; 3) Materiality held-out R² gain ≥+0.005 vs mu+alpha+delta or RMSE ≥0.02 (approx via tau²·p(1-p)/var_resid; joint held-out via even→odd cross-prediction). BH Wald tau test p<0.05.
+
+### Results — Stage A joint fit [Empirical finding / Model-dependent conclusion]
+
+**Flag counts & overlaps confirmed pass2:** 18XX 81 games 39,856 obs 10,831 users ≥1, 930 ≥10, 337 ≥20; Wargame 2020 games 1,641,907 obs 204,757 ≥1, 40,922 ≥10; Party 1268 2,042k obs 227k≥1 62,902≥10; Economic 1287 obs 4.1M 267k≥1 105k≥10; Coop 1543 3.24M 263k≥1 94k≥10; Legacy 50 277k obs 117k≥1 1,603≥10 [Empirical]. Warg mean weight 2.89 vs 1.97 non-Warg; 18XX 3.92 vs 2.08; Economic 2.74 vs 2.03; Party 1.30 vs 2.17 [Empirical]. Overlaps above.
+
+**Per-flag tau (hierarchical SD, confirmed, shrinkage):** 18XX 0.001 (tiny, joint nets out Economic/Heavy), Economic 0.001, Wargame 0.329, Party 0.317, Coop 0.250, Legacy 0.526 [Model-dependent]. Provisional nearly identical: Warg 0.333, Party 0.318, Coop 0.251, Legacy 0.531, 18XX/Econ 0.001 [Empirical: stability across populations within 2%]. Larger than Phase 3 mean |tau|≤0.036 (which was mean difference, not SD); SD of residual differences in Phase 3 was 0.63 for Warg, so SD ~0.3 is consistent with that dispersion. Tau even/odd similar (Warg 0.304/0.303) [Empirical].
+
+**Gates confirmed (pass requires all four):**
+
+| Flag | n≥10 | tau | Stability r (n_overlap) | Distinct |r| | Material R2 (approx) | p_bh | Overall |
+|---|---:|---:|---:|---:|---:|---:|---|
+| 18XX | 930 | 0.001 | 0.721 (1346) **pass** | 0.103 **fail** | 0.00000 fail | 0.85 fail | **FAIL** |
+| Wargame | 40922 | 0.329 | 0.483 (55483) fail | 0.033 pass | 0.00481 fail | 1.5e-06 pass | **FAIL** |
+| Party | 62902 | 0.317 | 0.447 (83303) fail | 0.072 pass | 0.00545 pass | 1.5e-06 pass | **FAIL** (stability) |
+| Economic |105561|0.001|0.550 (130308) pass|0.108 fail|0.00000 fail|0.85 fail|**FAIL**|
+| Coop |94562|0.250|0.418 (120064) fail|0.125 fail|0.00508 pass|1.5e-06 pass|**FAIL** (stability+distinct)|
+| Legacy |1603|0.526|0.334 (4991) fail|0.000 pass|0.00221 fail|1.5e-06 pass|**FAIL**|
+
+Provisional same pattern: Warg 0.483 fail stability, Party 0.449 fail, Coop 0.413 fail, Legacy 0.337 fail; 18XX 0.722 pass stability but fail distinctness/materiality/BH; Economic 0.534 pass stability but fail distinctness/materiality/BH. No flag passes all gates in either population [Empirical].
+
+**BH correction:** Wald tau test (tau / se_tau, floor for tiny tau) across 6 flags → p_bh 0.85 for 18XX/Economic (non-significant), 1.5e-06 for Warg/Party/Coop/Legacy (significant) [Model-dependent]. BH does not rescue failures.
+
+**Held-out joint (all 6 flags together) vs mu+alpha+delta baseline, even↔odd cross-prediction (no leakage across halves, but delta/alpha reuse full fit → conservative):** Provisional R² gain **+0.00864** (>0.005) RMSE improv 0.0084 (<0.02); Confirmed R² gain **+0.00979** (>0.005) RMSE 0.00945 (<0.02) on 24.1M test obs [Empirical]. Joint taste explains <1% variance (R² 0.393→0.403). Per-flag approx R2 via tau²·p(1-p)/var: Warg 0.0048 (<0.005), Party 0.00545 (just over), Coop 0.00508, Legacy 0.0022, 18XX/Econ ~0 [Model-dependent]. Per-flag incremental joint (net of overlap) would be even smaller than marginal approx, so materiality fails for most.
+
+**Stability details:** Even/odd Pearson r: 18XX 0.72 (good but n small 1.3k overlap), Warg 0.483, Party 0.447, Coop 0.418, Legacy 0.334 — all <0.5 [Empirical]. Distinctness |r(gamma,delta)|: 18XX 0.103, Economic 0.108, Coop 0.125 fail (>0.08) — suggests residual correlation with global severity, not distinct taste; Warg 0.033, Party 0.072, Legacy 0.000 pass [Empirical].
+
+**Separate from Phase 4 & Phase 3:** Phase 4 within-game selection resid≈0 SD 0.015 (no systematic rater-pool selection within game); Phase 3 frequent-type taste |tau|≤0.036 R²+0.004 on frequent types; current test on specific categories could have been missed by frequent average but still fails gates — confirms frequent result extends to these theoretically motivated types when tested jointly net of correlations.
+
+### Stage B — type × weight interaction (gated) [Method / Empirical]
+Only for flags that pass Stage A BH-corrected gates. **No survivors in confirmed** → Stage B not run per spec §3 (confirmatory, not exploratory). Would have extended Stage A joint as `r_ug = [Stage A] + gamma_{u,t×weight}·flag_{g,t}·weight_class_g` on confirmed only, with 3-class primary (Light <2.5 / Medium 2.5–3.5 / Heavy ≥3.5) and 5-class sensitivity (<1.5/1.5–2.0/2.0–2.5/2.5–3.5/>3.5) orthogonal to type. Documented in `docs/raterxgenre_taste_v2/stage_b_type_weight.json/.md` as gated empty.
+
+### Validation checks [Observed fact / Method]
+- **Parity splits partition correctly:** even 12,073,302 + odd 12,073,005 = 24,146,307 (pass2) and 12,255,143+12,254,645=24,509,788 (active) — no overlap, no leakage across halves [Empirical].
+- **Duplicate user-game rows:** 1,510 duplicates in 24.1M (rare but real, retained per canonical semantics) [Observed fact].
+- **Per-user sufficient stats validation anchor:** Top 18XX user 3985085099831395624 (79 18XX ratings, max). Direct SQL: n_18xx 79, sum_r_18xx 111.90, mean resid among 18XX 1.42, per-user S 79 for 18XX, 71 for 18XX·Economic overlap, etc. Python joint raw via S⁻¹c matches SQL aggregates within 1e-9; shrinkage pulls sparse 18XX gamma to ~0 (tau 0.001) as intended. Per-user mean resid offset -0.256 across all users due to rating-weighted alpha/delta centering (per-game mean alpha=0 but rating-weighted mean alpha 0.558, delta -0.302 → 0.256 offset) — gates invariant to constant shift (correlation/SD unchanged) [Validation].
+- **Flag counts reconcile:** game-level 81/2020/1268/1287/1543/50 vs rating-level 39k/1.64M etc. [Empirical].
+- **No wide-table bug:** narrow single-scan aggregations per user (COUNT/SUM per flag, not SELECT * wide), DuckDB bounded 4GB/3threads/temp scratch/ducktmp, copy-once scratch/phase2-pass2 verified.
+
+### Limitations [Limitation / Assumption]
+- **Sparse cells limit stability:** 18XX 930 users ≥10 net of correlated flags, Legacy 1,603 ≥10 — stability gate underpowered; weight correlation with type (18XX 91% Heavy, Economic 2.74 vs 2.03, Warg 2.89 vs 1.97) limits net identifiability even jointly; hierarchical shrinkage required but cannot create signal where data sparse [Limitation].
+- **18XX definition assumption:** Strict Series: 18xx only; naive `18\d\d` regex would add history false positives (21 games with 1871/1812 history tags) — sensitivity to definition; alternative pattern would change 18XX count 81→102 (+26%) and tau estimate [Assumption].
+- **Legacy definition assumption:** Mechanic `Legacy Game` primary (50 games, exact BGG string `Legacy Game` not `Legacy`); linked `Legacy Versions` via `game_links` rel version/reimplementation adds ≤15 games (0.1% of population) — conservative; broader family/mechanic search would not materially change [Assumption].
+- **Held-out leakage:** delta_u/alpha_g from full fit (mu 7.139/7.144) reused for held-out predictions → baseline already sees test data via delta/alpha (conservative, underestimates gamma gain). Proper even→odd would refit delta/alpha per half (delta_even/odd available, alpha_even not stored, used full alpha) — conservative bias <0.002 R2 estimated [Limitation].
+- **Materiality approx:** per-flag R2 via tau²·p(1-p)/var overestimates joint incremental due to flag overlap (sum marginal R2 0.017 > joint 0.0098) — conservative for gate (overestimates, yet still fails for most) [Limitation].
+- **Selection not fixed:** Game-level dedup and n≥100/≥10 floors correct for noise and duplicate SKUs, not for who chooses to buy/play/rate; sample-size shrinkage alone cannot fix self-selection (high rating from small group ≠ broad appeal) [Assumption].
+- **Conceptual separation:** gamma_{u,t} is not a credibility score and does not establish broad appeal; underratedness (resid vs expected) vs taste (systematic user×type deviation) vs broad appeal (evidence beyond niche) kept separate [Assumption].
+- **Timestamp semantics unresolved:** postdate/rating_tstamp ambiguous — not used; time-based taste drift not tested [Limitation].
+
+### Implications for next phase [Implication / Hypothesis]
+- **No flag warrants type-adjusted quality estimator.** Additive `mu + alpha_g + delta_u` remains sufficient; hierarchical tau 0.001–0.53 but unstable/distinctness/materiality failures and <1% joint variance mean type×taste does not materially improve prediction or stability over severity alone. This matches Phase 3 frequent-type R²+0.004 and Phase 4 selection 0 — the specific categories feared to be hidden by frequent-type averaging are also not stable/distinct/material when tested jointly net of correlations.
+- **Next phase (hidden-gem):** Do not carry any of these 6 type flags into type-adjusted ranking; use severity-adjusted means (adj_mean) as quality estimate. Hidden-gem hunt must focus on evidence of appeal beyond existing niche (cross-audience), not just underratedness or taste.
+- **Hypothesis kept open:** A different type definition (e.g., Heavy-as-type, Abstract Strategy) could be revisited only if specific reason surfaces, per spec exclusion — no evidence here to justify.
+
+### Artefacts [Method]
+- Script `scripts/41_raterxgenre_taste_v2.py` (next free number, rerunnable, bounded 4GB/3threads/temp scratch/ducktmp, narrow single-scan per-user S/c aggregations, no wide-table bug, no full-snapshot rescans, seed 42)
+- Outputs `docs/raterxgenre_taste_v2/`: `README.md`, `stage_a_joint_fit.json` (per-flag gamma distribution, gates, BH), `stage_a_joint_fit.md`, `stage_b_type_weight.json/.md` (gated empty), `gate_summary.csv` (12-row machine-readable)
+- Inputs: `bgg_research_population.parquet` (16,627), `data/processed/phase2-active/rating_observations_active.parquet` (24.5M provisional), `data/processed/phase2-pass2/rating_observations_pass2.parquet` + `games_pass2.parquet` (14,698/287,302/24.1M confirmed), `game_links.parquet` (43k) — copy once into `scratch/phase2-active` + `scratch/phase2-pass2`
+- Reproduction: `python scripts/41_raterxgenre_taste_v2.py --active-dir data/processed/phase2-active --pass2-dir data/processed/phase2-pass2 --population data/processed/bgg_research_population.parquet --out-dir docs/raterxgenre_taste_v2`
