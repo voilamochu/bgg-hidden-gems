@@ -1,0 +1,15 @@
+{
+  "universe_game_ids": 16627,
+  "threshold_t": 10,
+  "inputs": {
+    "rating_observations.parquet": 26924709,
+    "users.parquet": 606497,
+    "collections.parquet": 29618326,
+    "bgg_research_population.parquet": 16627
+  },
+  "outputs": {
+    "rating_observations_active.parquet": 24509788,
+    "users_active.parquet": 288730,
+    "collections_active.parquet": 25889485
+  }
+}
