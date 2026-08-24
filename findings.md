@@ -1016,3 +1016,52 @@ The committed `scripts/16` was rerun end-to-end at full convergence (100 alterna
 - Scripts: `15_phase2_same_game_volume_comparison.py`, `16_phase2_user_severity_stability.py` (`--reuse` mode available), `17_phase2_gap_decomposition.py`, `18_phase2_rater_credibility.py`, `19_phase2_temporal_drift.py`, `20_phase2_audience_selection.py`, `21_phase2_cross_audience_consistency.py`, `22_phase2_baseline_comparison.py`; residual export added to `05`.
 - Derived extracts (gitignored, reproducible): `game_band_cells.parquet`, `within_game_diffs_*.parquet`, `user_severity.parquet`, `game_adjusted_means.parquet`, `gap_cells_low_high.parquet`, `era_mix_by_group.parquet`, comparison tables.
 - JSON result summaries beside each script's outputs under `data/processed/phase2/`.
+
+## 2026-08-24: Phase 3 step (a)/(b) — residual-by-type descriptives after the additive baseline
+
+### Scope and method
+
+**[Method]** New `scripts/23_phase3_type_descriptives.py`, reusing the Phase 2 fit artifacts (`user_severity.parquet`, `game_adjusted_means.parquet`; the earlier refit attempt was abandoned per steer — `--reuse` path, see scratch/STEER.md). Residuals r_ug = y − c − alpha_g − delta_u with c = 6.7919 re-centered empirically. Universe: covered observations (games.parquet record present; 24.6M of 26.9M obs, 91.4%). Within-user contrasts restricted to users with >=20 lifetime observations (223,061 users; this excludes the entire 'low' volume-band group 1-9 by construction — they cannot support >=5-obs cells). Features: top-12 categories / mechanics / themes by observation mass plus 3 weight bands. Informative cell = user has >=5 covered obs with and without the feature. Timestamps unused.
+
+### Baseline reproduction checks
+
+1. **Additive baseline verified on reused artifacts [Observed data]:** stability JSON matches the Phase 2 record exactly (mu=7.1228, R² game 0.230 / rater 0.249 / both 0.438, parity r=0.872 over 223,069 users, band deltas +0.84 → −1.25). Implied R² from recomputed residual SD on the covered universe = **0.419–0.425** depending on scope (vs 0.438 overall) — small drop from excluding uncovered niche games.
+2. **Holdout-number discrepancy noted [Observed data]:** the artifact's parity holdout RMSEs (game-FE-only 1.772, +user 1.316, both directions) do not match the figures recorded in the 2026-08-23 findings entry (1.563/1.253); the raw-train-mean RMSE (1.417) does match. Provenance of the recorded numbers unresolved; flagged for the next Phase 2 touchpoint, does not block Phase 3.
+3. **Centering convention documented [Method]:** game_alpha is centered across games and delta_u across users (both unweighted), so observation-weighted means are +1.10 and −0.77; residuals must be re-centered by the empirical intercept (~6.79), not mu. Constant shifts do not affect contrasts or R² gains.
+
+### Main results
+
+4. **A real but SMALL systematic type pattern exists in the residuals [Empirical finding]:** population-level within-user contrasts tau_t (= how much higher a user rates their t-games than their own non-t-games, after game identity and global severity) are precisely estimated and ordered:
+   - Largest positive: Variable Player Powers **+0.029** (z=+27), heavy weight **+0.027**, theme Science Fiction **+0.018**, Hand Management **+0.014**, Dice Rolling **+0.013**, Solo/Solitaire **+0.013**, theme Fantasy **+0.010**, Thematic **+0.010**.
+   - Largest negative: category Family **−0.034** (z=−33), Cooperative Game **−0.019**, light weight **−0.019**, medium weight **−0.016**, Set Collection **−0.013**.
+   - Many |z| > 5 → survives any multiple-comparison correction within families; this is a genuine pattern, not noise.
+   - **Magnitude is tiny:** extremes are ±0.03 rating points against a residual SD of ~1.20 and a severity spread of ~2.1. Even naively bundling all features, predicted type shifts have SD well under 0.05 → upper bound on R² gain from population-level type effects ≈ 0.2% of rating variance.
+5. **Individual heterogeneity is much larger than the mean effect [Observed data]:** between-user SD of contrasts is 0.41–0.62 across features (share of users positive only 47–54%) — whether that heterogeneity is stable signal or estimation noise is exactly what the parity gate must decide.
+6. **Contrasts differ by rater volume band [Empirical finding]:** e.g., Cooperative tau is about **+0.03 among mid-band users vs −0.004 among high-band users** (20% sample); War **+0.07 mid vs −0.035 high**. Type-taste patterns are NOT uniform across rater populations — relevant for any later user×type modeling and consistent with the Phase B finding that participation differs by audience.
+
+### Methodological pitfalls found on the way (recorded to prevent recurrence)
+
+7. **Subsampling + cell thresholds silently selects superfans [Method / Empirical finding]:** under k%-observation sampling with an ">=5 observations per side" cell filter, only users with >=5k feature observations survive, shifting taus by up to **±0.08 points** (Cooperative measured +0.06 sampled vs **−0.017** full-population) and flipping signs. All final numbers must come from full-data passes; script 23 now verifies itself against independent full-data direct-SQL anchors every run (agreement to 4 decimals).
+8. **DuckDB operational limits in this environment:** repeated ALS refits over 27M rows in one process were killed (SIGKILL, no traceback); wide boolean-flag tables + positional pandas assembly produced one corrupted-looking result set before being replaced. Working recipe: bounded memory_limit (4GB) + temp_directory spilling + threads<=4 + preserve_insertion_order=false; narrow single-scan aggregations; key-based joins only; in-run anchor assertions.
+
+### Open for next steps
+
+- Gate 1 (stability): split-half replication of the persisted per-user contrasts (`phase3_user_tag_contrasts.parquet`) — how much of the 0.41–0.62 contrast SD replicates?
+- Gate 2 (distinctness): condition contrasts on delta_u/volume band/game mix; scale-anchoring diagnostic (`phase3_user_scale_diagnostic.parquet`) computed but not yet analyzed.
+- Gate 3 (materiality): held-out prediction gain from per-user tastes beyond mu + alpha + delta.
+
+## 2026-08-24: Phase 3 Gate 1 — taste contrasts are stable, not fitting noise
+
+### Method
+
+**[Method]** `scripts/24_phase3_contrast_stability.py`: parity-half design mirroring Phase 2's severity check. Additive model refit on EACH half (rating_observation_id even/odd) warm-started from full-fit artifacts — converged in 4-5 alternating sweeps (final change <3e-3), confirming warm-start validity for bounded refits. Per-user-per-feature contrasts computed within each half from that half's own parameters (no cross-half leakage); >=5 obs per side required WITHIN HALF (3.67M informative cells per half over ~207k users; 2.96M cells joinable across halves).
+
+### Results
+
+1. **The population-level type pattern replicates essentially perfectly [Empirical finding]:** even-half vs odd-half pooled taus correlate **r=0.991**, regression slope **0.994** (39 features). Half-fit taus match full-fit values closely (e.g., VPP +0.028/+0.027 halves vs +0.029 full; Family −0.029/−0.028 vs −0.034 full). The residual-by-type pattern is real structure of the rating process, not parameter noise.
+2. **Per-user taste heterogeneity carries genuine stable signal [Empirical finding]:** cross-half Pearson of individual contrasts ranges **0.12–0.50** (median ≈0.28) against placebo correlations of **±0.01** (mismatched users). Highest stability: category War (**0.50**), heavy weight (**0.47**), Party (**0.42**); lowest: Hand Management (**0.12**). Attenuation from within-half cell noise is expected; the signal fraction implied (~r² = 1.5–25% of raw contrast variance replicated at matched cells) says most individual-contrast variance is noise, with a real stable core concentrated in a minority of raters.
+3. **All statistically significant features replicate [Empirical finding]:** **29 of 39** features pass BH-FDR q=0.05 within family on even-half z-scores; **all 29** reproduce sign and near-equal magnitude on the untouched odd half. No feature's significance depends on one half's quirks.
+
+### Classification
+
+- The additive Phase 2 baseline leaves a small but REAL user x game-type interaction: stable across independent observations, precisely ordered, and heterogeneous across raters ([Empirical finding] for existence/stability; magnitude assessment continues in gates 2-3).
