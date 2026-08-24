@@ -1,0 +1,164 @@
+{
+  "generated_at": "2026-08-24T10:51:41.231142+00:00Z",
+  "population": {
+    "research_population_games": 16627,
+    "active_estimation_sample": 16549,
+    "active_observations": 24509788,
+    "active_users": 288730,
+    "mu": 7.144007675729632,
+    "sigma_e": 1.1940701083513163,
+    "sigma_alpha2": 0.7462197074043406
+  },
+  "broad_pool": {
+    "definition": "n_obs >=100 and underratedness_pref >0 (Q3b/OLS resid >0; n floor 100 as in Phase 6 preview top_residuals_preview_nmin100.csv)",
+    "n_floor": 100,
+    "threshold_resid_gt0": 0,
+    "size": 7754,
+    "threshold_gt02_size": 5131,
+    "p95_threshold": 0.828350835938854,
+    "top5pct_size": 748,
+    "p90_threshold": 0.6259267536502785
+  },
+  "robust_subset": {
+    "definition": "n_obs >=200 and underratedness_pref >=0.60 and min_alt_resid >=0.30 (all of cv_pref, wls_pref, ols_Q3, wls_Q3 >=0.30) and z>=5 and year<2025 (unreleased excluded) and not duplicate-shadowed; z= res/SE SE=1.194/sqrt(n) post_SD=1/sqrt(1/0.746+n/1.426)",
+    "n_floor_robust": 200,
+    "resid_threshold": 0.6,
+    "min_alt_threshold": 0.3,
+    "z_threshold": 5,
+    "size": 910,
+    "flagged_wellknown_among_robust_criteria": 67,
+    "excluded_unreleased_among_robust": 3
+  },
+  "exclusions_and_dedup": {
+    "excluded_low_evidence_count": 1272,
+    "excluded_unreleased_count": 361,
+    "flagged_duplicate_title": 206,
+    "flagged_shadowed": 136,
+    "flagged_wellknown": 530,
+    "not_underrated_count": 6800
+  },
+  "n_distribution": {
+    "p10": 100.0,
+    "median": 293.0,
+    "p90": 2796.4000000000015,
+    "mean": 1480.9532902290168,
+    "per_disposition": {
+      "broad_positive": {
+        "count": 2440,
+        "median": 370.5,
+        "mean": 1084.3348360655739
+      },
+      "broad_positive_gt02": {
+        "count": 3894,
+        "median": 261.0,
+        "mean": 794.6194144838213
+      },
+      "excluded_low_evidence": {
+        "count": 729,
+        "median": 86.0,
+        "mean": 77.39780521262003
+      },
+      "excluded_low_evidence_negative": {
+        "count": 543,
+        "median": 86.0,
+        "mean": 79.26151012891344
+      },
+      "excluded_unreleased": {
+        "count": 361,
+        "median": 11.0,
+        "mean": 34.689750692520775
+      },
+      "flagged_duplicate_title": {
+        "count": 206,
+        "median": 240.0,
+        "mean": 659.0776699029126
+      },
+      "flagged_shadowed_by_more_popular_related": {
+        "count": 136,
+        "median": 473.5,
+        "mean": 1817.110294117647
+      },
+      "flagged_wellknown": {
+        "count": 530,
+        "median": 15206.0,
+        "mean": 20466.737735849056
+      },
+      "not_underrated": {
+        "count": 6800,
+        "median": 333.0,
+        "mean": 969.8244117647059
+      },
+      "robust_underrated": {
+        "count": 910,
+        "median": 473.5,
+        "mean": 913.4197802197803
+      }
+    }
+  },
+  "stability": {
+    "jaccard_preferred_agreements": {
+      "Q3b_vs_Q3": {
+        "spearman": 0.9847134849836044,
+        "jaccard_top1": 0.6751269035532995
+      },
+      "Q3b_vs_Q4": {
+        "spearman": 0.958353056843522,
+        "jaccard_top1": 0.5789473684210527
+      },
+      "Q3_vs_Q4": {
+        "spearman": 0.9738649579420374,
+        "jaccard_top1": 0.7647058823529411
+      }
+    },
+    "residual_overlap_wls_vs_ols_Q3b": {
+      "spearman": 0.9634009602479658,
+      "jaccard_top1": 0.7368421052631579
+    },
+    "spearman_Q3b_vs_Q3": 0.9847134849836044,
+    "jaccard_Q3b_vs_Q3": 0.6751269035532995,
+    "spearman_Q3b_vs_Q4": 0.958353056843522,
+    "jaccard_Q3b_vs_Q4": 0.5789473684210527,
+    "cv_R2_Q3b_OLS": 0.5821894267159451,
+    "cv_R2_Q3_OLS": 0.5704413447807412,
+    "cv_R2_Q4_OLS": 0.5849415737618434
+  },
+  "broad_appeal_evidence_tallies": {
+    "robust_underrated_count": 910,
+    "robust_with_share_heavy": 910,
+    "robust_with_mean_delta": 910,
+    "robust_with_share_own": 910,
+    "robust_with_within_game_heavy_light": 902,
+    "robust_is_reimplementation": 12,
+    "robust_wellknown_flagged": 530,
+    "robust_n_decile_dist": {
+      "D6": 209,
+      "D7": 182,
+      "D8": 160,
+      "D5": 155,
+      "D9": 115,
+      "D10": 50,
+      "D4": 39,
+      "D1": 0,
+      "D2": 0,
+      "D3": 0
+    },
+    "robust_year_ge2025": 0
+  },
+  "provenance": {
+    "residuals_source": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2-active/phase6_residuals_active.parquet",
+    "population_source": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2-active/bgg_research_population.parquet",
+    "selection_diagnostic": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/reports/phase4_selection/selection_diagnostic.csv",
+    "phase6_comparative": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/docs/phase2-active/phase6_comparative.json",
+    "phase5_params": {
+      "mu": 7.144007675729632,
+      "sigma_e": 1.1940701083513163,
+      "sigma_alpha": 0.8638400936541095
+    }
+  },
+  "claim_tags": {
+    "counts": "observed facts from data",
+    "thresholds": "method choices (not ground truth)",
+    "residual": "model-dependent conditional anomaly Q3b/OLS, not latent quality or broad appeal",
+    "broad_appeal": "evidence taxonomy distinct, not combined score"
+  }
+}
