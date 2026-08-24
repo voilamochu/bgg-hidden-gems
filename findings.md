@@ -1814,7 +1814,6 @@ CV = 5-fold out-of-fold, unweighted metrics predicting `adj_mean` (seed 20260824
 
 Tagging per AGENTS.md: observed facts (counts, band means, sample sizes), empirical findings (slopes, CV metrics, shifts, overlaps, stability), model-dependent (all spec outputs, residual, preferred spec), supported conclusions (classification c; WLS not material; preferred spec), limitations as listed.
 
-<<<<<<< HEAD
 ## 2026-08-24: Sensitivity — do `1–99` active-rating games materially affect Phase 5/6? (scripts/32)
 
 ### Scope [Method]
@@ -1891,7 +1890,7 @@ One new rerunnable script `scripts/32_sensitivity_n100_games.py` (efficient: cop
 ### Tagging
 
 Counts/`n`/`mu`/`harmonic`/`top-20 n/SE/resid` = **observed facts**; `Var/sigma/lambda/beta/R²/corr/Jaccard/SD/P05/P95/shrinkage/cross-Jaccard enrichment` = **empirical findings**; `beta/R²/shrinkage interval/resid` = **model-dependent conclusions**; case-3 verdict + "no rerun / `n≥100` screening floor" = **supported conclusion / model-dependent conclusion**; scope/recursive-closure disclaimer = **limitation**; `single-filter` semantics advisory = **assumption**.
-=======
+
 ## 2026-08-24: Phase 7 — robust candidate screening for potential hidden gems (scripts/32)
 
 ### Scope and method
@@ -1971,5 +1970,77 @@ Used only defensible within-BGG evidence, explicitly distinguished per `broad_ap
 *Record:* `scripts/32_phase7_candidate_screening.py` (bounded 4GB/threads3 `temp_directory scratch/ducktmp` `scratch/phase2-active` copy-once, uses `phase6_residuals_active.parquet` `bgg_research_population` `selection_diagnostic.csv` `within_game_diffs_active*` `game_tags/links_filtered`) → `docs/phase7-candidate-screening/{README.md, underrated_candidates.md, underrated_candidates.csv (16549×44), broad_appeal_evidence.md (80 excerpt of 910), exclusions_and_deduplication.md, screening_summary.json}` + `reports/phase7_candidate_screening/screening_summary.json`. Rerunnable: `python scripts/32_phase7_candidate_screening.py --active-dir scratch/phase2-active --population scratch/phase2-active/bgg_research_population.parquet --out-dir docs/phase7-candidate-screening`.
 
 Tagging per AGENTS.md: observed facts (counts 7754/910/361/530/206/136, n medians, mu 7.144 SE 1.194, Jaccard .675/.579/.737, CV .582/.570/.585, band counts), empirical findings (stability .962, corr +0.18, band flatness, pool composition SDs), model-dependent (all residuals, Q3b/Q3/Q4/WLS, robust rule), supported conclusions (preferred spec, WLS not material, no broad proof from popularity/residual, niche preservation), assumptions (severity descriptive level), limitations as above, hypothesis/speculation flagged, implications as method discipline.
->>>>>>> origin/main
+
+## 2026-08-24: Phase 7A — absolute-quality gate for robust underrated candidates (quality gate, docs/phase7-candidate-screening/quality_gate)
+
+### Scope and method [Method]
+
+**Population held fixed:** 910 robust underrated candidates from Phase 7 (`n≥200`, `resid≥0.60 Q3b/OLS adj−expected`, `min_alt≥0.30`, `z≥5`, `year<2025`, not duplicate-shadowed; `SE=1.194/√n`, `mu 7.144`, `16,549` estimation sample, `16,627` research population `≥10` per user minus `degenerate_strict`, `24.5M obs`, `mu`/`SE`/`adj` from `scripts/26`/`30`/`31`, `phase2-active`; see `docs/phase7-candidate-screening/README.md`). **Do not rerun Phase 5/6, do not modify primary pipeline, do not build hidden-gem score, do not perform broad-appeal selection.** Starting set is the 910 robust (not the 7,754 broad pool); gate is about **absolute quality (`adj_mean`) vs underratedness (`resid`)**, not broad appeal.
+
+Compared defensible gate families on the 910 robust, each with N retained, adj/resid distributions among retained/excluded, sensitivity, overlap, interpretable empirical basis (active `adj` quantiles as anchor, not arbitrary N):
+
+- **A. Absolute adj thresholds** `adj≥7.0, 7.3, 7.5, 7.6, 7.8, 8.0` (anchors: P52/mu−0.17SD, P66/mu+0.18SD, **P74≈P75/mu+0.41SD**, P77/mu+0.52SD, P85/mu+0.75SD, P90/mu+0.98SD; active quantiles DuckDB `quantile_cont` on `game_adjusted_means_active.parquet` 16,564 rows: P10 5.80, P25 6.39, **P50 6.96**, **P75 7.515**, P90 8.01, P95 8.28, mean 6.926 SD 0.872).
+- **B. Percentile thresholds** `adj≥P50 (6.959), P75 (7.515), P90 (8.009)` — same cuts restated; P75 vs 7.5 differ by 0.015 (534 vs 544 retained).
+- **C. Lower-confidence-bound thresholds** `lower = adj − k·SE`, `k=1, 1.96` (and `post_SD` variant `post_SD=1/√(1/0.746+n/1.426)`; at `n≥200` median `SE 0.055` vs `post 0.055` diff <0.002 — EB adds nothing at this n floor). At robust median `n=474 SE0.055 → 1.96·SE 0.108`; at `n=200 SE0.084 →0.165`; at `n=100 SE0.119 →0.234`. Illustrates that `resid 0.6 at n=200 z 7.1` and `n=50 z 3.5` are not equivalent — the latter would fail `lower≥7.0` at `adj 7.1` (lb 6.93) while former passes (lb 7.0 at adj 7.16).
+- **D. Reasonable combinations** `adj≥7.5 AND lower1.96≥7.0` (544), `adj≥7.3 AND lower≥7.0` (654), `adj≥P75 AND lower≥7.0` (534) — conjunctions of absolute floor plus uncertainty floor.
+
+Data handling: reuse `docs/phase7-candidate-screening/underrated_candidates.csv` + `game_adjusted_means_active.parquet` + `phase5_quality_comparison.json` (`mu 7.144`, `sigma_e 1.194`, `sigma_alpha² 0.746`, `sd_adj 0.872`) + `bgg_research_population.parquet`; copy-once into `scratch/phase2-active` where applicable, DuckDB bounded `memory_limit 4GB/threads 3/temp scratch/ducktmp`, narrow single-scan aggregations, no wide-table bug, no full-snapshot rescans. Outputs in `docs/phase7-candidate-screening/quality_gate/` — see `README.md` (methodology) + `quality_gate_comparison.md` (per-gate tables) + `quality_gate_candidates.csv` (910 rows ×20 gate flags) + `quality_gate_summary.json` (per-gate stats, sensitivity grids, empirical basis).
+
+### Results [Observed facts / Empirical findings]
+
+**Robust quality distribution before gate [Observed fact]:** `adj` mean 7.68 median 7.67 P10 6.89 P90 8.48 min 6.19 max 9.46 SD 0.60; `resid` mean 0.86 median 0.79 P10 0.62 max 2.27; `lower_1_96` median 7.58 min 6.06 max 9.36; `n` median 474 mean 913 P10 234 P90 2150; `adj vs resid r=+0.32` (modest, R² 0.10 — not interchangeable).
+
+**A. Absolute thresholds [Empirical finding / Observed fact]:**
+
+| Gate | Anchor | N retained /910 | Retained adj med / excluded med | Retained resid med / excluded | N med ret/exc | Interpretation |
+|---|---|---:|---:|---:|---:|---|
+| `adj≥7.0` | P52, mu−0.17SD, 48.1% active ≥7.0 | **786 (86.4%)** /124 | 7.77/6.80 Δ+0.97 | 0.81/0.70 Δ+0.11 | 502/412 | Barely above median — very lenient floor; keeps many 7.0–7.3 still below top quartile |
+| `adj≥7.3` | P66, mu+0.18SD | **654 (71.9%)** /256 | 7.91/7.01 Δ+0.90 | 0.83/0.72 | 512/434 | Modest above-average |
+| **`adj≥7.5`** | **P74≈P75, mu+0.41SD, 25.7% ≥7.5 — top quartile** | **544 (59.8%)** /366 | **8.00/7.14 Δ+0.86** | **0.84/0.73** | **536/417** | **Defensible "good" — top quartile** |
+| `adj≥7.6` | P77, mu+0.52SD | 492 (54.1%) /418 | 8.06/7.20 | 0.85/0.73 | 524/440 | Slightly stricter than 7.5 (−52 games) |
+| `adj≥7.8` | P85, mu+0.75SD, 15.2% ≥7.8 | 382 (42.0%) /528 | 8.19/7.32 | 0.88/0.75 | 488/468 | Top 15% — clearly good, stringent |
+| `adj≥8.0` | P90, mu+0.98SD, 10.2% ≥8.0 | 274 (30.1%) /636 | 8.33/7.42 | 0.88/0.76 | 494/468 | Top decile — very good, very strict |
+
+Retained vs excluded sensitivity is smooth: each 0.1 adj above 7.0 removes ~45–55 games (7.0→786, 7.2→701, 7.3→654, 7.5→544, 7.6→492, 7.8→382, 8.0→274). Retained are higher on both `adj` (Δ 0.86–0.97) and `resid` (Δ 0.11–0.13) — gate screens "underrated but mediocre" (excluded median `adj` 6.80–7.42, `resid` never >0.76) not "high resid gems". Lowest-`adj` robust examples illustrate the need: `6584 Grave Robbers II adj6.19 resid0.84 n314 SE0.067 lb6.06; 2256 Magnificent Race 6.38/0.76/n292; 4934 Battling Tops 6.42/0.67/n388` — robustly underrated (`z 8–13`) yet below-median absolute quality.
+
+**B/C. Lower-bound gates and comparison to adj [Empirical finding]:**
+
+| Gate | N retained | Retained adj med / exc | N med ret/exc | Empirical basis | vs adj at same level |
+|---|---|---:|---:|---:|---|---|
+| `lower1.96≥6.8` | 813 (89.3%) | 7.75/6.75 | 501/352 | `adj≥6.94` at median n — lenient | 27 more than `adj≥7.0` (813 vs 786) — high-n `6.8≤adj<7.0` kept |
+| `lower1.96≥7.0` | **740 (81.3%)** | 7.83/6.87 | 520/362 | **`adj≥7.14` at median n (`mu−0.00`); `adj lower 95% ≥ median-like 7.0`** — uncertainty-aware guard | 46 fewer than `adj≥7.0` (740 vs 786) — screens 46 borderline `adj 7.0–7.13` low-n (e.g. `NFL Strategy adj7.02 n217 SE0.081 lb6.86` fails safely) |
+| `lower1.96≥7.2` | 654 (71.9%) | 7.91/7.01 | 534/379 | `adj≥7.34` at median n — between `adj≥7.3` and `7.5` | **Identical N to `adj≥7.3` (654=654) but 10 games differ each way** |
+| `lower1≥7.0` | 760 (83.5%) | 7.81/6.84 | 513/358 | `adj≥7.07` at median n (68% one-sided) | 20 more than `lower1.96≥7.0` (760 vs 740) |
+| `post_SD≥7.0` | 740 (81.3%) | same as `lower1.96≥7.0` | — | post differs <0.002 at `n≥200` — no material difference | identical |
+
+Borderline illustration (adj 6.9–7.6): `adj 7.02 n217 SE0.081 lb6.86` fails `lower≥7.0` while `adj 7.14 n777 SE0.043 lb7.06` passes at same adj level — lower bakes `SE` so low-n and high-n at same `adj` are not treated equally, as required by task example (`resid 0.6 at n=200 SE0.084 z7.1 vs n=50 SE0.169 z3.5`).
+
+**D. Combinations — empirical overlap finding [Empirical finding; Supported conclusion]:**
+
+Every conjunction `adj≥threshold AND lower1.96≥7.0` with `threshold≥7.3` retains **exactly the same set as adj alone** (`adj≥7.5 ∩ lower≥7.0 = 544 = adj≥7.5`; `adj≥7.3 ∩ lower≥7.0 = 654 = adj≥7.3`; `P75 ∩ lower≥7.0 = 534 = P75`). At `adj≥7.5`, worst-case `n=200 lb=7.335` >7.0 so lower is logically redundant. Its value is guarding lenient floors: `adj≥7.0 ∩ lower≥7.0` =740 (46 fewer than `adj≥7.0` alone; those 46 are `adj 7.0–7.13` low-n). Thus **the material decision is the adj threshold choice; lower choice matters only if a lenient adj floor is adopted** — because robust already requires `n≥200` (SE ≤0.084, median 0.055, median `1.96·SE` 0.108).
+
+**What was not built / kept distinct [Method discipline]:**
+
+No hidden-gem score, no broad-appeal ranking (that remains Phase B's `broad_appeal_evidence.md` four evidence types: reach / composition / cross-audience / proxy caveats, no combined score). Gate is about **absolute quality (`adj`) vs conditional anomaly (`resid`)** — distinct per AGENTS.md central problem (sample-size shrinkage corrects noise, not who is in sample). A game with `resid 0.8 at adj 6.8 n250 SE0.076 z10.5` is robustly underrated yet below-median quality — correctly screened by this gate.
+
+### Interpretation — what "actually good enough" means operationally [Supported conclusion; Method choice with empirical anchor]
+
+No threshold is discovered ground truth. Among those compared, **top-quartile active quality is the most defensible "good" standard**: **`adj≥7.5` (equivalently `≥P75=7.515`, 10-game difference 544 vs 534) — `+0.36` above `mu 7.144` (`+0.41SD`), P74 of active (25.7% ≥7.5).** Basis: clear anchor ("top quartile"), separation (`Δ adj +0.86` vs excluded median 7.14 still below P75), smooth sensitivity (~52 per 0.1 adj), retains `resid` distribution (median 0.84 vs excluded 0.73, so high resid not preferentially discarded). Lenient alternative 7.3 (P66, mu+0.18SD, 654 retained, keeps 110 `7.3≤adj<7.5` below top quartile) or stringent 7.8 (P85, mu+0.75SD, 382 retained, discards 162 more than 7.5 for +0.19 median adj) are possible if next phase wants larger/smaller starting set — report sensitivity alongside any chosen N.
+
+Lower companion `lower1.96≥7.0` (`adj lower 95% ≥ median-like 7.0`, requires `adj≥7.14` at median n) is defensible as uncertainty-aware floor; at `adj≥7.5` it is redundant given `n≥200` but valuable if a lenient `adj≥7.0` is adopted (screens the 46 borderline low-n). `post_SD` variant adds nothing at this n floor.
+
+All gates are **screening, not final ranking** — the later broad-appeal screen starts from actually-good candidates (544 at 7.5 or 534 at P75), not from 910 raw robust.
+
+### Limitations and open issues [Limitation / Assumption / Hypothesis]
+
+- **Adj and resid both model-dependent** [Model-dependent]: `adj` is preferred quality estimator (active held-out adj `R² 0.938` vs raw `0.779` vs bayes `-1.35`) but assumes additive `delta_u` (global severity `r 0.877` gap −0.03; beyond-additive `SD 0.015` per Phase 4 — non-additive forms untested). `resid` is `Q3b/OLS` 46-feature conditional anomaly (tags overlap, descriptive contrasts not causal, measurement error in X not modeled); `min_alt≥0.30` already guards cross-spec (Q3b vs Q3 `.985/.675`, Q3b vs Q4 `.958/.579`, WLS vs OLS `.963/.737`).
+- **Low adj ≠ uninteresting** [Assumption / Limitation]: excluded `adj 6.2–7.3` robust are not "bad games" — robustly better-than-expected **for their characteristics** but below-good absolute quality; a niche-excellence question would keep them.
+- **Self-selection caveat preserved** [Assumption / Limitation]: `adj`/`SE` correct additive level + noise, not who rates. High `adj+resid` can still reflect niche self-selection (people choose what to buy/play/rate; `R² game 0.201` includes popularity premium; `+0.26/10×` volume slope survives severity) — gate screens underrated-but-mediocre, not broad appeal. That distinction is Phase B's job; do not interpret passing gate as broad-appeal evidence.
+- **Threshold not identified** [Limitation]: no natural break at 7.5 in adj distribution; choice justified by anchor + separation + sensitivity, not by data revealing a threshold.
+- **Coverage** [Observed fact / Limitation]: `adj` via `bgg_research_population` (complete 16,627); `games.parquet` 80.89% irrelevant here (join via population parquet). Robust `n≥200` floor already restricts SE ≤0.084; within-robust n differences (median 417 excluded vs 536 retained) remain but SE handles them.
+
+*Record:* bounded Python over 910 robust (no Phase 5/6 rerun) → `docs/phase7-candidate-screening/quality_gate/{README.md, quality_gate_comparison.md, quality_gate_candidates.csv (910×40, 20 gate flags, sorted by resid desc), quality_gate_summary.json (per-gate stats + sensitivity + empirical_basis + provenance)}`. Rerunnable: re-derive CSV+JSON from `../underrated_candidates.csv` + `game_adjusted_means_active.parquet` + `phase5_quality_comparison.json` using gate definitions above; comparison.md is view of summary.json.
+
+Tagging per AGENTS.md: retained/excluded counts, N medians, mu 7.144, SE 1.194/√n, adj quantiles P50 6.96 P75 7.515 P90 8.01, active N 16564, n deciles P10 100 med 293 P90 2796, harmonic 106.5, low-adj examples = **observed facts**; per-gate N, adj/resid/lower/n distributions, sensitivity grids, correlations r+0.32, overlaps, Δ medians = **empirical findings**; all resid/adj/lower/SE/post_SD/Lambda/mu = **model-dependent conclusions**; top-quartile 7.5/P75 recommendation + combination redundancy + lenient-gate screening = **supported conclusions / method choices with stated anchor** (not ground truth); `adj` beyond next broad-appeal = **hypothesis** (gate screens quality, not appeal); thresholds not identified / self-selection vs noise distinction / low adj not bad = **limitations/assumptions**; broad appeal remains distinct = **speculation guarded**.
+
 
