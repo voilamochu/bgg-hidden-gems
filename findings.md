@@ -2281,3 +2281,47 @@ Extended the executed second-pass (169 pruned on `game_links`/`families`/`title_
 - **Anomalous-rater diagnostic lightweight:** Not full rerun of `scripts/25` (degenerate_strict 667, broad 3993) — prevalence and distribution shift flagged, full audit must be rerun before refreshed Phase 2 baseline (scripts/26).
 - **No downstream refresh yet:** Phase 2/3/4 severity/taste/informativeness/selection, new adj/expected fit remain deferred per task.
 
+
+## 2026-08-24: Phase 2 Pass 2 canonical materialization — converged 14698/287306/24146464 (script 38)
+
+### What was built [Method / Observed fact]
+
+Materialized the complete reusable Phase 2 Pass 2 canonical Parquet layer under `data/processed/phase2-pass2/` using the **already-finalized `final_games.csv` (14698 rows) and `final_users.csv` (287306 rows) as authoritative membership lists** — no population redefinition, no additional recursive closure unless validation contradiction (none found). Previous `phase2-pass2` at `918f03f` already had `games_pass2.parquet` + `final_*.csv` via script 37; this pass **adds the missing canonical extracts** and replaces the minimal catalog/validation with a complete, provenance-rich layer via new rerunnable script `scripts/38_phase2_pass2_materialize.py`.
+
+**Canonical extracts (6, gitignored, reproducible via script 38):**
+- `rating_observations_pass2.parquet` 24,146,464 rows — every non-null review rating where `game_id IN final_games AND user_pseudouserid IN final_users`, no dedup beyond established `rating_observations` canonicalization, `rating_observation_id`/`source_rowid` retained, `rating_tstamp`/`postdate` preserved as-is
+- `users_pass2.parquet` 287,306 rows — `SEMI JOIN final_users ON user_pseudouserid` (preserve `cnt_filtered`, `is_degenerate_strict/broad`, `filtered_*` flags from active)
+- `collections_pass2.parquet` 25,493,841 rows — `SEMI JOIN final_games ON game_id AND SEMI JOIN final_users ON user_pseudouserid`
+- `games_pass2.parquet` 14,698 rows — `SEMI JOIN final_games ON game_id` against `bgg_research_population.parquet` (16627, complete useful game metadata; LEFT JOIN to `game_attrs`/`games`/`weights` preserved, do not drop games lacking metadata — 7 weight NULL = 99.95% present, `games.parquet` coverage 12691/14698 = 86.35%)
+- `game_tags_pass2.parquet` 181,838 rows — `SEMI JOIN final_games ON game_id`
+- `game_links_pass2.parquet` 33,002 rows — `SEMI JOIN final_games ON game_id`
+
+Derived Phase 2 artifacts (`user_severity`, `game_adjusted_means`, `rater_stats`) remain historical reference under `data/processed/phase2/`; no new `mu`/`delta`/`alpha`/`R²`/`beta` refit — STOP after canonical rebuild per task.
+
+**Filtering rules (hard, verified):** every rating observation `game_id` in 14698 AND `user_pseudouserid` in 287306; every user-dependent extract only final users; every game-dependent extract only final games; preserve canonical rating semantics; do not silently deduplicate or alter ratings beyond `rating_observations` canonicalization.
+
+**Provenance:** `scratch/phase2/rating_observations.parquet` 26,924,709 → `data/processed/phase2-filtered/rating_observations_filtered.parquet` 25,335,220 → `scratch/phase2-active/rating_observations_active.parquet` 24,509,788 → `phase2-pass2/rating_observations_pass2.parquet` 24,146,464. Users 606,497 → 544,955 → 288,730 → 287,306. Collections 29,618,326 → 27,584,966 → 25,889,485 → 25,493,841. Tags 276,045 → 189,629 → 181,838. Links 43,196 → 33,483 → 33,002. Population `bgg_research_population.parquet` 16,627 → 14,698 via 269 pruned + 4-iter closure.
+
+**Reproduction:** `python scripts/38_phase2_pass2_materialize.py --final-games data/processed/phase2-pass2/final_games.csv --final-users data/processed/phase2-pass2/final_users.csv --input-dir data/processed/phase2 --output-dir data/processed/phase2-pass2` (bounded `4GB`/`threads 3`/`temp scratch/ducktmp`, narrow single-scan aggregations, copy-once `scratch/phase2-pass2`, no wide-table bug, no full-snapshot rescans; in worktrees point `--input-dir` at `scratch/phase2` and `--active-dir` at `scratch/phase2-active`). Validated overall_pass **True** (see below). `data/processed/phase2-active/` and historical `phase2`/`phase2-filtered` untouched; new extracts in explicit `phase2-pass2` namespace, distinct from `phase2-second-pass` (14786/16458).
+
+### Validation — six hard checks plus coverage [Empirical finding / Observed fact]
+
+All checks recomputed on the final `phase2-pass2` extracts via **narrow single-scan DuckDB aggregations** (ANTI JOIN / GROUP BY HAVING), not by construction:
+
+- **Retained `game_id`s are subset of `final_games` (14698):** `games_in_rating` 14698, `games_not_in_final` 0 — pass
+- **Retained `user_id`s are subset of `final_users` (287306):** `users_in_rating` 287306, `users_not_in_final` 0 — pass
+- **Every retained user has ≥10 qualifying ratings within final universe:** recomputed `COUNT(*) WHERE game_id IN final_games AND user_pseudouserid IN final_users` per user, `MIN(cnt)` = 10, `MAX` 11628, `MEAN` 84.04, violations `0` — pass
+- **Every retained game has ≥100 qualifying ratings within final universe:** per-game `COUNT(*)`, `MIN(cnt)` = 100, `MAX` 122032, `MEAN` 1642.84, violations `0` — pass
+- **No excluded game/user appears in `rating_observations_pass2`:** left anti-join vs `final_games`/`final_users` = `0` both — pass (also `excluded_games_in_rating` 0, `excluded_users_in_rating` 0)
+- **Rating observations and users internally consistent:** every `rating_observations_pass2` `user_pseudouserid`/`game_id` has matching `users_pass2`/`games_pass2` row: `rating_users_missing_from_users_pass2` 0, `rating_games_missing_from_games_pass2` 0; `users_pass2`/`games_pass2` themselves are subsets of `final_*` (0 not_in_final); `collections_pass2` games/users not in final `0`/`0`; `game_tags`/`game_links` games not in final `0`/`0` — pass
+- **All major extract row counts reconcile:** `rating_observations_pass2` count = sum per-game counts = sum per-user counts = 24,146,464 — pass
+- **Metadata joins do not silently drop games:** `games_pass2` 14,698 rows remain (LEFT JOIN `bgg_research_population` → `game_attrs`/`games`/`weights`), with `NULL` counts recorded as coverage not dropped: `weight` NULL 7 (99.95% present), `families`/`mechanics`/`categories` NULL 0, `games.parquet` (`game_attrs`) coverage 12691/14698 (86.35%) — pass
+
+Additional: `rating_observation_id` unique 24,146,464/24,146,464 and `collections` `source_rowid` unique — canonical semantics preserved, no silent dedup.
+
+Machine-readable: `data/processed/phase2-pass2/parquet_catalog.csv` (6-row full 6-extract catalog: `full_file`, `filtered_file`, `active_file`, `pass2_file`, `contains`, `records_full`, `records_filtered`, `records_active`, `records_pass2`), `extract_counts.json` (full 26.9M → filtered 25.3M → active 24.5M → pass2 24.1M), `validation.json` (explicit counts for each check plus `filtering_logic`, `source_files`, `reproduction_command`, `final_population` 14698/287306/24146464), `README.md` (source files, exact filtering/join logic, row counts before/after, metadata coverage). Committed docs copies under `docs/phase2-pass2/` as well.
+
+**Population definition preserved:** `final_games.csv`/`final_users.csv` history kept intact (not overwritten); new extracts built alongside existing `games_pass2.parquet` (now overwritten with same 14698 via SEMI JOIN, validated). Zero violations confirm converged definition was authoritative; no additional cleanup pass needed.
+
+**Downstream:** Complete reusable layer that `scripts/26` `phase2-active` baseline could be rerun on `phase2-pass2` without modification except for input path (e.g. `data/processed/phase2-pass2/rating_observations_pass2.parquet`). No Phase 2 statistics rerun yet.
+
