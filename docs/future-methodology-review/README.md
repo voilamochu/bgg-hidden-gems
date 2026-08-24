@@ -1,0 +1,106 @@
+# Second-Pass Methodology Review — Executed
+
+**Status:** `EXECUTED` — second-pass population built for direct comparison before adoption (deferred review now authorized). Current **16,627-game research population** (`data/processed/bgg_research_population.parquet`, `scripts/01_clean_population.py`) remains **primary first-pass record**; second-pass is refinement enabled by newly available 9 GB SQLite snapshot (`data/processed/phase2-second-pass/`).
+
+**Date executed:** 2026-08-24
+**Scripts:** `scripts/34_second_pass_population.py` (game-level dedup + recursive closure, bounded 4GB/3threads, copy-once to `scratch/second-pass`) and `scripts/35_second_pass_model_comparison.py` (Phase5/6 refit on closed populations).
+**Outputs:** `data/processed/phase2-second-pass/` (see its `README.md`), comparison `comparison_table.json`, model `model_comparison.json`, pruned lists `pruned_lists/`, closure logs `*_closure_log.csv`, populations `bgg_population_second_pass*.parquet`.
+
+## What was deferred and why it is now executed
+
+- `population_second_pass_plan.md` (deferred) — now executed; this README is provenance.
+- `candidate_pruning_rules_to_investigate.md` — five rule families investigated, two adopted for primary (see below).
+- `game_rater_recursive_closure_plan.md` / `docs/second-pass-methodology-review.md` — recursive `games<100` + `users<10` mutual closure with degenerate rerun, now executed.
+
+**Do not label current 16,627 population "wrong"** — treat as refinement. Adoption requires material difference per deferred criteria (beta>10%, R²>0.02, Jaccard<0.70 top-1%, top residuals dominated by n<100 high-SE). Single-filter precursor was `bgg-sensitivity-n100` (16,564 vs 14,952, beta+3%, R²+0.014, r 0.9995). Recursive closure now shows whether iteration matters beyond single filter; second-pass adds dedup.
+
+## Game-level cleanup — review of each game in 16,627 population
+
+Using richer metadata now available: `game_links` (43,196 rows, but `phase2-filtered` 33,483 within population), `families` via `bgg_research_population.families` (975 distinct Game: families, 554 with >1, 117 with >5), `title`/`title_clean` (213 duplicate groups), `is_reimplementation`, `reimplementation`/`version` rel, `language_ease` via `games_filtered` (80.89% coverage but population parquet complete), `bgg_research_population` complete for 16,627.
+
+**Explicit, auditable rules for what constitutes same underlying game *for hidden-gem discovery* (independent game discovery, not SKU counting), with included vs excluded examples per rule. Keep more popular/complete record per family/title group (not higher-residual).**
+
+| Rule | Identification | Candidate count | Adopted? | Included (kept) vs Excluded (removed) examples |
+|---|---|---:|---|---|
+| **A. Editions / special / deluxe / anniversary / big boxes** | Title regex `(?i)\b(deluxe|anniversary|big box|collector|special edition|designer edition|revised edition)\b` (with or without "Edition", plus `\\(.*Edition.*\\)`), stripped base `stripped_base(title)` removes those suffixes + trailing digits, group by base lowercased, keep `max(users_rated)` per base, remove other edition-flagged games in group. Guard: no designer/year guard in primary (sensitivity checks designer identical 113 vs overlap 124 vs no-guard 153 — only 13 diff, so primary uses no-guard for simplicity; overlaps documented). | 153 removed (154 CSV lines) | **Yes, primary** | **Excluded:** Small World Designer Edition 140135 n266 (keeper Small World 40692 n75285); Carcassonne Big Box 6 230914 n5342, Big Box 5 164127 n2240, Big Box 7 364405, Big Box 4 140711, Big Box 2006 142057 etc keep 822 Carcassonne n140919; Alhambra Big Box 45358 n4816 keep Alhambra 6249 n35816; Hansa Teutonica Big Box 286749 keep Hansa 43015; Rococo Deluxe 296100 keep Rococo 144344; Castles Burgundy Special 363622 keep Burgundy 84876; Vinhos Deluxe 175640 keep Vinhos 42052; Power Grid Deluxe not in same base (Europe/North America) — kept (distinct). **Included:** Brass: Birmingham 224517 vs Brass: Lancashire 28720 — NOT flagged (different base "brass: birmingham" vs "brass: lancashire"), kept separate as materially distinct. Pandemic vs Legacy not edition. Dominion (Second Edition) 209418 NOT flagged (Second Edition without edition keyword) — kept, would be removed under reimplementation investigate. |
+| **B. Language / version-specific** | `rel=version` where designer+year identical (guard), plus language_ease/families tags. | 0 removed | **Investigate, not adopted** (no cases meet guard in this population; would be 0 anyway) | **Included:** Catan 13 vs Catan Card Game etc not version (different year/designer). Would have excluded Catan German vs English if same designer/year but none present with both in 16,627. |
+| **C. Reimplementations / alternate editions / standalone expansions / variants** | `rel=reimplementation` where weight within 0.2 and mechanics Jaccard >0.8 and designer identical (triple). Keep materially distinct where weight/mech/year differ. | 47 would be removed of 895 pairs | **Investigate, NOT adopted** (would incorrectly prune Ticket to Ride: Europe 14996 vs Ticket to Ride 9209 weight 1.91 vs 1.82 diff 0.09 pass, mech 1.0 pass, designer same true → flagged, but distinct map products, arguably should stay). | **Excluded (if adopted):** Dominion Second Edition 209418 vs Dominion 36218, Battle Line Medieval vs Schotten Totten etc. **Included (guard kept):** Brass Birmingham vs Lancashire NOT flagged (designer string differs: ["Martin Wallace"] vs ["Gavan Brown","Matt Tolman","Martin Wallace"] → designer_same false, year gap 11 fail → 2/4 pass, stays); Pandemic 30549 vs Legacy 161936 NOT flagged (weight diff 0.43 fail, mech 0.53 fail → 1/3, stays); Castles 2011 vs 2019 NOT flagged (mech 0.53 fail, year gap 8). Shows guard distinguishes edition vs new design. |
+| **D. Duplicate / near-duplicate** | `title_clean` exact duplicates (213 groups), keep most popular where designer identical. Strict variant year±1+families identical removes 1 (Dominion Big Box 142132 vs 142131); moderate designer-only removes 49. Levenshtein ≤2 not separately run (exact already captures 49). | Strict 1, moderate 49 | **Investigate, sensitivity only** (primary keeps moderate as sensitivity `bgg_population_second_pass_sensitivity_dup.parquet` 16412 games, 215 removed). Not adopted for primary to avoid pruning distinct reprints with large year gaps (Puerto Rico 3076 2002 vs 318985 2020 gap 18y, same designer but distinct BigBox containers; strict would keep, moderate would remove). | **Excluded (sensitivity):** Catan: Big Box 269980,182880 keep 191710; Aladdin's Dragons 53103 keep 492; AquaSphere 289223 keep 159508; Puerto Rico 108687/318985/165332 keep 3076; etc. **Included (primary):** all 49 kept in primary, removed only in sensitivity. Dominion Big Box duplicate 142132 would be removed even under strict. |
+| **E. Other family >5** | `rel=family` where Game family has >5 records in 16,627 (117 families >5, e.g., Catan 48, Carcassonne 29). Test keeping most popular per family. | Would remove 996 if collapsed per `stem>5` (or ~? for Game family) — too aggressive, excises distinct designs (e.g., Catan 48→1 would remove Starfarers, Junior, etc distinct). | **Investigate, NOT adopted generally**; instead **targeted collapse for flagged families only** (next row). | **Included:** Catan 13 + 47 others all kept; Carcassonne 822 +28 others kept; Pandem ic 16 kept etc. |
+| **F. Targeted family Monikers / Time's Up!** | Monikers via `stem_title == "monikers"` (before colon lowercased, parens stripped) — 8 games share stem; Time's Up! via `Game: Time's Up!` family (11 games) using `families` parse `ast.literal_eval` + `Game:` prefix. Keep most popular per group. | 17 removed (7 Monikers +10 Time's Up!) | **Yes, primary** | **Excluded:** Monikers: More Monikers 255249 n521 resid2.27, Shmonikers 179448 n326 resid2.05, Something 195709 n255, Serious Nonsense 283152 n609, Classics 283151 n343, Nonsense Box 221248 n484, Monikers-er 404462 n131 — keeper Monikers 156546 n7906 retained. Time's Up! Title Recall! 36553 n3787 resid1.93, Edición Amarilla 38713, Edición Azul 57660, Family 88126, Deluxe 37141, Party 230262, Academy 46158, Édition purple 33495, Kids 174219, Harry Potter 347304 — keeper Time's Up! 1353 n6292 retained. Overlap with edition 1 (Time's Up! Deluxe 37141 also edition). **Included:** Small World family 4 not collapsed beyond edition (Underground 97786, Warcraft 309630 kept distinct — weight/mech differ). Brass, Pandemic families kept. |
+
+**Combined primary:** edition 153 + family 17 −1 overlap = **169 games removed** (1.0% of 16,627), 140,272 obs removed (0.57% of 24.5M, 128,463 edition +12,833 family +1 overlap corrected), 73,048 users affected (≥1 rating lost), 0 users lose all, Jaccard vs current 0.9897 (16458/16627). Sensitivity with duplicate adds 46 more → 215 removed. Full investigate with reimplementation would be 252.
+
+**What was quantified per rule (required):** games removed (counts + game_id CSVs `pruned_lists/rule_*.csv` + combined), obs removed (active rows), users affected (any vs lose all, per `quant_*` in `comparison_table.json`), categories/eras/volume (era 2020 42.6% of removed 72/169 vs 26.8% overall; 2010 46% vs 42.5%; 2000 10.7% vs 16.8% — Big Box/deluxe cluster in 2010+20s, already 46% of 2020-22 and 99% of 2023+ missing `games.parquet` metadata — checked era bias), examples included vs excluded per rule above, overlap Jaccard (retained n, users_rated median 355 vs 357 overall), whether rule risks systematically removing particular types (deluxe/BigBox indeed cluster in 2020+ and Party/Card/Medieval/Fantasy — documented, but keepers are higher-volume versions so population not systematically biased by genre beyond product-type; family collapse is Party/Humor-specific as intended).
+
+**Small World test case:** Designer Edition 140135 n246 resid2.20 unranked vs base 40692 n75285 rank410 resid−0.17 — edition rule correctly removes 140135 (base small world keeper 40692). Small World Underground 97786 n11530 rank~? and Warcraft 309630 n4754 kept (weight 2.59 vs 2.35 diff 0.24 >0.2, mech jacc 0.5, not edition — distinct).
+
+## Recursive cleaning to fixed-point closure
+
+Starting from candidate universe after Step1 (16458 primary, 16627 base for comparison), recursively remove:
+
+- games with <100 **qualifying ratings** (`rating_observations_active` rows for 16,627×≥10 minus degenerate_strict; `n_active` per game `P10=100 P90=2795`, 1612 games <100 in active 16564);
+- users with <10 **qualifying ratings** within that universe (`n_active` per user, `t=10` primary);
+- users with anomalous rating behavior (`degenerate_*` as defined in `scripts/25`: `n≥20` single_value OR `SD<0.2` OR `modal≥95%` on ROUND-binned 1..10 for `degenerate_strict` (667 users historically; 0 in active file after exclusion, recomputed each iteration); `n≥10` k≤2 OR `SD<0.5` OR `modal≥90%` for broad).
+
+Recompute qualifying ratings after each filter, repeat until no game has <100, no user has <10, and no remaining user is `degenerate` under recomputed diagnostics — where each prune can introduce more valid candidates (mutual closure). This is the deferred `game_rater_recursive_closure_plan.md`.
+
+**Closure logs:** `primary_closure_log.csv` (4 iterations, converged) and `base_16627_closure_log.csv` (4 iterations).
+
+| Iteration | Games current (with active) | Games <100 | Users total | Users active ≥10 | Users <10 | Deg strict | Obs total excl deg | Obs active |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| **Primary (16458 start)** 1 | 16458 (16396) | 1662 | 288730 | 288257 | 473 | 0 | 24369516 | 24365299 |
+| 2 | 14796 (14796) | 10 | 288727 | 287779 | 948 | 3 | 24263621 | 24255224 |
+| 3 | 14786 (14796→14786) | 0 | 288727 | 287776 | 951 | 3 | 24262621 | 24254208 |
+| 4 | 14786 | 0 | 288727 | 287776 | 951 | 3 | 24262621 | 24254208 converged |
+| **Base 16627 start** 1 | 16627 (16564) | 1675 | 288730 | 288730 | 0 | 0 | 24509788 | 24509788 |
+| 2 | 14952 | 11 | 288727 | 288253 | 474 | 3 | 24403300 | 24399104 |
+| 3 | 14941 | 0 | 288727 | 288250 | 477 | 3 | 24402200 | 24397989 |
+| 4 | 14941 | 0 | 288727 | 288250 | 477 | 3 | 24402200 | 24397989 converged |
+
+**Result:** Primary closed **14,786 games**, 287,776 users, 24,254,208 obs in **4 iterations** (pruned 1662+10 games, 951 users <10 after, 3 deg). Base closed **14,941 games**, 288,250 users, 24,397,989 obs (pruned 1675+11, 477 users <10, 3 deg). Primary has 155 fewer games than base closed (169 dedup −14 net closure difference). Single-filter precursor (active≥100 only, no recursion) was 14,952 games (base) — recursive adds only 11 (base) /10 (primary) beyond single filter, so iteration matters little beyond single filter (as sensitivity `bgg-sensitivity-n100` found: beta+3%, R²+0.014, r0.9995). Recursive closure is essentially single-filter plus one more pass for users who drop below 10.
+
+**Rerun anomalous-rater identification:** On final converged population, `degenerate_strict` prevalence is **3 / 287,776 ≈0.001%** (vs current active 0.31% strict at n≥20, 667 users, but active file already excludes those 667, so initial deg 0; after closure deg recomputed on remaining games finds 3 new near-constant raters). `degenerate_broad` not recomputed separately but would be similar order (broad initially 3325 retained). The `SD<0.2` / `modal≥95%` flags become less discriminating when low-n games removed (fewer sparse histories), as expected. Not material to adopt; exclusion remains bounded.
+
+## Comparison table current vs second-pass (required before adoption)
+
+| Population | Games (n) | Obs (n) users | Categories/eras/volume |
+|---|---|---:|---|
+| Current **16,627** research population | 16627 (16564 active with ≥1 active rating) | 24,509,788 obs, 288,730 users active ≥10 minus strict, `P10 n_active 100 P90 2795 mean 1480 harmonic 106.5` | Era 1950 37 1960 117 1970 434 1980 624 1990 1098 2000 2788 2010 7067 2020 4462; users_rated median 357 mean1714; cats top CardGame 5330 Fantasy2572 Wargame2265 |
+| Primary **second-pass before closure** | 16458 (169 removed 1.0%) | removed obs 140,272 (0.57%), users affected 73,048 | Eras removed 2020 72 (1.6% of 2020), 2010 78 (1.1%), 2000 18 (0.6%), 1990 1; volume median 484 mean1033;Cats removed CardGame35 Fantasy33 Medieval32 Party25; Jaccard vs current 0.9897 |
+| Primary **closed** (14786) | 14786 (−11% vs 16627, −10.7% vs active 16564) | 24,254,208 obs (−255,580 vs current −1.0%), 287,776 users (−954) | Eras closed 2020 3236 (vs 4462 −27%), 2010 6641 (vs7067 −6%), 2000 2699 (−3%); users_rated median 409 mean1888 P10 140; cats top CardGame4675 Fantasy2285 |
+| Base **closed** (14941) | 14941 | 24,397,989 obs, 288,250 users | Eras 2020 3295, 2010 6719, 2000 2716 |
+| Sensitivity **primary+duplicate** (16412) before closure | 16412 (215 removed) | — | Add 46 more duplicates (Catan BigBox etc). |
+| Sensitivity **primary+duplicate+reimp** (investigate 252) | 16375 | — | — |
+
+**Model impact (Phase5/6 preferred Q3b/OLS band-volume, 46 feats, 5-fold CV seed 20260824, n_obs weighting OLS as primary):**
+
+| Universe | Phase5 `lambda` (`sigma_e` 1.194) | Phase6 `R²` in / CV `R²` | `beta_weight` (per weight point) | Residual `SD` | `corr(resid,log n)` | Top-1% Jaccard vs current (overlap) | Jaccard cross (full top-1% sets) | Degenerate strict |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Current active 16564 (16549 est) | 1.91 var_adj 0.7596 rmse_adj 0.2166 R² 0.938 held-out | **0.584 / 0.582** RMSE0.562 | **0.4613** | 0.562 | −0.004 | — | — | 0 (667 excluded) |
+| Primary before closure 16458 (16381 est) | 1.93 var_adj0.7526 rmse0.2171 | **0.588 / 0.586** (+0.003) | 0.4596 (−0.4%) | 0.557 | −0.004 | — | — | — |
+| **Primary closed 14786 (14779 est)** | **1.99 var_adj0.7198 rmse0.1539 R² held-out 0.984** | **0.602 / 0.600 (+0.018 / +0.018)** | **0.4727 (+2.5%)** | 0.535 | +0.013 | **0.934 top1% 0.932 top5% on overlap 14779** | **0.425 cross** (58% of current top-1% not in closed) | **3 / 287k 0.001%** |
+| Base closed 14941 (14934 est) | 1.97 var_adj0.7277 rmse0.1537 | **0.599 / 0.595 (+0.014)** | 0.4748 (+2.9%) | 0.540 | +0.013 | 0.974 top1% on overlap, **0.57 cross** | 0.57 | 3 |
+
+**Materiality vs deferred criteria:** Adopt only if beta shift >10%, R² change >0.02, Jaccard <0.70 for top-1%, or top residuals dominated by n<100 high-SE. Here **beta +2.5%, R² +0.018, Jaccard on overlap 0.934 (cross 0.425)** — cross Jaccard 0.425 is <0.70 but that is **expected because cross compares full top-1% which includes n<100 high-SE games that cannot appear in closed**; on the overlap (games that exist in both, i.e., n≥100), Jaccard is 0.934 (>0.70) and Pearson r 0.9993, Spearman 0.999. So **estimation is stable, screening is noisy** — exactly the single-filter sensitivity conclusion (case 3: estimation harmlessly stable, screening materially noisy at low n). The 0.425 cross is not evidence of model change but of noisy tail dominance.
+
+**Top residuals:** Current top-10 includes n=1–3 extreme high-SE games (Pondscape 2025 n1 adj11.55 resid3.94, Thief's Market n3 resid2.88, Tolleno n1 resid2.22, plus Monikers More Monikers n452 resid2.27, Small World Designer Edition n246 resid2.20). Primary closed top-10 after dedup+closure removes all n<100 and Monikers/Time/Small World duplicates; top is Red White & Blue Racin' n133 resid1.98, Gamut of Games n434 resid1.93, Start Player n181 resid1.87, Funkenschlag EnBW n198 resid1.84 — all n≥100, SE≤0.084 (median closed SE 0.064). Base closed top still polluted: Monikers More Monikers n452 resid2.28, Small World Designer Edition n246 resid2.18, Shmonikers etc dominate — shows dedup cleans candidate screen beyond n-floor.
+
+**Categories/eras/volume shift:** Removing BigBox/deluxe disproportionately removes 2020+ (1.6% of 2020 vs 0.6% of 2000) — expected deluxe editions cluster in 2020+ (but already 46% of 2020-22 missing games.parquet metadata, so era bias checked and not material for population inference; it is product-type bias by design). Party/Humor enriched in family collapse (17 Party 100% of that rule) — intended (Monikers/Time are Party). Overall cats after closed shift modestly: CardGame 5330→4675 (−12%), Party 1485→1276 (−14%), Wargame 2265→2037 (−10%) — not systematic excision of a genre, but tail removal of low-n plus product-type dedup.
+
+## Provenance and inputs for the second-pass
+
+- Primary pipeline: `16,627` games × `≥10` active users minus `degenerate_strict` → `24,509,788` obs (`data/processed/phase2-active/` `scripts/24`, `active_baseline_refresh.json` `scripts/26`).
+- Richer SQLite snapshot: `data/processed/phase2/game_links` (43,196 rows, 33,483 filtered to 16,627), `families` via `bgg_research_population.families`, `title`/`title_clean`, `is_reimplementation`, `reimplementation`/`version` rel, `bgg_research_population` complete for 16,627.
+- This second-pass is **not** the sensitivity_n100 study (`docs/phase6-intermediate/sensitivity_n100.md`); that study is single-filter `n_active≥100` games only, this review is iterated fixed-point plus edition/family dedup.
+- Second-pass populations: `data/processed/phase2-second-pass/bgg_population_second_pass.parquet` (16458), `bgg_population_second_pass_closed.parquet` (14786), `bgg_population_second_pass_sensitivity_dup.parquet` (16412), `bgg_population_base_closed.parquet` (14941), pruned lists `pruned_lists/*.csv`, closure logs `*_closure_log.csv`, model `model_comparison.json`, comparison `comparison_table.json`, README `README.md`.
+- Scripts: `scripts/34_second_pass_population.py`, `scripts/35_second_pass_model_comparison.py`, bounded 4GB/3threads, copy-once, narrow aggregations, no wide-table bug.
+
+## Outputs when executed (now)
+
+- Updated population parquet(s) for second-pass `N'` universe and `phase2-second-pass` extracts.
+- Pruned game lists (`pruned_lists/` per rule and combined, `missing_ids`-style CSVs).
+- Recursive closure logs (per-iteration `games`/`users`/`obs` counts, `degenerate` counts before/after rerun).
+- Rerun anomalous-rater identification on final converged population and comparison of `degenerate_*` prevalence vs current active (0.31% strict at n≥20, 667 users → closed 0.001% 3 users).
+- Comparison table current (16,627/16564 active, 24.5M obs) vs second-pass (N' games, N' obs, N' users, categories/eras/volume, R²/beta, residual ranks, top residuals, degenerate prevalence) — direct comparison before adoption.
+- Explicit rule documentation (this README + `population_second_pass_plan.md` executed, `executed_rules.md` below, `candidate_pruning_rules...` updated).
