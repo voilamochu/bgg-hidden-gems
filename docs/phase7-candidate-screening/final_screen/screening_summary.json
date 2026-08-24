@@ -1,0 +1,183 @@
+{
+  "generated_at": "2026-08-24T00:00:00Z",
+  "status": "INTERMEDIATE / NOT FINAL RESEARCH OUTPUTS \u2014 screening stage, not the final hidden-gem ranking",
+  "population": {
+    "research_population_games": 16627,
+    "active_estimation_sample": 16549,
+    "active_observations": 24509788,
+    "mu": 7.144007675729632,
+    "sigma_e": 1.1940701083513163,
+    "sigma_alpha2": 0.7462197074043406
+  },
+  "pipeline": {
+    "broad_pool_910_definition": "n>=200 & resid>=0.60 Q3b/OLS & min_alt>=0.30 & z>=5 & year<2025 & not duplicate-shadowed (910 robust)",
+    "quality_gate": "adj_mean >= 7.5 (P74\u2248P75=7.515, mu+0.41SD, top quartile, 25.7% >=7.5)",
+    "quality_gated_N": 544,
+    "excluded_by_quality_gate": 366
+  },
+  "dispositions": {
+    "likely_hidden_gem_candidate": 55,
+    "high_quality_but_well_known": 0,
+    "high_quality_but_niche_only": 19,
+    "duplicate_or_edition_related": 104,
+    "insufficient_hiddenness_evidence": 40,
+    "insufficient_broad_appeal_evidence": 317,
+    "other_exclusion": 9,
+    "total": 544
+  },
+  "disposition_stats": {
+    "high_quality_but_niche_only": {
+      "count": 19,
+      "n_median": 452.0,
+      "n_mean": 463.36842105263156,
+      "n_p10": 240.0,
+      "n_p90": 921.0,
+      "adj_median": 8.38827138465265,
+      "adj_mean": 8.365746502462583,
+      "resid_median": 1.0455120821917419,
+      "resid_mean": 1.3098749663029101,
+      "resid_min": 0.6332866627610354,
+      "resid_max": 2.271947675912269
+    },
+    "duplicate_or_edition_related": {
+      "count": 104,
+      "n_median": 549.0,
+      "n_mean": 823.5,
+      "n_p10": 256.0,
+      "n_p90": 1743.0,
+      "adj_median": 8.11385463419797,
+      "adj_mean": 8.163616567445274,
+      "resid_median": 0.893148964613443,
+      "resid_mean": 0.9348764842937847,
+      "resid_min": 0.6028337365608403,
+      "resid_max": 2.2021093921151405
+    },
+    "insufficient_hiddenness_evidence": {
+      "count": 40,
+      "n_median": 4309.5,
+      "n_mean": 4642.025,
+      "n_p10": 1948.0,
+      "n_p90": 9131.0,
+      "adj_median": 8.041759187733174,
+      "adj_mean": 8.077244011617905,
+      "resid_median": 0.7587996891873461,
+      "resid_mean": 0.847794854197067,
+      "resid_min": 0.6052039990189844,
+      "resid_max": 1.9292331435184895
+    },
+    "insufficient_broad_appeal_evidence": {
+      "count": 317,
+      "n_median": 483.0,
+      "n_mean": 737.3249211356467,
+      "n_p10": 231.0,
+      "n_p90": 1743.0,
+      "adj_median": 7.8875174234250345,
+      "adj_mean": 7.959176401062609,
+      "resid_median": 0.8387668182933723,
+      "resid_mean": 0.9028933420129875,
+      "resid_min": 0.600265577324592,
+      "resid_max": 1.7594642391402635
+    },
+    "likely_hidden_gem_candidate": {
+      "count": 55,
+      "n_median": 544.0,
+      "n_mean": 691.6181818181818,
+      "n_p10": 234.0,
+      "n_p90": 1404.0,
+      "adj_median": 8.525346186817313,
+      "adj_mean": 8.502199144192197,
+      "resid_median": 0.8529290158576828,
+      "resid_mean": 0.9062859079253717,
+      "resid_min": 0.6000803760645326,
+      "resid_max": 1.557639790530935
+    },
+    "other_exclusion": {
+      "count": 9,
+      "n_median": 217.0,
+      "n_mean": 219.44444444444446,
+      "n_p10": 202,
+      "n_p90": 246,
+      "adj_median": 7.984806854083933,
+      "adj_mean": 7.997301304257948,
+      "resid_median": 0.6482786253418267,
+      "resid_mean": 0.6521199866370556,
+      "resid_min": 0.6100476966686301,
+      "resid_max": 0.6840480821996628
+    },
+    "high_quality_but_well_known": {
+      "count": 0,
+      "n_median": null,
+      "n_mean": null,
+      "n_p10": null,
+      "n_p90": null,
+      "adj_median": null,
+      "adj_mean": null,
+      "resid_median": null,
+      "resid_mean": null,
+      "resid_min": null,
+      "resid_max": null
+    }
+  },
+  "thresholds": {
+    "quality_gate_adj": 7.5,
+    "wellknown_users_ge": 20000,
+    "wellknown_rank_lt": 500,
+    "insufficient_hidden_users_ge": 5000,
+    "insufficient_hidden_rank_lt": 1000,
+    "edition_keywords": [
+      "edition",
+      "anniversary",
+      "big box",
+      "collector",
+      "deluxe",
+      "decennial",
+      "heritage",
+      "premium",
+      "reprint",
+      "box set",
+      "nonsense",
+      "shmonikers",
+      "more monikers",
+      "classics",
+      "party edition",
+      "special edition",
+      "kickstarter edition"
+    ],
+    "niche_share_own_ge": 0.78,
+    "niche_share_light_le": 0.04,
+    "niche_users_lt": 1500,
+    "other_n_lt": 260,
+    "other_resid_lt": 0.7,
+    "suggestive_share_own_max": 0.78,
+    "suggestive_share_own_min": 0.45,
+    "suggestive_mean_high_ge": 7.5,
+    "suggestive_share_heavy_range": [
+      0.12,
+      0.45
+    ],
+    "suggestive_n_min": 300,
+    "suggestive_resid_min": 0.65,
+    "suggestive_num_weights_min": 15
+  },
+  "provenance": {
+    "inputs": [
+      "docs/phase7-candidate-screening/quality_gate/quality_gate_candidates.csv (910 robust, 544 gated)",
+      "docs/phase7-candidate-screening/underrated_candidates.csv (16549 rows)",
+      "data/processed/phase2-active/game_adjusted_means_active.parquet (mu 7.144, SE 1.194/sqrt(n))",
+      "data/processed/phase2-active/phase6_residuals_active.parquet (resid Q3b/OLS)",
+      "scratch/phase2-active/bgg_research_population.parquet (complete 16627, for users/rank/weights/is_reimplementation)",
+      "data/processed/phase2-active/within_game_diffs_active_*.parquet (heavy vs light)",
+      "docs/phase7-candidate-screening/broad_appeal_evidence.md taxonomy"
+    ],
+    "method": "Single-label priority: wellknown > insufficient_hiddenness > niche > edition > other > likely_hidden_gem_candidate > insufficient_broad_appeal; four dimensions reported separately per candidate, no combined score",
+    "handling": "copy-once into scratch/phase2-active, DuckDB bounded memory_limit 4GB / threads 3 / temp_directory scratch/ducktmp, narrow single-scan aggregations"
+  },
+  "claim_tags": {
+    "counts": "observed facts from data",
+    "thresholds": "method choices (not ground truth)",
+    "residual": "model-dependent conditional anomaly Q3b/OLS, not latent quality or broad appeal",
+    "adj": "model-dependent quality estimator mu+alpha with SE 1.194/sqrt(n)",
+    "hiddenness": "popularity/recognition proxy, not proof of broad appeal; low n alone is not hiddenness",
+    "audience": "within-BGG proxy evidence, not external validation; light-vs-heavy gap is severity not taste"
+  }
+}
