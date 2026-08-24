@@ -73,6 +73,12 @@ The earlier central limitation (no rater identities) is resolved for additive le
 
 These are unresolved questions, not conclusions that the current results failed to find an effect.
 
+## Deferred second-pass methodology review (not part of current primary pipeline)
+
+**Status: DEFERRED — to be reconsidered only after the current full Phase 1–7 pass is complete.** See `docs/second-pass-methodology-review.md:1` for the full proposal.
+
+**Proposed rule to revisit:** recursive mutual filtering — start from the research game population, iteratively remove games with <100 qualifying ratings and users with <10 qualifying ratings, recomputing qualifying ratings after each filter until closure (no game <100, no user <10), then **rerun anomalous-rater identification** on that closed population. Rationale: the current Phase 1 floor is on original BGG rating count, while later user filtering can reduce a game's active count below 100; closure would make game and user criteria mutually consistent. Requires comparison of current (`16,627 × ≥10` → `16,564` active games, `P10=100`) vs recursively closed populations (Phase 5 `lambda`, Phase 6 `Q3b/OLS` `R²`/`beta`, residual ranks, candidate counts, `degenerate_*` prevalence) before adoption. **Do not confuse with the `n_active ≥100` *sensitivity* study** (`bgg-sensitivity-n100`), which is a single-filter check; this deferred item is the iterated fixed-point.
+
 ## Phase 2 user-level results — refreshed active baseline is now PRIMARY (scripts 26; details in findings.md 2026-08-24)
 
 **Active primary (16,627 games × ≥10 active users minus strict, 24.5M obs, 288,730 users, 16,564 games; `data/processed/phase2-active/`, scripts/26):**
