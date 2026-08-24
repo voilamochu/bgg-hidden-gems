@@ -1642,4 +1642,119 @@ Narrow question after Phase 3/3.1 [Supported conclusions]: *global rater severit
 
 Tagging per AGENTS.md: observed facts (counts, shares, χ²), empirical findings (mean_delta distribution, resid≈0, cross SD 0.015, rank overlaps), model-dependent (resid with fitted alpha, cross-half), assumption (H0 exchangeable given delta, severity descriptive, no exposure), hypothesis (shared enthusiasm), supported conclusions (no material within-game selection beyond delta, keep adj), speculation (held-out alpha would move <0.02).
 
+## 2026-08-24: Phase 5 — most defensible game-quality estimator (active population, scripts/30)
+
+**Population — exact:** `16,627` research-population games; users `≥10` in-universe ratings minus `degenerate_strict` (667 users); `data/processed/phase2-active/` (`rating_observations_active` 24,509,788 obs, 288,730 users, 16,564 games with active ratings) + refreshed baseline `user_severity_active` / `game_adjusted_means_active` (`mu=7.144`) from `scripts/26`. **Reused** — no new severity/taste/informativeness refit; global `delta_u` (parity `r 0.877`, `R² both 0.394`, `SD delta 0.70`) remains primary rater-level effect; taste `|tau|≤0.036` `R²+0.004` and experience flat `R²/RMSE` from Phases 3/3.1 — **do not add `user×type` or credibility weighting** [Assumption / Supported conclusion].
+
+**Estimands compared — state which:**
+
+| # | Estimand | Definition in this phase | Complete vs partial |
+|---|---:|---|---|
+| 1 | **Raw active average** | `AVG(rating)` on active obs per game (from `game_adjusted_means_active.raw_mean`, 24.5M obs) — **primary** for n-consistent comparison [Observed fact] | 16,564 games |
+| 1b | `avg_rating_current` (pop) | `bgg_research_population.avg_rating_current` (game-level snapshot, all users ≥100) — **secondary agreement check** [Observed fact] | 16,627 games, complete |
+| 2 | `bayes_rating` (BGG) | `bgg_research_population.bayes_rating` (shrinkage toward 5.49 prior, lam≈2500) — **preferred** over `games.parquet` `bayes_rating` which covers only `13,449/16,627=80.89%` [Observed fact / Limitation] | 16,627 complete; `games.parquet` 80.89% caveat preserved |
+| 3 | **Severity-adjusted mean** | `adj_mean_g = AVG(rating - delta_u) = mu + alpha_g` from active ALS (`mu=7.144`, `delta_full/even/odd` in `user_severity_active`, `game_adjusted_means_active`) [Model-dependent / Empirical finding] | 16,564 games |
+| 4 | **EB shrunk** | `adj_shrunk_g = w_g*adj_mean_g + (1-w_g)*mu`, `w_g=n_g/(n_g+lambda)`, `lambda=sigma_e²/sigma_alpha²` estimated from active data (`lambda 1.91`, see below) [Model-dependent] | 16,564 games |
+| 4b | Conservative bound | `adj_mean_g ± SE` or `adj_shrunk ± post_SD` lower 95% (`adj -1.96*SE`) [Model-dependent] | |
+
+*Raw agreement check [Empirical finding]:* active raw vs pop `avg_rating_current` Pearson **0.975**, median difference **-0.017**, mean **-0.023** (active 0.02 lower), `n_active` vs `users_rated` Pearson **0.994** — close agreement, active raw is the n-consistent version used for held-out [Observed fact]. `pop bays` vs raw Pearson **0.556** (shrinkage), `raw vs adj` **0.979** [Empirical finding].
+
+### Core question — does adj need additional shrinkage due to varying n_g?
+
+*Active `n_g` distribution [Observed fact, verifies task values]:* mean **1,480**, median **293**, `P10 100`, `P25 144`, `P75 872`, `P90 2,795`, min 1 max 122,168 on 16,564 games. Harmonic mean `1/E[1/n]=106.5` (small-game dominated) [Observed fact]. Task examples: `n=120` and `n=12,000` differ by **100×** in `n`, **10×** in SE.
+
+**EB variance-estimation [Model-dependent]:**
+
+- Residual after severity+game: `r = rating - adj_mean_g - delta_u`, `sigma_e² = Var(r) = 1.426`, `sigma_e = 1.194` [Empirical finding].
+- Observed `Var(adj_mean) = 0.760` (`SD 0.872`, mean adj 6.926) [Empirical finding].
+- `E[1/n] = 0.00939` → `sigma_alpha² (MM) = Var(adj) - sigma_e²·E[1/n] = 0.760 -0.013 = 0.746` [Model-dependent].
+- Cross-check `Cov(adj_even, adj_odd)=0.741` (even/odd `rating_observation_id` split) → `lambda_cov=1.92` vs `lambda_MM=1.91` [Empirical finding / Model-dependent].
+- **Preferred `lambda = 1.91`** (`mu=7.144` prior). BGG `bayes` prior `5.49` `lambda≈2500` is **~1,300× stronger** — massive overshrinkage for quality estimation [Supported conclusion].
+
+*Shrinkage table [Model-dependent]:* `w=n/(n+1.91)` → `n=50` **0.963** (3.7% prior), `n=100` **0.981** (1.9%), `n=120` **0.984** (1.6%), `n=293` **0.994** (0.65%), `n=2795` **0.9993** (0.07%), `n=12,000` **0.9998** (0.02%) — negligible for typical `n` [Model-dependent].
+
+*SE comparison [Model-dependent]:* `SE = sigma_e / sqrt(n)` and `post_SD = sqrt(1/(1/sigma_alpha² + n/sigma_e²))` (near-identical because prior is weak):
+
+| `n_g` | `SE` (freq) | `post_SD` | 95% width freq | comment |
+|---:|---:|---:|---:|---|
+| 50 | 0.169 | 0.166 | 0.662 | |
+| 100 | 0.119 | 0.118 | 0.468 | **P10** example |
+| 120 | 0.109 | 0.108 | 0.427 | task example (small) |
+| 293 | 0.070 | 0.070 | 0.273 | **median** |
+| 1000 | 0.038 | 0.038 | 0.148 | |
+| 2795 | 0.023 | 0.023 | 0.089 | **P90** |
+| 12000 | 0.011 | 0.011 | 0.043 | task example (large) — **10× more precise** than n=120 |
+
+Actual game quantiles: `SE median 0.070` `P10 0.023` `P90 0.119` (swap of n quantiles as expected) [Model-dependent / Empirical finding]. A 120-rating game and 12,000-rating game have SEs differing **10×** — point estimates must not be treated as equally precise [Supported conclusion].
+
+### Method — held-out validation (not in-sample R²)
+
+*Discipline [Method]:* Reuse active extracts + `scripts/26` baseline via `scratch/phase2-active` copy-once; DuckDB bounded `memory_limit=4GB` `threads=3` `temp_directory scratch/ducktmp`; compact aggregates, no large pandas, no wide-table bug, no full-snapshot rescans; one deterministic even/odd `rating_observation_id %2` split (8,682,? not many); prefer `bgg_research_population` for complete joins (preserve `games.parquet` 80.89% caveat).
+
+*Procedure [Method]:* Fit `alpha/delta` is reused (ALS already gives `delta_even/delta_odd`); compute per-game `raw_half = AVG(rating)`, `adj_half = AVG(rating - delta_full)` (sensitivity `adj_half_halfDelta` using half-specific delta — corr 0.968 similar), `n_half`. Pivoted to 16,512 games with both halves (median `n_total` of paired games ~300). Estimand from even half predicts odd-half **primary target `adj_odd` = AVG(rating - delta) odd** (severity-adjusted quality) and secondary `raw_odd`; also individual odd ratings with `rating - delta`. Compute `RMSE`, `R² = 1 - MSE/Var(target)`, `Corr`, `bias`.
+
+### Results — comparative held-out performance [Empirical findings]
+
+*Game-level, predicting held-out `adj_odd` (Var target 0.763, `SD 0.874`; `n=16,512` games):*
+
+| Estimand (trained on even half) | Target | RMSE | R² | Corr vs target | Bias (pred-target) |
+|---|---:|---:|---:|---:|---:|
+| **raw_even** (AVG rating even) | adj_odd | **0.410** | **0.779** | 0.945 | -0.294 |
+| raw_even | raw_odd | 0.253 | 0.910 | 0.955 | -0.000 |
+| **adj_even** (severity-adjusted) | **adj_odd** | **0.217** | **0.938** | **0.969** | -0.001 |
+| **adj_shrunk_even** (EB lam 1.91) | adj_odd | **0.205** | **0.945** | **0.972** | +0.001 |
+| bayes_rating (BGG 5.49 lam 2500) | adj_odd | **1.338** | **-1.346** | 0.563 | **-1.125** |
+| bayes_rating | raw_odd | 1.090 | -0.671 | 0.549 | -0.831 |
+
+*Stratified by `n_even` (even-half count) — RMSE adj vs shrunk [Empirical finding]:*
+
+| `n_even` band | `n_games` | mean `n` | RMSE adj | RMSE shrunk | MAE adj | MAE shrunk |
+|---|---:|---:|---:|---:|---:|---:|
+| `<50` (mean 33.9) | 1,560 | 0.519 | **0.470** | 0.333 | **0.312** | **gain 0.049 (9%)** |
+| `50-99` (71.0) | 4,593 | 0.224 | **0.222** | — | — | gain 0.002 |
+| `100-199` (141) | 3,469 | 0.155 | 0.155 | — | — | gain 0.001 |
+| `200-499` (316) | 3,127 | 0.100 | 0.100 | — | — | <0.001 |
+| `500-999` (709) | 1,571 | 0.064 | 0.064 | — | — | <0.001 |
+| `1000+` (4236) | 2,192 | 0.037 | 0.037 | — | — | none |
+
+*Individual-level, odd-rating prediction (`n=12,254,645` test obs) [Empirical finding]:* raw_even `RMSE 1.372` predicting raw rating vs adj_even `RMSE 1.195` predicting severity-adjusted rating `rating - delta` — gain **0.177** points, mirrors active holdout `1.372→1.238` in `scripts/26` [Model-dependent / Empirical finding].
+
+*Interval coverage [Empirical finding]:* frequentist `adj ±1.96·SE` for predicting other half's observed adj_odd: two-sided **81.8%** (lower 90.9%), posterior interval **81.6%** — under-covers 95% because target `adj_odd` has its own sampling variance (`Var(adj_even-adj_odd)= sigma_e²(1/n_even+1/n_odd)`). Interval is valid for true quality `theta_g`, not for other half's noisy mean [Model-dependent].
+
+*Correlations [Empirical finding]:* even->odd `raw 0.955` vs `adj 0.969` vs `shrunk 0.972` vs `bayes-adj 0.563`; full-data `raw vs adj 0.979` vs `adj vs bayes 0.564` — bayes is poor as quality proxy.
+
+### Preferred estimator — decision [Supported conclusion; model-dependent]
+
+**Primary baseline for next phase (RQ2 `y`): `adj_mean_g = AVG(rating - delta_u) = mu + alpha_g` with `mu=7.144` (active ALS, `game_adjusted_means_active.parquet`).**
+
+*Why not the others [Supported conclusion]:*
+- **Adj vs raw:** adj predicts held-out adj_odd with **R² 0.938 RMSE 0.217** vs raw **R² 0.779 RMSE 0.410** — raw is biased by rater-pool `mean(delta)` (`SD 0.177` across games, Layer A Phase 4) and predicts quality far worse. Raw `R² 0.91` when predicting itself (`raw_odd`) is irrelevant for quality — it is predicting popularity-contaminated signal. Adj removes stable global severity (`r 0.877`, gap `-0.03`) — **the primary rater-level effect**.
+- **Shrunk vs adj:** EB `lambda 1.91` implies `w=0.981` at `P10 (n=100)`, `0.994` at median — negligible. Held-out gain is **0.012 RMSE overall**, **0.049 RMSE (9%) only for `n_even<50`** (9.4% of games, ~1,560). Earns complexity decision: **primary remains adj; optional `adj_shrunk` as sensitivity/ranking variant for low-n display** (report both), not replacement. Formula `adj_shrunk = w·adj + (1-w)·mu`, `w=n/(n+1.91)`. Posterior `SD` ≈ `SE` (prior weak) so interval unchanged.
+- **Bayes vs adj:** `bayes` `R² -1.35` (worse than predicting mean), bias **-1.12**, corr **0.56** — heavily overshrinks (`lambda 2500` vs `1.91`, prior 5.49 vs 7.14). Useful as popularity rank but **not defensible game-quality estimate** and would reintroduce volume confounding into RQ2.
+
+*Uncertainty [Model-dependent conclusion]:* report `adj_mean_g` **plus `SE = sigma_e / sqrt(n_g)` (`sigma_e=1.194`, `sigma_alpha 0.746`)** and lower 95% `adj -1.96·SE` (or shrunk posterior bound `shrunk ±1.96·post_SD`). Table above gives examples: `n=100` SE 0.119 (width 0.47), `n=293` 0.070 (0.27), `n=2795` 0.023 (0.09), `n=120` 0.109 vs `n=12k` 0.011 (**10×**). Do not treat 120- and 12,000-rating games as equally precise.
+
+*Tagging per AGENTS.md:* observed facts (n dist, mu, counts, RMSEs), empirical findings (correlations, RMSE/R², bias, Var components, stratified gains), model-dependent (lambda/SE/post_SD/shrunk/coverage/R²), supported conclusions (preferred adj, bayes not defensible, weight RQ2), assumption (severity descriptive level), hypothesis (none new), speculation (none).
+
+### Limitations [Limitation / Assumption]
+
+- **Within-BGG held-out only** — even/odd split is internal; predicts severity-adjusted BGG mean, not external broad appeal or future audience. No external validation (sales, plays, non-BGG exposure) — cannot establish that `adj_mean` is broadly appealing [Limitation].
+- **Severity descriptive, not causal/credibility** — `delta_u` is global level shift (stable, reliability ≥0.735 at 10-24, ≥0.92 at ≥50), not rater accuracy; low-vs-high gap is almost entirely level [Assumption / Supported conclusion].
+- **Beyond-additive selection still open** — within-game selection beyond additive level was ~0 after severity in Phase 4 (`resid≈0`, cross-half `SD 0.015`); this phase tests `n_g` precision/shrinkage only, not new selection [Limitation].
+- **Timestamps unresolved** — no temporal split; `postdate`/`rating_tstamp` semantics remain dual readings per `AGENTS.md` [Limitation].
+- **Game metadata 80.89%** — `games.parquet` covers 13,449 of 16,627; we used `bgg_research_population` (complete) for `bayes_rating`/`weight`/`categories` to avoid lopsided exclusion (missing 99.4% of 2023+ games). Analyses requiring `games` attrs would lose 2020+ games [Limitation].
+- **Coverage intervals** — `SE` interval under-covers predicting other half (81.8% vs 95%) because target is noisy; valid for latent `theta_g` under normal EB assumptions which are not validated [Model-dependent / Limitation].
+- **Small-game caveat** — stratified shows gains for `n_even<50` (mean `n=34`); such games are 9.4% of active (P10 100 total → half ~50). RQ2 underratedness for very small games remains noisy even after EB [Limitation].
+
+### Implications for RQ2 (next phase: estimate expected rating, flag better-than-expected)
+
+- **What `y` will be [Supported conclusion / Method]:** `y_g = adj_mean_g` (active severity-adjusted, `mu=7.144`). Sensitivity `y_shrunk_g` with `lambda 1.91`. Do not use `raw` (+0.177 bias via pool) or `bayes` (bias -1.12, overshrunk, popularity-confounded) as primary.
+- **Whether `n_g` weighting is needed in the expected-rating regression [Supported conclusion]:** **Yes — heteroscedasticity is an order of magnitude.** Use **WLS weighting by `w_g = n_g / sigma_e²` (≈ `n_g`) or `1/SE²`,** or report measurement-error-aware `SE`. At minimum show equal-weighted vs `n_g`-weighted vs `1/SE²`-weighted sensitivity. Median `SE 0.070` vs `P10 SE 0.119` vs `P90 SE 0.023` — ignoring this treats 100- and 2795-rating games equally.
+- **How to carry uncertainty [Implication]:** report `adj_mean` with `SE` and `adj_shrunk` with `post_SD`; for candidate lists rank by `adj_mean` but flag low-n (`n<100`, `SE>0.12`) and provide lower-bound `adj -1.96·SE` as conservative ranking.
+- **Do not build hidden-gem score yet** — this phase's output is the quality estimator `y` that RQ2 will decompose into `expected(y | popularity, age, genre, complexity, audience)` plus residual [Method discipline].
+
+*Record:* `scripts/30_phase5_quality_estimator.py` (bounded `4GB/threads3` `temp_directory scratch/ducktmp` `scratch/phase2-active` copy-once, `EXPLAIN`-level semi-joins not needed here but pattern kept, no wide-table bug, deterministic even/odd split, single scan aggregates per half, compact JSON) → `data/processed/phase2-active/phase5_quality_estimator.json` (gitignored, 20KB) + committed `docs/phase2-active/phase5_quality_comparison.json` + `reports/phase5_quality_estimator/{phase5_quality_estimator.json,comparative_table.csv,stratified_rmse_by_n.csv,se_table.csv}`. Rerunnable: `python scripts/30_phase5_quality_estimator.py --active-dir scratch/phase2-active --population scratch/phase2-active/bgg_research_population.parquet --out-dir data/processed/phase2-active`. Validation anchored: `n_obs 24,509,788` delta 0, `mu 7.144`, `n_g` 16564 median 293, lambda MM 1.91 vs cov 1.92 agreement.
+
+Tagging per AGENTS.md: observed facts (counts, n dist, mu, raw agreement), empirical findings (held-out RMSE/R2/corr/bias, Var components, stratified, individual holdout, coverage), model-dependent (EB lambda/SE/shrunk/R2/post_SD, interval), supported conclusions (preferred adj, bayes overshrinks, weighting needed), assumption (delta descriptive), limitation (no external validation), implication (RQ2 y and weighting).
+
 
