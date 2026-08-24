@@ -1,6 +1,8 @@
-# Game/Rater Recursive Closure Plan — Second-Pass Population (Deferred)
+# Game/Rater Recursive Closure Plan — Second-Pass Population (Deferred → EXECUTED 2026-08-24)
 
-**Status:** `DEFERRED` — not part of the current primary pipeline (`16,627` games × `≥10` per user minus `degenerate_strict` → `24.5M obs`, `scripts/24` + `26`). To be reconsidered only after the current full Phase 1–7 first pass is complete, **jointly** with the game-level pruning in `candidate_pruning_rules_to_investigate.md:1` and `population_second_pass_plan.md:1`. Do not implement now.
+**Status:** `EXECUTED` — recursively closed to fixed point (see `README.md:1` and `data/processed/phase2-second-pass/*_closure_log.csv`). Primary closed 14786 games (4 iterations, 1662+10 pruned, 3 deg, 287,776 users, 24.25M obs); base closed 14941 (1675+11 pruned, 3 deg). Single-filter precursor was 14952 vs closed 14941 diff 11, so iteration adds little beyond single-filter (as sensitivity found). Logs in `data/processed/phase2-second-pass/`.
+
+**Status (original):** `DEFERRED` — not part of the current primary pipeline (`16,627` games × `≥10` per user minus `degenerate_strict` → `24.5M obs`, `scripts/24` + `26`). To be reconsidered only after the current full Phase 1–7 first pass is complete, **jointly** with the game-level pruning in `candidate_pruning_rules_to_investigate.md:1` and `population_second_pass_plan.md:1`. Do not implement now.
 
 **Date proposed:** 2026-08-24
 **Source:** Captain instruction, now subsumed into the comprehensive `population_second_pass_plan.md:1`. This file is the detailed closure specification that was previously at `docs/second-pass-methodology-review.md:1`.

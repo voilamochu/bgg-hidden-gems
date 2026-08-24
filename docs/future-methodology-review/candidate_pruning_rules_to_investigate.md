@@ -1,6 +1,8 @@
-# Candidate Pruning Rules to Investigate — Second-Pass Game-Level Population (Deferred)
+# Candidate Pruning Rules to Investigate — Second-Pass Game-Level Population (Deferred → EXECUTED 2026-08-24)
 
-**Status:** `DEFERRED` — not part of the current primary pipeline (`16,627` games × `≥10` per user minus `degenerate_strict` → `24.5M obs`, `scripts/24` + `26` + `30`/`31` on `phase2-active`). To be investigated only after the current full Phase 1–7 first pass is complete. See `population_second_pass_plan.md:1` for the overall second-pass plan and `game_rater_recursive_closure_plan.md:1` for the recursive closure that must be evaluated jointly with these rules.
+**Status:** `EXECUTED` — investigated and decided with explicit, auditable rules (see `executed_rules.md:1` and `README.md:1` in this directory, plus `data/processed/phase2-second-pass/`). Primary adopted: edition/bigbox 153 + targeted Monikers/Time's Up! 17 =169 (1.0%); reimplementation (47) and broad family (996) and language (0) investigated but NOT adopted; duplicate title_clean (49) sensitivity only.
+
+**Status (original):** `DEFERRED` — not part of the current primary pipeline (`16,627` games × `≥10` per user minus `degenerate_strict` → `24.5M obs`, `scripts/24` + `26` + `30`/`31` on `phase2-active`). To be investigated only after the current full Phase 1–7 first pass is complete. See `population_second_pass_plan.md:1` for the overall second-pass plan and `game_rater_recursive_closure_plan.md:1` for the recursive closure that must be evaluated jointly with these rules.
 
 **Date proposed:** 2026-08-24
 **Source:** Captain instruction, Phase 7 candidate-screening context (multiple Monikers/Time's Up! records, Small World Designer Edition).

@@ -1,6 +1,8 @@
-# Second-Pass Methodology Review (Deferred)
+# Second-Pass Methodology Review (Deferred → EXECUTED 2026-08-24)
 
-**Status:** `DEFERRED` — **not part of the current primary pipeline**. To be reconsidered only after the current full Phase 1–7 pass is complete. Requires explicit comparison of the current and recursively cleaned populations before adoption. Do not implement now.
+**Status:** `EXECUTED` — recursively closed to fixed point (see `docs/future-methodology-review/README.md:1` and `data/processed/phase2-second-pass/` for logs; 4 iterations, base 14941 vs primary 14786, vs single-filter 14952 diff 11, estimation stable per `model_comparison.json`). Requires explicit comparison before adoption — now done.
+
+**Status (original):** `DEFERRED` — **not part of the current primary pipeline**. To be reconsidered only after the current full Phase 1–7 pass is complete. Requires explicit comparison of the current and recursively cleaned populations before adoption. Do not implement now.
 
 **Date proposed:** 2026-08-24
 **Source:** Captain deferred item, recorded per instruction.
