@@ -1,0 +1,9 @@
+full_file,filtered_file,active_file,contains,records_full,records_filtered,records_active,pct_filtered_vs_full,pct_active_vs_full,pct_active_vs_filtered
+data/processed/phase2/rating_observations.parquet,data/processed/phase2-filtered/rating_observations_filtered.parquet,data/processed/phase2-active/rating_observations_active.parquet,"Canonical individual rating observations: every non-null review rating, no dedup, population+active users",26924709,25335220,24509788,94.097,91.031,96.742
+data/processed/phase2/users.parquet,data/processed/phase2-filtered/users_filtered.parquet,data/processed/phase2-active/users_active.parquet,Pseudonymous rater profiles filtered to active users (cnt_filtered>=10 minus strict) with degenerate flags,606497,544955,288730,89.853,47.606,52.982
+data/processed/phase2/collections.parquet,data/processed/phase2-filtered/collections_filtered.parquet,data/processed/phase2-active/collections_active.parquet,Collection/status rows for population games x active users,29618326,27584966,25889485,93.135,87.41,93.854
+data/processed/phase2/games.parquet,data/processed/phase2-filtered/games_filtered.parquet,,"Per-game metadata: game_attrs joined to browse fields (filtered to 16,627 in phase2-filtered; reused via join)",21925,13449,,61.341,,
+data/processed/phase2/game_tags.parquet,data/processed/phase2-filtered/game_tags_filtered.parquet,,Normalized game tags (category/mechanic/theme taxonomy; reused from phase2-filtered),276045,189629,,68.695,,
+data/processed/phase2/game_links.parquet,data/processed/phase2-filtered/game_links_filtered.parquet,,"Game relationship links (expansions, reimplementations; reused)",43196,33483,,77.514,,
+data/processed/phase2/ratings.parquet,,,All review rows incl. null-rating comment rows; not active-filtered (canonical is rating_observations),29618326,,,,,
+data/processed/phase2/user_ratings.parquet,,,Compact alternate snapshot; username namespace does not join to users (non-canonical),,,,,,

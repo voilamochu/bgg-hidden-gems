@@ -1095,3 +1095,48 @@ Phase 3 restarts on `data/processed/phase2-filtered/rating_observations_filtered
 - Interaction with the threshold study (merged, `scripts/23_user_threshold_study.py`, t=10 primary / t=20 sensitivity): no exclusion floor needed from this side. The two recommendations are complementary and consistent: their t=10/t=20 floors sit exactly where this audit finds raw flag rates become interpretable (below n≈10 flags are artifacts; 10–50 worth flagging); at their primary t=10 population (289,397 users), `degenerate_strict`-class contamination is ~0.2–0.3% of users and ≤0.19% of ratings — negligible for pooled game means, and the flags should simply travel with the user table as sensitivity markers.
 
 Open: whether the 1000+ uptick is real needs user-level inspection beyond counts; per-game impact for the 15 games with ≥20% flagged share unchecked game-by-game.
+
+## 2026-08-24: Active analytical extracts for the established population (games × users × degenerate exclusion)
+
+**[Method]** Created `scripts/24_build_active_phase2_extracts.py` (rerunnable, bounded `memory_limit=4GB`/`threads=4`/`temp_directory`, explicit `SEMI JOIN`s verified via `EXPLAIN`, no wide-table positional bug, `ORDER BY rating_observation_id`/`user_pseudouserid`). Rebuilds only user/rating-dependent layers on the fixed 16,627-game research population (`data/processed/bgg_research_population.parquet`, `scripts/01`). Copies needed source parquets once into `scratch/phase2` (full snapshot `rating_observations.parquet` 26.9M, `users.parquet`, `collections.parquet`) and runs via DuckDB. Preserves the two reference areas unchanged: `data/processed/phase2/` (full snapshot, 95,540 games, 26.9M obs) and `data/processed/phase2-filtered/` (16,627 games, 25.3M obs) — the latter not present locally in this worktree but logically reused; game-level reference tables `games`/`game_tags`/`game_links` already filtered there are NOT duplicated here (documented join / symlink if `phase2-filtered` exists). New active sibling is `data/processed/phase2-active/` (gitignored via `data/processed/`; `docs/phase2-active/` holds the committed catalog copy).
+
+**Population definition (games × users × exclusion) [Method / Supported decision]:**
+- **Games:** 16,627 research population (corrected per `findings.md` refresh; 16,567 have ≥1 rating in this SQLite snapshot [Observed fact]).
+- **Users (active):** `cnt_filtered = COUNT(*) WHERE game_id IN population` (canonical `rating_observations`, no dedup, source keys retained) with **t=10 primary** (`cnt_filtered ≥10`). Threshold t=10 comes from `scripts/23_user_threshold_study.py` / `reports/user_population_thresholds.*` (ICC reliability 0.78 at t=10 vs 0.85 at t=20; 289,397 users / 24,558,361 ratings before exclusion [Observed fact from threshold study]).
+- **Exclusion:** `degenerate_strict` per `scripts/25_phase2_anomalous_rater_audit.py`: `n≥20` AND (`k==1` single bin OR `SD<0.2` raw OR `modal_share≥0.95` on `ROUND` rating clipped to [1,10]). This is the heavy-rater near-constant/high, low scale-diversity tail — treated as **low-information / degenerate noise, not fake/malicious classification** [Assumption / Method]. Strict = 667 users / 48,573 obs (0.307% at n≥20, 0.19% of filtered obs [Observed fact from audit, recomputed here: 667 / 48,573]).
+- **Preserved for sensitivity:** `degenerate_broad` (`n≥10` AND (`k≤2` OR `SD<0.5` OR `modal≥0.90`)) is **NOT excluded**; kept as `is_degenerate_broad` column in the active user table (3,992 broad users total; 3,326 retained in active [Observed fact]). Single parameter change (`is_degenerate_broad` filter) gives the sensitivity variant.
+
+Semi-join logic (canonical, no duplication/drop):
+```
+-- active observations
+SELECT r.* FROM rating_observations r
+  SEMI JOIN pop p ON p.game_id = r.game_id
+  SEMI JOIN active_users a ON a.user_pseudouserid = r.user_pseudouserid
+```
+
+**Outputs [Observed fact]:**
+- `data/processed/phase2-active/rating_observations_active.parquet` — 24,509,788 canonical observations (ORDER BY rating_observation_id)
+- `data/processed/phase2-active/users_active.parquet` — 288,730 rows, one per retained user: original `users.parquet` fields plus `cnt_filtered`, `is_degenerate_strict` (all FALSE), `is_degenerate_broad`, and binned stats (`filtered_mean_rating`, `filtered_sd_rating`, `filtered_modal_share`, `filtered_n_bins_used`, `filtered_entropy_bits`)
+- `data/processed/phase2-active/collections_active.parquet` — 25,889,485 collection/status rows for population games × active users
+- `data/processed/phase2-active/validation.json`, `extract_counts.json`, `parquet_catalog.csv`, `README.md` (source-extract/ filter documentation; catalog extends `docs/phase2-filtered/PARQUET_CATALOG.md` style with an “active” column; committed copy at `docs/phase2-active/`)
+
+**Counts and coverage [Observed fact / Empirical finding]:**
+- Filtered reference (16,627 games): 25,335,220 obs, 544,955 users with ≥1 filtered rating; 16,567 distinct games with ≥1 rating.
+- Before degenerate exclusion (t≥10 on filtered counts): 289,397 users, 24,558,361 ratings (96.93% of filtered ratings [Observed fact]; recomputed exactly here, matches threshold study).
+- **Active (t≥10 minus strict): 288,730 users / 24,509,788 observations** [Observed fact] — exactly 667 users / 48,573 obs removed (0.23% of users, 0.20% of pre-exclusion ratings). Shares vs filtered: 96.74% of filtered obs, 52.98% of filtered users; vs full snapshot (26,924,709 obs, 571,248 rating users): 91.03% of full obs, 50.54% of full rating users.
+- Game coverage: 16,564 distinct games have ≥1 active rating (99.98% of 16,567 filtered games; **3 games lost** [Observed fact] — essentially none at coarse granularity; even at t=100, 16,344 games retain ≥10 raters, so threshold is not game-binding).
+- Collections active retains 93.85% of filtered collections (25,889,485 / 27,584,966) and 87.41% of full.
+- Repeated user-game pairs preserved as distinct observations: 1,435 pairs / 2,962 obs, max 4 per pair [Observed fact] (vs 1,465 / 3,022 in filtered).
+
+**Validations passed [Observed fact]:**
+- 0 violations: every retained `game_id` is in the 16,627 set (ANTI JOIN pop = 0).
+- 0 violations: every retained user has `cnt_filtered ≥10` before exclusion (min 10) and 0 with `cnt_filtered <10` post.
+- 0 violations: no retained user is `degenerate_strict`; 0 strict observations in active.
+- Flag source validated: degenerate counts recomputed here (667 strict, 3,993 broad) match the committed `reports/anomalous_rater_audit/audit_summary.json` + `removal_sensitivity.csv` (strict 667, broad 3,992/3,993 rounding) [Empirical finding].
+- Output rows anchored: filtered anchor `SEMI JOIN pop` = 25,335,220; active rows = filtered t≥10 minus strict by construction.
+
+**Where `degenerate_broad` is kept [Method]:** column `is_degenerate_broad` in `users_active.parquet` (3,326 TRUE among active). Full-snapshot fit artifacts (`rater_stats`, `user_severity`, `game_adjusted_means`, scripts 15–22) remain historical reference for the full universe — not mixed with filtered/active observations; re-estimation on the active universe is the follow-up taste task's deliverable (not done here). `postdate`/`rating_tstamp` semantics remain unresolved — dual readings preserved where applicable.
+
+**No Phase 2 statistical re-analysis, no change to the 16,627-game population** [Method note]. The 60 population games absent from the SQLite snapshot (recent high-game_id releases) remain absent here as well — snapshot mismatch, not a filter loss.
+
+**Reproduce:** `python scripts/24_build_active_phase2_extracts.py --input-dir scratch/phase2 --population scratch/phase2/bgg_research_population.parquet` (bounded memory, rerunnable; `docs/phase2-active/README.md` records exact invocation + source paths).
