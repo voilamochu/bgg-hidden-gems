@@ -1,0 +1,1356 @@
+{
+  "active_dir": "data/processed/phase2-active",
+  "population": "scratch/phase2/bgg_research_population.parquet",
+  "phase2_dir": "data/processed/phase2",
+  "out_dir": "data/processed/phase2-active",
+  "min_cell": 3,
+  "n_iter": 100,
+  "active_band_order": [
+    "10-24",
+    "25-49",
+    "50-99",
+    "100-249",
+    "250-499",
+    "500-999",
+    "1000+"
+  ],
+  "generated_at": "2026-08-24T04:20:48Z",
+  "validation": {
+    "violations_game_id_not_in_population": 0,
+    "min_cnt_filtered_among_active": 10,
+    "violations_cnt_filtered_lt10": 0,
+    "violations_degenerate_strict_in_active": 0,
+    "degenerate_broad_retained": 3325,
+    "active_observations": 24509788,
+    "active_users": 288730,
+    "active_distinct_games": 16564,
+    "source_full_observations_reference": 26924709,
+    "expected_active_observations": 24509788,
+    "expected_active_users": 288730,
+    "delta_obs_vs_expected": 0,
+    "delta_users_vs_expected": 0,
+    "filtered_reference": {
+      "observations": 25335220,
+      "users": 544955,
+      "games_with_ratings": 16567,
+      "share_active_vs_filtered_obs": 0.96742,
+      "share_active_vs_filtered_users": 0.529824,
+      "games_lost_vs_filtered": 3
+    },
+    "t10_expectation": {
+      "users_before_exclusion": 289397,
+      "ratings_before_exclusion": 24558361,
+      "strict_users_removed": 667,
+      "strict_obs_removed": 48573,
+      "expected_active_users": 288730,
+      "expected_active_ratings": 24509788
+    }
+  },
+  "raw_band_means_active": [
+    {
+      "volume_band": "10-24",
+      "n_obs": 1529269,
+      "n_users": 95945,
+      "n_games": 16074,
+      "mean_rating": 7.7257443183246295,
+      "sd_rating": 1.5390458188510427
+    },
+    {
+      "volume_band": "25-49",
+      "n_obs": 2529456,
+      "n_users": 71545,
+      "n_games": 16289,
+      "mean_rating": 7.5106578456512905,
+      "sd_rating": 1.521995421125647
+    },
+    {
+      "volume_band": "50-99",
+      "n_obs": 3998084,
+      "n_users": 56925,
+      "n_games": 16423,
+      "mean_rating": 7.372444990970465,
+      "sd_rating": 1.5025745583484047
+    },
+    {
+      "volume_band": "100-249",
+      "n_obs": 6761527,
+      "n_users": 44002,
+      "n_games": 16465,
+      "mean_rating": 7.199285922860842,
+      "sd_rating": 1.48745562887063
+    },
+    {
+      "volume_band": "250-499",
+      "n_obs": 4939774,
+      "n_users": 14410,
+      "n_games": 16463,
+      "mean_rating": 6.970897351856491,
+      "sd_rating": 1.4952089062157534
+    },
+    {
+      "volume_band": "500-999",
+      "n_obs": 3241863,
+      "n_users": 4844,
+      "n_games": 16455,
+      "mean_rating": 6.763932826427083,
+      "sd_rating": 1.4871065523496196
+    },
+    {
+      "volume_band": "1000+",
+      "n_obs": 1509815,
+      "n_users": 1059,
+      "n_games": 16427,
+      "mean_rating": 6.470509430453321,
+      "sd_rating": 1.5501688803901408
+    }
+  ],
+  "pooled_gaps_active": {
+    "10-24_vs_1000+": {
+      "gap": 1.2552348878713113,
+      "n_low": 1529269,
+      "n_high": 1509815
+    },
+    "10-24_vs_500plus": {
+      "gap": 1.0550448811532815
+    },
+    "10-49_vs_500plus": {
+      "gap": 0.9209998870177731
+    }
+  },
+  "band_pair_game_overlap_active": [
+    {
+      "band_a": "10-24",
+      "band_b": "1000+",
+      "games_any_a": 16074,
+      "games_any_b": 16427,
+      "games_both": 16004,
+      "jaccard": 0.970115778626417,
+      "games_a_with_ge3_a_raters": 14672,
+      "games_b_with_ge3_b_raters": 16121,
+      "games_with_ge3_both": 14473
+    },
+    {
+      "band_a": "10-24",
+      "band_b": "250-499",
+      "games_any_a": 16074,
+      "games_any_b": 16463,
+      "games_both": 16048,
+      "jaccard": 0.9732548972041968,
+      "games_a_with_ge3_a_raters": 14672,
+      "games_b_with_ge3_b_raters": 16337,
+      "games_with_ge3_both": 14656
+    },
+    {
+      "band_a": "25-49",
+      "band_b": "1000+",
+      "games_any_a": 16289,
+      "games_any_b": 16427,
+      "games_both": 16223,
+      "jaccard": 0.9836294185411993,
+      "games_a_with_ge3_a_raters": 15652,
+      "games_b_with_ge3_b_raters": 16121,
+      "games_with_ge3_both": 15447
+    },
+    {
+      "band_a": "50-99",
+      "band_b": "1000+",
+      "games_any_a": 16423,
+      "games_any_b": 16427,
+      "games_both": 16339,
+      "jaccard": 0.989582702440797,
+      "games_a_with_ge3_a_raters": 16180,
+      "games_b_with_ge3_b_raters": 16121,
+      "games_with_ge3_both": 15949
+    },
+    {
+      "band_a": "100-249",
+      "band_b": "500-999",
+      "games_any_a": 16465,
+      "games_any_b": 16455,
+      "games_both": 16408,
+      "jaccard": 0.9937015503875969,
+      "games_a_with_ge3_a_raters": 16346,
+      "games_b_with_ge3_b_raters": 16290,
+      "games_with_ge3_both": 16251
+    }
+  ],
+  "per_user_shared_ground_active": [
+    {
+      "band_a": "10-24",
+      "band_b": "1000+",
+      "users_in_band_a_with_ge1_game": 95945,
+      "median_share_of_own_games_co_rated_by_b_ge1": 1.0,
+      "p25_share_ge1": 1.0,
+      "p75_share_ge1": 1.0,
+      "median_share_co_rated_by_b_ge3": 1.0
+    },
+    {
+      "band_a": "10-24",
+      "band_b": "250-499",
+      "users_in_band_a_with_ge1_game": 95945,
+      "median_share_of_own_games_co_rated_by_b_ge1": 1.0,
+      "p25_share_ge1": 1.0,
+      "p75_share_ge1": 1.0,
+      "median_share_co_rated_by_b_ge3": 1.0
+    },
+    {
+      "band_a": "25-49",
+      "band_b": "1000+",
+      "users_in_band_a_with_ge1_game": 71545,
+      "median_share_of_own_games_co_rated_by_b_ge1": 1.0,
+      "p25_share_ge1": 1.0,
+      "p75_share_ge1": 1.0,
+      "median_share_co_rated_by_b_ge3": 1.0
+    },
+    {
+      "band_a": "50-99",
+      "band_b": "1000+",
+      "users_in_band_a_with_ge1_game": 56925,
+      "median_share_of_own_games_co_rated_by_b_ge1": 1.0,
+      "p25_share_ge1": 1.0,
+      "p75_share_ge1": 1.0,
+      "median_share_co_rated_by_b_ge3": 1.0
+    },
+    {
+      "band_a": "100-249",
+      "band_b": "500-999",
+      "users_in_band_a_with_ge1_game": 44002,
+      "median_share_of_own_games_co_rated_by_b_ge1": 1.0,
+      "p25_share_ge1": 1.0,
+      "p75_share_ge1": 1.0,
+      "median_share_co_rated_by_b_ge3": 1.0
+    }
+  ],
+  "paired_contrasts_active": [
+    {
+      "contrast": "10-24_vs_1000plus",
+      "low_bands": [
+        "10-24"
+      ],
+      "high_bands": [
+        "1000+"
+      ],
+      "n_games_paired": 14473,
+      "mean_diff": 1.1080952044535586,
+      "median_diff": 1.0913858539390464,
+      "p10_diff": 0.24187212787212894,
+      "p25_diff": 0.6844696969696962,
+      "p75_diff": 1.5264693597951355,
+      "p90_diff": 2.0041017479674808,
+      "share_positive": 0.9372624887721965,
+      "precision_weighted_pooled_diff": 1.0559447465646992,
+      "median_total_raters_of_paired_games": 363.0,
+      "p25_total_raters": 172.0,
+      "p75_total_raters": 1046.0
+    },
+    {
+      "contrast": "10-49_vs_500plus",
+      "low_bands": [
+        "10-24",
+        "25-49"
+      ],
+      "high_bands": [
+        "500-999",
+        "1000+"
+      ],
+      "n_games_paired": 16037,
+      "mean_diff": 0.8287269735027822,
+      "median_diff": 0.8043023255813946,
+      "p10_diff": 0.2092407834101378,
+      "p25_diff": 0.5154668952782924,
+      "p75_diff": 1.1305887252005062,
+      "p90_diff": 1.4850666119144023,
+      "share_positive": 0.9459375194861882,
+      "precision_weighted_pooled_diff": 0.7807429184367569,
+      "median_total_raters_of_paired_games": 311.0,
+      "p25_total_raters": 151.0,
+      "p75_total_raters": 910.0
+    },
+    {
+      "contrast": "25-49_vs_1000plus",
+      "low_bands": [
+        "25-49"
+      ],
+      "high_bands": [
+        "1000+"
+      ],
+      "n_games_paired": 15447,
+      "mean_diff": 0.8426269480402704,
+      "median_diff": 0.8334558383655963,
+      "p10_diff": 0.07906612685560044,
+      "p25_diff": 0.48486548174048183,
+      "p75_diff": 1.2007791898503979,
+      "p90_diff": 1.611418634556932,
+      "share_positive": 0.9167475885285169,
+      "precision_weighted_pooled_diff": 0.8355038944857254,
+      "median_total_raters_of_paired_games": 328.0,
+      "p25_total_raters": 160.0,
+      "p75_total_raters": 963.5
+    }
+  ],
+  "game_fe_regression_active": {
+    "n_obs": 24509788,
+    "n_games": 16564,
+    "reference_band": "1000+",
+    "note": "rating ~ band dummies + game fixed effects; exact within-game demeaning; SEs clustered by game; bands defined on active lifetime counts",
+    "coefficients": [
+      {
+        "band": "10-24",
+        "beta_vs_1000plus": 1.057848952622351,
+        "cluster_se": 0.009422754226468943
+      },
+      {
+        "band": "25-49",
+        "beta_vs_1000plus": 0.8431148825490213,
+        "cluster_se": 0.00631874181748225
+      },
+      {
+        "band": "50-99",
+        "beta_vs_1000plus": 0.6909257232214302,
+        "cluster_se": 0.00461791897233987
+      },
+      {
+        "band": "100-249",
+        "beta_vs_1000plus": 0.5207881221624108,
+        "cluster_se": 0.003401096793283119
+      },
+      {
+        "band": "250-499",
+        "beta_vs_1000plus": 0.3310395016881537,
+        "cluster_se": 0.0022908657647743823
+      },
+      {
+        "band": "500-999",
+        "beta_vs_1000plus": 0.18811185134569455,
+        "cluster_se": 0.0016093910422851237
+      }
+    ]
+  },
+  "als_convergence_full_active": {
+    "mu": 7.144007675731139,
+    "iterations": 6,
+    "final_max_change": 0.001076868645274398
+  },
+  "als_convergence_even": {
+    "mu": 7.1436602736351125,
+    "iterations": 6,
+    "final_max_change": 0.0009722333357811141
+  },
+  "als_convergence_odd": {
+    "mu": 7.144355091949123,
+    "iterations": 7,
+    "final_max_change": 0.0010071224196892548
+  },
+  "als_ms": {
+    "mu_full": 7.144007675731139,
+    "mu_even": 7.1436602736351125,
+    "mu_odd": 7.144355091949123
+  },
+  "severity_by_band_active": [
+    {
+      "volume_band": "10-24",
+      "users": 95945,
+      "mean_delta": 0.2680251473076408,
+      "sd_delta": 0.7338887576444483,
+      "median_delta": 0.2308087814532755
+    },
+    {
+      "volume_band": "25-49",
+      "users": 71545,
+      "mean_delta": 0.04208346866104285,
+      "sd_delta": 0.6399908869767676,
+      "median_delta": 0.026361891604868348
+    },
+    {
+      "volume_band": "50-99",
+      "users": 56925,
+      "mean_delta": -0.11116629007127711,
+      "sd_delta": 0.6072176856923506,
+      "median_delta": -0.11098309655891306
+    },
+    {
+      "volume_band": "100-249",
+      "users": 44002,
+      "mean_delta": -0.27313483851008413,
+      "sd_delta": 0.6051932739661698,
+      "median_delta": -0.25555446702154083
+    },
+    {
+      "volume_band": "250-499",
+      "users": 14410,
+      "mean_delta": -0.4623748839168844,
+      "sd_delta": 0.6168105111964584,
+      "median_delta": -0.4293206775855741
+    },
+    {
+      "volume_band": "500-999",
+      "users": 4844,
+      "mean_delta": -0.597912644319176,
+      "sd_delta": 0.6298497904142639,
+      "median_delta": -0.5501356040321104
+    },
+    {
+      "volume_band": "1000+",
+      "users": 1059,
+      "mean_delta": -0.775074004753344,
+      "sd_delta": 0.6866123146004903,
+      "median_delta": -0.7317892197566407
+    }
+  ],
+  "severity_distribution_active": {
+    "n_users_with_delta": 288730,
+    "mean_delta": -1.4906188937447757e-15,
+    "sd_delta": 0.7023745473815263,
+    "p05": -1.076148774936161,
+    "p25": -0.416872661312505,
+    "p50": -0.02242769786217169,
+    "p75": 0.39757477651290407,
+    "p95": 1.1745592636968771,
+    "min_delta": -7.277714200591814,
+    "max_delta": 4.7575653142616545
+  },
+  "delta_dispersion_by_count_bucket_active": [
+    {
+      "bucket": 0,
+      "users": 100135,
+      "mean_n": 16.31816048334748,
+      "sd_delta": 0.7312438788741804
+    },
+    {
+      "bucket": 1,
+      "users": 102954,
+      "mean_n": 44.58124016551081,
+      "sd_delta": 0.6318007788509675
+    },
+    {
+      "bucket": 2,
+      "users": 35734,
+      "mean_n": 96.28647786421895,
+      "sd_delta": 0.6033348182768701
+    },
+    {
+      "bucket": 3,
+      "users": 16484,
+      "mean_n": 147.6284882310119,
+      "sd_delta": 0.6070853539002095
+    },
+    {
+      "bucket": 4,
+      "users": 9891,
+      "mean_n": 197.90486300677384,
+      "sd_delta": 0.5914845148621632
+    },
+    {
+      "bucket": 5,
+      "users": 6004,
+      "mean_n": 248.38657561625584,
+      "sd_delta": 0.6060638189147202
+    },
+    {
+      "bucket": 6,
+      "users": 4181,
+      "mean_n": 298.21238938053096,
+      "sd_delta": 0.6020316784920642
+    },
+    {
+      "bucket": 7,
+      "users": 2941,
+      "mean_n": 348.9598775926556,
+      "sd_delta": 0.6211092601173358
+    },
+    {
+      "bucket": 8,
+      "users": 2174,
+      "mean_n": 398.7157313707452,
+      "sd_delta": 0.6336137123706332
+    },
+    {
+      "bucket": 9,
+      "users": 1650,
+      "mean_n": 448.98424242424244,
+      "sd_delta": 0.6130073183748025
+    },
+    {
+      "bucket": 10,
+      "users": 1317,
+      "mean_n": 499.05846621108583,
+      "sd_delta": 0.6055288777942504
+    },
+    {
+      "bucket": 11,
+      "users": 917,
+      "mean_n": 548.6815703380589,
+      "sd_delta": 0.6075986327280347
+    },
+    {
+      "bucket": 12,
+      "users": 756,
+      "mean_n": 598.9484126984127,
+      "sd_delta": 0.6267358001473875
+    },
+    {
+      "bucket": 13,
+      "users": 562,
+      "mean_n": 649.9893238434164,
+      "sd_delta": 0.644028924410647
+    },
+    {
+      "bucket": 14,
+      "users": 469,
+      "mean_n": 699.8720682302771,
+      "sd_delta": 0.636973695966673
+    },
+    {
+      "bucket": 15,
+      "users": 375,
+      "mean_n": 749.3546666666666,
+      "sd_delta": 0.613669066576268
+    },
+    {
+      "bucket": 16,
+      "users": 332,
+      "mean_n": 798.0903614457832,
+      "sd_delta": 0.671546264095049
+    },
+    {
+      "bucket": 17,
+      "users": 276,
+      "mean_n": 849.3007246376811,
+      "sd_delta": 0.6469849627639257
+    },
+    {
+      "bucket": 18,
+      "users": 217,
+      "mean_n": 897.6451612903226,
+      "sd_delta": 0.5742636637186764
+    },
+    {
+      "bucket": 19,
+      "users": 200,
+      "mean_n": 948.485,
+      "sd_delta": 0.7307341021459581
+    },
+    {
+      "bucket": 20,
+      "users": 1161,
+      "mean_n": 1387.2497846683893,
+      "sd_delta": 0.6754763623430218
+    }
+  ],
+  "variance_decomposition_nested_r2_active": {
+    "total_var": 2.354058480844167,
+    "r2_game_identity_only": 0.20137406712911587,
+    "r2_rater_identity_only": 0.2181210203307925,
+    "r2_additive_both": 0.3943211541852414,
+    "note": "nested-model R2 of rating variance explained by game identity, rater identity, and additive two-way fit on active set"
+  },
+  "stability_parity_active": {
+    "min10_each_half": {
+      "users_compared": 200264,
+      "min_obs_each_half": 10,
+      "pearson": 0.8771661770008742,
+      "spearman": 0.854309856928727,
+      "median_abs_delta_diff": 0.16695192538375417,
+      "p90_abs_delta_diff": 0.5340941520709116,
+      "sd_even": 0.6705559343850812,
+      "sd_odd": 0.6712394297473743,
+      "sd_difference": 0.33253023149699235
+    },
+    "min20_each_half": {
+      "users_compared": 132253,
+      "min_obs_each_half": 20,
+      "pearson": 0.9221842375862839,
+      "spearman": 0.903881408280351,
+      "median_abs_delta_diff": 0.13373675628155418,
+      "p90_abs_delta_diff": 0.4096834312168742,
+      "sd_even": 0.6423461079869597,
+      "sd_odd": 0.6433538186457597,
+      "sd_difference": 0.25360727339586536
+    }
+  },
+  "placebo_mismatched_correlation_active": -0.0006588962147424998,
+  "severity_reliability_by_band_active": {
+    "min_half_obs": 10,
+    "rows": [
+      {
+        "band": "10-24",
+        "users_compared": 10528,
+        "sd_half_estimate": 0.7146751370149991,
+        "implied_noise_sd_half": 0.36790121389558794,
+        "implied_signal_sd": 0.6127064944013247,
+        "reliability_icc_style": 0.735000475669108
+      },
+      {
+        "band": "25-49",
+        "users_compared": 68496,
+        "sd_half_estimate": 0.6735365572710267,
+        "implied_noise_sd_half": 0.2986625460180799,
+        "implied_signal_sd": 0.6036987473786121,
+        "reliability_icc_style": 0.8033747985456111
+      },
+      {
+        "band": "50-99",
+        "users_compared": 56925,
+        "sd_half_estimate": 0.6253207719198972,
+        "implied_noise_sd_half": 0.20940067645603933,
+        "implied_signal_sd": 0.5892176376299756,
+        "reliability_icc_style": 0.8878626083739984
+      },
+      {
+        "band": "100-249",
+        "users_compared": 44002,
+        "sd_half_estimate": 0.6130047009007276,
+        "implied_noise_sd_half": 0.14270370028130996,
+        "implied_signal_sd": 0.5961630794106697,
+        "reliability_icc_style": 0.9458070417137355
+      },
+      {
+        "band": "250-499",
+        "users_compared": 14410,
+        "sd_half_estimate": 0.6199691740022281,
+        "implied_noise_sd_half": 0.09181561517511833,
+        "implied_signal_sd": 0.6131326687781523,
+        "reliability_icc_style": 0.9780672592834848
+      },
+      {
+        "band": "500-999",
+        "users_compared": 4844,
+        "sd_half_estimate": 0.6329090718491245,
+        "implied_noise_sd_half": 0.06629971872659565,
+        "implied_signal_sd": 0.6294269143639272,
+        "reliability_icc_style": 0.9890266121244361
+      },
+      {
+        "band": "1000+",
+        "users_compared": 1059,
+        "sd_half_estimate": 0.6881113783669637,
+        "implied_noise_sd_half": 0.047536638821084304,
+        "implied_signal_sd": 0.6864674333190733,
+        "reliability_icc_style": 0.9952275711431307
+      }
+    ],
+    "note": "signal/noise decomposition of parity-half severity estimates on active set; min 10 per half"
+  },
+  "game_level_adjustment_active": {
+    "pearson_raw_vs_adj": 0.9793576586857263,
+    "spearman_raw_vs_adj": 0.9799941425445658,
+    "corr_n_obs_with_shift": 0.01710913198991137,
+    "shift_quantiles_p5_median_p95": [
+      0.02430806888336129,
+      0.29305642074567295,
+      0.5626250384255147
+    ]
+  },
+  "game_adjustment_shift_by_volume_active": [
+    {
+      "vol_band": "a_25k+",
+      "games": 138,
+      "median_shift": 0.26227376100858946,
+      "mean_shift": 0.2673264491420778
+    },
+    {
+      "vol_band": "b_5k-25k",
+      "games": 808,
+      "median_shift": 0.33452290007256336,
+      "mean_shift": 0.32764744605223617
+    },
+    {
+      "vol_band": "c_1k-5k",
+      "games": 2812,
+      "median_shift": 0.335237706847185,
+      "mean_shift": 0.3300072341317423
+    },
+    {
+      "vol_band": "d_250-1k",
+      "games": 5354,
+      "median_shift": 0.2997871868915931,
+      "mean_shift": 0.3017769747733539
+    },
+    {
+      "vol_band": "e_<250",
+      "games": 7452,
+      "median_shift": 0.26103275020277605,
+      "mean_shift": 0.269394674002942
+    }
+  ],
+  "holdout_active": {
+    "fit_even_predict_odd": {
+      "n_test": 12254612,
+      "rmse_game_fe_only": 1.472397338017681,
+      "rmse_game_fe_plus_user": 1.2377883499178712,
+      "rmse_raw_train_game_mean": 1.372391065519177,
+      "mae_game_fe_only": 1.0843301263914722,
+      "mae_game_fe_plus_user": 0.9068423510176472
+    },
+    "fit_odd_predict_even": {
+      "n_test": 12255109,
+      "rmse_game_fe_only": 1.4731721620593718,
+      "rmse_game_fe_plus_user": 1.238488337961815,
+      "rmse_raw_train_game_mean": 1.3729737748946491,
+      "mae_game_fe_only": 1.0846127456542236,
+      "mae_game_fe_plus_user": 0.9069829265266885
+    }
+  },
+  "holdout_improvement_by_test_user_band_active": [
+    {
+      "volume_band": "10-24",
+      "n": 765214,
+      "rmse_game_only": 1.4035923373046129,
+      "rmse_with_user": 1.3510089503566265
+    },
+    {
+      "volume_band": "25-49",
+      "n": 1263475,
+      "rmse_game_only": 1.3775720673466874,
+      "rmse_with_user": 1.2792008676538067
+    },
+    {
+      "volume_band": "50-99",
+      "n": 1997752,
+      "rmse_game_only": 1.3815393785410737,
+      "rmse_with_user": 1.2404818744531487
+    },
+    {
+      "volume_band": "100-249",
+      "n": 3381329,
+      "rmse_game_only": 1.4235469650859032,
+      "rmse_with_user": 1.2177348810095527
+    },
+    {
+      "volume_band": "250-499",
+      "n": 2469459,
+      "rmse_game_only": 1.5143154279920137,
+      "rmse_with_user": 1.2218662667797513
+    },
+    {
+      "volume_band": "500-999",
+      "n": 1621900,
+      "rmse_game_only": 1.5807996057015583,
+      "rmse_with_user": 1.2132599727526734
+    },
+    {
+      "volume_band": "1000+",
+      "n": 755483,
+      "rmse_game_only": 1.7376494998546983,
+      "rmse_with_user": 1.2331818535546681
+    }
+  ],
+  "gap_groups_active": {
+    "low_bands_primary": [
+      "10-24"
+    ],
+    "high_bands_primary": [
+      "500-999",
+      "1000+"
+    ],
+    "low_bands_wide": [
+      "10-24",
+      "25-49"
+    ]
+  },
+  "raw_gap_active": {
+    "low_mean": 7.72574431832462,
+    "high_mean": 6.670699437171358,
+    "raw_gap_low_minus_high": 1.055044881153262,
+    "n_obs_low": 1529269,
+    "n_obs_high": 4751678
+  },
+  "standardized_decomposition_active": {
+    "common_weight_total_ratings": 12539993.0,
+    "std_raw_low": 7.5927099464660515,
+    "std_raw_high": 6.701125374923197,
+    "std_gap_raw": 0.8915845715428548,
+    "std_sevadjusted_low": 7.329382848855471,
+    "std_sevadjusted_high": 7.363693273838121,
+    "std_gap_severity_adjusted": -0.03431042498264958,
+    "unweighted_cellmean_gap_raw": 0.9891246814362731,
+    "unweighted_cellmean_gap_sevadjusted": -0.010723075545875815
+  },
+  "support_overlap_active": {
+    "low_obs_on_shared_games": 1529169,
+    "low_obs_total": 1529269,
+    "high_obs_on_shared_games": 4729877,
+    "high_obs_total": 4751678,
+    "share_low_on_shared": 0.9999346092806433,
+    "share_high_on_shared": 0.9954119365832449
+  },
+  "standardized_decomposition_wide_active": {
+    "low_bands": [
+      "10-24",
+      "25-49"
+    ],
+    "high_bands": [
+      "500-999",
+      "1000+"
+    ],
+    "std_gap_raw": 0.7686189438234443,
+    "std_gap_severity_adjusted": -0.016728738619828043,
+    "std_raw_low": 7.498548727232797,
+    "std_raw_high": 6.729929783409353
+  },
+  "historical_reference": {
+    "full_snapshot": {
+      "raw_gap_band1_vs_1000plus": 2.456699792802123,
+      "raw_band_means": [
+        {
+          "volume_band": "1",
+          "n_obs": 124374,
+          "n_users": 124374,
+          "n_games": 21297,
+          "mean_rating": 8.854124095148505,
+          "sd_rating": 1.7370812571921328
+        },
+        {
+          "volume_band": "2-4",
+          "n_obs": 239369,
+          "n_users": 86646,
+          "n_games": 24431,
+          "mean_rating": 8.448879807452093,
+          "sd_rating": 1.6508086844877892
+        },
+        {
+          "volume_band": "5-9",
+          "n_obs": 438592,
+          "n_users": 64786,
+          "n_games": 27365,
+          "mean_rating": 8.044262345049612,
+          "sd_rating": 1.6123115238209513
+        },
+        {
+          "volume_band": "10-24",
+          "n_obs": 1534191,
+          "n_users": 96230,
+          "n_games": 39928,
+          "mean_rating": 7.712708964099027,
+          "sd_rating": 1.580243505930761
+        },
+        {
+          "volume_band": "25-49",
+          "n_obs": 2568159,
+          "n_users": 72632,
+          "n_games": 45562,
+          "mean_rating": 7.488976445212336,
+          "sd_rating": 1.567584592454934
+        },
+        {
+          "volume_band": "50-99",
+          "n_obs": 4127413,
+          "n_users": 58743,
+          "n_games": 52948,
+          "mean_rating": 7.339325827180347,
+          "sd_rating": 1.5501849470424471
+        },
+        {
+          "volume_band": "100-249",
+          "n_obs": 7063825,
+          "n_users": 45884,
+          "n_games": 63381,
+          "mean_rating": 7.15840061172924,
+          "sd_rating": 1.5364414835182933
+        },
+        {
+          "volume_band": "250-499",
+          "n_obs": 5233965,
+          "n_users": 15245,
+          "n_games": 61171,
+          "mean_rating": 6.929657943346842,
+          "sd_rating": 1.5438957173862575
+        },
+        {
+          "volume_band": "500-999",
+          "n_obs": 3586819,
+          "n_users": 5364,
+          "n_games": 58077,
+          "mean_rating": 6.715983989434669,
+          "sd_rating": 1.5390265393391682
+        },
+        {
+          "volume_band": "1000+",
+          "n_obs": 2008002,
+          "n_users": 1344,
+          "n_games": 64724,
+          "mean_rating": 6.397424302346382,
+          "sd_rating": 1.6158661149093838
+        }
+      ],
+      "paired_contrasts": [
+        {
+          "contrast": "band1_vs_1000plus",
+          "low_bands": [
+            "1"
+          ],
+          "high_bands": [
+            "1000+"
+          ],
+          "n_games_paired": 5881,
+          "mean_diff": 2.281755212882927,
+          "median_diff": 2.2666666666666666,
+          "p10_diff": 0.9586919831223639,
+          "p25_diff": 1.6128767123287684,
+          "p75_diff": 2.9851351351351347,
+          "p90_diff": 3.722222222222223,
+          "share_positive": 0.9644618262200306,
+          "precision_weighted_pooled_diff": 2.0822754154880885,
+          "median_total_raters_of_paired_games": 744.0,
+          "p25_total_raters": 190.0,
+          "p75_total_raters": 2895.0
+        },
+        {
+          "contrast": "low2_24_vs_500plus",
+          "low_bands": [
+            "2-4",
+            "5-9",
+            "10-24"
+          ],
+          "high_bands": [
+            "500-999",
+            "1000+"
+          ],
+          "n_games_paired": 23664,
+          "mean_diff": 1.2780728198698041,
+          "median_diff": 1.2000000000000002,
+          "p10_diff": 0.23632788130613644,
+          "p25_diff": 0.7380952380952381,
+          "p75_diff": 1.7643300600109113,
+          "p90_diff": 2.4575686274509803,
+          "share_positive": 0.9339503042596349,
+          "precision_weighted_pooled_diff": 1.0580557153170145,
+          "median_total_raters_of_paired_games": 166.0,
+          "p25_total_raters": 63.0,
+          "p75_total_raters": 544.0
+        }
+      ],
+      "game_fe_regression": {
+        "n_obs": 26924709,
+        "n_games": 95540,
+        "reference_band": "1000+",
+        "note": "rating ~ band dummies + game fixed effects; exact within-game demeaning; SEs clustered by game",
+        "coefficients": [
+          {
+            "band": "1",
+            "beta_vs_1000plus": 2.065816776567636,
+            "cluster_se": 0.017586875041693036
+          },
+          {
+            "band": "2-4",
+            "beta_vs_1000plus": 1.6628675636094685,
+            "cluster_se": 0.015043652579311605
+          },
+          {
+            "band": "5-9",
+            "beta_vs_1000plus": 1.3426014769071999,
+            "cluster_se": 0.012882096907758938
+          },
+          {
+            "band": "10-24",
+            "beta_vs_1000plus": 1.0532745478104948,
+            "cluster_se": 0.008894148451422005
+          },
+          {
+            "band": "25-49",
+            "beta_vs_1000plus": 0.8368710147338987,
+            "cluster_se": 0.005990120011402176
+          },
+          {
+            "band": "50-99",
+            "beta_vs_1000plus": 0.6794558341956469,
+            "cluster_se": 0.0043368658962645475
+          },
+          {
+            "band": "100-249",
+            "beta_vs_1000plus": 0.5035647027250693,
+            "cluster_se": 0.0031415324153754322
+          },
+          {
+            "band": "250-499",
+            "beta_vs_1000plus": 0.3141495141884544,
+            "cluster_se": 0.002140851273067164
+          },
+          {
+            "band": "500-999",
+            "beta_vs_1000plus": 0.17251348960880605,
+            "cluster_se": 0.001492043691317909
+          }
+        ]
+      }
+    },
+    "full_snapshot_severity": {
+      "severity_by_band": [
+        {
+          "volume_band": "1",
+          "users": 124374,
+          "mean_delta": 0.8377683792852658,
+          "sd_delta": 1.7828991802536318,
+          "median_delta": 0.9895128017890994
+        },
+        {
+          "volume_band": "2-4",
+          "users": 86646,
+          "mean_delta": 0.41778459841458976,
+          "sd_delta": 1.2149155411882122,
+          "median_delta": 0.47362532793693557
+        },
+        {
+          "volume_band": "5-9",
+          "users": 64786,
+          "mean_delta": 0.07271399657220218,
+          "sd_delta": 0.9217104624265555,
+          "median_delta": 0.0381726087807468
+        },
+        {
+          "volume_band": "10-24",
+          "users": 96230,
+          "mean_delta": -0.21296426755875733,
+          "sd_delta": 0.7605212621353208,
+          "median_delta": -0.261113075484747
+        },
+        {
+          "volume_band": "25-49",
+          "users": 72632,
+          "mean_delta": -0.44152988230092227,
+          "sd_delta": 0.6694716947683534,
+          "median_delta": -0.46625785722684565
+        },
+        {
+          "volume_band": "50-99",
+          "users": 58743,
+          "mean_delta": -0.6001662292188158,
+          "sd_delta": 0.6311612956413518,
+          "median_delta": -0.6097067297515184
+        },
+        {
+          "volume_band": "100-249",
+          "users": 45884,
+          "mean_delta": -0.7671871323428877,
+          "sd_delta": 0.6234727553736525,
+          "median_delta": -0.7562021187061978
+        },
+        {
+          "volume_band": "250-499",
+          "users": 15245,
+          "mean_delta": -0.955153451320268,
+          "sd_delta": 0.6267285523416241,
+          "median_delta": -0.9306953706113095
+        },
+        {
+          "volume_band": "500-999",
+          "users": 5364,
+          "mean_delta": -1.0895118336342544,
+          "sd_delta": 0.6415410544638607,
+          "median_delta": -1.0417481096591668
+        },
+        {
+          "volume_band": "1000+",
+          "users": 1344,
+          "mean_delta": -1.251066070315212,
+          "sd_delta": 0.699703474650903,
+          "median_delta": -1.2179021176857172
+        }
+      ],
+      "variance_decomposition": {
+        "total_var": 2.5705037859586644,
+        "r2_game_identity_only": 0.23025354422208166,
+        "r2_rater_identity_only": 0.2486955399500297,
+        "r2_additive_both": 0.4381535499125627,
+        "note": "nested-model R2 of rating variance explained by game identity (raw game mean), rater identity (raw user mean), and the additive two-way fit. Marginal effect moments are not used because they double-count under unbalanced correlated factors."
+      },
+      "stability_parity": {
+        "users_compared": 223069,
+        "min_obs_each_half": 20,
+        "pearson": 0.8720042175452927,
+        "spearman": 0.8441169423168746,
+        "median_abs_delta_diff": 0.17546251482898212,
+        "p90_abs_delta_diff": 0.5712247953092809,
+        "sd_even": 0.70355214874761,
+        "sd_odd": 0.7041616614728455,
+        "sd_difference": 0.35612117577967056
+      },
+      "game_level_adjustment": {
+        "pearson_raw_vs_adj": 0.9025019751034806,
+        "spearman_raw_vs_adj": 0.9091246690095853,
+        "corr_n_obs_with_shift": 0.03322074644572213,
+        "shift_quantiles_p5_median_p95": [
+          -0.5583879684254207,
+          0.6736239821269294,
+          1.4667173519607817
+        ]
+      },
+      "holdout": {
+        "fit_even_predict_odd": {
+          "n_test": 13451943,
+          "rmse_game_fe_only": 1.7723665972532359,
+          "rmse_game_fe_plus_user": 1.315905014607528,
+          "rmse_raw_train_game_mean": 1.41657008209977,
+          "mae_game_fe_only": 1.3646815558536307,
+          "mae_game_fe_plus_user": 0.9672250377301109
+        },
+        "fit_odd_predict_even": {
+          "n_test": 13451684,
+          "rmse_game_fe_only": 1.7737341469044838,
+          "rmse_game_fe_plus_user": 1.3170644910250364,
+          "rmse_raw_train_game_mean": 1.417211718875206,
+          "mae_game_fe_only": 1.3654908865715811,
+          "mae_game_fe_plus_user": 0.9676606239120763
+        }
+      }
+    },
+    "full_snapshot_gap": {
+      "raw": {
+        "low_mean": 8.290516867991547,
+        "high_mean": 6.601651736661317,
+        "raw_gap_low_minus_high": 1.68886513133023,
+        "n_obs_low": 802335,
+        "n_obs_high": 5594821
+      },
+      "standardized_decomposition": {
+        "common_weight_total_ratings": 12507134.0,
+        "std_raw_low": 8.01568238132296,
+        "std_raw_high": 6.6267156590456855,
+        "std_gap_raw": 1.3889667222772752,
+        "std_sevadjusted_low": 7.789793160553353,
+        "std_sevadjusted_high": 7.777610999528552,
+        "std_gap_severity_adjusted": 0.01218216102480163,
+        "unweighted_cellmean_gap_raw": 2.2362288624423527,
+        "unweighted_cellmean_gap_sevadjusted": 0.5276284719044018
+      },
+      "support_overlap": {
+        "low_obs_on_shared_games": 791889,
+        "low_obs_total": 802335,
+        "high_obs_on_shared_games": 5318089,
+        "high_obs_total": 5594821,
+        "share_low_on_shared": 0.9869805006636878,
+        "share_high_on_shared": 0.9505378277517725
+      }
+    },
+    "full_snapshot_credibility": {
+      "severity_reliability_by_band": {
+        "min_half_obs": 10,
+        "rows": [
+          {
+            "band": "10-24",
+            "users_compared": 23857,
+            "sd_half_estimate": 0.7553740450848206,
+            "implied_noise_sd_half": 0.3885320017623154,
+            "implied_signal_sd": 0.6477907313279287,
+            "reliability_icc_style": 0.7354367756989327
+          },
+          {
+            "band": "25-49",
+            "users_compared": 72632,
+            "sd_half_estimate": 0.7046621163135567,
+            "implied_noise_sd_half": 0.305378313293903,
+            "implied_signal_sd": 0.6350533709360744,
+            "reliability_icc_style": 0.8121918060113991
+          },
+          {
+            "band": "50-99",
+            "users_compared": 58743,
+            "sd_half_estimate": 0.6491866766871305,
+            "implied_noise_sd_half": 0.212373363809189,
+            "implied_signal_sd": 0.6134662953516279,
+            "reliability_icc_style": 0.8929809982796669
+          },
+          {
+            "band": "100-249",
+            "users_compared": 45884,
+            "sd_half_estimate": 0.6310020443083165,
+            "implied_noise_sd_half": 0.14468164728815167,
+            "implied_signal_sd": 0.6141911761489752,
+            "reliability_icc_style": 0.9474266856196341
+          },
+          {
+            "band": "250-499",
+            "users_compared": 15245,
+            "sd_half_estimate": 0.6295029998991362,
+            "implied_noise_sd_half": 0.09350579886983788,
+            "implied_signal_sd": 0.6225196321881947,
+            "reliability_icc_style": 0.9779361405765565
+          },
+          {
+            "band": "500-999",
+            "users_compared": 5364,
+            "sd_half_estimate": 0.6440304811120435,
+            "implied_noise_sd_half": 0.06715431106948315,
+            "implied_signal_sd": 0.6405197569991057,
+            "reliability_icc_style": 0.9891273614326033
+          },
+          {
+            "band": "1000+",
+            "users_compared": 1344,
+            "sd_half_estimate": 0.7009922703435907,
+            "implied_noise_sd_half": 0.04681132642269924,
+            "implied_signal_sd": 0.6994275250517449,
+            "reliability_icc_style": 0.9955406101992131
+          }
+        ],
+        "note": "signal/noise decomposition of parity-half severity estimates; single-rating users are excluded because no half estimate exists"
+      },
+      "entanglement": {
+        "n_users_with_postdates": 483808,
+        "corr_log_volume_vs_severity": -0.39801675627332933,
+        "corr_log_volume_vs_within_user_sd": 0.17995307674611263,
+        "corr_severity_vs_within_user_sd": -0.45834773621656266,
+        "corr_log_tenure_vs_severity": -0.18191561899594366,
+        "corr_log_volume_vs_log_tenure": 0.5885626908965648,
+        "note": "tenure uses unresolved-semantics postdate field"
+      }
+    },
+    "filtered_16k_allusers": {
+      "raw_band_means": [
+        {
+          "volume_band": "1",
+          "n_obs": 107396,
+          "mean_rating": 8.82651298819323,
+          "sd_rating": 1.7037182918109741,
+          "n_users": 107396
+        },
+        {
+          "volume_band": "2-4",
+          "n_obs": 232634,
+          "mean_rating": 8.430041868084631,
+          "sd_rating": 1.6118168899027667,
+          "n_users": 83718
+        },
+        {
+          "volume_band": "5-9",
+          "n_obs": 436829,
+          "mean_rating": 8.040541393039396,
+          "sd_rating": 1.5732755382153765,
+          "n_users": 64444
+        },
+        {
+          "volume_band": "10-24",
+          "n_obs": 1532266,
+          "mean_rating": 7.729962357234302,
+          "sd_rating": 1.5407409985746383,
+          "n_users": 96082
+        },
+        {
+          "volume_band": "25-49",
+          "n_obs": 2538959,
+          "mean_rating": 7.518735663565166,
+          "sd_rating": 1.5270198448787244,
+          "n_users": 71818
+        },
+        {
+          "volume_band": "50-99",
+          "n_obs": 4008961,
+          "mean_rating": 7.378286688066843,
+          "sd_rating": 1.5074456069448832,
+          "n_users": 57086
+        },
+        {
+          "volume_band": "100-249",
+          "n_obs": 6772865,
+          "mean_rating": 7.203293289279138,
+          "sd_rating": 1.4906734332647236,
+          "n_users": 44077
+        },
+        {
+          "volume_band": "250-499",
+          "n_obs": 4943810,
+          "mean_rating": 6.972587679415188,
+          "sd_rating": 1.4971085796002321,
+          "n_users": 14421
+        },
+        {
+          "volume_band": "500-999",
+          "n_obs": 3246648,
+          "mean_rating": 6.766992512732945,
+          "sd_rating": 1.4894984828274245,
+          "n_users": 4851
+        },
+        {
+          "volume_band": "1000+",
+          "n_obs": 1514852,
+          "mean_rating": 6.480368508256826,
+          "sd_rating": 1.5578348175494228,
+          "n_users": 1062
+        }
+      ],
+      "raw_gap_1_vs_1000": 2.3461444799363926,
+      "raw_gap_low_vs_high": 1.5900306189447297
+    }
+  },
+  "comparison_table": {
+    "note": "Active is primary (16,627 games \u00d7 >=10 active users, minus strict, 24.5M obs); historical references are 16,627\u00d7all-users (25.3M obs) and full-snapshot 95,540\u00d7all-users (26.9M obs). Pooled gaps on active use 10-24 as low (since 1..9 excluded); historical gaps use 1 as low.",
+    "rows": [
+      {
+        "metric": "pooled_gap_low_vs_high",
+        "unit": "rating points",
+        "full_snapshot_95540": 2.457,
+        "filtered_16k_allusers": 2.346,
+        "active_10-24_vs_1000": 1.255,
+        "active_10-24_vs_500plus": 1.055,
+        "comment": "Active gaps smaller because low floor raised from 1 to 10; compare within-game gaps for selection vs level shift"
+      },
+      {
+        "metric": "within_game_gap_mean",
+        "unit": "rating points",
+        "full_snapshot_band1_vs_1000": 2.282,
+        "full_snapshot_low2_24_vs_500": 1.278,
+        "active_10-24_vs_1000": 1.108,
+        "active_10-49_vs_500plus": 0.829
+      },
+      {
+        "metric": "severity_spread_max_minus_min_mean_delta",
+        "unit": "rating points",
+        "full_snapshot": 2.089,
+        "active": 1.043,
+        "comment": "Ordered by lifetime volume; active spread excludes 1..9 bands so narrower"
+      },
+      {
+        "metric": "R2_game_identity_only",
+        "unit": "variance explained",
+        "full_snapshot": 0.23,
+        "active": 0.201
+      },
+      {
+        "metric": "R2_rater_identity_only",
+        "unit": "variance explained",
+        "full_snapshot": 0.249,
+        "active": 0.218
+      },
+      {
+        "metric": "R2_additive_both",
+        "unit": "variance explained",
+        "full_snapshot": 0.438,
+        "active": 0.394
+      },
+      {
+        "metric": "parity_reliability_pearson_min10_each_half",
+        "unit": "correlation",
+        "full_snapshot_min20": 0.872,
+        "active_min10": 0.877
+      },
+      {
+        "metric": "median_abs_delta_diff_parity",
+        "unit": "rating points",
+        "full_snapshot": 0.175,
+        "active_min10": 0.167
+      },
+      {
+        "metric": "n_obs",
+        "unit": "count",
+        "full_snapshot": 26924709,
+        "filtered_16k_allusers": 25335220,
+        "active": 24509788
+      },
+      {
+        "metric": "n_users",
+        "unit": "count",
+        "full_snapshot": 571248,
+        "filtered_16k_allusers": 544955,
+        "active": 288730,
+        "active_users_note": ">=10 active ratings minus 667 strict; 52.98% of filtered"
+      },
+      {
+        "metric": "n_games_with_ratings",
+        "unit": "count",
+        "full_snapshot": 95540,
+        "filtered_16k_allusers": 16567,
+        "active": 16564
+      }
+    ]
+  }
+}

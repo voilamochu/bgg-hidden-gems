@@ -1140,3 +1140,117 @@ SELECT r.* FROM rating_observations r
 **No Phase 2 statistical re-analysis, no change to the 16,627-game population** [Method note]. The 60 population games absent from the SQLite snapshot (recent high-game_id releases) remain absent here as well — snapshot mismatch, not a filter loss.
 
 **Reproduce:** `python scripts/24_build_active_phase2_extracts.py --input-dir scratch/phase2 --population scratch/phase2/bgg_research_population.parquet` (bounded memory, rerunnable; `docs/phase2-active/README.md` records exact invocation + source paths).
+
+## 2026-08-24: Refreshed Phase 2 statistical baseline on the active population (scripts/26, Phase 2-active)
+
+**Blocked by `bgg-active-extracts` (done: PR #5 merged) — re-estimates Phase 2 quantities that depend on the user/rating population on the exact active analytical population now that `data/processed/phase2-active/` exists. Historical reference artefacts under `data/processed/phase2/` (full snapshot, 95,540 games) and `data/processed/phase2-filtered/` (16,627 games × all users) remain untouched; the refreshed primary is the active 16,627 × ≥10 minus strict universe. Timestamp semantics remain unresolved — no time-based re-analysis; game-level Phase 1/RQ2 models not redone (population-agnostic by construction).**
+
+### Active population re-validated [Observed fact]
+
+- **Active size (exact):** 288,730 users / 24,509,788 observations on the 16,627-game research population; 16,564 distinct games have ≥1 active rating (99.98% of 16,567 filtered; 3 games lost) [Observed fact].
+- **Before exclusion (t≥10 on filtered counts):** 289,397 users / 24,558,361 ratings; strict exclusion removes 667 users / 48,573 obs (0.31% at n≥20, 0.19% of filtered obs) [Observed fact; matches `scripts/23` and recomputed here delta 0/0].
+- **Shares:** 96.74% of filtered obs (25,335,220), 52.98% of filtered users (544,955); 91.03% of full-snapshot obs (26,924,709); 50.54% of full rating users [Observed fact].
+- **Broad retained for sensitivity:** 3,325 active users have `is_degenerate_broad` (preserved, not excluded) [Observed fact].
+- **Validations passed [Observed fact]:** 0 game_id violations (all in 16,627 set); 0 users with cnt_filtered<10; 0 degenerate_strict in active; 0 strict observations; repeated pairs preserved (1,435 pairs / 2,962 obs, max 4); repeated `python scripts/26` run recreates identical counts.
+
+### What was re-estimated on the active set [Method]
+
+New rerunnable `scripts/26_phase2_active_baseline_refresh.py` (bounded `memory_limit=4GB`/`threads=4`/`temp_directory`, narrow aggregations, no wide-table bug, deterministic ordering, `EXPLAIN`-level semi-join discipline from scripts/24):
+
+1. **Same-game volume-band comparisons** — bands defined on *active* lifetime counts (`cnt_active = cnt_filtered` for retained users); active order is `10-24` .. `1000+` (7 bands; `1`/`2-4`/`5-9` do not exist after t=10). Raw band means, overlap (game and per-user shared ground), paired within-game contrasts (`min_cell=3`), and game-FE regression (`rating ~ band + game FE`, exact demeaning, cluster-robust SEs by game).
+2. **Per-user severity offsets** — two-way additive fit `rating = mu + game_alpha + user_delta` via alternating projections (120 iter max, tol 2e-3, mean-centered; 6–7 iterations to convergence on active). Outputs `data/processed/phase2-active/user_severity_active.parquet` (288,730 rows) / `game_adjusted_means_active.parquet` (16,564 rows) — gitignored artefacts, plus `active_band_cells.parquet` / `gap_cells_active.parquet` / `within_game_diffs_active_*.parquet`. Full-snapshot deltas NOT carried forward.
+3. **Stability/reliability** — even/odd `rating_observation_id` parity splits computed **within the active set** (no cross-half leakage); per-half counts from `half_counts` view; Pearson/Spearman, median |diff|, ICC-style reliability by band (signal/noise split `noise_half = sd(diff)/√2`, `reliability = Var(signal)/Var(total)`).
+4. **Gap decomposition** — game-mix standardization (common game-weight) vs severity-adjusted gap on active; primary low=`10-24` vs high=`500-999+1000+`, sensitivity wide low=`10-24+25-49` vs same high.
+5. **Other baseline quantities** — `R²(game)` / `R²(rater)` / `R²(both)` on active; per-user severity distribution and dispersion by count bucket; holdout prediction (fit one half, predict the other).
+
+### Results on the active set — and how they differ from previous populations [Empirical findings; previous full-snapshot values marked HISTORICAL]
+
+**Notation:** Active is **primary** (this entry). Full-snapshot (95,540 games × 571,248 users, 26.9M obs, `data/processed/phase2/*.json`) is **historical reference** — do not mix its parameters with active observations. Filtered 16,627×all-users (25.3M obs) is the intermediate reference; recomputed here for the gap comparison.
+
+**1. Raw band means and pooled gaps [Observed fact]:**
+
+| Band (active lifetime) | n_obs | mean_rating |
+|---:|---:|---:|
+| 10-24 | 1,529,269 | 7.726 |
+| 25-49 | 2,529,456 | 7.511 |
+| 50-99 | 3,998,084 | 7.372 |
+| 100-249 | 6,761,527 | 7.199 |
+| 250-499 | 4,939,774 | 6.971 |
+| 500-999 | 3,241,863 | 6.764 |
+| 1000+ | 1,509,815 | 6.471 |
+
+- **Pooled gaps (active):** `10-24` vs `1000+` = **+1.255** (n low 1.53M vs high 1.51M); `10-24` vs `500plus` (`500-999`+`1000+`) = **+1.055**; wider `10-49` vs `500plus` = +0.921 [Observed fact].
+- **HISTORICAL full-snapshot pooled gap (for contrast, different low floor):** `1` vs `1000+` = +2.457 on 95,540 games; +2.35 on 16,627×all-users filtered recomputed [Observed fact]. Active gaps are smaller because the low floor moved from 1 to 10 — the one-rating-user tail (mean 8.85, sd 1.74, 124k users in full snapshot) is excluded by design; compare **within-game** gaps to assess the level-shift pattern net of that truncation.
+
+**2. Within-game gaps survive on the same games [Empirical finding]:**
+
+| Contrast (active) | n_games paired (≥3 each side) | mean diff | median diff | share>0 |
+|---|---|---:|---:|---:|
+| `10-24` vs `1000+` | 14,473 | **+1.108** | 1.091 | 93.7% |
+| `25-49` vs `1000+` | 15,447 | +0.843 | 0.833 | 91.7% |
+| `10-49` vs `500plus` | 16,037 | **+0.829** | 0.804 | 94.6% |
+
+- **Game-FE regression (active, ref `1000+`) [Empirical finding]:** beta vs `1000+` — `10-24` **+1.058** (SE 0.009), `25-49` +0.843 (0.006), `50-99` +0.691 (0.005), `100-249` +0.521 (0.003), `250-499` +0.331 (0.002), `500-999` +0.188 (0.002); n=24.5M obs, 16,564 games; exact within-game demeaning, SEs clustered by game.
+- **HISTORICAL:** full-snapshot `1` vs `1000+` within-game mean +2.282 (96% >0); `10-24` vs `1000+` FE beta +1.053 — the active `10-24` vs `1000+` within-game gap (+1.108) is essentially the **same estimand** as the full-snapshot `10-24` vs `1000+` FE beta, confirming the ordered level shift persists after removing 1–9 raters [Empirical finding]. The `1` vs `1000+` extreme is not computable on active (no `1` band).
+
+**3. Severity offsets re-estimated on active [Empirical finding; model-dependent conclusion]:**
+
+- **ALS convergence [Observed fact]:** `mu = 7.144` (active grand mean; vs 7.123 full-snapshot); full fit 6 iter, final max change 0.0011; half fits 6–7 iter. Same alternating-projection recipe as `scripts/16` (no warm-start carryover of snapshot deltas).
+- **Severity by active band [Empirical finding]:** mean delta — `10-24` **+0.268**, `25-49` +0.042, `50-99` -0.111, `100-249` -0.273, `250-499` -0.462, `500-999` -0.598, `1000+` **-0.775**; ordered exactly as before, spread **1.043** points (max-min) vs **2.089** HISTORICAL spread that included the `1`..`5-9` tail (there `1` +0.838 → `1000+` -1.251). Restricting to the comparable `10-24`..`1000+` slice, HISTORICAL spread was 1.065 (`10-24` -0.213 → `1000+` -1.251 on the full snapshot) — active and historical agree that severity is monotonic with volume and large; the excluded 1–9 bands accounted for ~1 point of the full 2.09-point HISTORICAL spread.
+- **Severity distribution [Observed fact]:** n=288,730 users with delta; mean 0 (centered), sd ~0.66 (dispersion bucket sd_delta 0.73 at bucket 0 (mean n≈16) → 0.60 at bucket 2 (mean n≈96), consistent with measurement noise shrinking with volume). P5/P50/P95 shifts analogous to HISTORICAL but re-centered at higher mu.
+- **Game-level adjustment [Empirical finding]:** `pearson(raw_mean, adj_mean)=0.979`, `spearman=0.980` on active (vs 0.903/0.909 HISTORICAL where low-volume 1-rated outliers were present); `corr(n_obs, shift)=0.017` (vs 0.033 HISTORICAL); shift quantiles P5/median/P95 = 0.02 / 0.29 / 0.56 (HISTORICAL  -0.56 / 0.67 / 1.47 — active shifts smaller because the 1-rated spike is gone and mu is higher).
+
+**4. Stability / reliability on active [Empirical finding]:**
+
+- **Parity stability [Empirical finding]:** active `min10 each half` — Pearson **0.877**, Spearman 0.854, median abs delta-diff **0.167**, p90 0.534, sd_even 0.671, sd_diff 0.333; n=200,264 users with ≥10 per half. HISTORICAL full-snapshot (`min20 each half`) was Pearson 0.872, median diff 0.175 (n=223k). Active stricter `min20 each half` reaches Pearson **0.922** (n=132,253) — stability **rises or is maintained** after moving to the active population.
+- **Reliability by band (ICC-style, min 10 per half) [Empirical finding]:** `10-24` 0.735 (n=10,528 half-split users), `25-49` 0.803, `50-99` 0.888, `100-249` 0.946, `250-499` 0.978, `500-999` 0.989, `1000+` 0.995. HISTORICAL full-snapshot values at same bands were 0.735, 0.812, 0.893, 0.947, 0.978, 0.989, 0.996 — **indistinguishable**; reliability ≥0.89 at ≥50 obs holds on active as before [Supported conclusion].
+- **Placebo mismatched correlation:** ~0.00 (deterministic roll), confirming parity correlation is not artifactual [Observed fact].
+
+**5. Gap decomposition on active [Empirical finding; model-dependent conclusion]:**
+
+- **Raw gap (active primary `10-24` vs `500plus`)** = 1.055 points.
+- **Standardized (common-game-weight) raw gap** = 0.892 (active) vs 1.389 HISTORICAL broad gap; game-mix explains only ~0.16 on active (15% of raw) and ~0.30 on full — the gap barely moves when games are held fixed.
+- **Severity-adjusted standardized gap** = **-0.034** on active (wide low variant -0.017) vs +0.012 HISTORICAL [Empirical finding]: subtracting the stable additive severity offset closes the standardized gap to near zero **on the active set as well**. This replicates the central Phase 2 decomposition result: the rating gap is almost entirely an additive rater-level level difference, not game composition [Supported conclusion; model-dependent on additive severity].
+- **Support overlap [Observed fact]:** share of low-band obs on games also rated by high band remains high (active and HISTORICAL both >90% on shared games), so the contrast is not driven by disjoint game sets.
+
+**6. Variance and prediction baseline on active [Empirical finding]:**
+
+- **Nested R² (active):** `R²(game)=0.201` (HISTORICAL 0.230), `R²(rater)=0.218` (0.249), `R²(both additive)=0.394` (0.438) [Empirical finding]. Additive fit explains slightly less variance on active — expected because truncating the extreme low-volume tail removes some between-rater variance (low-volume extremes inflated rater R² on full snapshot).
+- **Holdout prediction (parity halves, active) [Empirical finding]:** fit even→predict odd RMSE: game-only 1.472 → with user severity **1.238** (raw train game mean 1.372; mae 1.084→0.907). Odd→even same (1.473→1.238). HISTORICAL full-snapshot holdout was 1.772→1.316 (game-only RMSE higher there because low-volume games are noisier). On both populations, adding delta_u **reduces** out-of-sample error — severity is not just in-sample fitting [Empirical finding; prediction claim, not accuracy vs ground truth].
+
+### Small comparison table — refreshed primary vs historical reference [Observed fact]
+
+Active is **refreshed primary** for Phase 3; historical is **not** primary (do not mix its parameters with active observations). Pooled gaps on active use `10-24` as low (since `1`..`9` excluded); historical gaps use `1` as low.
+
+| Metric | Full snapshot HISTORICAL (95,540×all users, 26.9M obs) | Filtered 16,627×all-users HISTORICAL (25.3M obs) | Active **PRIMARY** (16,627×≥10 minus strict, 24.5M obs) |
+|---|---:|---:|---:|
+| Pooled gap low vs high (rating pts) | `1` vs `1000+` 2.457 | `1` vs `1000+` 2.346 | `10-24` vs `1000+` **1.255** ; `10-24` vs `500plus` **1.055** |
+| Within-game gap mean | `1` vs `1000+` 2.282 ; `low2-24` vs `500plus` 1.278 | — (same game mix as active; not refit here) | `10-24` vs `1000+` **1.108** ; `10-49` vs `500plus` **0.829** |
+| Severity spread (max-min mean_delta) | 2.089 (`1` +0.84 → `1000+` -1.25) | — | **1.043** (`10-24` +0.27 → `1000+` -0.78); comparable slice HIST. `10-24`→`1000+` was 1.07 |
+| R²(game) / R²(rater) / R²(both) | 0.230 / 0.249 / 0.438 | — | **0.201 / 0.218 / 0.394** |
+| Parity reliability Pearson (min10 each half) | 0.872 (min20) | — | **0.877** (min10, n=200k); min20 0.922 |
+| Median |delta diff| parity | 0.175 | — | **0.167** |
+| n_obs / n_users / n_games | 26.9M / 571k / 95,540 | 25.3M / 545k / 16,567 | **24.5M** / **288,730** (53% of filtered) / **16,564** |
+
+**Interpretation [Model-dependent conclusion]:** the low-vs-high volume rating level difference remains large and almost entirely explained by stable additive per-user severity on the active population, exactly as on the full snapshot. Moving to the active population truncates the extreme 1–9 tail (which contributed ~1 point to the full 2.46-point pooled gap) but leaves the ordered severity structure, within-game gaps, game-FE betas, and ICC reliabilities essentially unchanged on the overlapping bands. No evidence here that selection into the 1–9 tail was a different phenomenon — it extends the same gradient.
+
+### What changes for Phase 3 [Implication]
+
+- **Phase 3 MUST use the refreshed severity baseline** (`data/processed/phase2-active/user_severity_active.parquet` + `game_adjusted_means_active.parquet` from `scripts/26`), not the older `data/processed/phase2/user_severity.parquet` full-snapshot deltas. The two baselines differ in centering (`mu` 7.144 vs 7.123) and in the excluded tail; mixing them with active observations violates the population definition.
+- **Deltas to carry forward [Method]:** `user_severity_active` is one row per active user (fields `user_pseudouserid`, `volume_band` (active cnt), `rating_observations_active`, `is_degenerate_broad`, `delta_full`, `delta_even`, `delta_odd`); game deltas via `game_adjusted_means_active` (`game_id`, `game_alpha`, `n_obs`, `raw_mean`, `adj_mean`). Historical full-snapshot `user_severity.parquet` / `game_adjusted_means.parquet` are now labelled **historical reference**; do not join them to `rating_observations_active`.
+- **Threshold interaction [Supported conclusion]:** the t=10 primary / t=20 sensitivity tiers from `scripts/23` remain valid on active; ICC at 50+ is ≥0.92 on both populations, and game coverage loss stays at 3 games — the refreshed numbers do not change that roadmap.
+- **No timestamp re-analysis** [Method note]: `postdate`/`rating_tstamp` semantics remain unresolved (AGENTS.md); time-based results continue under both readings as hypothesis-grade where used, unchanged.
+
+### Limitations carried over and still open [Limitation / Assumption]
+
+- **Severity is a descriptive level difference, not credibility or causal disposition** [Assumption / Limitation] — same AGENTS.md / `scripts/15–18` interpretation on active: low-vs-high-volume gap equals additive offsets does not say heavy raters are more “correct.”
+- **Game-level RQ2 residual models are population-agnostic and not redone here** [Method note] — they remain comparable across populations.
+- **Within-game selection beyond additive level (enthusiasm trajectories vs scale anchoring) still unidentified** on active as on full [Unresolved hypothesis].
+- **Method checks re-applied on active** [Method]: parity correlations computed within the active set only (half-counts from `half_counts` view, no cross-half leakage); narrow aggregations via `active_band_cells.parquet`; bounded `memory_limit=4GB`/`threads=4`/`temp_directory`; key numbers SQL-anchored (active obs/users vs `validation.json` filtered anchor).
+
+### Artefacts and reproduce [Method]
+
+- **Rerunnable:** `python scripts/26_phase2_active_baseline_refresh.py --active-dir data/processed/phase2-active --population data/processed/bgg_research_population.parquet --phase2-dir data/processed/phase2` (fails closed if `data/processed/phase2-active/` missing; deterministic; ~60s ALS on 24.5M×288k). Artefacts under `data/processed/phase2-active/` (gitignored) plus validation JSON next to them; committed summary copy for review at `docs/phase2-active/active_baseline_refresh.json` (this entry's comparison table).
+- **Outputs described above** plus validation at `data/processed/phase2-active/active_baseline_validation.json` (also checked: 0 violations, delta_obs 0, delta_users 0).
+
+
