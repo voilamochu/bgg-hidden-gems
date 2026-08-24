@@ -1073,3 +1073,25 @@ Phase 3 restarts on `data/processed/phase2-filtered/rating_observations_filtered
 **Phase 3 availability under the recommended primary (t=10, filtered universe): 289,397 users and 24,558,361 ratings (96.9% of the 25.34M in-universe ratings; 16,390 of 16,567 rated games still have ≥10 retained raters). Sensitivity tier t=20: 217,102 users / 23,547,280 ratings.**
 
 **[Limitation / classification]** This threshold defines where *per-user statistics become statistically usable*; it is NOT a credibility finding — excluded users are not worse raters (AGENTS.md: volume is entangled activity/exposure, and the low-volume level gap is stable additive severity, not error). Their ratings still inform game-level aggregates in pooled analyses; the threshold binds only analyses that condition on per-user quantities (severity estimation, calibration/discernment, taste profiles). Thresholds must always be stated with their lifetime-count definition (filtered-universe counts here; full-snapshot counts would be more inclusive for the same numeric t).
+
+## 2026-08-24: Anomalous / low-informative rater audit on the filtered universe (scripts/25)
+
+**Scope.** All 544,955 raters / 25.3M observations of the 16,627-game filtered universe; per-user rating-distribution shape (scale diversity, near-constancy, modal concentration, binary usage) by lifetime *filtered* count thresholds {1,3,5,10,20,50,100} and Phase 2 volume bands. Definitions and full tables: `docs/phase2-anomalous-audit/SUMMARY.md`; outputs in `data/processed/phase2-audit-anomalous/`. Independent of and concurrent with the lifetime-threshold study.
+
+### Findings
+
+1. **Degenerate rating patterns collapse with history length but leave a persistent heavy-rater tail [Empirical finding]:** `degenerate_strict` (n≥20 AND single-value OR SD<0.2 OR modal≥95%) affects 0.31% of n≥20 users, 0.21% at n≥50, 0.15% at n≥100 — versus ≈0% chance under both null models (uniform 1–10; iid empirical, 200k reps). By band it declines to 0.08% at 250–499 then rises to 0.14% (500–999) / 0.28% (1000+); small absolute counts (~3–7 users), suggestive only.
+2. **Tiny-n flagging is uninformative [Method note]:** below n≈10 flags are arithmetic artifacts (24.3% of all users are "single-value" only because n=1); observed n≤5 rates are comparable to or BELOW the iid-empirical null (n≥3 single-value 2.43% vs 4.59% null).
+3. **Binary usage is mostly honest small-n grading [Empirical finding]:** among 53,945 exact-two-value users, {9,10}+{8,9}+{8,10} = 62%; extreme {1,10} is 1.83% (985 users, median n=3; only 86 with n≥20). "Binary" alone is not an anomaly class.
+4. **Flagged heavy raters rate broadly and popularly, near-constant HIGH [Empirical finding]:** the 667 strict users have median 40 distinct games, median host-game volume 7,927 obs (vs 12,821 for other n≥20 raters), 0.8% niche share, mean rating 9.64 vs 7.38. Not a niche-enthusiasm pattern. Whether this is enthusiasm-plus-selection vs automation/identity multi-rating is NOT identifiable from this data [speculation kept open].
+5. **Removal would be negligible at the aggregate level, and nearly so per game [Observed fact]:** strict composite = 667 users / 48.6k obs (0.19% of observations); broad composite = 0.61%. Only 85 of 12,593 touched games get ≥5% of their observations from broad-flagged users (p99 share 4.2%, max 100% for a few tiny games).
+6. **Filtered-vs-full count basis barely moves users across thresholds [Observed fact]:** corr(filtered n, full-snapshot n)=0.991; 0 of 121,497 filtered-n≥50 users fall below 50 on the full basis.
+
+### Recommendation
+
+- **Flag, don't exclude, by default:** carry `degenerate_broad`/`degenerate_strict` as sensitivity flags into Phase 3 taste analysis; run one variant excluding the strict composite (n≥20) as a shortlist-stability check.
+- The flagged-tail signature (near-constant offset) is the additive rater-level effect severity adjustment already absorbs; exclusion or reliability weighting would double-count an existing correction [model-dependent conclusion].
+- Patterns are rare enough to ignore at **n≥50**; worth flagging at n=10–50; uninformative below n=10.
+- Interaction with the threshold study (merged, `scripts/23_user_threshold_study.py`, t=10 primary / t=20 sensitivity): no exclusion floor needed from this side. The two recommendations are complementary and consistent: their t=10/t=20 floors sit exactly where this audit finds raw flag rates become interpretable (below n≈10 flags are artifacts; 10–50 worth flagging); at their primary t=10 population (289,397 users), `degenerate_strict`-class contamination is ~0.2–0.3% of users and ≤0.19% of ratings — negligible for pooled game means, and the flags should simply travel with the user table as sensitivity markers.
+
+Open: whether the 1000+ uptick is real needs user-level inspection beyond counts; per-game impact for the 15 games with ≥20% flagged share unchecked game-by-game.
