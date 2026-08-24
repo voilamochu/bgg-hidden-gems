@@ -1,0 +1,122 @@
+{
+  "validation": {
+    "violations_game_id_not_in_population": 0,
+    "min_cnt_filtered_among_active": 10,
+    "violations_cnt_filtered_lt10": 0,
+    "violations_degenerate_strict_in_active": 0,
+    "degenerate_broad_retained": 3325,
+    "active_observations": 24509788,
+    "active_users": 288730,
+    "active_distinct_games": 16564,
+    "source_full_observations_reference": 26924709,
+    "expected_active_observations": 24509788,
+    "expected_active_users": 288730,
+    "delta_obs_vs_expected": 0,
+    "delta_users_vs_expected": 0,
+    "filtered_reference": {
+      "observations": 25335220,
+      "users": 544955,
+      "games_with_ratings": 16567,
+      "share_active_vs_filtered_obs": 0.96742,
+      "share_active_vs_filtered_users": 0.529824,
+      "games_lost_vs_filtered": 3
+    },
+    "t10_expectation": {
+      "users_before_exclusion": 289397,
+      "ratings_before_exclusion": 24558361,
+      "strict_users_removed": 667,
+      "strict_obs_removed": 48573,
+      "expected_active_users": 288730,
+      "expected_active_ratings": 24509788
+    }
+  },
+  "retained_population_checks": "all passed (0 violations)",
+  "comparison_table": {
+    "note": "Active is primary (16,627 games \u00d7 >=10 active users, minus strict, 24.5M obs); historical references are 16,627\u00d7all-users (25.3M obs) and full-snapshot 95,540\u00d7all-users (26.9M obs). Pooled gaps on active use 10-24 as low (since 1..9 excluded); historical gaps use 1 as low.",
+    "rows": [
+      {
+        "metric": "pooled_gap_low_vs_high",
+        "unit": "rating points",
+        "full_snapshot_95540": 2.457,
+        "filtered_16k_allusers": 2.346,
+        "active_10-24_vs_1000": 1.255,
+        "active_10-24_vs_500plus": 1.055,
+        "comment": "Active gaps smaller because low floor raised from 1 to 10; compare within-game gaps for selection vs level shift"
+      },
+      {
+        "metric": "within_game_gap_mean",
+        "unit": "rating points",
+        "full_snapshot_band1_vs_1000": 2.282,
+        "full_snapshot_low2_24_vs_500": 1.278,
+        "active_10-24_vs_1000": 1.108,
+        "active_10-49_vs_500plus": 0.829
+      },
+      {
+        "metric": "severity_spread_max_minus_min_mean_delta",
+        "unit": "rating points",
+        "full_snapshot": 2.089,
+        "active": 1.043,
+        "comment": "Ordered by lifetime volume; active spread excludes 1..9 bands so narrower"
+      },
+      {
+        "metric": "R2_game_identity_only",
+        "unit": "variance explained",
+        "full_snapshot": 0.23,
+        "active": 0.201
+      },
+      {
+        "metric": "R2_rater_identity_only",
+        "unit": "variance explained",
+        "full_snapshot": 0.249,
+        "active": 0.218
+      },
+      {
+        "metric": "R2_additive_both",
+        "unit": "variance explained",
+        "full_snapshot": 0.438,
+        "active": 0.394
+      },
+      {
+        "metric": "parity_reliability_pearson_min10_each_half",
+        "unit": "correlation",
+        "full_snapshot_min20": 0.872,
+        "active_min10": 0.877
+      },
+      {
+        "metric": "median_abs_delta_diff_parity",
+        "unit": "rating points",
+        "full_snapshot": 0.175,
+        "active_min10": 0.167
+      },
+      {
+        "metric": "n_obs",
+        "unit": "count",
+        "full_snapshot": 26924709,
+        "filtered_16k_allusers": 25335220,
+        "active": 24509788
+      },
+      {
+        "metric": "n_users",
+        "unit": "count",
+        "full_snapshot": 571248,
+        "filtered_16k_allusers": 544955,
+        "active": 288730,
+        "active_users_note": ">=10 active ratings minus 667 strict; 52.98% of filtered"
+      },
+      {
+        "metric": "n_games_with_ratings",
+        "unit": "count",
+        "full_snapshot": 95540,
+        "filtered_16k_allusers": 16567,
+        "active": 16564
+      }
+    ]
+  },
+  "generated_at": "2026-08-24T04:20:48Z",
+  "artefacts": {
+    "user_severity_active": "data/processed/phase2-active/user_severity_active.parquet",
+    "game_adjusted_means_active": "data/processed/phase2-active/game_adjusted_means_active.parquet",
+    "active_band_cells": "data/processed/phase2-active/active_band_cells.parquet",
+    "gap_cells_active": "data/processed/phase2-active/gap_cells_active.parquet"
+  }
+}

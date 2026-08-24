@@ -70,10 +70,14 @@ retained. Filtering uses explicit SEMI JOINs on `game_id` / `user_pseudouserid`.
 | `data/processed/phase2/user_ratings.parquet` | (none) | (reused) | Compact alternate snapshot; username namespace does not join to users (non-canonical) | n/a | not filtered | (reused via filtered) | n/a | n/a | n/a |
 
 Derived Phase 2 artifacts (`rater_stats`, `rater_behavior_by_volume`,
-`user_severity`, `game_adjusted_means`) remain FULL-SNAPSHOT artifacts
-under `data/processed/phase2/`; re-estimation on the active universe is the
-follow-up taste task's deliverable. Do not mix filtered/active observations
-with full-snapshot fit artifacts.
+`user_severity`, `game_adjusted_means`) on the full snapshot remain under
+`data/processed/phase2/` as **historical reference**. Re-estimation on the
+active universe (the refreshed baseline) is now complete: `scripts/26_phase2_active_baseline_refresh.py`
+produces `user_severity_active.parquet` / `game_adjusted_means_active.parquet`
+and `active_baseline_refresh.json` / `active_baseline_validation.json` under
+`data/processed/phase2-active/` (gitignored). Do not mix filtered/active
+observations with full-snapshot fit artefacts — Phase 3 must use the active
+severity baseline, not the historical reference deltas.
 
 ## Counts and validation (this build)
 
@@ -101,12 +105,36 @@ Detailed checks: `validation.json`; row counts: `extract_counts.json` / `parquet
   and scripts 15–22 fit artifacts are historical reference for that universe — do not mix
   filtered/active observations with full-snapshot parameters.
 
+## Refreshed Phase 2 baseline on the active population (scripts/26)
+
+Re-estimates Phase 2 quantities that depend on the user/rating population on the
+active extracts (see `findings.md` 2026-08-24 entry and committed copy
+`docs/phase2-active/active_baseline_refresh.json`). Key refreshed numbers
+(primary for Phase 3; full-snapshot values are historical reference):
+
+- **Raw band means (active):** 10-24 7.726 → 1000+ 6.471; pooled gap `10-24` vs `1000+` **+1.255** (vs HISTORICAL `1` vs `1000+` +2.46); within-game gap `10-24` vs `1000+` **+1.108** (94% >0) replicates the HISTORICAL `10-24` FE beta +1.053.
+- **Severity offsets (active, ALS mu=7.144):** mean delta `10-24` +0.27 → `1000+` -0.78 (spread 1.04); HISTORICAL `1`→`1000+` spread 2.09 included the excluded 1–9 tail.
+- **Stability:** parity Pearson **0.877** (min10 each half, n=200k; median |diff| 0.167), min20 0.922; reliability ≥0.89 at ≥50 obs — indistinguishable from HISTORICAL.
+- **R² (active):** game 0.201 / rater 0.218 / both 0.394 (HISTORICAL 0.230/0.249/0.438); holdout RMSE game-only 1.472 → with severity **1.238**.
+- **Gap decomposition (active):** standardized raw gap 0.89 → severity-adjusted **-0.03** (HISTORICAL +0.01) — the rating gap is again closed by additive severity, not game mix.
+
+Active severity artefacts for Phase 3: `data/processed/phase2-active/user_severity_active.parquet`
+and `game_adjusted_means_active.parquet` (one row per active user / per game with ≥1 active rating).
+Committed validation copy: `docs/phase2-active/active_baseline_validation.json`.
+
 ## Reproduce
 
 ```bash
+# Active extracts (prerequisite, once)
 python scripts/24_build_active_phase2_extracts.py \
     --input-dir scratch/phase2 \
     --population scratch/phase2/bgg_research_population.parquet
+
+# Refreshed baseline on the active population
+python scripts/26_phase2_active_baseline_refresh.py \
+    --active-dir data/processed/phase2-active \
+    --population scratch/phase2/bgg_research_population.parquet \
+    --phase2-dir data/processed/phase2
 ```
-In worktrees without local base extracts, point `--input-dir` at the copied extracts
-(e.g. `scratch/phase2`) and `--population` at `scratch/phase2/bgg_research_population.parquet`.
+In worktrees without local base extracts, point `--input-dir`/`--active-dir` at the copied extracts
+(e.g. `scratch/phase2`) and `--population` at `scratch/phase2/bgg_research_population.parquet`. The refresh script fails closed if `data/processed/phase2-active/` is missing.
