@@ -1,0 +1,731 @@
+{
+  "generated_at": "2026-08-24T16:30:47Z",
+  "seed": 42,
+  "populations": {
+    "provisional": {
+      "population": "provisional",
+      "mu": 7.144007675729601,
+      "sigma2_resid": 1.4258034236581039,
+      "var_resid": 1.4258034236581039,
+      "mean_resid": -0.21784137311592114,
+      "n_total": 24509788,
+      "n_users": 288730,
+      "tau": {
+        "18XX": 0.001,
+        "Wargame": 0.33326548740987955,
+        "Party": 0.31814496031593775,
+        "Economic": 0.001,
+        "Coop": 0.25063795053374127,
+        "Legacy": 0.530776582702958
+      },
+      "tau2": {
+        "18XX": 1e-06,
+        "Wargame": 0.11106588509854459,
+        "Party": 0.10121621577442962,
+        "Economic": 1e-06,
+        "Coop": 0.06281938224775413,
+        "Legacy": 0.28172378074583004
+      },
+      "per_flag": [
+        {
+          "flag": "18XX",
+          "tau": 0.001,
+          "tau2": 1e-06,
+          "tau_even": 0.001,
+          "tau_odd": 0.001,
+          "n_users_ge1": 10842,
+          "n_users_ge5": 2095,
+          "n_users_ge10": 932,
+          "gamma_stats": {
+            "mean_shrunk": -6.607669298719205e-09,
+            "sd_shrunk": 5.862491815177458e-07,
+            "p50_shrunk": 0.0,
+            "p90_shrunk": 0.0,
+            "mean_raw": -0.010726109316235863,
+            "sd_raw": 0.246546580777212
+          },
+          "stability": {
+            "r": 0.7224984191834796,
+            "spearman": 0.5543489827246361,
+            "n_overlap": 1350,
+            "pass": true
+          },
+          "distinctness": {
+            "r_gamma_delta": -0.10131923238815638,
+            "abs": 0.10131923238815638,
+            "pass": false
+          },
+          "materiality": {
+            "approx_r2_gain": 1.141267389823418e-09,
+            "approx_rmse_improvement": 6.813765107693825e-10,
+            "prevalence": 0.0016298794587696964,
+            "pass": false
+          },
+          "gates": {
+            "stability": true,
+            "distinctness": false,
+            "materiality": false
+          },
+          "p_raw": 0.85,
+          "p_bh": 0.85,
+          "bh_pass": false,
+          "overall_pass": false
+        },
+        {
+          "flag": "Wargame",
+          "tau": 0.33326548740987955,
+          "tau2": 0.11106588509854459,
+          "tau_even": 0.3087237876345779,
+          "tau_odd": 0.30799490436302474,
+          "n_users_ge1": 206361,
+          "n_users_ge5": 82570,
+          "n_users_ge10": 42302,
+          "gamma_stats": {
+            "mean_shrunk": -0.04119661154833381,
+            "sd_shrunk": 0.15529807163054457,
+            "p50_shrunk": 0.0,
+            "p90_shrunk": 0.09445013682835271,
+            "mean_raw": -0.17713585169797433,
+            "sd_raw": 0.7925899464286963
+          },
+          "stability": {
+            "r": 0.48306944057750956,
+            "spearman": 0.38599236365316153,
+            "n_overlap": 57124,
+            "pass": false
+          },
+          "distinctness": {
+            "r_gamma_delta": 0.0337985978948498,
+            "abs": 0.0337985978948498,
+            "pass": true
+          },
+          "materiality": {
+            "approx_r2_gain": 0.005016901082203746,
+            "approx_rmse_improvement": 0.002999032000721602,
+            "prevalence": 0.06919174494695751,
+            "pass": true
+          },
+          "gates": {
+            "stability": false,
+            "distinctness": true,
+            "materiality": true
+          },
+          "p_raw": 1e-06,
+          "p_bh": 1.5e-06,
+          "bh_pass": true,
+          "overall_pass": false
+        },
+        {
+          "flag": "Party",
+          "tau": 0.31814496031593775,
+          "tau2": 0.10121621577442962,
+          "tau_even": 0.30474244696402714,
+          "tau_odd": 0.30623705738505685,
+          "n_users_ge1": 228486,
+          "n_users_ge5": 117878,
+          "n_users_ge10": 63717,
+          "gamma_stats": {
+            "mean_shrunk": -0.04953829837579053,
+            "sd_shrunk": 0.1608607316975019,
+            "p50_shrunk": -0.004452247214280255,
+            "p90_shrunk": 0.10363757717198169,
+            "mean_raw": -0.17203128324556805,
+            "sd_raw": 0.7269440446293288
+          },
+          "stability": {
+            "r": 0.4490416059001908,
+            "spearman": 0.3730506705115253,
+            "n_overlap": 84190,
+            "pass": false
+          },
+          "distinctness": {
+            "r_gamma_delta": 0.06648189485960224,
+            "abs": 0.06648189485960224,
+            "pass": true
+          },
+          "materiality": {
+            "approx_r2_gain": 0.005503676186482871,
+            "approx_rmse_improvement": 0.0032904212098485708,
+            "prevalence": 0.08470334382329214,
+            "pass": true
+          },
+          "gates": {
+            "stability": false,
+            "distinctness": true,
+            "materiality": true
+          },
+          "p_raw": 1e-06,
+          "p_bh": 1.5e-06,
+          "bh_pass": true,
+          "overall_pass": false
+        },
+        {
+          "flag": "Economic",
+          "tau": 0.001,
+          "tau2": 1e-06,
+          "tau_even": 0.16974695654994973,
+          "tau_odd": 0.001,
+          "n_users_ge1": 268832,
+          "n_users_ge5": 171628,
+          "n_users_ge10": 106175,
+          "gamma_stats": {
+            "mean_shrunk": -2.1165180338963392e-06,
+            "sd_shrunk": 6.230084339939467e-06,
+            "p50_shrunk": -7.925375349624965e-07,
+            "p90_shrunk": 1.2874965523443798e-06,
+            "mean_raw": -0.22759285264924417,
+            "sd_raw": 0.61568569391528
+          },
+          "stability": {
+            "r": 0.5344998171462833,
+            "spearman": 0.37958343454878507,
+            "n_overlap": 130956,
+            "pass": true
+          },
+          "distinctness": {
+            "r_gamma_delta": 0.08887148050309576,
+            "abs": 0.08887148050309576,
+            "pass": false
+          },
+          "materiality": {
+            "approx_r2_gain": 9.887707795071967e-08,
+            "approx_rmse_improvement": 5.903308286647757e-08,
+            "prevalence": 0.1698171359132115,
+            "pass": false
+          },
+          "gates": {
+            "stability": true,
+            "distinctness": false,
+            "materiality": false
+          },
+          "p_raw": 0.85,
+          "p_bh": 0.85,
+          "bh_pass": false,
+          "overall_pass": false
+        },
+        {
+          "flag": "Coop",
+          "tau": 0.25063795053374127,
+          "tau2": 0.06281938224775413,
+          "tau_even": 0.2318843680879935,
+          "tau_odd": 0.22972980998405818,
+          "n_users_ge1": 264915,
+          "n_users_ge5": 161160,
+          "n_users_ge10": 95100,
+          "gamma_stats": {
+            "mean_shrunk": -0.05223067114323608,
+            "sd_shrunk": 0.12532225428961916,
+            "p50_shrunk": -0.029879402190628672,
+            "p90_shrunk": 0.0658708492982991,
+            "mean_raw": -0.24246468995464668,
+            "sd_raw": 0.7022626672028405
+          },
+          "stability": {
+            "r": 0.413313445211424,
+            "spearman": 0.3048320332423304,
+            "n_overlap": 120599,
+            "pass": false
+          },
+          "distinctness": {
+            "r_gamma_delta": 0.11694265171248935,
+            "abs": 0.11694265171248935,
+            "pass": false
+          },
+          "materiality": {
+            "approx_r2_gain": 0.005092674879096049,
+            "approx_rmse_improvement": 0.0030443863872893218,
+            "prevalence": 0.13337728584188488,
+            "pass": true
+          },
+          "gates": {
+            "stability": false,
+            "distinctness": false,
+            "materiality": true
+          },
+          "p_raw": 1e-06,
+          "p_bh": 1.5e-06,
+          "bh_pass": true,
+          "overall_pass": false
+        },
+        {
+          "flag": "Legacy",
+          "tau": 0.530776582702958,
+          "tau2": 0.28172378074583004,
+          "tau_even": 0.5695629457375802,
+          "tau_odd": 0.573727478977683,
+          "n_users_ge1": 117376,
+          "n_users_ge5": 13415,
+          "n_users_ge10": 1623,
+          "gamma_stats": {
+            "mean_shrunk": -0.005896754008597125,
+            "sd_shrunk": 0.18479167433852237,
+            "p50_shrunk": 0.0,
+            "p90_shrunk": 0.14716316098743826,
+            "mean_raw": -0.03543334973078342,
+            "sd_raw": 0.8319975597176609
+          },
+          "stability": {
+            "r": 0.33749285046133526,
+            "spearman": 0.2703879593693996,
+            "n_overlap": 5033,
+            "pass": false
+          },
+          "distinctness": {
+            "r_gamma_delta": -0.0020783244137628047,
+            "abs": 0.0020783244137628047,
+            "pass": true
+          },
+          "materiality": {
+            "approx_r2_gain": 0.0022162642671921997,
+            "approx_rmse_improvement": 0.0013239214036360192,
+            "prevalence": 0.01134522256985658,
+            "pass": false
+          },
+          "gates": {
+            "stability": false,
+            "distinctness": true,
+            "materiality": false
+          },
+          "p_raw": 1e-06,
+          "p_bh": 1.5e-06,
+          "bh_pass": true,
+          "overall_pass": false
+        }
+      ],
+      "heldout_joint": {
+        "n_test": 24509788,
+        "sst": 57697471.950887166,
+        "sse_baseline": 36109246.870043166,
+        "sse_with_gamma": 35610487.41105889,
+        "r2_baseline": 0.37416240869652273,
+        "r2_with_gamma": 0.3828067988599051,
+        "r2_gain": 0.008644390163382365,
+        "rmse_baseline": 1.21377848779153,
+        "rmse_with_gamma": 1.205366646360628,
+        "rmse_improvement": 0.008411841430902012,
+        "per_half": {
+          "odd_test_even_train": {
+            "n": 12254645,
+            "mse_base": 1.472672501744136,
+            "mse_gamma": 1.4490687814864112
+          },
+          "even_test_odd_train": {
+            "n": 12255143,
+            "mse_base": 1.4738439331068514,
+            "mse_gamma": 1.4567487228309244
+          }
+        }
+      },
+      "flags_view": "active_game_flags",
+      "ro_path": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-active/rating_observations_active.parquet",
+      "severity_path": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-active/user_severity_active.parquet",
+      "game_means_path": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-active/game_adjusted_means_active.parquet"
+    },
+    "confirmed": {
+      "population": "confirmed",
+      "mu": 7.139007726394243,
+      "sigma2_resid": 1.4242984172963622,
+      "var_resid": 1.4242984172963622,
+      "mean_resid": -0.25588660784794365,
+      "n_total": 24146307,
+      "n_users": 287302,
+      "tau": {
+        "18XX": 0.001,
+        "Wargame": 0.32881010038598757,
+        "Party": 0.3167754580699753,
+        "Economic": 0.001,
+        "Coop": 0.24951061374942377,
+        "Legacy": 0.5264271032695033
+      },
+      "tau2": {
+        "18XX": 1e-06,
+        "Wargame": 0.10811608211584324,
+        "Party": 0.10034669083544268,
+        "Economic": 1e-06,
+        "Coop": 0.062255546373614135,
+        "Legacy": 0.27712549505672024
+      },
+      "per_flag": [
+        {
+          "flag": "18XX",
+          "tau": 0.001,
+          "tau2": 1e-06,
+          "tau_even": 0.001,
+          "tau_odd": 0.001,
+          "n_users_ge1": 10831,
+          "n_users_ge5": 2093,
+          "n_users_ge10": 930,
+          "gamma_stats": {
+            "mean_shrunk": -6.862168998708569e-09,
+            "sd_shrunk": 5.864782129685528e-07,
+            "p50_shrunk": 0.0,
+            "p90_shrunk": 0.0,
+            "mean_raw": -0.010861378431559283,
+            "sd_raw": 0.24727133607477622
+          },
+          "stability": {
+            "r": 0.7209590835509514,
+            "spearman": 0.5529664271585182,
+            "n_overlap": 1346,
+            "pass": true
+          },
+          "distinctness": {
+            "r_gamma_delta": -0.10329384808319164,
+            "abs": 0.10329384808319164,
+            "pass": false
+          },
+          "materiality": {
+            "approx_r2_gain": 1.156976558596752e-09,
+            "approx_rmse_improvement": 6.90390855595524e-10,
+            "prevalence": 0.0016506043760646297,
+            "pass": false
+          },
+          "gates": {
+            "stability": true,
+            "distinctness": false,
+            "materiality": false
+          },
+          "p_raw": 0.85,
+          "p_bh": 0.85,
+          "bh_pass": false,
+          "overall_pass": false
+        },
+        {
+          "flag": "Wargame",
+          "tau": 0.32881010038598757,
+          "tau2": 0.10811608211584324,
+          "tau_even": 0.3039108505692593,
+          "tau_odd": 0.30317626180200635,
+          "n_users_ge1": 204757,
+          "n_users_ge5": 80585,
+          "n_users_ge10": 40922,
+          "gamma_stats": {
+            "mean_shrunk": -0.0463399907994976,
+            "sd_shrunk": 0.15306605423839412,
+            "p50_shrunk": 0.0,
+            "p90_shrunk": 0.08431826358073499,
+            "mean_raw": -0.20143791341540804,
+            "sd_raw": 0.7958277315234601
+          },
+          "stability": {
+            "r": 0.48307108916534225,
+            "spearman": 0.38816684236514365,
+            "n_overlap": 55483,
+            "pass": false
+          },
+          "distinctness": {
+            "r_gamma_delta": 0.032810884332073485,
+            "abs": 0.032810884332073485,
+            "pass": true
+          },
+          "materiality": {
+            "approx_r2_gain": 0.004810651149601785,
+            "approx_rmse_improvement": 0.0028740718392537,
+            "prevalence": 0.06799826573893888,
+            "pass": false
+          },
+          "gates": {
+            "stability": false,
+            "distinctness": true,
+            "materiality": false
+          },
+          "p_raw": 1e-06,
+          "p_bh": 1.5e-06,
+          "bh_pass": true,
+          "overall_pass": false
+        },
+        {
+          "flag": "Party",
+          "tau": 0.3167754580699753,
+          "tau2": 0.10034669083544268,
+          "tau_even": 0.30391961775998794,
+          "tau_odd": 0.3048364505136321,
+          "n_users_ge1": 227489,
+          "n_users_ge5": 117050,
+          "n_users_ge10": 62902,
+          "gamma_stats": {
+            "mean_shrunk": -0.057313778053052614,
+            "sd_shrunk": 0.16172017852260773,
+            "p50_shrunk": -0.012162996170177777,
+            "p90_shrunk": 0.093740918429396,
+            "mean_raw": -0.2003002511709729,
+            "sd_raw": 0.7288952956104751
+          },
+          "stability": {
+            "r": 0.44745826643175796,
+            "spearman": 0.3720278083764764,
+            "n_overlap": 83303,
+            "pass": false
+          },
+          "distinctness": {
+            "r_gamma_delta": 0.07165067545365242,
+            "abs": 0.07165067545365242,
+            "pass": true
+          },
+          "materiality": {
+            "approx_r2_gain": 0.005454390179491397,
+            "approx_rmse_improvement": 0.0032591933084473723,
+            "prevalence": 0.08457057222042277,
+            "pass": true
+          },
+          "gates": {
+            "stability": false,
+            "distinctness": true,
+            "materiality": true
+          },
+          "p_raw": 1e-06,
+          "p_bh": 1.5e-06,
+          "bh_pass": true,
+          "overall_pass": false
+        },
+        {
+          "flag": "Economic",
+          "tau": 0.001,
+          "tau2": 1e-06,
+          "tau_even": 0.17045172822512156,
+          "tau_odd": 0.001,
+          "n_users_ge1": 267647,
+          "n_users_ge5": 170899,
+          "n_users_ge10": 105561,
+          "gamma_stats": {
+            "mean_shrunk": -2.4760793904328507e-06,
+            "sd_shrunk": 6.562710891657812e-06,
+            "p50_shrunk": -9.569639084089107e-07,
+            "p90_shrunk": 1.0841219098780855e-06,
+            "mean_raw": -0.26192659207326574,
+            "sd_raw": 0.6166872402347832
+          },
+          "stability": {
+            "r": 0.5498197948522764,
+            "spearman": 0.39631928415398654,
+            "n_overlap": 130308,
+            "pass": true
+          },
+          "distinctness": {
+            "r_gamma_delta": 0.1084669397352105,
+            "abs": 0.1084669397352105,
+            "pass": false
+          },
+          "materiality": {
+            "approx_r2_gain": 9.93248445410299e-08,
+            "approx_rmse_improvement": 5.926911006426394e-08,
+            "prevalence": 0.17055837979696026,
+            "pass": false
+          },
+          "gates": {
+            "stability": true,
+            "distinctness": false,
+            "materiality": false
+          },
+          "p_raw": 0.85,
+          "p_bh": 0.85,
+          "bh_pass": false,
+          "overall_pass": false
+        },
+        {
+          "flag": "Coop",
+          "tau": 0.24951061374942377,
+          "tau2": 0.062255546373614135,
+          "tau_even": 0.23113459495002633,
+          "tau_odd": 0.22858585873609533,
+          "n_users_ge1": 263737,
+          "n_users_ge5": 160550,
+          "n_users_ge10": 94562,
+          "gamma_stats": {
+            "mean_shrunk": -0.0601300065734383,
+            "sd_shrunk": 0.1264740610250296,
+            "p50_shrunk": -0.036572624382172354,
+            "p90_shrunk": 0.05779625823261802,
+            "mean_raw": -0.2754532333453387,
+            "sd_raw": 0.7027087697709842
+          },
+          "stability": {
+            "r": 0.41807823431897445,
+            "spearman": 0.3106955454750992,
+            "n_overlap": 120064,
+            "pass": false
+          },
+          "distinctness": {
+            "r_gamma_delta": 0.12477995854766159,
+            "abs": 0.12477995854766159,
+            "pass": false
+          },
+          "materiality": {
+            "approx_r2_gain": 0.005077101250514112,
+            "approx_rmse_improvement": 0.0030334624012136047,
+            "prevalence": 0.13415198440076156,
+            "pass": true
+          },
+          "gates": {
+            "stability": false,
+            "distinctness": false,
+            "materiality": true
+          },
+          "p_raw": 1e-06,
+          "p_bh": 1.5e-06,
+          "bh_pass": true,
+          "overall_pass": false
+        },
+        {
+          "flag": "Legacy",
+          "tau": 0.5264271032695033,
+          "tau2": 0.27712549505672024,
+          "tau_even": 0.5680155847573772,
+          "tau_odd": 0.5735072673033472,
+          "n_users_ge1": 117116,
+          "n_users_ge5": 13355,
+          "n_users_ge10": 1603,
+          "gamma_stats": {
+            "mean_shrunk": -0.006655000061593431,
+            "sd_shrunk": 0.18278941535737644,
+            "p50_shrunk": 0.0,
+            "p90_shrunk": 0.14390295308016238,
+            "mean_raw": -0.03847644899737769,
+            "sd_raw": 0.8326500416047307
+          },
+          "stability": {
+            "r": 0.33440718961154353,
+            "spearman": 0.26877070002789355,
+            "n_overlap": 4991,
+            "pass": false
+          },
+          "distinctness": {
+            "r_gamma_delta": -0.00044753946970946864,
+            "abs": 0.00044753946970946864,
+            "pass": true
+          },
+          "materiality": {
+            "approx_r2_gain": 0.0022081797395150675,
+            "approx_rmse_improvement": 0.0013183929434581465,
+            "prevalence": 0.011480844669124765,
+            "pass": false
+          },
+          "gates": {
+            "stability": false,
+            "distinctness": true,
+            "materiality": false
+          },
+          "p_raw": 1e-06,
+          "p_bh": 1.5e-06,
+          "bh_pass": true,
+          "overall_pass": false
+        }
+      ],
+      "heldout_joint": {
+        "n_test": 24146307,
+        "sst": 56665232.56719103,
+        "sse_baseline": 35972596.24849257,
+        "sse_with_gamma": 35418002.7999126,
+        "r2_baseline": 0.36517341200642006,
+        "r2_with_gamma": 0.37496060290733724,
+        "r2_gain": 0.009787190900917175,
+        "rmse_baseline": 1.220563929939425,
+        "rmse_with_gamma": 1.2111185798980657,
+        "rmse_improvement": 0.00944535004135938,
+        "per_half": {
+          "odd_test_even_train": {
+            "n": 12073005,
+            "mse_base": 1.4891814450058998,
+            "mse_gamma": 1.4622941422010296
+          },
+          "even_test_odd_train": {
+            "n": 12073302,
+            "mse_base": 1.4903711691324473,
+            "mse_gamma": 1.4713222869475857
+          }
+        }
+      },
+      "flags_view": "pass2_game_flags",
+      "ro_path": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/rating_observations_pass2.parquet",
+      "severity_path": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/user_severity_pass2.parquet",
+      "game_means_path": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/game_adjusted_means_pass2.parquet"
+    }
+  },
+  "model_spec": "r_ug = mu + alpha_g + delta_u + sum_t gamma_{u,t}\u00b7flag_{g,t} + epsilon, gamma_{u,t} ~ N(0, tau_t^2), joint simultaneous, hierarchical shrinkage diagonal approximation, sigma2 fixed to resid variance, tau via MoM",
+  "classification": {
+    "flags": [
+      "18XX",
+      "Wargame",
+      "Party",
+      "Economic",
+      "Coop",
+      "Legacy"
+    ],
+    "definitions": {
+      "18XX": "families contains 'Series: 18xx' (case-insensitive) OR 18XX/18dd pattern; history false positives (e.g., 1871 in History tag) excluded; 81 games in pass2, 82 in provisional",
+      "Wargame": "category == 'Wargame' (2020 pass2, 2265 provisional)",
+      "Party": "category == 'Party Game' (1268/1485)",
+      "Economic": "category == 'Economic' (1287/1403)",
+      "Cooperative": "mechanic == 'Cooperative Game' only (1543/1800)",
+      "Legacy": "mechanic == 'Legacy Game' (50/62) OR linked via game_links to Legacy (checked, adds minimal)",
+      "Other": "none of above (8808/other)",
+      "excluded": "Heavy-as-type redundant with weight axis; Abstract Strategy no basis in Phase3/4"
+    },
+    "weight_axis": {
+      "primary_3class": [
+        [
+          "Light",
+          0,
+          2.5
+        ],
+        [
+          "Medium",
+          2.5,
+          3.5
+        ],
+        [
+          "Heavy",
+          3.5,
+          10
+        ]
+      ],
+      "sensitivity_5class": [
+        [
+          "<1.5",
+          0,
+          1.5
+        ],
+        [
+          "1.5-2.0",
+          1.5,
+          2.0
+        ],
+        [
+          "2.0-2.5",
+          2.0,
+          2.5
+        ],
+        [
+          "2.5-3.5",
+          2.5,
+          3.5
+        ],
+        [
+          ">3.5",
+          3.5,
+          10
+        ]
+      ],
+      "orthogonal": "weight never used to define type flags"
+    }
+  },
+  "gates": {
+    "stability": "even/odd rating_observation_id split Pearson r >0.5 (eligible n>=3 per half, rarer flags relax to >=1)",
+    "distinctness": "|r(gamma_t, delta_u)| <0.08",
+    "materiality": "held-out R2 gain >= +0.005 vs mu+alpha+delta or RMSE >=0.02 (approx via tau^2 * prevalence)",
+    "bh": "Benjamini-Hochberg across 6 flags, p from Wald tau test, must survive p_bh<0.05 before materiality"
+  },
+  "validation_anchor": {
+    "error": "Conversion Error: Could not convert string '9609170173551261269' to INT64 when casting from source column user_pseudouserid\n\nLINE 10:                 WHERE r.user_pseudouserid = 3985085099831395624\n                               ^"
+  },
+  "provenance": {
+    "active_ro": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-active/rating_observations_active.parquet",
+    "pass2_ro": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/rating_observations_pass2.parquet",
+    "pop_path": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/bgg_research_population.parquet",
+    "games_pass2_path": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/phase2-pass2/games_pass2.parquet",
+    "mu_active": 7.144007675729601,
+    "mu_pass2": 7.139007726394243,
+    "script": "scripts/41_raterxgenre_taste_v2.py",
+    "duckdb": "memory_limit 4GB threads 3 temp /home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/ducktmp"
+  }
+}
