@@ -1,0 +1,711 @@
+{
+  "audit_script": "scripts/27_games_metadata_coverage_audit.py",
+  "inputs": {
+    "population": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/2/bgg-hidden-gems/scratch/phase2/bgg_research_population.parquet",
+    "games": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/2/bgg-hidden-gems/scratch/phase2/games.parquet",
+    "rating_observations": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/2/bgg-hidden-gems/scratch/phase2/rating_observations.parquet",
+    "active_rating_observations": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/2/bgg-hidden-gems/data/processed/phase2-active/rating_observations_active.parquet"
+  },
+  "coverage": {
+    "research_population_total": 16627,
+    "games_parquet_total": 21925,
+    "covered": 13449,
+    "missing": 3178,
+    "pct_covered_research": 80.887,
+    "pct_missing_research": 19.113,
+    "pct_covered_game_attrs": 61.341,
+    "pct_covered_rated_population": 81.179
+  },
+  "why_missing": {
+    "population_total": 16627,
+    "games_parquet_total": 21925,
+    "games_parquet_max_game_id": 349161,
+    "games_parquet_min_game_id": 1,
+    "population_max_game_id": 438481,
+    "population_min_game_id": 1,
+    "covered_via_semi_join": 13449,
+    "missing_total": 3178,
+    "missing_gt_games_max": 2259,
+    "missing_le_games_max": 919,
+    "missing_gt_max_share": 0.7108,
+    "games_parquet_covers_population_pct": 80.887,
+    "games_parquet_covers_game_attrs_pct": 61.341,
+    "covered_weight_null": 107,
+    "logic_note": "games.parquet is FROM game_attrs LEFT JOIN games LEFT JOIN weights; LEFT JOINs preserve game_attrs rows even when browse/weight missing (proven by covered rows with NULL weight). Therefore missing = absent from game_attrs (Snapshot vintage, not filtering). scripts/23 SEMI JOIN does not drop additional rows beyond the 3,178 absent from game_attrs; scripts/24 reuses filtered via join/symlink and adds no further game filter.",
+    "filtered_step_drop": 0,
+    "is_reimplementation_filter_in_games_parquet": false,
+    "weights_join_drops_rows": false
+  },
+  "balance": {
+    "covered_vs_missing": [
+      {
+        "grp": "covered",
+        "n": 13449,
+        "mean_users_rated": 1891.4284333407688,
+        "median_users_rated": 370.0,
+        "q25_users_rated": 179.0,
+        "q75_users_rated": 1118.0,
+        "q90_users_rated": 3604.2000000000007,
+        "mean_bayes": 5.790972041043953,
+        "median_bayes": 5.61466,
+        "q10_bayes": 5.49707,
+        "q90_bayes": 6.386516,
+        "mean_avg": 6.546649561305658,
+        "median_avg": 6.56051,
+        "q10_avg": 5.5395900000000005,
+        "q90_avg": 7.538516,
+        "mean_weight": 2.077156051476593,
+        "median_weight": 2.0,
+        "q10_weight": 1.1143,
+        "q90_weight": 3.2,
+        "mean_num_weights": 91.10313034426352,
+        "median_num_weights": 22.0,
+        "mean_year": 2008.7650382928098,
+        "median_year": 2013.0,
+        "mean_rank": 11059.906062675469,
+        "median_rank": 8867.0,
+        "share_reimplementation": 0.018514387686816864,
+        "share_expansion": 0.0,
+        "mean_min_players": 1.9796267380474384,
+        "mean_max_players": 5.753215852479738,
+        "mean_playing_time": 101.88400624581753,
+        "median_playing_time": 45.0,
+        "mean_dump_voters": 1757.9002156294148,
+        "weight_null_share": 0.00044612982377871963
+      },
+      {
+        "grp": "missing",
+        "n": 3178,
+        "mean_users_rated": 965.8307111390811,
+        "median_users_rated": 308.0,
+        "q25_users_rated": 164.0,
+        "q75_users_rated": 782.5,
+        "q90_users_rated": 1988.9000000000024,
+        "mean_bayes": 5.829917655758338,
+        "median_bayes": 5.66228,
+        "q10_bayes": 5.543409,
+        "q90_bayes": 6.379101,
+        "mean_avg": 7.127032076777851,
+        "median_avg": 7.126105,
+        "q10_avg": 6.292955,
+        "q90_avg": 8.039384000000002,
+        "mean_weight": 2.1399103187125266,
+        "median_weight": 2.0,
+        "q10_weight": 1.125,
+        "q90_weight": 3.274760000000003,
+        "mean_num_weights": 33.42794210195091,
+        "median_num_weights": 11.0,
+        "mean_year": 2022.8728760226556,
+        "median_year": 2023.0,
+        "mean_rank": 8102.440538764783,
+        "median_rank": 7270.0,
+        "share_reimplementation": 0.009125235997482694,
+        "share_expansion": 0.0,
+        "mean_min_players": 1.6359345500314664,
+        "mean_max_players": 5.532724984266834,
+        "mean_playing_time": 89.97419760855884,
+        "median_playing_time": 45.0,
+        "mean_dump_voters": 538.053715020907,
+        "weight_null_share": 0.0028319697923222154
+      }
+    ],
+    "mech_cat": [
+      {
+        "grp": "covered",
+        "mean_mech_count": 3.8263067886088185,
+        "mean_cat_count": 2.7801323518477212
+      },
+      {
+        "grp": "missing",
+        "mean_mech_count": 4.977973568281938,
+        "mean_cat_count": 2.750471994965387
+      }
+    ]
+  },
+  "concentration": {
+    "by_year_bucket": [
+      {
+        "year_bucket": "<2000",
+        "covered": 2305.0,
+        "missing": 5.0,
+        "pct_missing": 0.2,
+        "total": 2310.0
+      },
+      {
+        "year_bucket": "2000-09",
+        "covered": 2786.0,
+        "missing": 2.0,
+        "pct_missing": 0.1,
+        "total": 2788.0
+      },
+      {
+        "year_bucket": "2010-14",
+        "covered": 2570.0,
+        "missing": 10.0,
+        "pct_missing": 0.4,
+        "total": 2580.0
+      },
+      {
+        "year_bucket": "2015-19",
+        "covered": 4447.0,
+        "missing": 40.0,
+        "pct_missing": 0.9,
+        "total": 4487.0
+      },
+      {
+        "year_bucket": "2020-22",
+        "covered": 1329.0,
+        "missing": 1131.0,
+        "pct_missing": 46.0,
+        "total": 2460.0
+      },
+      {
+        "year_bucket": "2023+",
+        "covered": 12.0,
+        "missing": 1990.0,
+        "pct_missing": 99.4,
+        "total": 2002.0
+      }
+    ],
+    "by_id_and_year": [
+      {
+        "id_bucket": "<=349k",
+        "yr_bucket": "2020-22",
+        "total": 1938,
+        "missing": 609.0,
+        "pct_missing": 31.4
+      },
+      {
+        "id_bucket": "<=349k",
+        "yr_bucket": "2023+",
+        "total": 272,
+        "missing": 260.0,
+        "pct_missing": 95.6
+      },
+      {
+        "id_bucket": "<=349k",
+        "yr_bucket": "<2020",
+        "total": 12158,
+        "missing": 50.0,
+        "pct_missing": 0.4
+      },
+      {
+        "id_bucket": ">349k",
+        "yr_bucket": "2020-22",
+        "total": 522,
+        "missing": 522.0,
+        "pct_missing": 100.0
+      },
+      {
+        "id_bucket": ">349k",
+        "yr_bucket": "2023+",
+        "total": 1730,
+        "missing": 1730.0,
+        "pct_missing": 100.0
+      },
+      {
+        "id_bucket": ">349k",
+        "yr_bucket": "<2020",
+        "total": 7,
+        "missing": 7.0,
+        "pct_missing": 100.0
+      }
+    ],
+    "by_weight_bucket": [
+      {
+        "weight_bucket": "1.0-1.5",
+        "covered": 3855.0,
+        "missing": 749.0,
+        "pct_missing": 16.3
+      },
+      {
+        "weight_bucket": "1.5-2.0",
+        "covered": 2747.0,
+        "missing": 638.0,
+        "pct_missing": 18.8
+      },
+      {
+        "weight_bucket": "2.0-2.5",
+        "covered": 3017.0,
+        "missing": 826.0,
+        "pct_missing": 21.5
+      },
+      {
+        "weight_bucket": "2.5-3.0",
+        "covered": 1895.0,
+        "missing": 432.0,
+        "pct_missing": 18.6
+      },
+      {
+        "weight_bucket": "3.0-3.5",
+        "covered": 1111.0,
+        "missing": 286.0,
+        "pct_missing": 20.5
+      },
+      {
+        "weight_bucket": "3.5+",
+        "covered": 818.0,
+        "missing": 238.0,
+        "pct_missing": 22.5
+      },
+      {
+        "weight_bucket": "NULL_weight",
+        "covered": 6.0,
+        "missing": 9.0,
+        "pct_missing": 60.0
+      }
+    ],
+    "missing_year_detail": [
+      {
+        "yr": 1970,
+        "missing_cnt": 1
+      },
+      {
+        "yr": 1975,
+        "missing_cnt": 1
+      },
+      {
+        "yr": 1984,
+        "missing_cnt": 1
+      },
+      {
+        "yr": 1993,
+        "missing_cnt": 2
+      },
+      {
+        "yr": 2007,
+        "missing_cnt": 1
+      },
+      {
+        "yr": 2009,
+        "missing_cnt": 1
+      },
+      {
+        "yr": 2010,
+        "missing_cnt": 1
+      },
+      {
+        "yr": 2011,
+        "missing_cnt": 1
+      },
+      {
+        "yr": 2012,
+        "missing_cnt": 2
+      },
+      {
+        "yr": 2013,
+        "missing_cnt": 2
+      },
+      {
+        "yr": 2014,
+        "missing_cnt": 4
+      },
+      {
+        "yr": 2015,
+        "missing_cnt": 2
+      },
+      {
+        "yr": 2016,
+        "missing_cnt": 5
+      },
+      {
+        "yr": 2017,
+        "missing_cnt": 3
+      },
+      {
+        "yr": 2018,
+        "missing_cnt": 7
+      },
+      {
+        "yr": 2019,
+        "missing_cnt": 23
+      },
+      {
+        "yr": 2020,
+        "missing_cnt": 58
+      },
+      {
+        "yr": 2021,
+        "missing_cnt": 254
+      },
+      {
+        "yr": 2022,
+        "missing_cnt": 819
+      },
+      {
+        "yr": 2023,
+        "missing_cnt": 813
+      },
+      {
+        "yr": 2024,
+        "missing_cnt": 755
+      },
+      {
+        "yr": 2025,
+        "missing_cnt": 395
+      },
+      {
+        "yr": 2026,
+        "missing_cnt": 27
+      }
+    ],
+    "covered_year_detail": [
+      {
+        "yr": 1950,
+        "covered_cnt": 4
+      },
+      {
+        "yr": 1951,
+        "covered_cnt": 3
+      },
+      {
+        "yr": 1952,
+        "covered_cnt": 3
+      },
+      {
+        "yr": 1953,
+        "covered_cnt": 3
+      },
+      {
+        "yr": 1954,
+        "covered_cnt": 5
+      },
+      {
+        "yr": 1955,
+        "covered_cnt": 1
+      },
+      {
+        "yr": 1956,
+        "covered_cnt": 6
+      },
+      {
+        "yr": 1957,
+        "covered_cnt": 1
+      },
+      {
+        "yr": 1958,
+        "covered_cnt": 7
+      },
+      {
+        "yr": 1959,
+        "covered_cnt": 4
+      },
+      {
+        "yr": 1960,
+        "covered_cnt": 10
+      },
+      {
+        "yr": 1961,
+        "covered_cnt": 5
+      },
+      {
+        "yr": 1962,
+        "covered_cnt": 13
+      },
+      {
+        "yr": 1963,
+        "covered_cnt": 12
+      },
+      {
+        "yr": 1964,
+        "covered_cnt": 11
+      },
+      {
+        "yr": 1965,
+        "covered_cnt": 19
+      },
+      {
+        "yr": 1966,
+        "covered_cnt": 6
+      },
+      {
+        "yr": 1967,
+        "covered_cnt": 13
+      },
+      {
+        "yr": 1968,
+        "covered_cnt": 17
+      },
+      {
+        "yr": 1969,
+        "covered_cnt": 11
+      },
+      {
+        "yr": 1970,
+        "covered_cnt": 16
+      },
+      {
+        "yr": 1971,
+        "covered_cnt": 22
+      },
+      {
+        "yr": 1972,
+        "covered_cnt": 36
+      },
+      {
+        "yr": 1973,
+        "covered_cnt": 38
+      },
+      {
+        "yr": 1974,
+        "covered_cnt": 43
+      },
+      {
+        "yr": 1975,
+        "covered_cnt": 55
+      },
+      {
+        "yr": 1976,
+        "covered_cnt": 32
+      },
+      {
+        "yr": 1977,
+        "covered_cnt": 65
+      },
+      {
+        "yr": 1978,
+        "covered_cnt": 52
+      },
+      {
+        "yr": 1979,
+        "covered_cnt": 73
+      },
+      {
+        "yr": 1980,
+        "covered_cnt": 60
+      },
+      {
+        "yr": 1981,
+        "covered_cnt": 72
+      },
+      {
+        "yr": 1982,
+        "covered_cnt": 45
+      },
+      {
+        "yr": 1983,
+        "covered_cnt": 57
+      },
+      {
+        "yr": 1984,
+        "covered_cnt": 47
+      },
+      {
+        "yr": 1985,
+        "covered_cnt": 54
+      },
+      {
+        "yr": 1986,
+        "covered_cnt": 71
+      },
+      {
+        "yr": 1987,
+        "covered_cnt": 70
+      },
+      {
+        "yr": 1988,
+        "covered_cnt": 75
+      },
+      {
+        "yr": 1989,
+        "covered_cnt": 72
+      },
+      {
+        "yr": 1990,
+        "covered_cnt": 86
+      },
+      {
+        "yr": 1991,
+        "covered_cnt": 101
+      },
+      {
+        "yr": 1992,
+        "covered_cnt": 111
+      },
+      {
+        "yr": 1993,
+        "covered_cnt": 95
+      },
+      {
+        "yr": 1994,
+        "covered_cnt": 92
+      },
+      {
+        "yr": 1995,
+        "covered_cnt": 103
+      },
+      {
+        "yr": 1996,
+        "covered_cnt": 110
+      },
+      {
+        "yr": 1997,
+        "covered_cnt": 106
+      },
+      {
+        "yr": 1998,
+        "covered_cnt": 133
+      },
+      {
+        "yr": 1999,
+        "covered_cnt": 159
+      },
+      {
+        "yr": 2000,
+        "covered_cnt": 164
+      },
+      {
+        "yr": 2001,
+        "covered_cnt": 193
+      },
+      {
+        "yr": 2002,
+        "covered_cnt": 211
+      },
+      {
+        "yr": 2003,
+        "covered_cnt": 235
+      },
+      {
+        "yr": 2004,
+        "covered_cnt": 295
+      },
+      {
+        "yr": 2005,
+        "covered_cnt": 313
+      },
+      {
+        "yr": 2006,
+        "covered_cnt": 299
+      },
+      {
+        "yr": 2007,
+        "covered_cnt": 320
+      },
+      {
+        "yr": 2008,
+        "covered_cnt": 362
+      },
+      {
+        "yr": 2009,
+        "covered_cnt": 394
+      },
+      {
+        "yr": 2010,
+        "covered_cnt": 433
+      },
+      {
+        "yr": 2011,
+        "covered_cnt": 441
+      },
+      {
+        "yr": 2012,
+        "covered_cnt": 529
+      },
+      {
+        "yr": 2013,
+        "covered_cnt": 545
+      },
+      {
+        "yr": 2014,
+        "covered_cnt": 622
+      },
+      {
+        "yr": 2015,
+        "covered_cnt": 805
+      },
+      {
+        "yr": 2016,
+        "covered_cnt": 847
+      },
+      {
+        "yr": 2017,
+        "covered_cnt": 899
+      },
+      {
+        "yr": 2018,
+        "covered_cnt": 944
+      },
+      {
+        "yr": 2019,
+        "covered_cnt": 952
+      },
+      {
+        "yr": 2020,
+        "covered_cnt": 738
+      },
+      {
+        "yr": 2021,
+        "covered_cnt": 570
+      },
+      {
+        "yr": 2022,
+        "covered_cnt": 21
+      },
+      {
+        "yr": 2023,
+        "covered_cnt": 7
+      },
+      {
+        "yr": 2024,
+        "covered_cnt": 4
+      },
+      {
+        "yr": 2025,
+        "covered_cnt": 1
+      }
+    ]
+  },
+  "rating_coverage": {
+    "full": {
+      "missing_with_ratings_distinct_games": 3119,
+      "missing_total_obs": 1682941,
+      "missing_no_obs_games": 59,
+      "missing_per_game_stats": {
+        "games_with_obs": 3119,
+        "mean_obs": 539.5771080474511,
+        "median_obs": 166.0,
+        "q25": 87.0,
+        "q75": 413.0,
+        "mean_rating_obs": 7.257562976765267
+      }
+    },
+    "active": {
+      "missing_with_ratings_distinct_games": 3116,
+      "missing_total_obs": 1610752,
+      "covered_with_ratings_distinct_games": 13448,
+      "active_distinct_games_total": 16564,
+      "missing_per_game_stats": {
+        "games_with_obs": 3116,
+        "mean_obs": 516.9293966623877,
+        "median_obs": 154.5,
+        "q25": 80.0,
+        "q75": 396.0,
+        "mean_rating_obs": 7.1668435006557605
+      },
+      "covered_per_game_stats": {
+        "games_with_obs": 13448,
+        "mean_obs": 1702.7837596668649,
+        "median_obs": 336.5,
+        "mean_rating_obs": 6.509539018892963
+      },
+      "active_is_effectively": "3116 missing-metadata games still contribute 1610752 active ratings; active universe is 16564 distinct games, not reduced to 13,449"
+    }
+  },
+  "intent": {
+    "scripts_13_header": "SELECT FROM game_attrs LEFT JOIN games LEFT JOIN weights ORDER BY game_id \u2014 21,925 rows = game_attrs count, not population count",
+    "is_complete_population_table": false,
+    "is_partial_auxiliary": true,
+    "exact_coverage_research_population": "13449 / 16627 = 80.89% (reported 80.86% uses 13449/16627=80.89% ; 61.34% uses 13449/21925)",
+    "exact_coverage_rated_population": "13449 / 16567 = 81.18% (81.19%)",
+    "exact_coverage_game_attrs": "13449 / 21925 = 61.34%",
+    "docs_reference": "docs/phase2-filtered/PARQUET_CATALOG.md documents 13,449 / 16,567 (81.2%) carry games.parquet row; game-level population parquet remains complete for all 16,627",
+    "scripts_24_reuse_note": "phase2-active reuses phase2-filtered games/game_tags/game_links via join/symlink, not duplicated; active rating observations are complete for 16,564 distinct games (99.98% of rated)"
+  },
+  "output_files": {
+    "missing_ids_csv": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/2/bgg-hidden-gems/reports/games_metadata_coverage/missing_ids.csv",
+    "summary_json": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/2/bgg-hidden-gems/reports/games_metadata_coverage/summary.json",
+    "summary_md": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/2/bgg-hidden-gems/reports/games_metadata_coverage/summary.md"
+  },
+  "generated_at": "2026-08-24T04:47:42Z"
+}

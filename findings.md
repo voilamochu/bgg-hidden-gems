@@ -1253,4 +1253,118 @@ Active is **refreshed primary** for Phase 3; historical is **not** primary (do n
 - **Rerunnable:** `python scripts/26_phase2_active_baseline_refresh.py --active-dir data/processed/phase2-active --population data/processed/bgg_research_population.parquet --phase2-dir data/processed/phase2` (fails closed if `data/processed/phase2-active/` missing; deterministic; ~60s ALS on 24.5M×288k). Artefacts under `data/processed/phase2-active/` (gitignored) plus validation JSON next to them; committed summary copy for review at `docs/phase2-active/active_baseline_refresh.json` (this entry's comparison table).
 - **Outputs described above** plus validation at `data/processed/phase2-active/active_baseline_validation.json` (also checked: 0 violations, delta_obs 0, delta_users 0).
 
+## 2026-08-24: Games metadata coverage audit — why 13,449 of 16,627 population games have a `games.parquet` row (Phase 2-active chain)
+
+**Scope.** Dispatched task to investigate the 3,178-game gap in `data/processed/phase2-active/games.parquet` (reused from `phase2`→`phase2-filtered`→`phase2-active`; see `scripts/13:205` `FROM game_attrs` join and `scripts/23`/`24` semi-join chain). No change to active population or downstream analyses.
+
+**Method.** New rerunnable `scripts/27_games_metadata_coverage_audit.py` (bounded DuckDB `memory_limit=4GB`/`threads=4`/`temp_directory`, explicit column lists, no SQLite scan, no wide-table bug, deterministic `ORDER BY game_id`). Uses scratch copies (`scratch/phase2/bgg_research_population.parquet` 16,627 + `scratch/phase2/games.parquet` 21,925 + `scratch/phase2/rating_observations.parquet` 26.9M + `data/processed/phase2-active/rating_observations_active.parquet` 24.5M). Outputs committed to `reports/games_metadata_coverage/` for reproducibility.
+
+### 1. Which 3,178 IDs are missing [Observed fact]
+
+- `13,449 / 16,627 = 80.89%` of the research population have a `games.parquet` row; **3,178 = 19.11% missing** [Observed fact]. Rated-population coverage is `13,449 / 16,567 = 81.19%` (60 population games have zero SQLite ratings); game_attrs coverage is `13,449 / 21,925 = 61.34%` [Observed fact, matches `docs/phase2-filtered/PARQUET_CATALOG.md` 81.2% / 61.34%].
+- Full missing-ID list committed as `reports/games_metadata_coverage/missing_ids.csv` (3,178 rows, `ORDER BY game_id`, population fields: title/year/users_rated/avg/bayes/rank/weight/etc.) [Observed fact]. Verified `ANTI JOIN pop→games` and confirmed none appear in `games.parquet` / `phase2-active/games_active.parquet` (the latter does not exist — active reuses filtered via join/symlink per `data/processed/phase2-active/README.md`) [Observed fact].
+
+### 2. Why missing — source vs logic [Observed fact / Hypothesis, evidence-backed]
+
+- `games.parquet` SQL in `scripts/13_build_phase2_extracts.py:205` is `SELECT ... FROM game_attrs a LEFT JOIN games g ON g.game_id=a.game_id LEFT JOIN weights w ON w.game_id=a.game_id ORDER BY a.game_id` — row count `21,925 = game_attrs` count (per `docs/phase2_database_inventory.md`: game_attrs 21,925, games browse 161,404, weights 22,329) [Observed fact].
+- `LEFT JOIN` preserves a `game_attrs` row even when `games`/`weights` are NULL: among covered population rows, **107 have NULL `weight`/`weight_num_votes` in `games.parquet`** [Observed fact] — join does not drop them; `weights` join and `is_reimplementation` filter are not the cause.
+- Later filtering does not introduce the gap: `scripts/23_build_filtered_phase2_extracts.py` does `SEMI JOIN pop ON game_id` on `games.parquet` — filtered rows = 13,449 exactly [Observed fact]; `scripts/24_build_active_phase2_extracts.py` reuses `games_filtered` via documented join/symlink and adds no game filter (active ratings still cover 16,564 distinct games) [Observed fact].
+- **Missing = absent from `game_attrs`** (source, not logic) [Supported conclusion]. Vintage hypothesis [Hypothesis, evidence-backed]: SQLite snapshot latest review `2025-02-10` (inventory) predates the `bgg_games_current.parquet` scrape (population max `438,481` vs `games.parquet` max `349,161`). **2,259 missing (71.1%) have `game_id > 349,161`** — cannot exist in snapshot game_attrs [Observed fact]. Remaining **919 missing ≤349,161 (28.9%)** are 96% from 2020+ (609 in 2020-22, 260 in 2023+), consistent with an earlier `game_attrs` vintage that had not yet materialized those 2020-23 titles [Empirical finding]. Direct SQLite row-level diff would close the loop where `bgg.sqlite` is available; Parquet evidence already shows missing = absent, not filtered.
+
+### 3. Do missing games differ materially from the 13,449 covered? [Empirical finding; canonical population parquet is complete for both]
+
+Balance uses `bgg_research_population.parquet` (complete for all 16,627; `games.parquet` fields are incomplete by definition):
+
+| Metric (population fields) | Covered (13,449) | Missing (3,178) | Delta |
+|---|---:|---:|---:|
+| mean year | 2008.77 | 2022.87 | **+14.11** |
+| median year | 2013 | 2023 | +10 |
+| mean users_rated | 1,891 | 966 | **−926** |
+| median users_rated | 370 | 308 | −62 |
+| q75 users_rated | 1,118 | 783 | −335 |
+| q90 users_rated | 3,604 | 1,989 | −1,615 |
+| mean bayes_rating | 5.791 | 5.830 | +0.04 |
+| median bayes | 5.615 | 5.662 | +0.05 |
+| mean avg_rating_current | 6.547 | 7.127 | **+0.58** |
+| median avg | 6.561 | 7.126 | +0.57 |
+| mean weight | 2.08 | 2.14 | +0.06 |
+| median weight | 2.00 | 2.00 | 0.00 |
+| mean num_weights | 91.1 | 33.4 | **−57.7** |
+| median num_weights | 22 | 11 | −11 |
+| mean rank_current | 11,060 | 8,102 | −2,958 (better) |
+| median rank | 8,867 | 7,270 | −1,597 |
+| share is_reimplementation | 1.85% | 0.91% | −0.94pp |
+| mean playing_time (min) | 101.9 | 90.0 | −11.9 |
+| mean mechanics tags | 3.83 | 4.98 | **+1.15** |
+| mean categories tags | 2.78 | 2.75 | −0.03 |
+
+- Weight distribution almost identical (q10 1.11 vs 1.12, q90 3.20 vs 3.27); rank/bayes similar; `weight_null` share 0.04% vs 0.28% [Observed fact]. `kickstarted`/`mfg_playtime`/`family`/`source`/`num_expansions`/`publisher` are **not in the complete population parquet** — among games-parquet-only fields, the only comparable proxy is population `families` (top missing: `[]` 5.3%, `Crowdfunding: Kickstarter` 0.8%) with no strong publisher clustering visible; heavier `game_attrs`-only fields are NULL by construction for missing and are not used for the balance comparison [Limitation].
+- Interpretation [Empirical finding]: missing games are **~14 years newer**, have **~½ the rating volume** (mean 966 vs 1,891) and far fewer weight votes (33 vs 91), but **higher raw avg_rating** (+0.58) while bayes/weight are indistinguishable. The raw-average lift is expected from newer-era small-n selection and era/year effects that Bayes (prior 5.49 anchored) absorbs — not evidence of broader appeal [Model-dependent interpretation].
+
+### 4. Concentration [Observed fact]
+
+- **Era is the dominant concentrator** [Observed fact]:
+
+| Year bucket | Covered | Missing | % missing |
+|---|---:|---:|---:|
+| <2000 | 2,305 | 5 | 0.2% |
+| 2000-09 | 2,786 | 2 | 0.1% |
+| 2010-14 | 2,570 | 10 | 0.4% |
+| 2015-19 | 4,447 | 40 | 0.9% |
+| **2020-22** | 1,329 | 1,131 | **46.0%** |
+| **2023+** | 12 | 1,990 | **99.4%** |
+
+- By `game_id × era` (max games 349,161) [Observed fact]:
+
+| ID bucket | Era | Total | Missing | % missing |
+|---|---:|---:|---:|
+| ≤349k | <2020 | 12,158 | 50 | 0.4% |
+| ≤349k | 2020-22 | 1,938 | 609 | 31.4% |
+| ≤349k | 2023+ | 272 | 260 | 95.6% |
+| >349k | 2020-22 | 522 | 522 | **100%** |
+| >349k | 2023+ | 1,730 | 1,730 | **100%** |
+| >349k | <2020 | 7 | 7 | 100% |
+
+71% of missing (2,259) are `>349k` and 100% missing in every era for that ID range — snapshot did not contain those IDs.
+
+- **Weight / game type do not concentrate missingness** [Observed fact]: missing rate is 16–22% across weight buckets `1.0-1.5` through `3.5+` (no weight-type bias); `NULL_weight` is only 15 games. `families` cross-tab shows no material publisher/mfg clustering beyond the era effect (families field is the only product proxy in the complete parquet; dedicated publisher fields not present there) [Limitation].
+
+### 5. Are ratings for the missing-metadata games still present in the active rating extracts? [Observed fact]
+
+- Full snapshot `rating_observations.parquet` (26.9M): **3,119 / 3,178 (98.1%)** missing games have ≥1 rating; **1,682,941 observations**; 59 have zero ratings (recent high-ID releases — matches the overall 60 population games absent from SQLite) [Observed fact].
+- Active `rating_observations_active.parquet` (24.5M, t≥10 minus strict): **3,116 / 3,178 (98.0%)** missing games have ≥1 active rating; **1,610,752 active observations**; mean **517**, median **154** per missing game vs covered mean **1,703**, median **336** [Observed fact].
+- **Active universe is NOT reduced to 13,449** [Observed fact]: active distinct games with ≥1 rating is **16,564** (covered 13,448 + missing 3,116); only 3 games lost vs filtered (16,567 → 16,564). The effective rating universe remains 16.5k, not 13.4k.
+
+### 6. Intent of `games.parquet` [Observed fact]
+
+- **Not a complete population table; partial auxiliary source** [Observed fact]: `scripts/13` header + `docs/phase2_database_inventory.md` + `docs/phase2-filtered/PARQUET_CATALOG.md` document `games.parquet` as `FROM game_attrs` (21,925 rows) joined to browse/weights. `docs/phase2-filtered/PARQUET_CATALOG.md` explicitly states *Only 13,449 of 16,567 rated population games (81.2%) have a `games.parquet` metadata row; the game-level population parquet remains the complete metadata source for all 16,627* [Observed fact, citation]. `data/processed/phase2-active/README.md` catalog lists `games.parquet` filtered 13,449 (61.34% of game_attrs) and reused via join — not duplicated in active [Observed fact].
+- Exact coverage [Observed fact]: `13,449 / 16,627 = 80.89%` (≈80.86% in brief due to rounding); `13,449 / 21,925 = 61.35%` (≈61.34%); `13,449 / 16,567 rated = 81.19%` (≈81.2%).
+
+### Recommendation for Phase 3 [Supported decision, explicitly among brief's three options]
+
+- **Chosen: (1) Use all 16,627 and treat missing `games.parquet` metadata explicitly (COALESCE/NULL handling, missing-indicator, or join to `bgg_research_population` for complete fields) — the default unless invalid** [Supported decision].
+
+Reasoning [Supported conclusion]:
+
+- **Why not (2) restrict only the specific analyses requiring that metadata to 13,449 as the primary:** restricting primary analyses to 13,449 would **systematically excise 99.4% of 2023+ games and 46% of 2020-22 games** — the most relevant hidden-gem candidates — and bias every era/type result toward pre-2020 titles. It would discard 1.6M active ratings (6.6% of active) and 18.8% of games for no statistical gain, while ratings for 3,116 missing games are valid and present [Empirical finding]. Subsidiary `N=13,449` sensitivity variants are appropriate only where `game_tags`/`weight_num_votes`/`kickstarted`/mfg fields are essential.
+- **Why not (3) redefine the research universe:** the population definition (`scripts/01`: modern standalone, 1950+, ≥100 ratings, Latin titles, structural PnP rule) is unaffected; the gap is a **snapshot vintage artefact** (SQLite `game_attrs` vs newer `bgg_games_current.parquet` scrape), not a definition flaw [Hypothesis, evidence-backed]; missing games show no structural game-type divergence beyond era/volume [Empirical finding]. Redefinition not justified [Supported conclusion].
+- **Do not label missingness as error** [Method note]: it is by design given the two source vintages; no `games.parquet` intent was violated.
+
+**How to treat missing explicitly [Method]** for Phase 3:
+1. For fields **complete in `bgg_research_population.parquet`** (year, weight, num_weights, min/max players, playing_time, mechanics, categories, families, designers, rank/bayes/avg/users_rated, attrs_fetched_at) — **join to `bgg_research_population.parquet`** (or `scratch/phase2/bgg_research_population.parquet`), not to `games.parquet`. Example: `FROM rating_observations_active r JOIN read_parquet('scratch/phase2/bgg_research_population.parquet') pop USING (game_id)` or `LEFT JOIN` with `COALESCE(g.weight, pop.weight)`.
+2. For fields **only in `games.parquet`** (mfg_playtime, com_* playtime, mfg_age_rec, com_age_rec, language_ease, stddev, num_* counts, kickstarted, family/source, weight_num_votes where NULL) — `LEFT JOIN games ON game_id` and handle NULLs: `COALESCE(g.weight, pop.weight)` where both exist, or a **`is_games_metadata_missing` indicator** and separate `WHERE g.game_id IS NOT NULL` clause for analyses that truly require those attrs. Tag such analyses `N=13,449` subsidiary, not primary.
+3. For **type/taste models needing `game_tags`/`game_links`** — run primary models on all 16,627 via `bgg_research_population` fields; run sensitivity variants restricted to 13,449 with tag data. Report both.
+4. Always **state N and coverage** in Phase 3 tables: e.g., `N=16,627 (ratings 24.5M) primary; N=13,449 where game_attrs required` and cite `reports/games_metadata_coverage/missing_ids.csv`.
+
+### Deliverables
+
+- Script: `scripts/27_games_metadata_coverage_audit.py` (next free number; 24 active-build, 26 baseline, 23 duplicated, 25 anomalous — 27 chosen) — efficient DuckDB on scratch, one script, no SQLite scan [Method].
+- Reports: `reports/games_metadata_coverage/missing_ids.csv` (3,178, `ORDER BY game_id`) + `summary.json`/`summary.md` with exact coverage, balance, concentration, rating-presence, and intent citations [Observed fact].
+- This findings.md entry (dated, claim-tagged) and `reports/games_metadata_coverage/summary.md` recommendation [Observed fact].
+
+### Still open
+
+- Direct SQLite `SELECT COUNT(*) FROM game_attrs WHERE game_id IN (missing)` would formally close the vintage proof where `bgg.sqlite` is available; Parquet evidence is already decisive that missing = absent, not filtered [Open].
+- Publisher/manufacturer clustering beyond `families` not testable from the complete parquet; would need `games.parquet` mfg fields (NULL for missing) or external source [Limitation].
+
 
