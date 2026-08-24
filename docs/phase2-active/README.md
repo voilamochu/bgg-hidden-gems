@@ -139,6 +139,38 @@ Three gates (one even/odd split, no new large parquets):
 
 Rerunnable: `python scripts/27_phase3_taste_active.py --active-dir scratch/phase2-active --population scratch/phase2-active/bgg_research_population.parquet --out-dir data/processed/phase2-active` (bounded, single-scan aggregates, copy-once to `scratch/phase2-active/`). Output: `phase3_taste_active.json` (22KB).
 
+## Phase 3.1 rater informativeness / calibration beyond severity (scripts/28)
+
+Focused follow-up to Phase 3 taste: after accounting for global severity `delta_u` (ALS mu=7.144), does lifetime rating experience predict more informative/discriminating ratings? Uses the same active population (16,627×≥10 minus strict, 24.5M obs) and reuses `user_severity_active.parquet` / `game_adjusted_means_active.parquet` — no refit. Five severity-adjusted tests across volume bands `10-24..1000+` and cumulative thresholds `t=10,20,50,100` (one even/odd split, bounded `4GB/threads3`).
+
+**Scale discrimination — no meaningful spread advantage for heavy raters [Empirical finding]:**
+- Within-user SD raw `1.289 (10-24) →1.324 (1000+)`, residual SD `1.150→1.164` (medians 1.216→1.310 and 1.064→1.129) — flat within ~0.03 points vs rating SD 1.53.
+- Entropy raw `1.96→2.33` bits and bins `4.8→9.2` increase then plateau; modal share `0.412→0.357` stabilizes — reflects more games sampled, not tighter scale use.
+- Raw share at 10: `11.8% (10-24) →1.4% (1000+)` collapses after severity to `5.0%→3.1%` (share≥9: `29.9%→6.1%` raw → `22.9%→15.7%` adj). Heavy-rater "tightness" is largely severity level, not discrimination.
+- Threshold sensitivity `t=10→100`: mean within-user SD raw `1.308→1.310`, resid `1.146→1.134` — no trend.
+
+**Stability of own ratings — severity-adjusted means stabilize with n as expected, taste does not [Empirical finding]:**
+- Severity-adjusted rating `x = rating - delta` mean parity `r` (`x_even` vs `x_odd`, n≥5 per half): `0.285 (10-24) →0.932 (1000+)`, threshold `0.455 (t10) →0.787 (t100)` — rises as noise falls (expected); overall `0.455` (267k users).
+- Half-specific resid `r = rating - adj_mean - delta_half` (game+severity per half, isolates taste): parity `r` **-0.001 to -0.071** across all bands and thresholds — no stable taste beyond severity, consistent with Phase 3.
+- ICC of `x` simple ratio `0.11→0.02` falling with band (more within variance for heavy? artefactual due to fewer heavy games); ICC of pure resid is ~0 by construction (mean resid≈0).
+
+**Relative ordering vs consensus — no experience gradient [Empirical finding]:**
+- Within-user Pearson `r` between severity-adjusted rating `x` and `adj_mean` (game consensus): `10-24 mean 0.441 med 0.491 →100-249 0.502/0.522 →1000+ 0.484/0.497`; overall `0.475/0.513` (288k users, 602 NaNs in 10-24 excluded). Threshold `t10 0.475 →t50 0.499 →t100 0.501` — flat within 0.03 points. Heavy raters do not order games more like consensus after severity (severity invariance: `CORR(rating, adj_mean)==CORR(x, adj_mean)` per user).
+
+**Agreement with others on same game — heavy raters do not agree more [Empirical finding]:**
+- Within-band pairwise RMSE of `x` (severity-adjusted): `1.630 (10-24) ,1.657 (25-49),1.665 (50-99),1.669 (100-249),1.686 (250-499),1.678 (500-999),1.704 (1000+)` — slightly higher for heavy, not lower.
+- Cross-band `x` RMSE: `10-24 vs 1000+ 1.79`, `10-24 vs 250-499 1.70`, `25-49 vs 1000+ 1.78` — cross > within, but not due to unremoved severity (already removed). Raw RMSE anchor `1.86/1.96` shows severity removal lowers RMSE by ~0.23 but experience still not predictive.
+- ICC within-game `1 - mean_within/var_total` for `x`: `0.126 (10-24) →0.195 (1000+)` — higher for heavy due to lower within variance? But pairwise RMSE contradicts.
+
+**Held-out predictive usefulness — flat after severity, no weighting warranted [Empirical finding]:**
+- LOO game-mean RMSE of `x` (predict `x_i` from `loo_mean_g`): `1.204 (10-24),1.206 (25-49),1.195 (50-99),1.187 (100-249),1.195 (250-499),1.190 (500-999),1.212 (1000+)` — range `1.187-1.212` (0.025 spread) vs raw `1.49 vs 1.33` U-shape.
+- Threshold LOO: `ge20 1.195 vs lt20 1.202`, `ge50 1.193 vs lt50 1.206`, `ge100 1.192 vs lt100 1.201` — `ge` ~0.01 lower, not material.
+- Even→odd holdout (predict odd `x` from even game mean): `1.204 (10-24) →1.212 (1000+)`, overall `1.195` adj vs `1.372` raw — severity adjustment gives `0.177` gain, experience adds ~0.01.
+
+**Result [Supported conclusion]:** after global severity, lifetime experience does **not** predict more discriminating scale use, more consensual ordering, tighter inter-rater agreement, or meaningfully better held-out prediction. Severity adjustment is sufficient; **do not weight game-level estimates by rater experience** beyond `delta_u`. Treat `degenerate_broad` as already-handled.
+
+**Artefacts:** `scripts/28_phase31_rater_informativeness.py` (bounded, scratch copies, no wide-table). Outputs: `data/processed/phase2-active/phase31_informativeness.json` (gitignored) + committed `docs/phase2-active/phase31_informativeness.json`; reports `reports/phase31_informativeness/tiered_summary.csv` + `threshold_sensitivity.csv` + `phase31_informativeness.json`. See `findings.md` 2026-08-24 Phase 3.1 entry.
+
 ## Reproduce
 
 ```bash
@@ -152,6 +184,17 @@ python scripts/26_phase2_active_baseline_refresh.py \
     --active-dir data/processed/phase2-active \
     --population scratch/phase2/bgg_research_population.parquet \
     --phase2-dir data/processed/phase2
+
+# Phase 3 taste + informativeness (reuse refreshed baseline, no refit)
+python scripts/27_phase3_taste_active.py \
+    --active-dir scratch/phase2-active \
+    --population scratch/phase2-active/bgg_research_population.parquet \
+    --out-dir data/processed/phase2-active
+
+python scripts/28_phase31_rater_informativeness.py \
+    --active-dir scratch/phase2-active \
+    --population scratch/phase2-active/bgg_research_population.parquet \
+    --out-dir data/processed/phase2-active
 ```
 In worktrees without local base extracts, point `--input-dir`/`--active-dir` at the copied extracts
 (e.g. `scratch/phase2`) and `--population` at `scratch/phase2/bgg_research_population.parquet`. The refresh script fails closed if `data/processed/phase2-active/` is missing.

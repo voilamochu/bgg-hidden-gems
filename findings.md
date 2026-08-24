@@ -1441,3 +1441,133 @@ The large low-vs-high-volume rater gap (active `10-24` vs `1000+` +1.11 within-g
 Do not build a `user×type` taste correction for hidden-gem ranking on this active population — it would add complexity without explanatory or predictive benefit. Keep `severity (global delta)` and `game composition (adj_mean)` separate from `taste`; the selection problem for RQ3 remains within-game enthusiasm trajectories / exposure denominator, not a stable taste interaction for frequent types.
 
 
+
+## 2026-08-24: Phase 3.1 rater informativeness / calibration beyond global severity (scripts/28)
+
+**Primary universe:** 16,627 games × ≥10 in-universe ratings, excluding `degenerate_strict` (`data/processed/phase2-active/`, 24,509,788 obs, 288,730 users, 16,564 games, `rating_observations_active.parquet` copy in `scratch/phase2-active/`). Reuses refreshed baseline from `scripts/26` (ALS `rating = mu + alpha_g + delta_u`, `mu=7.144`, `delta_full/even/odd` in `user_severity_active.parquet`, `adj_mean = mu+alpha` in `game_adjusted_means_active.parquet`). Bounded DuckDB `memory_limit=4GB`/`threads=3`/`temp_directory scratch/ducktmp`; one even/odd `rating_observation_id %2` split only; no wide-table bug; `COPY` only for small aggregates. **Method:** after severity `x = rating - delta_full` or residual `r = rating - adj_mean - delta_full` (severity+game adjusted), test across volume bands `10-24..1000+` and cumulative thresholds `t=10,20,50,100` (primary `t=10` active, sensitivity `t=20,50`). Five dimensions below; all condition on `delta` so level shift not mistaken for discernment.
+
+### 1. Rating-scale discrimination / spread after severity [Empirical finding; Observed fact]
+
+Per-user within-user SD and entropy/modal from `users_active` (raw) vs residual SD after game+severity; scale-use histograms overall per band; share at 10 and ≥9 raw vs severity-adjusted. **Note:** `SD(rating - delta) == SD(rating)` per user by construction (delta constant) — reported both and residual SD is the severity-adjusted discrimination proxy.
+
+| Band | n_users | mean SD raw | med SD raw | mean SD resid | med SD resid | mean entropy | med entropy | mean modal | bins |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 10-24 | 95,945 | 1.289 | 1.216 | 1.150 | 1.064 | 1.961 | 2.000 | 0.412 | 4.8 |
+| 25-49 | 71,545 | 1.323 | 1.270 | 1.155 | 1.088 | 2.171 | 2.190 | 0.372 | 6.0 |
+| 50-99 | 56,925 | 1.319 | 1.277 | 1.142 | 1.086 | 2.245 | 2.258 | 0.360 | 6.8 |
+| 100-249 | 44,002 | 1.309 | 1.269 | 1.132 | 1.080 | 2.280 | 2.294 | 0.358 | 7.6 |
+| 250-499 | 14,410 | 1.313 | 1.275 | 1.139 | 1.086 | 2.312 | 2.327 | 0.356 | 8.4 |
+| 500-999 | 4,844 | 1.308 | 1.282 | 1.140 | 1.101 | 2.320 | 2.338 | 0.357 | 8.9 |
+| 1000+ | 1,059 | 1.324 | 1.310 | 1.164 | 1.129 | 2.328 | 2.367 | 0.357 | 9.2 |
+
+*Threshold sensitivity* `t=10→100`: mean SD raw `1.308→1.310`, resid `1.146→1.134` — flat [Empirical finding].
+
+Overall residual distribution per band `r`: mean ~0 by construction, SD `1.204 (10-24) →1.210 (1000+)`, p10 `-1.38→-1.47`, p90 `1.39→1.39` — no tighter heavy-rater variance [Empirical finding].
+
+Share at 10 raw: `11.77% (10-24) →1.44% (1000+)`; severity-adjusted `ROUND(x)` share at 10: `4.98%→3.07%`, share≥9 `22.87%→15.70%` [Observed fact]. Raw spike at 10 collapses from 10× to ~1.6× after severity — heavy-rater "tightness" is largely severity level, not discrimination [Supported conclusion].
+
+Histograms (overall per band, `ROUND(rating)` vs `ROUND(x)` 1-10; full tables in `phase31_informativeness.json` `histograms`) show the same: raw low-volume spike at 10/9, adjusted distributions overlap much more [Observed fact].
+
+**Interpretation [Supported conclusion]:** after severity, scale spread is uniform across experience tiers; entropy increase plateaus due to more games sampled, not better discrimination. No evidence heavy raters use the scale more informatively.
+
+### 2. Stability of own ratings (even/odd split, severity-adjusted) [Empirical finding]
+
+One deterministic split `parity = rating_observation_id %2`; n≥5 per half. Report `x = rating - delta_full` (severity-adjusted rating) parity correlation, and half-specific resid `r_half = rating - adj_mean - delta_parity` (game+severity per half, isolates taste).
+
+| Band | n_both | r(mean_x even vs odd) | r(sd_x) | median |abs(mean_x diff)| | half-specific r(mean_r) |
+|---|---:|---:|---:|---:|---:|
+| 10-24 | 75,216 | 0.285 | 0.421 | 0.417 | -0.001 |
+| 25-49 | 71,537 | 0.492 | 0.606 | 0.291 | -0.009 |
+| 50-99 | 56,925 | 0.644 | 0.754 | 0.205 | -0.006 |
+| 100-249 | 44,002 | 0.761 | 0.868 | 0.138 | -0.022 |
+| 250-499 | 14,410 | 0.853 | 0.939 | 0.091 | -0.024 |
+| 500-999 | 4,844 | 0.892 | 0.964 | 0.065 | -0.033 |
+| 1000+ | 1,059 | 0.931 | 0.984 | 0.043 | -0.071 |
+
+Threshold `t=10 0.455 (267,993 users) → t20 0.555 → t50 0.703 → t100 0.787` [Empirical finding].
+
+Half-specific resid parity is **-0.001 to -0.071** across all bands — no stable taste beyond game+severity, replicating Phase 3 taste stability `0.355 heavy` vs severity `0.877` [Empirical finding / Supported conclusion].
+
+ICC of `x` simple ratio `var_between_means / var_total`: `0.110 (10-24) →0.020 (1000+)` falling with band due to higher within variance for heavy? Not material [Empirical finding].
+
+**Interpretation [Supported conclusion]:** `x` stability rises with n as expected from reduced noise (a `1000+` user has ~700 per half vs `10-24` ~7 per half), not excess informativeness. After removing game+severity per half, no stable individual signal remains.
+
+### 3. Relative ordering vs consensus [Empirical finding]
+
+Within-user Pearson `r` between `x = rating - delta` and `adj_mean` (game consensus; severity-invariant per user because delta constant, so `CORR(rating, adj_mean)==CORR(x, adj_mean)`). n≥10, NaNs (602 in 10-24 from near-constant rating/game variance) excluded from mean.
+
+| Band | n | mean r | med r | p25 | p75 |
+|---|---:|---:|---:|---:|---:|
+| 10-24 | 95,343 | 0.441 | 0.491 | 0.264 | 0.668 |
+| 25-49 | 71,545 | 0.480 | 0.514 | 0.344 | 0.650 |
+| 50-99 | 56,925 | 0.497 | 0.522 | 0.382 | 0.639 |
+| 100-249 | 44,002 | 0.502 | 0.522 | 0.399 | 0.628 |
+| 250-499 | 14,410 | 0.501 | 0.517 | 0.407 | 0.613 |
+| 500-999 | 4,844 | 0.495 | 0.510 | 0.408 | 0.599 |
+| 1000+ | 1,059 | 0.484 | 0.497 | 0.406 | 0.581 |
+
+Overall `0.475 / 0.513` (288k users) [Empirical finding]. Threshold `t10 0.475 →t20 0.488 →t50 0.499 →t100 0.501` — flat within 0.03 [Empirical finding].
+
+**Interpretation [Supported conclusion]:** heavy raters do **not** order games more like consensus after severity; correlation is invariant to severity and uniform across experience.
+
+### 4. Agreement with other raters on same game [Empirical finding]
+
+Pairwise RMSE on `x` (severity-adjusted; r difference equals x difference for same game because alpha cancels). Computed without enumerating pairs via `n*sumsq - sum^2` per game.
+
+Within-band RMSE `x`:
+`10-24 1.630, 25-49 1.657, 50-99 1.665, 100-249 1.669, 250-499 1.686, 500-999 1.678, 1000+ 1.704` [Empirical finding] — heavy within-band RMSE **higher**, not lower.
+
+Cross-band RMSE `x`:
+`10-24 vs 1000+ 1.79, 10-24 vs 250-499 1.70, 25-49 vs 1000+ 1.78, 100-249 vs 1000+ 1.73` [Empirical finding] — cross > within, but after severity so not just level shift.
+
+Raw anchor (no severity): `10-24 1.86, 100-249 1.86, 1000+ 1.96` → severity lowers RMSE ~0.23 but experience still not predictive [Empirical finding].
+
+ICC within-game `1 - mean_within/var_total` for `x`: `0.126 (10-24) →0.195 (1000+)` [Empirical finding] — higher for heavy but pairwise RMSE contradicts tighter agreement.
+
+**Interpretation [Supported conclusion]:** two heavy raters do **not** agree more than two light raters on same game after severity; `H-H` RMSE is highest.
+
+### 5. Held-out predictive usefulness [Empirical finding; Model-dependent]
+
+LOO game-mean RMSE of `x`: `RMSE = sqrt(mean_i (x_i - loo_mean_g(i))^2)`, `x_i = rating_i - delta`, `loo_mean = (S - x_i)/(n-1)`, efficient `n^2 sumsq -2n S sum + n_T S^2` per game.
+
+| Band | LOO RMSE x | LOO RMSE raw | Even→odd holdout RMSE x |
+|---|---:|---:|---:|
+| 10-24 | 1.204 | 1.487 | 1.204 |
+| 25-49 | 1.206 | 1.396 | 1.206 |
+| 50-99 | 1.195 | 1.351 | 1.195 |
+| 100-249 | 1.187 | 1.333 | 1.186 |
+| 250-499 | 1.195 | 1.355 | 1.197 |
+| 500-999 | 1.190 | 1.375 | 1.191 |
+| 1000+ | 1.212 | 1.487 | 1.213 |
+
+Range `1.187-1.212` (0.025) vs raw U-shape `1.33-1.49` [Empirical finding].
+
+Threshold LOO: `ge20 1.195 vs lt20 1.202`, `ge50 1.193 vs lt50 1.206`, `ge100 1.192 vs lt100 1.201` — `ge` ~0.01 lower, not material [Empirical finding].
+
+Even→odd holdout (predict odd `x` from even game mean of `x`): overall `1.372 raw →1.195 adj` (gain 0.177 from severity) vs experience `1.20→1.21` flat [Empirical finding].
+
+**Interpretation [Supported conclusion]:** a heavy rater's severity-adjusted rating does **not** help predict other users' ratings or game estimates better than a light rater's; the heavy vs light LOO difference is an order of magnitude smaller than the severity adjustment gain. Do **not** weight game-level estimates by experience beyond `delta`.
+
+### Overall synthesis [Supported conclusion]
+
+After global severity `delta_u` (spread 1.04, parity r 0.877, R² both 0.394, holdout 1.472→1.238), **none** of the five informativeness dimensions shows material experience gradient: scale spread flat within 0.03 SD points, rank correlation flat within 0.03, inter-rater agreement not tighter for heavy (actually looser), LOO RMSE flat within 0.025, half-specific taste parity near-zero. The raw experience gradients (share10 11.8%→1.4%, LOO raw U-shape, etc.) collapse after severity to near-uniformity.
+
+**A well-supported "no informativeness beyond severity" is the valid result — do not invent a credibility cutoff** [Supported conclusion]. The established thresholds `t=10,20,50` show sensitivity but no material jump at `t=50` or `t=100` that would warrant a new cutoff; the existing `degenerate_strict` tail (667 users) is handled, `degenerate_broad` retained (3,325 users) is not re-weighted here.
+
+### Limitations [Limitation / Assumption]
+
+- **Severity is descriptive level, not credibility** [Assumption] — heavy-rater lower mean is not "better" calibration; variance is not automatically quality.
+- **Even/odd split is one deterministic split**; half-specific resid mean zero constraint induces artifactual negative parity for full-data resid, so we reported `x` and half-specific resid separately; per-rating within-user `r` rank correlation without same games is not identified [Limitation].
+- **Pairwise RMSE aggregates** use `x` differences; interpretation assumes severity adjustment fully captures level shifts (if enthusiasm trajectories remain, residual gap -0.03 suggests not) [Model-dependent].
+- **LOO and holdout are within-sample** (same BGG population) and use ALS `adj_mean` estimated from active data; not external validation for broad appeal [Limitation].
+- **Degenerate flags** are low-information markers, not fake-user classification; `degenerate_broad` sensitivity not rerun here (strict already excluded) [Assumption].
+- **Threshold comparisons are confounded by n**: parity `r(x)` rising with band is expected from reduced sampling noise (n_even ~7 vs 700); we did not decompose noise vs true informativeness beyond the LOO/ICC flatness [Limitation].
+
+### Implications for quality estimator / next phase [Supported conclusion]
+
+**Do not weight game-level estimates by rater experience beyond `delta`**. The game-level quality estimator from `scripts/26` (`adj_mean = AVG(rating - delta)`, `mu=7.144`) is sufficient; adding experience-weighted averaging or a credibility score would add complexity without predictive benefit (LOO gain 0.01 vs severity gain 0.23, R² gain 0.004 vs 0.193). Downstream hidden-gem work need not stratify by experience beyond severity; continue to treat selection as exposure/enthusiasm denominator, not rater credibility.
+
+Rerunnable: `python scripts/28_phase31_rater_informativeness.py --active-dir scratch/phase2-active --population scratch/phase2-active/bgg_research_population.parquet --out-dir data/processed/phase2-active` (bounded, copy-once, no wide-table). Outputs: `data/processed/phase2-active/phase31_informativeness.json` (gitignored) + committed `docs/phase2-active/phase31_informativeness.json` + `reports/phase31_informativeness/tiered_summary.csv` + `threshold_sensitivity.csv` (tiered JSON also at `reports/phase31_informativeness/phase31_informativeness.json`). Validation anchors: n_obs 24,509,788 delta 0, mu 7.144, pairwise formulas validated via sum_sq vs direct, LOO via per-row formula.
+
+Tagging per AGENTS.md: observed facts (counts, shares, RMSE), empirical findings (band means, correlations, LOO), model-dependent (LOO/holdout with ALS adj_mean), supported conclusions (no weighting), assumption (severity descriptive).
+
