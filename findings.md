@@ -2822,3 +2822,66 @@ Population reused (14,698 × 287,302 × 24,146,307; severity adj_mean NOT refit)
 - **Year sensitivity**: linear-year variant CV R² 0.5615 (spline matters globally) but 18XX β stable (+0.681) — conclusions not year-term artifact.
 - **Decision for Step 10** [model-dependent conclusion]: carry forward **Q3bFam = Q3b + fam_18XX + fam_Cooperative Game + fam_Legacy Game** as primary expected quality (mechanics stay sensitivity). Justified by complete removal of a fold-consistent systematic residual at +3 dummies cost, not by headline R². Q4Fam documented as sensitivity.
 - Construction note [observed fact]: Step-9 designs are rank p−1 (unobserved `1-99` vol band is the dropped dummy level → band dummies sum to intercept); lstsq min-norm handles it identically in scripts 48/49; family flags outside null space.
+
+## 2026-08-25 — Step 10: Quality and underratedness screening thresholds on Pass-2 (Q3bFam primary, Q4Fam sensitivity) [script 50]
+
+Population reused: 14,698 games × 287,302 users × 24,146,307 obs, `data/processed/phase2-pass2/` (mu 7.139, sigma_e 1.193, SE=sigma_e/sqrt(n), reuse Pass-2 severity — NOT refit) [observed fact]. Expected quality Q3bFam primary (48 feats: bands + ns_year + structure + cats≥500 + fam_18XX/fam_Cooperative/fam_Legacy, CV R² 0.6033) and Q4Fam sensitivity (78 feats, CV 0.6151) per Step 9B — reuse methodology, do NOT refit Q3b or re-choose families [model-dependent conclusion]. Script `50_step10_quality_underratedness_gates.py` (next free 50, bounded 4GB/3 threads/scratch/ducktmp, seed 20260824); outputs `docs/phase2-pass2/step10_quality_underratedness_gates/` mirrored to `reports/phase2_pass2/step10_quality_underratedness_gates/`; STOP after Step 10 — hiddenness/audience-selection NOT applied [method].
+
+### Distributions (§1) [observed fact / empirical finding]
+
+- **adj_mean** (severity-adjusted quality, mu 7.139, SD 0.847): p50 6.925, p75 7.466, p90 7.931, p95 8.185, p99 8.628. Median n 347 (p10 123, p90 3184, max 122032), median SE 0.0641 (p10 large SE 0.1076 at low n, p90 small SE 0.0212 at high n). 7 weight-null games median-filled 2.0 + flag — none selectively excluded; 2 in primary pool (Unlock! Timeless Adventures 7.835, Mythic Mischief: Headmaster's Box 8.075) [observed fact].
+- **Q3bFam residual** = adj_mean − expected_Q3bFam: mean ≈0, SD 0.531 (task stated 0.531 confirmed), p90 0.612, p95 0.804, p99 1.178 (task rounded estimates 0.75/0.85/1.2 slightly high vs empirical). Q4Fam residual SD 0.522, p90 0.600, p95 0.797. Residual-vs-log_n corr +0.013 (~0 by construction) [empirical finding, model-dependent].
+- Histograms, quantiles, band table and n/SE scatter in `distributions_histograms.png` / `distributions_vs_n_and_se.png` / `band_summary_pass2.csv` [observed fact].
+
+### Absolute quality thresholds (§2) [empirical finding + model-dependent conclusion]
+
+- `≥7.0` (above mu +0.86 SD, modest): 6,800 games (46.3%), median n 595, median resid +0.21 — too permissive as sole filter [empirical finding].
+- `≥7.5` (Step 9 high-quality flag): 3,446 (23.4%), median n 706, median resid +0.28. Of top-1% Q3bFam residuals (≥1.19), 69% pass / 31% fail — reproduces Step 9's 30% figure, proving high residual ≠ high quality [empirical finding].
+- `≥8.0` (strong): 1,245 (8.5%, median n 614, median resid +0.38) [observed fact].
+- Data-driven `p90 7.931` (1,470, top 10%) and `p95 8.185` (735, top 5%) are very stringent. **Recommended primary quality gate: `adj_mean ≥7.5`** (top quartile, median-to-stringent balance) with `7.0`/`8.0` as sensitivities [model-dependent conclusion].
+
+### Underratedness thresholds (§3) [empirical finding + model-dependent conclusion]
+
+- `≥0.50` (~0.94 SD): 2,175 (14.8%) — includes p75, too permissive [empirical finding].
+- `≥0.75` (~1.4 SD, p~96): 911 (6.2%), median n 235, 58% also adj≥7.5, 85% robust (also ≥0.75 under Q4Fam) — **recommended primary underratedness gate** [model-dependent conclusion].
+- `≥1.00` (~1.9 SD, p~98.5): 330 (2.2%) — stricter precision gate; `≥1.19` (Step 9 top-1%): 145 (1.0%).
+- Data-driven p90 0.612 (1,470), p95 0.804 (735), p99 1.178 (147) bracketing task's rounded values. Overall Q3bFam vs Q4Fam Spearman 0.9775, top-1% Jaccard 0.728 — resid ordering stable, per-gate robust fractions 80–87% [empirical finding].
+
+### Joint gates — quality AND underratedness (§4) [empirical finding + model-dependent conclusion]
+
+- `7.5+0.75` → **532** (median n 256, p10 118, p90 1255, median adj 8.00/resid +0.94). Resid-only 911→joint 532: **379 (42%) of highly-underrated games fail quality**; qual-only 3,446→joint 532: **2,914 (85%) of high-quality games are not highly underrated** — both components indispensable, reproducing Step 9's gap [empirical finding].
+- `7.5+1.00` → 211; `7.0+0.75` → 774 (+45% vs primary, tests quality sensitivity); `7.5+0.50` → 1,062; `8.0+0.75` → 266. None tiny (<20) or huge (>2000) — primary pool well-sized [model-dependent conclusion].
+- Data-driven `p90/p90 (7.931+0.612)` → 441. Examples and why-both-needed demonstration in `joint_gate_analysis.md` [method].
+
+### Uncertainty / rating count (§5) [empirical finding + model-dependent conclusion]
+
+- SE range 35× (0.003 at 122k obs → 0.119 at 100 obs); low-n (100–199, n=4,534) median SE 0.100 vs 25k+ 0.006. Lower_bound = adj−1.96SE (approx 95% LB) heavily penalises low-n: `resid−1.96SE` penalty ~0.17 gap between n=120 (0.21) and n=10k (0.04), i.e. ~0.32 SD of resid — naturally implements higher bar for low-n without ad hoc n-binning [empirical finding].
+- For primary `7.5+0.75` point pool (532): requiring `lower_bound_adj ≥7.5` retains 86% (458); `lower_bound_resid ≥0.75` retains 64% (343); both 57% (304). Requiring `lb_adj≥7.0 & lb_resid≥0.50` retains 62% for the permissive gate — shows LB is stricter and selects for high-n (median n 256→~400) [empirical finding].
+- **Proposed rule:** primary remains **point estimate** (preserves low-n discovery); interpretable **sensitivity rule `adj−1.96SE ≥7.0 & resid−1.96SE ≥0.50`** (1,057 games) as uncertainty-aware check, reporting per-game `SE`/`lower_bound` alongside point estimate rather than mechanically raising threshold by n [model-dependent conclusion / hypothesis]. Do not over-engineer; keep interpretable and show trade-offs per task.
+
+### Primary vs sensitivity (§6) [empirical finding + model-dependent conclusion]
+
+- **Q3bFam vs Q4Fam (mechanics):** overall Spearman 0.9775 / Pearson 0.9830; per joint gate Jaccard `7.5+0.75` 0.817 (532 vs 489, inter 459, churn 73), `7.5+1.0` 0.792. Movers are mechanics repricings (e.g., Titan Δ+0.55). Pool not a different list — mechanics as sensitivity validated [empirical finding].
+- **Q3b vs Q3bFam (family correction — 18XX impact):** Spearman 0.9928, Jaccard top-1% 0.860 — global stable. But at `7.5+0.75`, Q3b 550 → Q3bFam 532 (lost 38, gained 20); **31 of 38 lost are 18XX** (81% of churn; 18XX mean resid +0.676→0.000). At `7.5+1.0`, 21 of 31 lost are 18XX. At `7.93+0.61`, 37 of 48 lost are 18XX. **Family correction materially changes pool locally by de-biasing 18XX** as Step 9B intended, while negligible globally (+0.0046 CV R²) [empirical finding → model-dependent conclusion: Q3bFam correctly primary].
+- Movers and per-gate Jaccards in `primary_vs_sensitivity_comparison.md` / `q3b_vs_q3bFam_comparison.csv` / `movers_*.csv` [method].
+
+### Decision (§8) [model-dependent conclusion]
+
+- **Primary joint gate:** `adj_mean ≥7.5` **AND** `resid_Q3bFam ≥0.75` → **532 games** (3.6% of population) — distribution-justified, not tiny/huge, uncertainty-transparent, Q4Fam-stable (Jaccard 0.817), 18XX-corrected.
+- **Sensitivity gates:** `7.5+1.00` (strict, 211) and `7.0+0.75` (permissive quality, 774) to carry forward to hiddenness/audience screening; plus **uncertainty-aware sensitivity** `adj−1.96SE ≥7.0 & resid−1.96SE ≥0.50` (1,057, larger because thresholds relaxed) as SE-aware check. Justified not by p-values but by distribution/SD/quantiles, n/SE trade-offs, Q4Fam stability, and 18XX de-biasing.
+
+### Constraints preserved (§7) [method / observed fact]
+
+- Keep **quality / underratedness / hiddenness / audience-selection risk** distinct per Step 8 — this pool is **preliminary quality+underratedness only, NOT a hidden-gem list**; hiddenness (volume/visibility) and audience-selection (Step 7/7B/7C) deliberately NOT applied yet [method].
+- **No n<50 family excluded but in pool:** all three Q3bFam families pass n≥50 (18XX 81, Cooperative 1,543, Legacy 50), no hidden filter [observed fact].
+- **Year sensitivity:** ns_year knots [1983,2010,2017,2023] (Step 9); linear-year variant leaves 18XX β +0.748→+0.681, CV −0.04 — family correction not year-term artifact (Step 9B note) [empirical finding].
+
+### Artefacts [method]
+
+- Script `50_step10_quality_underratedness_gates.py` (next free 50, rerunnable, bounded 4GB/3 threads/temp scratch/ducktmp, seed 20260824, weight median-fill 2.0 + flag as before)
+- Outputs `docs/phase2-pass2/step10_quality_underratedness_gates/` mirrored to `reports/phase2_pass2/step10_quality_underratedness_gates/`: README.md (executive summary), quality_threshold_analysis.md (§2), underratedness_threshold_analysis.md (§3), joint_gate_analysis.md (§4), uncertainty_analysis.md (§5), primary_vs_sensitivity_comparison.md (§6), screening_pool.csv (532 rows: game_id, title, n_obs, adj_mean, expected_Q3bFam, residual_Q3bFam, SE, lower_bound, vol_band, plus Q3b/Q4Fam residuals), threshold_sensitivity.csv (per gate quality/resid/joint counts under Q3bFam & Q4Fam, Jaccard), step10_summary.json (machine-readable quantiles/gates/pools/overlaps), plus band_summary_pass2.csv, histograms PNGs, detail CSVs, movers CSVs.
+- Reproduce: `.venv/bin/python scripts/50_step10_quality_underratedness_gates.py`
+
+### Tags [claim discipline]
+
+Observed fact: counts, quantiles, SE, band summaries. Empirical finding: CV/R²/Jaccard/Spearman/delta-resid/retained fractions (model-dependent but data-driven). Model-dependent conclusion: recommended primary/sensitivity gates, uncertainty rule as sensitivity, Q3bFam primary justified. Assumption: additive severity reuse correct, weight median-fill, category threshold 500. STOP after Step 10 per task.

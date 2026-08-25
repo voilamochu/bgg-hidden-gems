@@ -1,0 +1,8 @@
+adj_threshold,resid_threshold,note,games_Q3b,games_Q3bFam,intersection,jaccard,only_Q3b,only_Q3bFam,n18XX_Q3b,n18XX_Q3bFam,lost_18XX_when_correcting,gained_18XX_when_correcting
+7.5,0.75,task example: moderate quality + high underratedness,550,532,512,0.8982456140350877,38,20,35,4,31,0
+7.5,1.0,task example: moderate quality + very high underratedness,231,211,200,0.8264462809917356,31,11,21,0,21,0
+7.0,0.75,task example: permissive quality + high underratedness,791,774,743,0.9038929440389294,48,31,35,4,31,0
+7.5,0.5,permissive underratedness (p~75) + moderate quality,1095,1062,1023,0.9021164021164021,72,39,51,9,42,0
+8.0,0.75,strong quality + high underratedness (precision gate),293,266,257,0.8509933774834437,36,9,35,4,31,0
+7.931369833295782,0.6120677636125564,data-driven joint p90/p90 (top 10% quality AND top 10% residual),478,441,430,0.8793456032719836,48,11,44,7,37,0
+7.0,1.0,permissive quality (7.0) + very high residual 1.0,316,297,285,0.8689024390243902,31,12,21,0,21,0

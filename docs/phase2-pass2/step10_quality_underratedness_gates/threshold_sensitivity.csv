@@ -1,0 +1,22 @@
+gate_type,adj_threshold,resid_threshold,note,games_Q3bFam,games_Q4Fam,jaccard
+quality_only,7.0,,above global mean +0.86 SD (modest),6800,6800,
+quality_only,7.5,,Step 9 high-quality flag (top 30% of Q3bFam residuals fail this in task),3446,3446,
+quality_only,8.0,,strong,1245,1245,
+quality_only,7.931369833295782,,data-driven p90 by adj_mean (top 10%),1470,1470,
+quality_only,8.185346320595833,,data-driven p95 by adj_mean (top 5%),735,735,
+quality_only,7.465967200128562,,p75 by adj_mean (top 25%),3675,3675,
+quality_only,8.628156888329059,,p99 by adj_mean (top 1%),147,147,
+resid_only,,0.5,approx +1 SD (task),2175,2096,0.7983157894736842
+resid_only,,0.75,"approx p90 (task, p90 0.61)",911,865,0.7742257742257742
+resid_only,,1.0,"approx p95 (task, actual p95 0.80)",330,315,0.7479674796747967
+resid_only,,1.19,Step 9 top 1% cutoff (task),145,135,0.7073170731707317
+resid_only,,0.6120677636125564,data-driven p90 Q3bFam,1470,1394,0.7866500311915159
+resid_only,,0.8041783052731921,data-driven p95 Q3bFam,735,710,0.7643467643467643
+resid_only,,1.1781237451453945,data-driven p99 Q3bFam,147,140,0.7083333333333334
+joint,7.5,0.75,task example: moderate quality + high underratedness,532,489,0.8167259786476868
+joint,7.5,1.0,task example: moderate quality + very high underratedness,211,194,0.7920353982300885
+joint,7.0,0.75,task example: permissive quality + high underratedness,774,732,0.7992831541218638
+joint,7.5,0.5,permissive underratedness (p~75) + moderate quality,1062,1012,0.8419182948490231
+joint,8.0,0.75,strong quality + high underratedness (precision gate),266,249,0.8262411347517731
+joint,7.931369833295782,0.6120677636125564,data-driven joint p90/p90 (top 10% quality AND top 10% residual),441,426,0.836864406779661
+joint,7.0,1.0,permissive quality (7.0) + very high residual 1.0,297,279,0.7777777777777778
