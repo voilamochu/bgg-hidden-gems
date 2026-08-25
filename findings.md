@@ -2558,3 +2558,96 @@ Only for flags that pass Stage A BH-corrected gates. **No survivors in confirmed
 - Outputs `docs/raterxgenre_taste_v2/`: `README.md`, `stage_a_joint_fit.json` (per-flag gamma distribution, gates, BH), `stage_a_joint_fit.md`, `stage_b_type_weight.json/.md` (gated empty), `gate_summary.csv` (12-row machine-readable)
 - Inputs: `bgg_research_population.parquet` (16,627), `data/processed/phase2-active/rating_observations_active.parquet` (24.5M provisional), `data/processed/phase2-pass2/rating_observations_pass2.parquet` + `games_pass2.parquet` (14,698/287,302/24.1M confirmed), `game_links.parquet` (43k) — copy once into `scratch/phase2-active` + `scratch/phase2-pass2`
 - Reproduction: `python scripts/41_raterxgenre_taste_v2.py --active-dir data/processed/phase2-active --pass2-dir data/processed/phase2-pass2 --population data/processed/bgg_research_population.parquet --out-dir docs/raterxgenre_taste_v2`
+## 2026-08-24: Step 7 — Observable Audience-Selection / Cult-vs-Hidden Investigation (pass2 14698/287302/24146307, script 42)
+
+### Objective [Method]
+Test whether observable rating histories and rater/game characteristics provide evidence that a game's rater pool is unusually narrow/self-selected, to distinguish (1) genuinely under-recognized games with broad cross-audience quality vs (2) cult/niche games whose high rating is driven by self-selected audience. This is NOT recovery of unobserved non-raters; quantify how much evidence about missing-selection can be extracted from observable histories. Use fixed canonical pass2 population (14698 games × 287302 users × 24146307 obs, mu 7.139, delta_u/adj_mean from scripts 39/40, do NOT modify baseline, do NOT rerun Phase 5/6, do NOT build hidden-gem score).
+
+### Method [Method / Assumption]
+**Script:** `scripts/42_phase7_audience_selection.py` (next free after 41, rerunnable, bounded DuckDB `memory_limit 4GB`/`threads 3`/`temp scratch/ducktmp`, narrow single-scan aggregations, copy-once `scratch/phase2-pass2`, no wide-table bug, no full-snapshot rescans, reuse `bgg_research_population.parquet` for categories/mechanics/families JSON arrays, reuse `user_severity_pass2`/`game_adjusted_means_pass2` without refitting).
+
+**Population validation [Observed fact]:** 14698 games (81 18XX, 2020 Wargame, 1268 Party, 1287 Economic, 1543 Coop, 50 Legacy, 8808 Other) × 287302 users × 24146307 obs, mu 7.139 (recomputed diff -0.000000), 0 violations (validated via earlier validation.json 7 checks).
+
+**Measures A–H [Method / Assumption]:**
+- **A. Audience Concentration:** per-game volume shares (7 bands), Herfindahl/entropy, weight within ±0.5 (sensitivity ±0.3/±0.8), type specialist share ≥10/≥20/≥5 other games of same primary type excluding target, category/mechanic related share (≥1 other sharing ≥1 category via active cats ≥2 overlap, mean 0.993 least discriminating), ownership share_own (snapshot caveat), mean_delta_raters.
+- **B. Prior Exposure:** per-rating other count = total type count -1 (avoid look-ahead, document timestamp unresolved → other count proxy not chronological prior), bins 0–4/5–19/≥20 (≥10 sensitivity), per-game shares.
+- **C. Cross-Audience:** severity-adjusted (`rating - delta_u`) comparison across splits: volume 10-24 vs 500+ (and 1000+), specialist 0-4 vs ≥20 (≥10), ownership own vs not, weight within vs outside; report ≥10 preferred vs ≥5 minimum, n_low/high, mean_low/high_adj, se_diff, z, p.
+- **D. Rating Heterogeneity:** SE-aware distinction: ordinary noise (|z|<2), genuine disagreement (|z|≥2 & |diff|≥0.3), concentrated specialist enthusiasm (adj≥7.5 & low diff & narrow spec>0.4), insufficient (no split ≥5).
+- **E. Distinctiveness:** TVD volume vs references: global (all 24.1M), same type, same weight class (Light/Med/Heavy), same volume decile (D1-D5); delta/weight diff vs reference.
+- **F. Missing-Non-Rater Proxy:** for typed games, penetration = n_raters among enthusiasts (users with ≥20/≥10 total of that type) / total_enthusiasts; missing = total - n_raters; Other not globally computed (per-game varying, heavy).
+- **G. Taxonomy:** auditable rule using empirical q75 thresholds (spec 0.939, tvd 0.231, own 0.664, herf 0.203, pen<0.05): low (0 deviations), moderate (1-2), high (≥3), insufficient (n<150 or no cross support & n<250); preserve deviation_count/details/reason, not calling "cult"/"hidden" factually.
+- **H. Known cases:** 4 mainstream (Catan, Ticket to Ride, Pandemic, Carcassonne), 4 18XX, 1 Monikers, 2 heavy niche, 5 candidate pool; not hand-tuned.
+
+For every metric: definition, denominator, reference, sensitivity, limitations documented in README/methodology_comparison.
+
+### Key Findings
+
+**A. Concentration [Empirical finding]:**
+- Volume: Herfindahl mean 0.192 (SD 0.019), share_heavy_500plus mean 0.29 (SD 0.129), entropy 1.756 — most games 20-30% heavy, not highly discriminating but TVD better.
+- Weight within ±0.5 mean 0.48 (SD 0.338) — about half within. 18XX heavy weight 3.92 vs 2.08 population, but within share varied 0.00–0.59 (not uniformly high).
+- Type specialist: mean 0.832 (median 0.86, q75 0.939) — very high because broad categories (Party 62k ≥10, Economic 105k ≥10) dominate; for narrow 18XX, median 0.24 (gateway 1830 0.13 low, niche 1817 0.59), for Wargame niche 0.97 (high), for Party/Economic broad 0.50–0.76 not distinctive. **Most discriminating for narrow types but inflated for broad; need type-specific thresholds or ≥20.**
+- Category/mechanic related mean 0.993 (SD 0.024) — **least discriminating** (almost all have ≥1 other sharing).
+- Ownership mean 0.573 (p75 0.664) — Monikers 0.67 vs mainstream 0.70 similar, On to Richmond II 0.94 high.
+
+**B. Prior Exposure [Empirical finding]:**
+- Other count distribution: for 18XX, share_0-4 for 1830 0.86 (many newcomers), 1817 0.40; heavy ≥20 share 0.14 vs 0.59; for Wargame median heavy 0.01, Party 0.006, Economic 0.008. **Temporal limitation:** other count includes post-target ratings, not true prior.
+
+**C. Cross-Audience [Empirical finding]:**
+- Volume 10-24 vs 500+: 12166 games ≥5 (9227 ≥10), median diff 0.08 (SD 0.35) near 0 after severity adjustment, not systematic.
+- Specialist 0-4 vs ≥20: 4626 ≥5 (3973 ≥10), median diff 0.15 — specialists slightly higher but SE large.
+- Ownership: 14686 ≥5, median diff 0.05 — no systematic own effect.
+- Weight within vs outside: 13965 ≥5, median diff 0.03 — negligible.
+- Per-type specialist: 18XX 76 ≥5, Wargame 1085, Party 1240, Economic 1085, Coop 1383, Legacy 44. **Does game remain highly rated by non-specialists?** For games with ≥10 per side, ~50% |diff|<0.3 non-significant (broadly consistent), ~18% significant specialist advantage, rest insufficient. Many niche games insufficient (small n).
+
+**D. Heterogeneity [Empirical finding]:**
+- Categories: genuine_disagreement 12155 (82.7%) — inflated due to multiple testing (66911 tests, 12 splits), moderate 1867, ordinary_noise 665, concentrated_specialist_enthusiasm 8, insufficient 3. **Raw counts overstate genuine disagreement; many are volume/specialist splits with small SE. With |z|≥2 threshold, many false positives expected (~0.22 per game).**
+
+**E. Distinctiveness [Empirical finding]:**
+- TVD_global mean 0.167 (SD 0.101), TVD_type 0.152 (SD 0.096), TVD_weight 0.166, TVD_decile 0.146 — **same-type most informative** (global flags all wargames as distinctive, type-relative isolates unusual within type); weight/volume less discriminating (corr 0.63–1.00). Same-type TVD smaller because reference already specialized.
+
+**F. Exposure Proxy [Empirical finding]:**
+- Enthusiasts ge20: 18XX 337 (930 ≥10), Wargame 17338 (40922), Party 25291 (62902), Economic 55654 (105561), Coop 44575 (94562), Legacy 49 (1603).
+- Median penetration ge20_other: 18XX 0.297 (29% of heavy 18XX have rated typical 18XX), Wargame 0.010 (1%), Party 0.0069, Economic 0.0083, Coop 0.0074, Legacy 0.408 (small legacy community). For 1830 0.13 low vs 18Chesapeake 0.28 high — varies.
+- Missing per game median Wargame ~17000, 18XX ~200. **Identification limit:** missing could be never encountered, disliked, not rated, unknown — proxy not negative preference.
+
+**G. Taxonomy [Model-dependent conclusion / Empirical finding]:**
+- low 3936 (26.8%), moderate 6867 (46.7%), high 1124 (7.6%), insufficient 2771 (18.8%).
+- Thresholds: spec q75 0.939 (inflated by broad categories), tvd 0.231, own 0.664, herf 0.203, pen<0.05. **Global spec threshold not type-specific, so 18XX low spec (0.13) not flagged as high — correctly shows gateway breadth but threshold sensitivity is limitation.**
+- High requires ≥3 deviations, so only 7.6% high (e.g., On to Richmond II 0.97 spec but n=102 insufficient not high). Moderate dominates.
+
+**H. Known Cases [Empirical finding]:**
+- Mainstream (Catan 0.50, Pandemic 0.47, TVD 0.31/0.29) → moderate (not low) due to Economic/Coop broad inflation; Ticket to Ride Other NaN, Carcassonne Other moderate — **not low as naively expected, reveals broad category threshold issue.**
+- 18XX varied: 1830 low (0.13), 1846 0.24, 18Chesapeake 0.27, 1817 0.59 — not uniformly high; 1830 gateway breadth correctly detected.
+- Monikers Party 0.76 moderate, not high.
+- On to Richmond II Wargame 0.97 high but insufficient (n=102).
+- Candidates variable: shows taxonomy not forcing binary.
+- **Validation verdict:** measures show plausible variation but threshold sensitivity (broad categories) is limitation; taxonomy preserves moderate/insufficient rather than forcing.
+
+### Overall Interpretation [Model-dependent conclusion / Implication]
+Given observable data, we can detect pool narrowness for typed games with moderate confidence via specialist share and TVD, but **spec thresholds are category-breadth dependent (broad Economic/Party inflate mean to 0.83, so global q75 not discriminating for narrow 18XX).** Cross-audience robustness testable only where ≥10 per side exists (3973 specialist pairs, 9227 volume pairs); many niche games insufficient (2771, 18.8%). Cannot recover unobserved non-raters; penetration proxy shows under-exposure but missing ≠ negative. **Overall, observable evidence distinguishes high vs low selectivity for clear narrow vs broad cases where type is narrow, but leaves large middle (46.7% moderate, 18.8% insufficient) where broad appeal cannot be established — a valid "we can't tell" is not failure.** Self-selection not solved; observable pool selectivity ≠ unobserved non-rater selection; do not infer low selectivity = broad appeal.
+
+### Limitations [Limitation / Assumption]
+- Timestamp unresolved → prior exposure is other count proxy, not chronological prior [Limitation].
+- Ownership snapshot caveat (collection at dump, not rating time) [Limitation].
+- Specialist thresholds broad-category sensitive (Party/Coop/Economic need ≥20, not ≥10); global q75 inflated [Limitation].
+- Category related least discriminating (mean 0.993) due to broad categories [Empirical finding / Limitation].
+- Penetration for Other not globally computed (per-game varying) [Limitation].
+- Heterogeneity inflated by multiple testing (66911 tests, 82.7% genuine) [Limitation].
+- Small n for 18XX (81 games, 930 users ≥10) limits stability for rare type [Limitation].
+- Weight NULL 7 games (99.95% present) [Observed fact].
+- No ground truth for broad appeal; taxonomy is evidence, not proof [Assumption].
+- Identification limit: missing rating could be never encountered, disliked, not rated, unknown — do not interpret as negative [Assumption].
+
+### Implications for Next Phase [Implication / Hypothesis]
+- **Do not alter quality estimator** (mu+alpha+delta remains sufficient, as also shown in Phase 3 taste v2 where type×taste failed gates); use adj_mean as quality.
+- **Do not build hidden-gem score** from taxonomy alone; combine quality (adj≥7.5) + underratedness (resid) + selectivity evidence, but preserve moderate/insufficient as candidates for external validation (play/sales), not proof.
+- **Next phase needs external data** (plays, sales) to validate moderate/insufficient cases; within BGG, no further broad-appeal proof without new data.
+- **Hypothesis kept open:** Trains-type (800 games) not in 6-flag set, could be added if reason surfaces; Heavy-as-type excluded per spec.
+
+### Artefacts [Method]
+- Script `scripts/42_phase7_audience_selection.py` (rerunnable, bounded 4GB/3threads/temp scratch/ducktmp, narrow single-scan, no wide-table, copy-once)
+- Outputs `docs/phase2-pass2/step7_audience_selection/` + `reports/phase2_pass2/step7_audience_selection/`: README.md, audience_selectivity_summary.md, audience_selectivity_game_level.csv (14698 rows, 90 cols), cross_audience_results.csv (66911 rows), exposure_proxy_results.csv (6249 rows), methodology_comparison.md, known_case_sanity_check.md, step7_summary.json (also in `data/processed/phase2-pass2/step7_summary.json` mirror if needed)
+- Inputs: `data/processed/phase2-pass2/rating_observations_pass2.parquet` 24.1M, `users_pass2` 287k, `games_pass2` 14.6k, `collections_pass2` 25.4M, `user_severity_pass2` 287k, `game_adjusted_means_pass2` 14.6k, `bgg_research_population.parquet` 16627
+- Reproduction: `python scripts/42_phase7_audience_selection.py` (also `python /tmp/generate_missing_docs.py` for docs fix)
+- Validation: counts reconcile 14698/287302/24146307, mu diff -0.000000, no degenerate, validation.json 7 checks overall_pass True.
+

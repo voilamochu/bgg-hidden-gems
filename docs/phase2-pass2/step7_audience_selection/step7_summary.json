@@ -1,0 +1,211 @@
+{
+  "generated_at": "2026-08-24T17:36:24Z",
+  "population": {
+    "games": 14698,
+    "users": 287302,
+    "observations": 24146307,
+    "mu": 7.13900772639585,
+    "mu_recomputed": 7.13900772639585,
+    "diff": 0.0
+  },
+  "inputs": {
+    "rating_observations_pass2": "data/processed/phase2-pass2/rating_observations_pass2.parquet",
+    "users_pass2": "data/processed/phase2-pass2/users_pass2.parquet",
+    "games_pass2": "data/processed/phase2-pass2/games_pass2.parquet",
+    "user_severity_pass2": "data/processed/phase2-pass2/user_severity_pass2.parquet",
+    "game_adjusted_means_pass2": "data/processed/phase2-pass2/game_adjusted_means_pass2.parquet",
+    "collections_pass2": "data/processed/phase2-pass2/collections_pass2.parquet",
+    "bgg_research_population": "data/processed/bgg_research_population.parquet"
+  },
+  "methodology": {
+    "script": "scripts/42_phase7_audience_selection.py",
+    "bounded": "memory_limit 4GB / threads 3 / temp scratch/ducktmp, narrow single-scan, no wide-table, no full-snapshot",
+    "baseline_reused": "user_severity_pass2 (delta_u) and game_adjusted_means_pass2 (adj_mean, mu 7.139) from scripts 39/40, no refit",
+    "weight_nulls": 7,
+    "flag_counts": {
+      "18XX": 81,
+      "Wargame": 2020,
+      "Party": 1268,
+      "Economic": 1287,
+      "Coop": 1543,
+      "Legacy": 50
+    },
+    "primary_type_counts": {
+      "Other": 8808,
+      "Wargame": 2020,
+      "Coop": 1356,
+      "Party": 1267,
+      "Economic": 1149,
+      "18XX": 81,
+      "Legacy": 17
+    }
+  },
+  "concentration": {
+    "measures": [
+      "share_vol_heavy_500plus",
+      "herfindahl_volume",
+      "entropy_volume",
+      "share_within_05",
+      "spec_primary_share_ge10",
+      "share_cat_or_mech_related",
+      "share_own",
+      "tvd_volume_global",
+      "mean_delta_raters"
+    ],
+    "most_discriminating": "spec_primary_share_ge10 (where applicable, but broad categories inflate) + tvd_volume_global + share_own",
+    "least_discriminating": "share_cat_or_mech_related (mean 0.993, low variance 0.024)",
+    "thresholds": {
+      "weight_within": "\u00b10.5 (sensitivity \u00b10.3/\u00b10.8)",
+      "specialist_ge": "\u226510 primary (\u226520 for broad categories), sensitivity ge5/ge20 reported",
+      "volume_heavy": "500+ (vs 1000+ sparse)"
+    },
+    "spec_distribution": {
+      "mean": 0.8315853687573368,
+      "median": 0.8596829912619386,
+      "q75": 0.9393560335304438,
+      "q90": 0.9747952010993075,
+      "std": 0.13722974452275805
+    },
+    "tvd_q75": 0.23074101344441206,
+    "own_q75": 0.6641929242675512
+  },
+  "cross_audience": {
+    "splits_tested": [
+      "volume_10-24_vs_500plus",
+      "volume_10-24_vs_1000plus",
+      "specialist_0-4_vs_ge20",
+      "specialist_0-4_vs_ge10",
+      "ownership_own_vs_not",
+      "weight_within0.5_vs_outside",
+      "specialist_18XX_0-4_vs_ge20",
+      "specialist_Wargame_0-4_vs_ge20",
+      "specialist_Party_0-4_vs_ge20",
+      "specialist_Economic_0-4_vs_ge20",
+      "specialist_Coop_0-4_vs_ge20",
+      "specialist_Legacy_0-4_vs_ge20"
+    ],
+    "min_cell_ge10": "preferred, \u226510 per side; ge5 minimum reported",
+    "n_games_with_ge10": 57651,
+    "n_games_with_ge5": 66911,
+    "total_cross_rows": 66911
+  },
+  "heterogeneity": {
+    "genuine_disagreement": 12155,
+    "moderate_heterogeneity": 1867,
+    "ordinary_noise": 665,
+    "concentrated_specialist_enthusiasm": 8,
+    "insufficient_evidence": 3
+  },
+  "distinctiveness": {
+    "references": [
+      "global",
+      "same_type",
+      "same_weight_class",
+      "same_volume_decile"
+    ],
+    "most_informative": "same_type for typed games, global for Other; weight/volume decile less discriminating",
+    "tvd_global_mean": 0.16721411690975865,
+    "tvd_type_mean": 0.15159634759661753,
+    "tvd_global_q75": 0.23074101344441206
+  },
+  "exposure_proxy": {
+    "definition": "penetration = n_raters among enthusiasts / total enthusiasts (ge20 and ge10, total vs other thresholds)",
+    "identification_limit": "missing \u2260 negative preference; proxy for under-exposure, not imputed rating",
+    "enthusiast_counts_ge20": {
+      "18XX": 337,
+      "Wargame": 17338,
+      "Party": 25291,
+      "Economic": 55654,
+      "Coop": 44575,
+      "Legacy": 49
+    },
+    "enthusiast_counts_ge10": {
+      "18XX": 930,
+      "Wargame": 40922,
+      "Party": 62902,
+      "Economic": 105561,
+      "Coop": 94562,
+      "Legacy": 1603
+    },
+    "median_penetration_ge20_other": {
+      "18XX": 0.2967359050445103,
+      "Wargame": 0.010151113161841,
+      "Party": 0.0068799177573049,
+      "Economic": 0.0082653537930786,
+      "Coop": 0.007448121144139,
+      "Legacy": 0.4081632653061224
+    }
+  },
+  "taxonomy": {
+    "moderate_audience_selectivity": 6867,
+    "low_audience_selectivity": 3936,
+    "insufficient_evidence": 2771,
+    "high_audience_selectivity": 1124
+  },
+  "taxonomy_thresholds": {
+    "spec_q75": 0.9393560335304438,
+    "spec_q90": 0.9747952010993075,
+    "tvd_q75": 0.23074101344441206,
+    "tvd_q90": 0.3187682962391368,
+    "share_own_q75": 0.6641929242675512,
+    "herf_q75": 0.2026059246350273,
+    "penetration_low": 0.05
+  },
+  "known_cases": [
+    {
+      "game_id": 13,
+      "title": "CATAN",
+      "category": "mainstream",
+      "taxonomy": "moderate_audience_selectivity",
+      "spec": 0.5,
+      "tvd": 0.31
+    },
+    {
+      "game_id": 421,
+      "title": "1830: Railways & Robber Barons",
+      "category": "18XX niche",
+      "taxonomy": "low_audience_selectivity",
+      "spec": 0.13,
+      "tvd": 0.08
+    },
+    {
+      "game_id": 367432,
+      "title": "On to Richmond II",
+      "category": "niche heavy warg",
+      "taxonomy": "insufficient_evidence",
+      "spec": 0.97,
+      "tvd": 0.13
+    }
+  ],
+  "outputs": {
+    "docs": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/docs/phase2-pass2/step7_audience_selection",
+    "reports": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/reports/phase2_pass2/step7_audience_selection",
+    "files": [
+      "README.md",
+      "audience_selectivity_summary.md",
+      "audience_selectivity_game_level.csv",
+      "cross_audience_results.csv",
+      "exposure_proxy_results.csv",
+      "methodology_comparison.md",
+      "known_case_sanity_check.md",
+      "step7_summary.json"
+    ]
+  },
+  "interpretation_rules": [
+    "Do not claim self-selection solved",
+    "Distinguish observable pool selectivity, user\u00d7type taste, and unobserved non-rater selection",
+    "Do not alter quality estimator",
+    "Do not create combined hidden-gem score",
+    "Do not infer low diversity = bad; high diversity \u2260 proven broad appeal",
+    "Preserve uncertainty and insufficient-evidence cases"
+  ],
+  "limitations": [
+    "Timestamp semantics unresolved \u2192 prior exposure is other count proxy, not chronological prior",
+    "Collections own is snapshot at dump, not rating time",
+    "Specialist thresholds broad-category sensitive (Party/Coop/Economic broad need \u226520)",
+    "Category related least discriminating due to broad categories (mean 0.993)",
+    "Penetration for Other games not globally computed (per-game category set varying)",
+    "Self-selection not solved; shrinkage corrects noise not who is in sample",
+    "No ground truth for broad appeal; taxonomy is evidence, not proof"
+  ]
+}
