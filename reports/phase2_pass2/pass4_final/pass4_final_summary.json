@@ -1,0 +1,161 @@
+{
+  "generated_at": "2026-08-25T16:17:07.655336+00:00Z",
+  "seed": 20260824,
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "mu": 7.139,
+    "source": "data/processed/phase2-pass2/",
+    "note": "validated mu\u22487.139, reuse severity Q3bFam/Q4Fam \u2014 NOT refit"
+  },
+  "pass2": {
+    "commit": "722d149",
+    "screening_pool": 532,
+    "outcome_counts": {
+      "strong": 39,
+      "plausible": 176,
+      "niche": 163,
+      "insufficient": 127,
+      "excluded": 27
+    },
+    "model": {
+      "primary": "Q3bFam 48f CV 0.6033",
+      "sensitivity": "Q4Fam 78f CV 0.6151"
+    }
+  },
+  "pass4_final": {
+    "method": "Q3bFam 48f preserved, hiddenness <1700/1700-2500/>2500 preserved + ref_penetration monitoring (intersect_250 134/279k), pruned 269 preserved (no new 5-pattern), solo_first/duel/wargame_duel + edition/system/hobby_well_known as monitoring flags (not model, not hard exclude), reference intersect_250 primary monitoring",
+    "screening_pool": 532,
+    "outcome_counts": {
+      "strong": 39,
+      "plausible": 176,
+      "niche": 163,
+      "insufficient": 127,
+      "excluded": 27
+    },
+    "delta_vs_pass2": {
+      "strong": 0,
+      "plausible": 0,
+      "niche": 0,
+      "insufficient": 0,
+      "excluded": 0
+    },
+    "spearman_vs_pass2": 1.0,
+    "jaccard_top1_vs_pass2": 1.0,
+    "jaccard_top5_vs_pass2": 1.0,
+    "survive_strong": 39,
+    "new_strong_enter": 0,
+    "strong_leave": 0,
+    "hypothetical_edition_extension": "37 vs 39 NOT kept \u2014 per-pattern fails n\u226550 gate, CV marginal, merely different",
+    "reference_primary": {
+      "candidate_id": "intersect_250_bayes_users",
+      "n_games": 134,
+      "n_users": 279108,
+      "n_obs": 4965490,
+      "median_weight": 2.94,
+      "median_year": 2015,
+      "median_users": 33913,
+      "definition": "intersection top250 bayes \u2229 top250 users (highly ranked + highly rated/high-volume)",
+      "covers_pct_active": 97
+    },
+    "hiddenness": {
+      "eligible_mean_pen": "0.146% (0% >5% hobby, max 0.589% wargame, 2.95% >0.5%)",
+      "borderline_mean_pen": "0.724%",
+      "exclude_mean_pen": "3.47% (17.7% >5% hobby) \u2014 order-of-magnitude gap, 1700 alone sufficient, penetration monitoring via per_game_hiddenness.csv"
+    }
+  },
+  "per_change_keep_drop": [
+    {
+      "change_id": "C-edition_title",
+      "proposed": "add 5 patterns Collector/Ultimate/Kickstarter/Complete Collector/Essential with corroboration to pruned_lists",
+      "reviewer": "NEEDS RERUN per-pattern (45/501, per-pattern CV missing)",
+      "rerun": "per-pattern 5 patterns all n<50 fail gate (Collector 21, Ultimate 7, Kickstarter 15, Complete1, Essential3) \u2192 no CV eligible; Second Edition 112 \u0394+0.0004 <0.001, Edition any 501 \u0394+0.0005 <0.001; base-title 87 not pruned but 10 pool 0 strong, niche enriched 24.5% not strong",
+      "final": "DROP extension \u2014 keep 269, keep edition flag monitoring, no new pruned rule \u2014 SUPPORTED belongs_in screening not model (leakage)"
+    },
+    {
+      "change_id": "C-game_system",
+      "proposed": "keep as hard hiddenness exclude",
+      "rerun": "n=32 <50 wide SE 0.095 CV -0.0001 Jaccard 0.986 0 strong",
+      "final": "KEEP screening \u2014 SUPPORTED (below gate, hard exclude as not hidden)"
+    },
+    {
+      "change_id": "C-base_title_dup",
+      "proposed": "implement base-title completeness test (285\u219239 corroborated 96)",
+      "rerun": "285 dup titles 611 games \u2192 39 corroborated 96 games, 87 missed \u219210 pool 0 strong, 11 truncated at 100",
+      "final": "DROP as hard rule \u2014 keep 269, document truncation, keep as monitoring sensitivity (not polluting strong)"
+    },
+    {
+      "change_id": "C-solo_first",
+      "proposed": "add to Step7 propensity+splits NOT Q3bFam",
+      "rerun": "n=691 +0.127 \u03b2+0.176 5/5 \u0394+0.0014 Jaccard 0.947, insufficient 34.4% vs 23% cross_support 80.5% vs 86.2%",
+      "final": "KEEP as monitoring flag + candidate covariate (NOT model, NOT hard exclude) \u2014 SUPPORTED belongs_in audience-selection, but calibration pending full refit"
+    },
+    {
+      "change_id": "C-duel_1_2p",
+      "proposed": "add to Step7 propensity/cross NOT Q3bFam",
+      "rerun": "n=2555 +0.080 \u03b2+0.201 5/5 \u0394+0.0038 Jaccard 0.814 18% churn, wargame 1153 vs Euro 1402 heterogeneous (47.7% vs 21.5% insufficient)",
+      "final": "KEEP as monitoring flag (NOT model) \u2014 heterogeneous, r -0.70 with log_max, largest CV but belongs in audience not model"
+    },
+    {
+      "change_id": "C-wargame_duel",
+      "proposed": "interaction in propensity NOT model",
+      "rerun": "n=1153 +0.074 \u03b2+0.204 5/5 \u0394+0.0017 Jaccard 0.947, strong 0/39 vs niche 27/163",
+      "final": "KEEP as interaction monitoring, NOT model \u2014 SUPPORTED"
+    },
+    {
+      "change_id": "C-hiddenness",
+      "proposed": "preserve <1700/1700-2500/>2500, add penetration monitoring",
+      "rerun": "eligible 12186 mean 0.146% max 0.58% vs exclude 1818 mean 3.47% 17.7% >5% \u2014 no eligible >1%, 0% >5% vs 360 >0.5% (2.95%) \u2014 order-of-magnitude gap",
+      "final": "PRESERVE thresholds \u2014 no strong reason to move 1700; add penetration as monitoring via per_game_hiddenness.csv (flag hobby_well_known >0.5%)"
+    },
+    {
+      "change_id": "C-reference_population",
+      "proposed": "adopt intersect_250 134/279k as primary broad-hobby reference",
+      "rerun": "tested 13 candidates: top250 bayes 280k weight3.03, top250 users 284k weight2.29, intersect_250 134/279k weight2.94 year2015 33k balances, covers 97% active, profile 420 less established 10k, 100 too narrow 40 games, 500 too broad 327 diminishing",
+      "final": "ADOPT intersect_250 as PRIMARY monitoring reference (defensible: balances bayes+volume, not adj, median weight between, year global median), keep alternatives as sensitivity, compute per-game ref_penetration/TVD vs ref pending full refit"
+    },
+    {
+      "change_id": "C-quality_preserve",
+      "proposed": "keep Q3bFam 48f + Q4Fam 78f + 18XX +0.676\u21920",
+      "rerun": "none meets 18XX bar \u22650.15+5/5+CV\u22650.001+belongs_in model; duel largest but heterogeneous; joint solo+edition+system \u0394+0.00197 < duel alone",
+      "final": "PRESERVE \u2014 keep Q3bFam 48f primary, Q4Fam 78f sensitivity, 18XX correction must remain"
+    }
+  ],
+  "evidence_files": {
+    "per_pattern": "pass4_final/per_pattern_edition.csv",
+    "base_title": "base_title_completeness.json",
+    "heterogeneity": "audience_heterogeneity.csv",
+    "propensity": "propensity_calibration_proxy.csv",
+    "hiddenness": "hiddenness_evidence.csv + per_game_hiddenness.csv",
+    "reference": "reference_population.csv + chosen_reference_gids.json",
+    "final_table": "final_screening_evidence_table.csv"
+  },
+  "what_changed": "final proposed_changes (15 rows) \u2192 final_changes diff: edition extension DROP, base-title DROP, solo/duel/wargame KEEP as monitoring NOT model, system KEEP screening, hiddenness PRESERVE + penetration monitoring, reference ADOPT intersect_250 monitoring, Q3bFam PRESERVE",
+  "why_changed": "investigation \u00a71-7 + rerun counts/CV/Jaccard per change (not just 39 anecdote) + hiddenness 0.146% vs 3.47% + reference 134/279k balances quality+reach vs single-metric bias",
+  "what_improved": "Transparency: per-game solo_first/duel/wargame_duel + edition/system + ref_penetration/hobby_well_known now exposed (insufficient 34.4%/33.3%/47.7% vs 23% overall, penetration 0.146% vs 3.47%); lineage completeness quantified (87 missed 0 strong); reference 134/279k covers 97% active; CV stability 5/5 not one-fold; strong 0 flags preserved genuinely better not merely different",
+  "what_remains": "solo-first n small (691) insufficient thin needs player-eligible at-risk + \u22655 threshold + solo_first split refit (~20% hypothesized); broad appeal for 176+127 moderate/insufficient needs external plays/sales or hobby panel (cannot recover non-raters, timestamp unresolved, snapshot collections); borderline hiddenness 1700-2500 needs external validation; n_version truncated at 100 for 11 games",
+  "strongest_candidates_note": "final 39 identical to Pass2 722d149 strong \u2014 genuinely hidden + robust quality/underrated + no material audience-selection concern, supporting cross-audience where available (see final_screening_evidence_table.csv where outcome_category_final==strong)",
+  "constraints": [
+    "reuse adj_mean/Q3bFam/Q4Fam \u2014 NOT refit severity or Q3bFam from scratch",
+    "n\u226550 gate for additive fam where appropriate",
+    "seed 20260824 5-fold",
+    "bounded 4GB/3threads scratch/ducktmp",
+    "weight 7 null median-filled 2.0 + flag",
+    "dimensions separate no combined score"
+  ],
+  "claim_tags": {
+    "observed_fact": "counts 14698/287k/24.1M mu 7.139 hidden buckets",
+    "empirical_finding": "resid/CV/Jaccard/spearman penetration 0.146%/3.47% per-pattern CV",
+    "model_dependent_conclusion": "Q3bFam primary outcome mapping",
+    "assumption": "additive severity reuse weight median-fill cat threshold 500 propensity calibrated reference \u22651 of 134 = broad hobby",
+    "limitation": "cannot recover non-raters timestamp unresolved snapshot collections borderline needs external plays/sales",
+    "hypothesis": "player-eligible at-risk would reduce insufficient 34%->20% pending full refit"
+  },
+  "files": [
+    "final_screening_evidence_table.csv (532 rows, 505 screened, + is_solo_first/is_duel/is_wargame_duel/is_euro_duel/is_edition_title/is_game_system/n_ref_raters/ref_penetration/hobby_well_known + screening_evidence_final_reason)",
+    "pass2_vs_pass4_counts.csv + pass2_vs_pass4_movers.csv + pass2_vs_pass4_comparison.md",
+    "per_pattern_edition.csv + base_title_completeness.json/csv + audience_heterogeneity.csv + propensity_calibration_proxy.csv + hiddenness_evidence.csv + per_game_hiddenness.csv + reference_population.csv + chosen_reference_gids.json + incorporated_review_evidence.json",
+    "final_methodology.md + incorporated_review.md + final_changes.md + README.md"
+  ]
+}

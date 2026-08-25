@@ -1,0 +1,7 @@
+candidate_id,flag_column,n_games,pct_pop,mean_resid_Q3bFam,median_resid,share_top5_pct,overlap_strong_n,overlap_niche_n,overlap_insufficient_n,passes_n50_gate,beta_added,ols_se,fold_betas,fold_pos_5,cv_r2_ext,delta_cv_r2,spearman_vs_Q3bFam,jaccard_top1,jaccard_top5
+solo_first,flag_solo_first,691,4.7,0.1308,0.16,5.8,4,8,11,True,0.1806,0.0236,+0.193 +0.171 +0.166 +0.179 +0.195,5,0.6076,0.0015,0.9972,0.884,0.916
+duel_1_2p,flag_duel,2555,17.38,0.0857,0.1101,5.6,8,37,43,True,0.2142,0.0165,+0.212 +0.204 +0.215 +0.209 +0.232,5,0.6105,0.0044,0.9923,0.802,0.847
+wargame_duel,flag_wargame_duel,1153,7.84,0.0956,0.1372,3.9,0,27,20,True,0.2369,0.0245,+0.232 +0.229 +0.238 +0.249 +0.236,5,0.6087,0.0025,0.9955,0.896,0.904
+euro_duel,flag_euro_duel,1079,7.34,0.0795,0.0808,6.7,4,9,17,True,0.1182,0.0196,+0.112 +0.114 +0.121 +0.105 +0.139,5,0.607,0.0009,0.9983,0.884,0.942
+strict_solo,flag_strict_solo,249,1.69,0.1354,0.135,5.2,0,2,3,True,0.1591,0.0364,+0.165 +0.120 +0.176 +0.166 +0.173,5,0.6065,0.0004,0.9991,0.986,0.96
+solo_mech,flag_solo_mech,1397,9.5,0.0084,0.0132,3.9,9,10,18,True,0.0128,0.0175,+0.011 +0.012 +0.009 +0.015 +0.018,5,0.6061,0.0,1.0,0.973,0.986
