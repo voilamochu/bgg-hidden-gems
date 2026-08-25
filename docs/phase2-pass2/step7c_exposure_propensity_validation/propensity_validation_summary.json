@@ -1,0 +1,720 @@
+{
+  "generated_at": "2026-08-25T07:51:28Z",
+  "population": {
+    "games": 14698,
+    "users": 287302,
+    "observations": 24146307,
+    "mu": 7.13900772639585
+  },
+  "marginal": 0.005718127380163941,
+  "shift_logit": -5.158379369820672,
+  "model_metrics": {
+    "logistic_balanced_holdout": {
+      "auc": 0.825126099375,
+      "brier": 0.16849274047715349
+    },
+    "prevalence_holdout": {
+      "logit_sampled_scale": {
+        "auc": 0.8221826557085962,
+        "brier": 0.16849274047715349,
+        "ece": 0.33874978342296447,
+        "mean_pred": 0.3444214500896312,
+        "mean_obs": 0.005671666666666667,
+        "cal_in_large": -0.3387497834229645
+      },
+      "rf_sampled_scale": {
+        "auc": 0.8487303526862675,
+        "brier": 0.15429226520460143,
+        "ece": 0.32413740111149686,
+        "mean_pred": 0.3298090677781635,
+        "mean_obs": 0.005671666666666667,
+        "cal_in_large": -0.3241374011114968
+      },
+      "weighted_logit": {
+        "auc": 0.8195281330038154,
+        "brier": 0.0055284440348921,
+        "ece": 0.00013766515800251169,
+        "mean_pred": 0.005738125605194591,
+        "mean_obs": 0.005671666666666667,
+        "cal_in_large": -6.645893852792392e-05
+      },
+      "logit_corrected_global": {
+        "auc": 0.8221826557085962,
+        "brier": 0.005578833630165865,
+        "ece": 0.00033860607553422674,
+        "mean_pred": 0.006010272742200893,
+        "mean_obs": 0.005671666666666667,
+        "cal_in_large": -0.0003386060755342264
+      },
+      "cal_bins_logit_sampled": [
+        {
+          "bin": "0.0-0.1",
+          "count": 65722,
+          "mean_pred": 0.05833047003489995,
+          "mean_obs": 0.00033474331274154775
+        },
+        {
+          "bin": "0.1-0.2",
+          "count": 134606,
+          "mean_pred": 0.15010041349288408,
+          "mean_obs": 0.001054930686596437
+        },
+        {
+          "bin": "0.2-0.3",
+          "count": 108733,
+          "mean_pred": 0.24749373466101046,
+          "mean_obs": 0.0018945490329522776
+        },
+        {
+          "bin": "0.3-0.4",
+          "count": 81366,
+          "mean_pred": 0.34788000256478246,
+          "mean_obs": 0.002863603962342993
+        },
+        {
+          "bin": "0.4-0.5",
+          "count": 63226,
+          "mean_pred": 0.4480100091559659,
+          "mean_obs": 0.00472906715591687
+        },
+        {
+          "bin": "0.5-0.6",
+          "count": 49906,
+          "mean_pred": 0.5476909735634413,
+          "mean_obs": 0.007133410812327175
+        },
+        {
+          "bin": "0.6-0.7",
+          "count": 38847,
+          "mean_pred": 0.6478619704717699,
+          "mean_obs": 0.011017581795248024
+        },
+        {
+          "bin": "0.7-0.8",
+          "count": 29264,
+          "mean_pred": 0.7474532533499604,
+          "mean_obs": 0.018247676325861127
+        },
+        {
+          "bin": "0.8-0.9",
+          "count": 20111,
+          "mean_pred": 0.8456693804110925,
+          "mean_obs": 0.032718412808910545
+        },
+        {
+          "bin": "0.9-1.0",
+          "count": 8219,
+          "mean_pred": 0.9358010288344524,
+          "mean_obs": 0.06387638398831974
+        }
+      ],
+      "cal_bins_corrected": [
+        {
+          "bin": "0.0-0.1",
+          "count": 597660,
+          "mean_pred": 0.0053614451488808584,
+          "mean_obs": 0.005342502426128568
+        },
+        {
+          "bin": "0.1-0.2",
+          "count": 1823,
+          "mean_pred": 0.13350414929499407,
+          "mean_obs": 0.07734503565551289
+        },
+        {
+          "bin": "0.2-0.3",
+          "count": 343,
+          "mean_pred": 0.23881316908301858,
+          "mean_obs": 0.10787172011661808
+        },
+        {
+          "bin": "0.3-0.4",
+          "count": 96,
+          "mean_pred": 0.33954358632237547,
+          "mean_obs": 0.11458333333333333
+        },
+        {
+          "bin": "0.4-0.5",
+          "count": 37,
+          "mean_pred": 0.44299805937004016,
+          "mean_obs": 0.1891891891891892
+        },
+        {
+          "bin": "0.5-0.6",
+          "count": 17,
+          "mean_pred": 0.5479501834498572,
+          "mean_obs": 0.35294117647058826
+        },
+        {
+          "bin": "0.6-0.7",
+          "count": 9,
+          "mean_pred": 0.6569892869479382,
+          "mean_obs": 0.4444444444444444
+        },
+        {
+          "bin": "0.7-0.8",
+          "count": 6,
+          "mean_pred": 0.7346335486036256,
+          "mean_obs": 0.16666666666666666
+        },
+        {
+          "bin": "0.8-0.9",
+          "count": 5,
+          "mean_pred": 0.8379744112930061,
+          "mean_obs": 0.4
+        },
+        {
+          "bin": "0.9-1.0",
+          "count": 4,
+          "mean_pred": 0.9346284868118178,
+          "mean_obs": 0.25
+        }
+      ],
+      "cal_bins_weighted": [
+        {
+          "bin": "0.0-0.1",
+          "count": 598606,
+          "mean_pred": 0.005390875774161238,
+          "mean_obs": 0.0054242690517635975
+        },
+        {
+          "bin": "0.1-0.2",
+          "count": 1173,
+          "mean_pred": 0.13117518111007484,
+          "mean_obs": 0.09803921568627451
+        },
+        {
+          "bin": "0.2-0.3",
+          "count": 166,
+          "mean_pred": 0.2390773381836392,
+          "mean_obs": 0.12048192771084337
+        },
+        {
+          "bin": "0.3-0.4",
+          "count": 35,
+          "mean_pred": 0.3366720317294263,
+          "mean_obs": 0.37142857142857144
+        },
+        {
+          "bin": "0.4-0.5",
+          "count": 12,
+          "mean_pred": 0.4452137180863409,
+          "mean_obs": 0.3333333333333333
+        },
+        {
+          "bin": "0.5-0.6",
+          "count": 3,
+          "mean_pred": 0.5270510664681474,
+          "mean_obs": 0.3333333333333333
+        },
+        {
+          "bin": "0.6-0.7",
+          "count": 2,
+          "mean_pred": 0.6379299022725275,
+          "mean_obs": 0.5
+        },
+        {
+          "bin": "0.7-0.8",
+          "count": 2,
+          "mean_pred": 0.7411628787716273,
+          "mean_obs": 0.5
+        },
+        {
+          "bin": "0.8-0.9",
+          "count": 1,
+          "mean_pred": 0.8440293795316054,
+          "mean_obs": 1.0
+        },
+        {
+          "bin": "0.9-1.0",
+          "count": 0,
+          "mean_pred": NaN,
+          "mean_obs": NaN
+        }
+      ],
+      "cal_bins_rf": [
+        {
+          "bin": "0.0-0.1",
+          "count": 43984,
+          "mean_pred": 0.08342020948163052,
+          "mean_obs": 9.094216078574027e-05
+        },
+        {
+          "bin": "0.1-0.2",
+          "count": 189382,
+          "mean_pred": 0.1482764543995622,
+          "mean_obs": 0.0007234056034892439
+        },
+        {
+          "bin": "0.2-0.3",
+          "count": 104291,
+          "mean_pred": 0.248426202128145,
+          "mean_obs": 0.0018122369140194264
+        },
+        {
+          "bin": "0.3-0.4",
+          "count": 71930,
+          "mean_pred": 0.34551862864380467,
+          "mean_obs": 0.003197553176699569
+        },
+        {
+          "bin": "0.4-0.5",
+          "count": 57758,
+          "mean_pred": 0.44774474486722904,
+          "mean_obs": 0.004778558814363378
+        },
+        {
+          "bin": "0.5-0.6",
+          "count": 43855,
+          "mean_pred": 0.547885227524686,
+          "mean_obs": 0.007137156538593091
+        },
+        {
+          "bin": "0.6-0.7",
+          "count": 37398,
+          "mean_pred": 0.647410351031894,
+          "mean_obs": 0.012166426012086208
+        },
+        {
+          "bin": "0.7-0.8",
+          "count": 26260,
+          "mean_pred": 0.7462098872040869,
+          "mean_obs": 0.01984006092916984
+        },
+        {
+          "bin": "0.8-0.9",
+          "count": 19833,
+          "mean_pred": 0.8445566769900648,
+          "mean_obs": 0.038420813795189836
+        },
+        {
+          "bin": "0.9-1.0",
+          "count": 5309,
+          "mean_pred": 0.9282084260151364,
+          "mean_obs": 0.09719344509323789
+        }
+      ],
+      "shift_logit": -5.158379369820672,
+      "marginal": 0.005718127380163941
+    },
+    "feature_cols": [
+      "log_total_excl",
+      "delta_full",
+      "mean_weight_excl",
+      "vol_ord_excl",
+      "log1p_cnt_18xx_excl",
+      "log1p_cnt_warg_excl",
+      "log1p_cnt_party_excl",
+      "log1p_cnt_econ_excl",
+      "log1p_cnt_coop_excl",
+      "log1p_cnt_legacy_excl",
+      "log1p_cnt_other_excl",
+      "weight_filled",
+      "weight_missing",
+      "year_centered",
+      "flag_18xx",
+      "flag_warg",
+      "flag_party",
+      "flag_econ",
+      "flag_coop",
+      "flag_legacy",
+      "inter_flag_18xx",
+      "inter_flag_warg",
+      "inter_flag_party",
+      "inter_flag_econ",
+      "inter_flag_coop",
+      "inter_flag_legacy"
+    ]
+  },
+  "overlap_counts": {
+    "overall": {
+      "borderline_overlap": 6494,
+      "adequate_overlap": 4819,
+      "insufficient_overlap": 3385
+    },
+    "overall_sample_rule": {
+      "adequate_overlap": 11820,
+      "insufficient_overlap": 2878
+    },
+    "per_type": {
+      "18XX": {
+        "adequate_overlap": 0,
+        "borderline_overlap": 0,
+        "insufficient_overlap": 81
+      },
+      "Coop": {
+        "adequate_overlap": 213,
+        "borderline_overlap": 935,
+        "insufficient_overlap": 208
+      },
+      "Economic": {
+        "adequate_overlap": 111,
+        "borderline_overlap": 889,
+        "insufficient_overlap": 149
+      },
+      "Legacy": {
+        "adequate_overlap": 0,
+        "borderline_overlap": 15,
+        "insufficient_overlap": 2
+      },
+      "Other": {
+        "adequate_overlap": 4452,
+        "borderline_overlap": 2756,
+        "insufficient_overlap": 1600
+      },
+      "Party": {
+        "adequate_overlap": 43,
+        "borderline_overlap": 947,
+        "insufficient_overlap": 277
+      },
+      "Wargame": {
+        "adequate_overlap": 0,
+        "borderline_overlap": 952,
+        "insufficient_overlap": 1068
+      }
+    }
+  },
+  "delta_stats": {
+    "sample_scale": {
+      "mean": -0.005855025066172214,
+      "median": -0.00605702535957815,
+      "std": 0.09136528460559046,
+      "mean_abs": 0.059943779725392,
+      "share_ge02": 0.038984895904204654,
+      "share_ge05": 0.0019730575588515443
+    },
+    "true_scale": {
+      "mean": -0.015248616546221202,
+      "median": -0.01576707418791385,
+      "std": 0.19113216180559153,
+      "mean_abs": 0.13324101040351188,
+      "share_ge02": 0.20805551775751802,
+      "share_ge05": 0.02279221662811267
+    },
+    "trunc_true": {
+      "mean": -0.0012031665192482558,
+      "median": -0.00031498795752145,
+      "std": 0.030462111460449453,
+      "mean_abs": 0.01610669115875318,
+      "share_ge02": 0.0021771669614913595,
+      "share_ge05": 0.0
+    },
+    "per_type_true": {
+      "mean": {
+        "18XX": -0.247,
+        "Coop": -0.059,
+        "Economic": 0.0,
+        "Legacy": 0.025,
+        "Other": -0.001,
+        "Party": -0.018,
+        "Wargame": -0.044
+      },
+      "median": {
+        "18XX": -0.245,
+        "Coop": -0.047,
+        "Economic": -0.008,
+        "Legacy": -0.003,
+        "Other": -0.01,
+        "Party": -0.023,
+        "Wargame": -0.028
+      },
+      "std": {
+        "18XX": 0.669,
+        "Coop": 0.204,
+        "Economic": 0.185,
+        "Legacy": 0.167,
+        "Other": 0.156,
+        "Party": 0.238,
+        "Wargame": 0.23
+      },
+      "share_ge02": {
+        "18XX": 0.691,
+        "Coop": 0.278,
+        "Economic": 0.194,
+        "Legacy": 0.118,
+        "Other": 0.154,
+        "Party": 0.318,
+        "Wargame": 0.316
+      },
+      "share_ge05": {
+        "18XX": 0.346,
+        "Coop": 0.033,
+        "Economic": 0.023,
+        "Legacy": 0.0,
+        "Other": 0.011,
+        "Party": 0.037,
+        "Wargame": 0.047
+      }
+    }
+  },
+  "weighting": {
+    "median_max_w_sample": 9.329813843794593,
+    "median_max_w_true": 1449.408256156279,
+    "p95_max_w_true": 7619.655245382404,
+    "p99_max_w_true": 16565.56559069674,
+    "median_ess_ratio_sample": 0.7202320826335751,
+    "median_ess_ratio_true": 0.3306043204872676,
+    "median_ess_ratio_trunc": 0.9817093717130104,
+    "corr_raw_stab": 0.9999999999999998,
+    "corr_raw_trunc": 0.45492080879887004,
+    "corr_adj_vs_raw_true": 0.9730789746319286,
+    "jaccard_top100_adj_vs_true": 0.6260162601626016,
+    "jaccard_top1pct_adj_vs_true": 0.5614973262032086,
+    "jaccard_sample_vs_true_top100": 0.7391304347826086
+  },
+  "18xx": {
+    "n_games": 81,
+    "delta_true_mean": -0.24729302248197513,
+    "delta_true_median": -0.2445817569154407,
+    "delta_true_std": 0.6690344952186758,
+    "overlap_counts_18xx": {
+      "insufficient_overlap": 81
+    },
+    "sensitivity_counts_18xx": {
+      "insufficient_overlap": 81
+    }
+  },
+  "known_cases": [
+    {
+      "game_id": 421,
+      "title": "1830: Railways & Robber Barons",
+      "primary_type": "18XX",
+      "n_obs": 5628,
+      "adj_mean": 8.413809542395915,
+      "delta_7b_sample": -0.2831472351666999,
+      "class_7b": "insufficient_overlap",
+      "delta_raw_sample": -0.2871506430453365,
+      "delta_raw_true": -0.3214577940238676,
+      "delta_stab_true": -0.3214577940238676,
+      "delta_trunc_true": -0.2005020326483784,
+      "mean_p_sample": 0.5595436231587567,
+      "mean_p_true": 0.1626407027220134,
+      "max_w_sample": 292.61030674057776,
+      "max_w_true": 50706.90817320228,
+      "ess_ratio_sample": 0.14400805352017834,
+      "ess_ratio_true": 0.11835401657335327,
+      "overlap_status": "insufficient_overlap",
+      "sensitivity_class": "insufficient_overlap",
+      "pen_all": 0.0195891431316176,
+      "pen_ge20": 0.9050445103857558,
+      "spec_ge10": 0.1382373845060412
+    },
+    {
+      "game_id": 17405,
+      "title": "1846: The Race for the Midwest",
+      "primary_type": "18XX",
+      "n_obs": 2998,
+      "adj_mean": 8.53805271103467,
+      "delta_7b_sample": -0.2172714178175905,
+      "class_7b": "insufficient_overlap",
+      "delta_raw_sample": -0.2243045292402996,
+      "delta_raw_true": -0.2686687067824191,
+      "delta_stab_true": -0.2686687067824191,
+      "delta_trunc_true": -0.1517804676708323,
+      "mean_p_sample": 0.6951535360126039,
+      "mean_p_true": 0.2447225390110017,
+      "max_w_sample": 377.1934109954127,
+      "max_w_true": 65414.42371093507,
+      "ess_ratio_sample": 0.08735003665851833,
+      "ess_ratio_true": 0.06253941094590941,
+      "overlap_status": "insufficient_overlap",
+      "sensitivity_class": "insufficient_overlap",
+      "pen_all": 0.0104350126347884,
+      "pen_ge20": 0.8813056379821959,
+      "spec_ge10": 0.2411607738492328
+    },
+    {
+      "game_id": 253608,
+      "title": "18Chesapeake",
+      "primary_type": "18XX",
+      "n_obs": 1732,
+      "adj_mean": 8.33889943774498,
+      "delta_7b_sample": -0.0612659987277552,
+      "class_7b": "insufficient_overlap",
+      "delta_raw_sample": -0.0616121857350808,
+      "delta_raw_true": -0.074231707375425,
+      "delta_stab_true": -0.074231707375425,
+      "delta_trunc_true": -0.0515438813678077,
+      "mean_p_sample": 0.7055475160783417,
+      "mean_p_true": 0.2543898873480753,
+      "max_w_sample": 257.217407923511,
+      "max_w_true": 44552.7049920432,
+      "ess_ratio_sample": 0.09484124150045625,
+      "ess_ratio_true": 0.06732222092405767,
+      "overlap_status": "insufficient_overlap",
+      "sensitivity_class": "insufficient_overlap",
+      "pen_all": 0.0060284996275695,
+      "pen_ge20": 0.608308605341246,
+      "spec_ge10": 0.2765588914549653
+    },
+    {
+      "game_id": 63170,
+      "title": "1817",
+      "primary_type": "18XX",
+      "n_obs": 764,
+      "adj_mean": 9.360258130891465,
+      "delta_7b_sample": -0.1555531911302488,
+      "class_7b": "strongly_sensitive",
+      "delta_raw_sample": -0.1587051453258361,
+      "delta_raw_true": -0.3519841095299973,
+      "delta_stab_true": -0.3519841095299973,
+      "delta_trunc_true": -0.0989156973894278,
+      "mean_p_sample": 0.9156612262023718,
+      "mean_p_true": 0.5239962175181144,
+      "max_w_sample": 94.72768223690332,
+      "max_w_true": 16298.596960519855,
+      "ess_ratio_sample": 0.11598712959625086,
+      "ess_ratio_true": 0.025980922953888565,
+      "overlap_status": "insufficient_overlap",
+      "sensitivity_class": "insufficient_overlap",
+      "pen_all": 0.0026592226994591,
+      "pen_ge20": 0.6735905044510384,
+      "spec_ge10": 0.5942408376963351
+    },
+    {
+      "game_id": 424,
+      "title": "1870: Railroading Across the Trans Mississippi from 1870",
+      "primary_type": "18XX",
+      "n_obs": 1053,
+      "adj_mean": 8.0269285401184,
+      "delta_7b_sample": -0.2857337096078485,
+      "class_7b": "insufficient_overlap",
+      "delta_raw_sample": -0.2972904680728829,
+      "delta_raw_true": -0.4143289136889567,
+      "delta_stab_true": -0.4143289136889567,
+      "delta_trunc_true": -0.2886845503630235,
+      "mean_p_sample": 0.7978075180076944,
+      "mean_p_true": 0.3615468089595465,
+      "max_w_sample": 139.15418145159242,
+      "max_w_true": 24023.584512626174,
+      "ess_ratio_sample": 0.09204259135333137,
+      "ess_ratio_true": 0.0496021273438831,
+      "overlap_status": "insufficient_overlap",
+      "sensitivity_class": "insufficient_overlap",
+      "pen_all": 0.0036651328567152,
+      "pen_ge20": 0.5964391691394659,
+      "spec_ge10": 0.3751187084520417
+    },
+    {
+      "game_id": 423,
+      "title": "1856: Railroading in Upper Canada from 1856",
+      "primary_type": "18XX",
+      "n_obs": 1328,
+      "adj_mean": 8.073115207981546,
+      "delta_7b_sample": -0.4816053004147624,
+      "class_7b": "insufficient_overlap",
+      "delta_raw_sample": -0.4875633326557267,
+      "delta_raw_true": -0.6412239139613929,
+      "delta_stab_true": -0.6412239139613938,
+      "delta_trunc_true": -0.2547762896692829,
+      "mean_p_sample": 0.7808580546141318,
+      "mean_p_true": 0.3400146556131828,
+      "max_w_sample": 211.5500222487509,
+      "max_w_true": 36611.94908935628,
+      "ess_ratio_sample": 0.07661950095038336,
+      "ess_ratio_true": 0.04577738478443043,
+      "overlap_status": "insufficient_overlap",
+      "sensitivity_class": "insufficient_overlap",
+      "pen_all": 0.0046223138022011,
+      "pen_ge20": 0.6706231454005931,
+      "spec_ge10": 0.3471385542168674
+    },
+    {
+      "game_id": 13,
+      "title": "CATAN",
+      "primary_type": "Economic",
+      "n_obs": 119003,
+      "adj_mean": 7.1197604937683705,
+      "delta_7b_sample": 0.0467614121066217,
+      "class_7b": "stable_under_exposure_adjustment",
+      "delta_raw_sample": 0.0465397334610173,
+      "delta_raw_true": 0.0837483945889943,
+      "delta_stab_true": 0.083748394588996,
+      "delta_trunc_true": -0.002064030669457,
+      "mean_p_sample": 0.5745808412715466,
+      "mean_p_true": 0.0187517613367983,
+      "max_w_sample": 10.991588273150445,
+      "max_w_true": 1738.361628762736,
+      "ess_ratio_sample": 0.736366906081552,
+      "ess_ratio_true": 0.46310444319243044,
+      "overlap_status": "adequate_overlap",
+      "sensitivity_class": "stable_under_exposure_adjustment",
+      "pen_all": 0.4142087420205915,
+      "pen_ge20": 0.6542746253638553,
+      "spec_ge10": 0.5049368503315043
+    },
+    {
+      "game_id": 9209,
+      "title": "Ticket to Ride",
+      "primary_type": "Other",
+      "n_obs": 87222,
+      "adj_mean": 7.502496399857066,
+      "delta_7b_sample": -0.0457973603733021,
+      "class_7b": "stable_under_exposure_adjustment",
+      "delta_raw_sample": -0.0453498012533888,
+      "delta_raw_true": -0.0697779402527913,
+      "delta_stab_true": -0.0697779402527913,
+      "delta_trunc_true": -0.000648068071734,
+      "mean_p_sample": 0.4595725295669221,
+      "mean_p_true": 0.0075582749566523,
+      "max_w_sample": 12.776838993192603,
+      "max_w_true": 2048.7853585972643,
+      "ess_ratio_sample": 0.7372689994824996,
+      "ess_ratio_true": 0.5423974130931086,
+      "overlap_status": "borderline_overlap",
+      "sensitivity_class": "moderately_sensitive",
+      "pen_all": 0.3035899506442698,
+      "pen_ge20": NaN,
+      "spec_ge10": NaN
+    },
+    {
+      "game_id": 30549,
+      "title": "Pandemic",
+      "primary_type": "Coop",
+      "n_obs": 120228,
+      "adj_mean": 7.622944385521923,
+      "delta_7b_sample": -0.0402269780298869,
+      "class_7b": "stable_under_exposure_adjustment",
+      "delta_raw_sample": -0.0383628203706942,
+      "delta_raw_true": -0.063257932250158,
+      "delta_stab_true": -0.0632579322501598,
+      "delta_trunc_true": -0.0054904463056644,
+      "mean_p_sample": 0.5405468860031419,
+      "mean_p_true": 0.0154880070522241,
+      "max_w_sample": 15.964362304713458,
+      "max_w_true": 2603.0396513911887,
+      "ess_ratio_sample": 0.6753248828296035,
+      "ess_ratio_true": 0.43342402099210803,
+      "overlap_status": "borderline_overlap",
+      "sensitivity_class": "moderately_sensitive",
+      "pen_all": 0.4184725480504834,
+      "pen_ge20": 0.7010656197420079,
+      "spec_ge10": 0.4751888079315966
+    },
+    {
+      "game_id": 822,
+      "title": "Carcassonne",
+      "primary_type": "Other",
+      "n_obs": 122032,
+      "adj_mean": 7.496404225324619,
+      "delta_7b_sample": -0.0232204772647701,
+      "class_7b": "stable_under_exposure_adjustment",
+      "delta_raw_sample": -0.0225944830861255,
+      "delta_raw_true": -0.0346617404618427,
+      "delta_stab_true": -0.0346617404618427,
+      "delta_trunc_true": -0.0004713381736785,
+      "mean_p_sample": 0.4517011046429969,
+      "mean_p_true": 0.0072735827630092,
+      "max_w_sample": 11.882774292035014,
+      "max_w_true": 1893.3232175484272,
+      "ess_ratio_sample": 0.7547387405097755,
+      "ess_ratio_true": 0.5666475598713612,
+      "overlap_status": "borderline_overlap",
+      "sensitivity_class": "moderately_sensitive",
+      "pen_all": 0.4247516550528712,
+      "pen_ge20": NaN,
+      "spec_ge10": NaN
+    }
+  ],
+  "A_answers": {}
+}
