@@ -2810,3 +2810,15 @@ Locked Step 7B methodology validation on pass2 canonical 14,698 × 287,302 × 24
 ### Tags [Claim discipline]
 Observed fact: counts, means, validation. Empirical finding: slopes, gaps, R2, correlations, Jaccards, residual stats (model-dependent but data-driven). Model-dependent conclusion: preferred estimator/spec, underratedness definition, stability interpretation. Assumption: severity additive, no refit correct, weight median fill 2.0, category threshold 500. Speculation: none — keep open where data cannot distinguish.
 
+
+## 2026-08-25 — Step 9B: expected-quality spec audit (family block, 18XX) [scripts/49]
+
+Population reused (14,698 × 287,302 × 24,146,307; severity adj_mean NOT refit); same 5-fold CV/seed 20260824 as Step 9. Script `49_step9b_spec_audit.py`; outputs `docs/phase2-pass2/step9b_expected_quality_spec_audit/` (+ reports mirror).
+
+- **Coverage audit** [observed fact]: Wargame (2020)/Party Game (1268)/Economic (1287) already controlled in Q3b via >=500 category flags; Cooperative Game (1543) only in Q4 mechanics; **18XX (81, BGG family `Series: 18xx` in `games_pass2.families`) and Legacy Game (50, mechanic, fails 500 gate) controlled nowhere**. fam_Wargame/fam_Party/fam_Economic bitwise-equal existing cat_* flags → not re-added; fam_Cooperative duplicates mech_Cooperative.
+- **18XX residual is an omitted-family effect** [empirical finding]: mean resid under Q3b +0.676 (n=81; sharpens Step 9's +0.606 title heuristic). One dummy absorbs it: β +0.748 ± 0.062 OLS SE, fold SD 0.023, positive 5/5 folds; residual → +0.000. Not hidden underratedness signal.
+- **CV**: Q3b 0.5987 → Q3bFam(+fam_18XX,+fam_Cooperative,+fam_Legacy) 0.6033 (ΔR² +0.0046, ΔRMSE −0.0031, better in **all 5 paired folds**; 18XX alone = ~85% of gain). Q4 0.6126 → Q4Fam 0.6151 (+0.0025). Cooperative β +0.083±0.017; Legacy +0.139±0.076 (imprecise, borderline flag).
+- **Rankings**: Spearman(Q3b,Q3bFam) 0.993, Jaccard top1% 0.860 — top-20 movers are all 18XX moving down ~−0.7; 18XX share of top-1% underratedness pool 6.2%→0%. Hidden-gem pool changes materially ONLY by removing the 18XX artifact cluster.
+- **Year sensitivity**: linear-year variant CV R² 0.5615 (spline matters globally) but 18XX β stable (+0.681) — conclusions not year-term artifact.
+- **Decision for Step 10** [model-dependent conclusion]: carry forward **Q3bFam = Q3b + fam_18XX + fam_Cooperative Game + fam_Legacy Game** as primary expected quality (mechanics stay sensitivity). Justified by complete removal of a fold-consistent systematic residual at +3 dummies cost, not by headline R². Q4Fam documented as sensitivity.
+- Construction note [observed fact]: Step-9 designs are rank p−1 (unobserved `1-99` vol band is the dropped dummy level → band dummies sum to intercept); lstsq min-norm handles it identically in scripts 48/49; family flags outside null space.

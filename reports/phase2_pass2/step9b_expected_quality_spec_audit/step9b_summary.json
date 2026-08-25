@@ -1,0 +1,809 @@
+{
+  "generated_at": "2026-08-25T10:26:55Z",
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "source": "data/processed/phase2-pass2/",
+    "severity": "reused scripts 39/40, NOT refit",
+    "mu": 7.139007726394262,
+    "sigma_e": 1.193439741795195
+  },
+  "procedure": {
+    "cv": "KFold-style permutation split, numpy default_rng",
+    "seed": 20260824,
+    "n_folds": 5,
+    "metrics": "unweighted R2/RMSE per fold, mean across folds (as script 48)"
+  },
+  "coverage_audit": {
+    "threshold_rule_existing": "categories/mechanics with >=500 games (script 48 TAG_MIN_COUNT)",
+    "threshold_rule_this_audit": "explicit n>=50 gate, six requested families only",
+    "q3b_category_block_n": 27,
+    "q4_mechanic_block_n": 31,
+    "families": [
+      {
+        "family": "18XX",
+        "n_games": 81,
+        "passes_gate_50": true,
+        "existing_variable": null,
+        "exactly_identical": false,
+        "already_in_q3b_cat_block": false,
+        "already_in_q4_mech_block": false,
+        "source_column": "families JSON contains 'Series: 18xx' (BGG family tag)"
+      },
+      {
+        "family": "Wargame",
+        "n_games": 2020,
+        "passes_gate_50": true,
+        "existing_variable": "cat_Wargame",
+        "exactly_identical": true,
+        "already_in_q3b_cat_block": true,
+        "already_in_q4_mech_block": false,
+        "source_column": "categories JSON contains 'Wargame' (BGG category)"
+      },
+      {
+        "family": "Party Game",
+        "n_games": 1268,
+        "passes_gate_50": true,
+        "existing_variable": "cat_Party Game",
+        "exactly_identical": true,
+        "already_in_q3b_cat_block": true,
+        "already_in_q4_mech_block": false,
+        "source_column": "categories JSON contains 'Party Game' (BGG category)"
+      },
+      {
+        "family": "Economic",
+        "n_games": 1287,
+        "passes_gate_50": true,
+        "existing_variable": "cat_Economic",
+        "exactly_identical": true,
+        "already_in_q3b_cat_block": true,
+        "already_in_q4_mech_block": false,
+        "source_column": "categories JSON contains 'Economic' (BGG category)"
+      },
+      {
+        "family": "Cooperative Game",
+        "n_games": 1543,
+        "passes_gate_50": true,
+        "existing_variable": "mech_Cooperative Game",
+        "exactly_identical": true,
+        "already_in_q3b_cat_block": false,
+        "already_in_q4_mech_block": true,
+        "source_column": "mechanics JSON contains 'Cooperative Game' (BGG mechanic)"
+      },
+      {
+        "family": "Legacy Game",
+        "n_games": 50,
+        "passes_gate_50": true,
+        "existing_variable": null,
+        "exactly_identical": false,
+        "already_in_q3b_cat_block": false,
+        "already_in_q4_mech_block": false,
+        "source_column": "mechanics JSON contains 'Legacy Game' (BGG mechanic)"
+      }
+    ],
+    "collinearity_note": "fam_Wargame/fam_Party Game/fam_Economic are exactly identical to cat_Wargame/cat_Party Game/cat_Economic; fam_Cooperative Game identical to mech_Cooperative Game. Duplicates were not re-added (kept existing). Designs carry the Step-9 band-dummy/intercept dependency (rank p-1, unobserved 1-99 level dropped); fit via lstsq min-norm identically to Step 9, family-flag estimates unaffected.",
+    "design_ranks": {
+      "Q3b": {
+        "rank": 44,
+        "p": 45,
+        "full_rank": false
+      },
+      "Q3b_x18XX": {
+        "rank": 45,
+        "p": 46,
+        "full_rank": false
+      },
+      "Q3bFam": {
+        "rank": 47,
+        "p": 48,
+        "full_rank": false
+      },
+      "Q4": {
+        "rank": 75,
+        "p": 76,
+        "full_rank": false
+      },
+      "Q4Fam": {
+        "rank": 77,
+        "p": 78,
+        "full_rank": false
+      },
+      "Q3bFam_yearlin": {
+        "rank": 45,
+        "p": 46,
+        "full_rank": false
+      }
+    }
+  },
+  "model_comparison": [
+    {
+      "spec": "Q3b",
+      "weighting": "ols",
+      "target": "adj",
+      "definition": "Step-9 primary reproduced (bands + ns_year + structure + categories>=500)",
+      "n_games": 14698,
+      "n_features": 45,
+      "r2_in": 0.6018630047487676,
+      "rmse_in": 0.5342849701216573,
+      "cv_r2_mean": 0.5987036895624864,
+      "cv_r2_sd": 0.006133217264687589,
+      "cv_rmse_mean": 0.5362096033520558,
+      "cv_rmse_sd": 0.006383133225438921,
+      "corr_resid_logn": 0.012538845962407003,
+      "spearman_resid_logn": 0.0020978190614529867,
+      "corr_cvresid_logn": 0.012378262704945785,
+      "fold1_r2": 0.5967894133977851,
+      "fold1_rmse": 0.5431104601030403,
+      "fold2_r2": 0.5965402022136876,
+      "fold2_rmse": 0.5252128149542611,
+      "fold3_r2": 0.5898377575872085,
+      "fold3_rmse": 0.5340315143213537,
+      "fold4_r2": 0.6081219133090847,
+      "fold4_rmse": 0.5416644823614272,
+      "fold5_r2": 0.6022291613046664,
+      "fold5_rmse": 0.5370287450201969
+    },
+    {
+      "spec": "Q3b_x18XX",
+      "weighting": "ols",
+      "target": "adj",
+      "definition": "Q3b + 18XX indicator only (attribution)",
+      "n_games": 14698,
+      "n_features": 46,
+      "r2_in": 0.6057512079958061,
+      "rmse_in": 0.5316696574418999,
+      "cv_r2_mean": 0.6026140699884899,
+      "cv_r2_sd": 0.0056833922233755566,
+      "cv_rmse_mean": 0.533595859301913,
+      "cv_rmse_sd": 0.006462216826985546,
+      "corr_resid_logn": 0.012804996157841397,
+      "spearman_resid_logn": 0.0022526822221460405,
+      "corr_cvresid_logn": 0.012622388208114146,
+      "fold1_r2": 0.6007639639289988,
+      "fold1_rmse": 0.5404270411423997,
+      "fold2_r2": 0.6006565030753401,
+      "fold2_rmse": 0.5225267027679552,
+      "fold3_r2": 0.5947650008234739,
+      "fold3_rmse": 0.5308141857588105,
+      "fold4_r2": 0.611956844974321,
+      "fold4_rmse": 0.5390075931842011,
+      "fold5_r2": 0.6049280371403156,
+      "fold5_rmse": 0.5352037736561988
+    },
+    {
+      "spec": "Q3bFam",
+      "weighting": "ols",
+      "target": "adj",
+      "definition": "Q3b + genuinely-new family indicators ['fam_18XX', 'fam_Cooperative Game', 'fam_Legacy Game']; Wargame/Party/Economic already present as cat_* (exact duplicates dropped, keep existing)",
+      "n_games": 14698,
+      "n_features": 48,
+      "r2_in": 0.6065352435097434,
+      "rmse_in": 0.5311407333812695,
+      "cv_r2_mean": 0.6033193821349394,
+      "cv_r2_sd": 0.005799527312106044,
+      "cv_rmse_mean": 0.5331200823652666,
+      "cv_rmse_sd": 0.006393699807143708,
+      "corr_resid_logn": 0.012757192640623628,
+      "spearman_resid_logn": 0.0023523129554931625,
+      "corr_cvresid_logn": 0.012565289858032489,
+      "fold1_r2": 0.6012241335001498,
+      "fold1_rmse": 0.5401154963923522,
+      "fold2_r2": 0.6010802582511412,
+      "fold2_rmse": 0.5222493949272,
+      "fold3_r2": 0.5956100027001412,
+      "fold3_rmse": 0.5302604662465054,
+      "fold4_r2": 0.6130024280601394,
+      "fold4_rmse": 0.538280924812927,
+      "fold5_r2": 0.6056800881631257,
+      "fold5_rmse": 0.5346941294473483
+    },
+    {
+      "spec": "Q4",
+      "weighting": "ols",
+      "target": "adj",
+      "definition": "Step-9 mechanics sensitivity reproduced (Q3b + mechanics>=500)",
+      "n_games": 14698,
+      "n_features": 76,
+      "r2_in": 0.617200513979439,
+      "rmse_in": 0.5238927193853802,
+      "cv_r2_mean": 0.6125664478999777,
+      "cv_r2_sd": 0.007231482962129363,
+      "cv_rmse_mean": 0.5268520046039916,
+      "cv_rmse_sd": 0.006387911370352994,
+      "corr_resid_logn": 0.013355782966994854,
+      "spearman_resid_logn": 0.0017180846042476232,
+      "corr_cvresid_logn": 0.012819208846573357,
+      "fold1_r2": 0.6066993399054615,
+      "fold1_rmse": 0.5363947786550797,
+      "fold2_r2": 0.6070831083711128,
+      "fold2_rmse": 0.5183051578803181,
+      "fold3_r2": 0.6090369251179356,
+      "fold3_rmse": 0.5213830615175252,
+      "fold4_r2": 0.6260816890693365,
+      "fold4_rmse": 0.5291066700709598,
+      "fold5_r2": 0.6139311770360424,
+      "fold5_rmse": 0.5290703548960756
+    },
+    {
+      "spec": "Q4Fam",
+      "weighting": "ols",
+      "target": "adj",
+      "definition": "Q4 + ['fam_18XX', 'fam_Legacy Game']; Wargame/Party/Economic duplicate cat_*, Cooperative duplicates mech_Cooperative Game (dropped)",
+      "n_games": 14698,
+      "n_features": 78,
+      "r2_in": 0.6198371643368243,
+      "rmse_in": 0.5220853649161489,
+      "cv_r2_mean": 0.6151479547696994,
+      "cv_r2_sd": 0.007060170132276502,
+      "cv_rmse_mean": 0.5250959844563964,
+      "cv_rmse_sd": 0.006411980801263098,
+      "corr_resid_logn": 0.013513245556595999,
+      "spearman_resid_logn": 0.0021218226882000583,
+      "corr_cvresid_logn": 0.012922051288905213,
+      "fold1_r2": 0.6093745613053683,
+      "fold1_rmse": 0.5345673938618185,
+      "fold2_r2": 0.6095456837783393,
+      "fold2_rmse": 0.5166783867563565,
+      "fold3_r2": 0.6121697576541684,
+      "fold3_rmse": 0.519289908393974,
+      "fold4_r2": 0.6283509194942694,
+      "fold4_rmse": 0.5274987090376434,
+      "fold5_r2": 0.6162988516163515,
+      "fold5_rmse": 0.5274455242321896
+    },
+    {
+      "spec": "Q3bFam_yearlin",
+      "weighting": "ols",
+      "target": "adj",
+      "definition": "Q3bFam but ns_year spline replaced by linear year_c (year-sensitivity)",
+      "n_games": 14698,
+      "n_features": 46,
+      "r2_in": 0.5649025035922763,
+      "rmse_in": 0.5585344718126758,
+      "cv_r2_mean": 0.5614681556257137,
+      "cv_r2_sd": 0.0024453108018057047,
+      "cv_rmse_mean": 0.5605893255915523,
+      "cv_rmse_sd": 0.008587550089597188,
+      "corr_resid_logn": 0.010661704280843343,
+      "spearman_resid_logn": -0.0011820292574030394,
+      "corr_cvresid_logn": 0.010485727072235478,
+      "fold1_r2": 0.5629593580866483,
+      "fold1_rmse": 0.5654355588910782,
+      "fold2_r2": 0.5622297382668757,
+      "fold2_rmse": 0.5470894108660977,
+      "fold3_r2": 0.5566419151971442,
+      "fold3_rmse": 0.5552216126809971,
+      "fold4_r2": 0.5632499079627226,
+      "fold4_rmse": 0.5718358412438062,
+      "fold5_r2": 0.5622598586151779,
+      "fold5_rmse": 0.5633642042757822
+    }
+  ],
+  "family_effects": {
+    "coefficients": [
+      {
+        "spec": "Q3b",
+        "feature": "fam_18XX",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b",
+        "feature": "fam_Wargame",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b",
+        "feature": "fam_Party Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b",
+        "feature": "fam_Economic",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b",
+        "feature": "fam_Cooperative Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b",
+        "feature": "fam_Legacy Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b_x18XX",
+        "feature": "fam_18XX",
+        "beta": 0.7483006430984792,
+        "ols_se": 0.06224986878178305,
+        "fold_beta_mean": 0.7485412307896523,
+        "fold_beta_sd": 0.022814126643210645,
+        "in_design": true
+      },
+      {
+        "spec": "Q3b_x18XX",
+        "feature": "fam_Wargame",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b_x18XX",
+        "feature": "fam_Party Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b_x18XX",
+        "feature": "fam_Economic",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b_x18XX",
+        "feature": "fam_Cooperative Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3b_x18XX",
+        "feature": "fam_Legacy Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3bFam",
+        "feature": "fam_18XX",
+        "beta": 0.7483291498362761,
+        "ols_se": 0.062192702523803364,
+        "fold_beta_mean": 0.7485289867625398,
+        "fold_beta_sd": 0.02289192937031898,
+        "in_design": true
+      },
+      {
+        "spec": "Q3bFam",
+        "feature": "fam_Wargame",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3bFam",
+        "feature": "fam_Party Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3bFam",
+        "feature": "fam_Economic",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3bFam",
+        "feature": "fam_Cooperative Game",
+        "beta": 0.0829289413247841,
+        "ols_se": 0.01663617339607948,
+        "fold_beta_mean": 0.0828674833275234,
+        "fold_beta_sd": 0.005879510342643994,
+        "in_design": true
+      },
+      {
+        "spec": "Q3bFam",
+        "feature": "fam_Legacy Game",
+        "beta": 0.13941295050574648,
+        "ols_se": 0.07615423322012468,
+        "fold_beta_mean": 0.13880813548776025,
+        "fold_beta_sd": 0.04217387562542338,
+        "in_design": true
+      },
+      {
+        "spec": "Q4",
+        "feature": "fam_18XX",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4",
+        "feature": "fam_Wargame",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4",
+        "feature": "fam_Party Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4",
+        "feature": "fam_Economic",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4",
+        "feature": "fam_Cooperative Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4",
+        "feature": "fam_Legacy Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4Fam",
+        "feature": "fam_18XX",
+        "beta": 0.6640646989962585,
+        "ols_se": 0.06650795929279787,
+        "fold_beta_mean": 0.6642329398700342,
+        "fold_beta_sd": 0.023395254495930152,
+        "in_design": true
+      },
+      {
+        "spec": "Q4Fam",
+        "feature": "fam_Wargame",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4Fam",
+        "feature": "fam_Party Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4Fam",
+        "feature": "fam_Economic",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4Fam",
+        "feature": "fam_Cooperative Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q4Fam",
+        "feature": "fam_Legacy Game",
+        "beta": 0.09786175970048744,
+        "ols_se": 0.07593748464743033,
+        "fold_beta_mean": 0.09793223196592064,
+        "fold_beta_sd": 0.046580487938782084,
+        "in_design": true
+      },
+      {
+        "spec": "Q3bFam_yearlin",
+        "feature": "fam_18XX",
+        "beta": 0.6810576134099946,
+        "ols_se": 0.06534922264414443,
+        "fold_beta_mean": 0.6812389818820048,
+        "fold_beta_sd": 0.024835716338505367,
+        "in_design": true
+      },
+      {
+        "spec": "Q3bFam_yearlin",
+        "feature": "fam_Wargame",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3bFam_yearlin",
+        "feature": "fam_Party Game",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3bFam_yearlin",
+        "feature": "fam_Economic",
+        "beta": NaN,
+        "ols_se": NaN,
+        "fold_beta_mean": NaN,
+        "fold_beta_sd": NaN,
+        "in_design": false
+      },
+      {
+        "spec": "Q3bFam_yearlin",
+        "feature": "fam_Cooperative Game",
+        "beta": 0.12272706594689439,
+        "ols_se": 0.017431633873411647,
+        "fold_beta_mean": 0.12271261458133709,
+        "fold_beta_sd": 0.009210056727416585,
+        "in_design": true
+      },
+      {
+        "spec": "Q3bFam_yearlin",
+        "feature": "fam_Legacy Game",
+        "beta": 0.25744632721404503,
+        "ols_se": 0.08001382030632932,
+        "fold_beta_mean": 0.25684233275576285,
+        "fold_beta_sd": 0.04646384610804383,
+        "in_design": true
+      }
+    ],
+    "residual_means_by_family": [
+      {
+        "family": "18XX",
+        "n_games": 81,
+        "mean_resid_Q3b": 0.6760198438901892,
+        "median_resid_Q3b": 0.6506291406613283,
+        "sd_resid_Q3b": 0.4274978762770064,
+        "share_top5pct_Q3b": 0.4074074074074074,
+        "mean_resid_Q3b_x18XX": 1.4964019049942034e-11,
+        "median_resid_Q3b_x18XX": -0.02296702788265037,
+        "mean_resid_Q3bFam": 2.2995937116112695e-11,
+        "median_resid_Q3bFam": -0.02204553991914615,
+        "mean_resid_Q4": 0.5080013964199753,
+        "median_resid_Q4": 0.4730222480954289,
+        "mean_resid_Q4Fam": 1.5584230750868928e-11,
+        "median_resid_Q4Fam": -0.017599283521009923
+      },
+      {
+        "family": "Wargame",
+        "n_games": 2020,
+        "mean_resid_Q3b": 8.742315562340263e-12,
+        "median_resid_Q3b": 0.04692532818134154,
+        "sd_resid_Q3b": 0.5228167979762554,
+        "share_top5pct_Q3b": 0.03811881188118812,
+        "mean_resid_Q3b_x18XX": 1.2034996541697498e-11,
+        "median_resid_Q3b_x18XX": 0.047693805324421135,
+        "mean_resid_Q3bFam": 8.588162084678704e-13,
+        "median_resid_Q3bFam": 0.04909474122518853,
+        "mean_resid_Q4": -8.551224854726353e-12,
+        "median_resid_Q4": 0.03916282568492235,
+        "mean_resid_Q4Fam": 1.8849765312990198e-11,
+        "median_resid_Q4Fam": 0.04246571267448962
+      },
+      {
+        "family": "Party Game",
+        "n_games": 1268,
+        "mean_resid_Q3b": 1.687211324035336e-11,
+        "median_resid_Q3b": 0.05182387835896707,
+        "sd_resid_Q3b": 0.6444666590440309,
+        "share_top5pct_Q3b": 0.08753943217665615,
+        "mean_resid_Q3b_x18XX": 2.2571034421093182e-11,
+        "median_resid_Q3b_x18XX": 0.05016619182470272,
+        "mean_resid_Q3bFam": 1.1245431505024037e-12,
+        "median_resid_Q3bFam": 0.04945800497253172,
+        "mean_resid_Q4": -3.144243925861248e-11,
+        "median_resid_Q4": 0.05203825749037261,
+        "mean_resid_Q4Fam": 1.3392167150913244e-11,
+        "median_resid_Q4Fam": 0.0502962854604867
+      },
+      {
+        "family": "Economic",
+        "n_games": 1287,
+        "mean_resid_Q3b": 1.5717526908753573e-11,
+        "median_resid_Q3b": 0.02035216290619246,
+        "sd_resid_Q3b": 0.5397140892811674,
+        "share_top5pct_Q3b": 0.05516705516705517,
+        "mean_resid_Q3b_x18XX": 1.389461074902427e-11,
+        "median_resid_Q3b_x18XX": 0.03882198339570486,
+        "mean_resid_Q3bFam": -1.3738788230189048e-12,
+        "median_resid_Q3bFam": 0.041912676098830204,
+        "mean_resid_Q4": -3.013796757696853e-11,
+        "median_resid_Q4": 0.02056334991891262,
+        "mean_resid_Q4Fam": 1.4447857569736203e-11,
+        "median_resid_Q4Fam": 0.02724919292478667
+      },
+      {
+        "family": "Cooperative Game",
+        "n_games": 1543,
+        "mean_resid_Q3b": 0.05629583569294116,
+        "median_resid_Q3b": 0.08170431032104286,
+        "sd_resid_Q3b": 0.5382187100639187,
+        "share_top5pct_Q3b": 0.07712248865845756,
+        "mean_resid_Q3b_x18XX": 0.05612078031406248,
+        "median_resid_Q3b_x18XX": 0.08336675213771194,
+        "mean_resid_Q3bFam": -7.190037432722013e-12,
+        "median_resid_Q3bFam": 0.027772975310059955,
+        "mean_resid_Q4": -6.374352331347899e-11,
+        "median_resid_Q4": 0.02103315800526584,
+        "mean_resid_Q4Fam": 9.122529476261486e-12,
+        "median_resid_Q4Fam": 0.019355754210979903
+      },
+      {
+        "family": "Legacy Game",
+        "n_games": 50,
+        "mean_resid_Q3b": 0.1516762761656388,
+        "median_resid_Q3b": 0.22073680332261603,
+        "sd_resid_Q3b": 0.5840432570007027,
+        "share_top5pct_Q3b": 0.08,
+        "mean_resid_Q3b_x18XX": 0.1551136805089497,
+        "median_resid_Q3b_x18XX": 0.2258225974156005,
+        "mean_resid_Q3bFam": 1.4569447870371732e-10,
+        "median_resid_Q3bFam": 0.05933787178688421,
+        "mean_resid_Q4": 0.09418822596329982,
+        "median_resid_Q4": 0.1709616637270681,
+        "mean_resid_Q4Fam": 8.150280450536229e-12,
+        "median_resid_Q4Fam": 0.0643625520066351
+      }
+    ],
+    "top_candidate_shares_18xx": {
+      "Q3b_top1pct_18xx_share_and_examples": {
+        "share": 0.06164383561643835,
+        "examples": [
+          "1817",
+          "1824: Austria-Hungary",
+          "1832: The South",
+          "1841: Railways in Northern Italy",
+          "1844: Schweiz",
+          "1849: The Game of Sicilian Railways",
+          "1850: The MidWest",
+          "18NY",
+          "18Rhl: Rhineland"
+        ]
+      },
+      "Q3b_top5pct_18xx_share_and_examples": {
+        "share": 0.04495912806539509,
+        "examples": [
+          "1817",
+          "1822CA",
+          "1822MX",
+          "1824: Austria-Hungary",
+          "1825 Unit 2",
+          "1825 Unit 3",
+          "1826: Railroading in France and Belgium from 1826",
+          "1828",
+          "1832: The South",
+          "1836Jr",
+          "1837: Rail Building in the Austro-Hungarian Empire",
+          "1841: Railways in Northern Italy"
+        ]
+      },
+      "Q3bFam_top1pct_18xx_share_and_examples": {
+        "share": 0.0,
+        "examples": []
+      },
+      "Q3bFam_top5pct_18xx_share_and_examples": {
+        "share": 0.0027247956403269754,
+        "examples": [
+          "1832: The South",
+          "1844: Schweiz"
+        ]
+      }
+    }
+  },
+  "rank_stability": [
+    {
+      "pair": "Q3b_vs_Q3bFam",
+      "spearman": 0.9928409896677318,
+      "jaccard_top1": 0.8598726114649682,
+      "jaccard_top5": 0.8605830164765526,
+      "jaccard_top10": 0.9065541855937703
+    },
+    {
+      "pair": "Q3b_vs_Q4",
+      "spearman": 0.9739902981325032,
+      "jaccard_top1": 0.727810650887574,
+      "jaccard_top5": 0.7497020262216925,
+      "jaccard_top10": 0.7773744706594071
+    },
+    {
+      "pair": "Q3b_vs_Q4Fam",
+      "spearman": 0.9706638889169099,
+      "jaccard_top1": 0.6781609195402298,
+      "jaccard_top5": 0.7250293772032902,
+      "jaccard_top10": 0.7645645645645646
+    },
+    {
+      "pair": "Q3bFam_vs_Q4Fam",
+      "spearman": 0.9775372164327761,
+      "jaccard_top1": 0.727810650887574,
+      "jaccard_top5": 0.766546329723225,
+      "jaccard_top10": 0.7969418960244649
+    },
+    {
+      "pair": "Q3b_vs_Q3b_x18XX",
+      "spearman": 0.9943140966138762,
+      "jaccard_top1": 0.8717948717948718,
+      "jaccard_top5": 0.9064935064935065,
+      "jaccard_top10": 0.9354413702239789
+    }
+  ],
+  "year_sensitivity": {
+    "primary_knots": [
+      1983.0,
+      2010.0,
+      2017.0,
+      2023.0
+    ],
+    "beta_18XX_Q3bFam": 0.7483291498362761,
+    "beta_18XX_Q3bFam_yearlin": 0.6810576134099946,
+    "cv_r2_Q3bFam": 0.6033193821349394,
+    "cv_r2_Q3bFam_yearlin": 0.5614681556257137,
+    "note": "ns_year knots kept at Step-9 quantiles [1983,2010,2017,2023]; linear-year variant run once to verify the family conclusions are not an artifact of the year term."
+  },
+  "recommendation": "EXTEND Q3b -> Q3bFam (add fam_18XX, fam_Cooperative Game, fam_Legacy Game): dCV_R2 +0.0046, 18XX residual +0.676 -> +0.000, 18XX positive in all 5 folds.",
+  "claim_tags": {
+    "counts/thresholds": "observed fact from data",
+    "CV numbers/coefficient estimates": "empirical finding (model-dependent)",
+    "recommendation": "model-dependent conclusion based on pre-stated criteria"
+  }
+}
