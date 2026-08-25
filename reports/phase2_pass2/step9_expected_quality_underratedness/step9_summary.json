@@ -1,0 +1,1157 @@
+{
+  "generated_at": "2026-08-25T09:19:23Z",
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "pass1_reference": {
+      "pass1_games": 16549,
+      "pass2_games": 14698,
+      "pass1_obs": 24509788,
+      "pass2_obs": 24146307,
+      "pass1_users": 288730,
+      "pass2_users": 287302,
+      "pass1_mu": 7.144007675729632,
+      "pass2_mu": 7.139007726394262,
+      "games_lost": 1869
+    },
+    "note": "Pass-2 canonical validated via scripts 39/40, mu 7.139, reuse severity, NOT refit"
+  },
+  "quality_estimator": {
+    "preferred": "adj_mean (severity-adjusted, mu 7.139)",
+    "lambda_eb": 2.0005517084461792,
+    "mu": 7.139007726394262,
+    "sigma_e": 1.193439741795195,
+    "sigma_alpha": 0.8437729632181028,
+    "verdict": "adj_mean preferred; BGG bayes overshrinks; EB shrinkage negligible for pass2 (all n>=100, median 347, p10 123, w ~0.99)"
+  },
+  "volume_diagnostic": {
+    "volume_measure_primary": "n_obs = pass2 ratings per game (same n that drives SE; measured in same pass2 universe as adj_mean)",
+    "volume_measure_sensitivity": "users_rated (population scrape)",
+    "band_table": [
+      {
+        "vol_band": "100-199",
+        "games": 4534,
+        "mean_n": 142.37273930304366,
+        "median_n": 139.0,
+        "raw_mean": 6.352960196407129,
+        "raw_median": 6.360181833141352,
+        "adj_mean": 6.619306782741473,
+        "adj_median": 6.644698310707469,
+        "raw_sd": 0.8809567818227505,
+        "adj_sd": 0.9038146784259345
+      },
+      {
+        "vol_band": "200-499",
+        "games": 4263,
+        "mean_n": 315.95730706075534,
+        "median_n": 300.0,
+        "raw_mean": 6.466914326427397,
+        "raw_median": 6.448912877697842,
+        "adj_mean": 6.753593547825749,
+        "adj_median": 6.75801829111151,
+        "raw_sd": 0.7713862871861041,
+        "adj_sd": 0.8100205516114269
+      },
+      {
+        "vol_band": "500-999",
+        "games": 2208,
+        "mean_n": 703.9447463768116,
+        "median_n": 679.0,
+        "raw_mean": 6.658106357545675,
+        "raw_median": 6.64155126546393,
+        "adj_mean": 6.972298140139981,
+        "adj_median": 6.984794898011241,
+        "raw_sd": 0.7119044065011673,
+        "adj_sd": 0.7596466164213147
+      },
+      {
+        "vol_band": "1k-2.5k",
+        "games": 1875,
+        "mean_n": 1569.1578666666667,
+        "median_n": 1492.0,
+        "raw_mean": 6.813053994920196,
+        "raw_median": 6.818199134199133,
+        "adj_mean": 7.140037951050804,
+        "adj_median": 7.174405813711459,
+        "raw_sd": 0.6325069480472308,
+        "adj_sd": 0.6760320268280089
+      },
+      {
+        "vol_band": "2.5k-5k",
+        "games": 879,
+        "mean_n": 3492.7337883959044,
+        "median_n": 3376.0,
+        "raw_mean": 7.02543027374998,
+        "raw_median": 7.039041883512022,
+        "adj_mean": 7.3599677220022475,
+        "adj_median": 7.385157415214223,
+        "raw_sd": 0.603431091096677,
+        "adj_sd": 0.6547086079194081
+      },
+      {
+        "vol_band": "5k-10k",
+        "games": 471,
+        "mean_n": 6938.668789808918,
+        "median_n": 6636.0,
+        "raw_mean": 7.1631946134070485,
+        "raw_median": 7.186721214002244,
+        "adj_mean": 7.4978713327627,
+        "adj_median": 7.534668424229284,
+        "raw_sd": 0.5707351216624339,
+        "adj_sd": 0.6233329259293724
+      },
+      {
+        "vol_band": "10k-25k",
+        "games": 330,
+        "mean_n": 15638.051515151516,
+        "median_n": 14724.5,
+        "raw_mean": 7.299004455599802,
+        "raw_median": 7.346876656842619,
+        "adj_mean": 7.6126041511852085,
+        "adj_median": 7.673748955977429,
+        "raw_sd": 0.5306490587374871,
+        "adj_sd": 0.5803939464001229
+      },
+      {
+        "vol_band": "25k+",
+        "games": 138,
+        "mean_n": 44627.52898550725,
+        "median_n": 36966.0,
+        "raw_mean": 7.488955701050758,
+        "raw_median": 7.5259063179926935,
+        "adj_mean": 7.754594972105629,
+        "adj_median": 7.809493319940049,
+        "raw_sd": 0.5805112691100277,
+        "adj_sd": 0.6187944963607425
+      }
+    ],
+    "band_table_6": [
+      {
+        "vol_band_6": "100-199",
+        "games": 4534,
+        "mean_n": 142.37273930304366,
+        "raw_mean": 6.352960196407129,
+        "adj_mean": 6.619306782741473
+      },
+      {
+        "vol_band_6": "200-499",
+        "games": 4263,
+        "mean_n": 315.95730706075534,
+        "raw_mean": 6.466914326427397,
+        "adj_mean": 6.753593547825749
+      },
+      {
+        "vol_band_6": "500-999",
+        "games": 2208,
+        "mean_n": 703.9447463768116,
+        "raw_mean": 6.658106357545675,
+        "adj_mean": 6.972298140139981
+      },
+      {
+        "vol_band_6": "1k-2k",
+        "games": 1532,
+        "mean_n": 1419.9360313315926,
+        "raw_mean": 6.793741247546346,
+        "adj_mean": 7.1174076559612605
+      },
+      {
+        "vol_band_6": "2k-5k",
+        "games": 1222,
+        "mean_n": 3139.887070376432,
+        "raw_mean": 6.990030981882649,
+        "adj_mean": 7.326607411561031
+      },
+      {
+        "vol_band_6": "5k+",
+        "games": 939,
+        "mean_n": 15534.897763578274,
+        "raw_mean": 7.2587987433521395,
+        "adj_mean": 7.575922123293852
+      }
+    ],
+    "decile_table": [
+      {
+        "decile": "(1.999, 2.09]",
+        "games": 1492,
+        "median_n": 111.0,
+        "raw_mean": 6.302459803830971,
+        "adj_mean": 6.567578272575738
+      },
+      {
+        "decile": "(2.09, 2.188]",
+        "games": 1476,
+        "median_n": 138.0,
+        "raw_mean": 6.365107599822466,
+        "adj_mean": 6.63190249923151
+      },
+      {
+        "decile": "(2.188, 2.29]",
+        "games": 1452,
+        "median_n": 174.0,
+        "raw_mean": 6.385925865756519,
+        "adj_mean": 6.651776790491936
+      },
+      {
+        "decile": "(2.29, 2.407]",
+        "games": 1471,
+        "median_n": 224.0,
+        "raw_mean": 6.421292462005437,
+        "adj_mean": 6.6965311880758005
+      },
+      {
+        "decile": "(2.407, 2.54]",
+        "games": 1462,
+        "median_n": 297.0,
+        "raw_mean": 6.4505413131571565,
+        "adj_mean": 6.7329489285232125
+      },
+      {
+        "decile": "(2.54, 2.702]",
+        "games": 1474,
+        "median_n": 414.0,
+        "raw_mean": 6.525438632820518,
+        "adj_mean": 6.827958965692188
+      },
+      {
+        "decile": "(2.702, 2.885]",
+        "games": 1462,
+        "median_n": 614.5,
+        "raw_mean": 6.6327629476454195,
+        "adj_mean": 6.945644982007159
+      },
+      {
+        "decile": "(2.885, 3.134]",
+        "games": 1470,
+        "median_n": 1008.0,
+        "raw_mean": 6.744680736192006,
+        "adj_mean": 7.0632227596517945
+      },
+      {
+        "decile": "(3.134, 3.503]",
+        "games": 1469,
+        "median_n": 1955.0,
+        "raw_mean": 6.876753244420965,
+        "adj_mean": 7.208861662760991
+      },
+      {
+        "decile": "(3.503, 5.086]",
+        "games": 1470,
+        "median_n": 6399.0,
+        "raw_mean": 7.184043963925402,
+        "adj_mean": 7.507721768354436
+      }
+    ],
+    "gap_top_bottom_decile": {
+      "raw": 0.8815841600944303,
+      "adj": 0.940143495778698
+    },
+    "slopes_per_tenfold": {
+      "raw_on_log_n_pass2": 0.47324788850933047,
+      "adj_on_log_n_pass2": 0.5105136403001704,
+      "raw_on_log_users_rated": 0.5459451202854418,
+      "adj_on_log_users_rated": 0.5842051230941995,
+      "raw_partial_weight_year": 0.37178086705635766,
+      "adj_partial_weight_year": 0.4003173221486702
+    },
+    "ratio_adj_over_raw": {
+      "simple": 1.0787446763010866,
+      "partial_weight_year": 1.0767561152844016
+    },
+    "even_odd_split_slopes": {
+      "n_games_both_halves": 14698,
+      "slope_raw_even": 0.47278234047335566,
+      "slope_raw_odd": 0.47379465289860495,
+      "slope_adj_even": 0.510758010097634,
+      "slope_adj_odd": 0.5103495223108959
+    },
+    "classification": "c) broadly unchanged or grows - severity adjustment does NOT explain the volume gradient",
+    "low_tail_inspection": {
+      "note": "All games >=100, so low tail is 100-199 vs high. Compare band means above."
+    },
+    "claim_tags": {
+      "slopes/gaps/band means": "empirical finding (descriptive, not causal)",
+      "classification": "empirical finding among pre-stated categories a/b/c",
+      "even_odd": "empirical finding (split-sample stability)"
+    }
+  },
+  "expected_quality": {
+    "estimation_sample_n": 14698,
+    "weight_missing_games": 7,
+    "median_weight_fill": 2.0,
+    "knots_year": [
+      1983.0,
+      2010.0,
+      2017.0,
+      2023.0
+    ],
+    "specs_tested": [
+      "Q0",
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q3b",
+      "Q3b_6band",
+      "Q4",
+      "Q0_flex_year",
+      "Q1_core_ns",
+      "Q2_structure_ns",
+      "Q3_categories_ns",
+      "Q3b_flex_volume_ns",
+      "Q4_mechanics_ns"
+    ],
+    "preferred_spec": "Q3b",
+    "preferred_weighting": "ols",
+    "cv_r2_preferred": 0.5987036895626533,
+    "cv_rmse_preferred": 0.5362096033519376,
+    "r2_comparison_vs_pass1": [
+      {
+        "spec": "Q0",
+        "hist_spec": "Q0_linear",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.19615443940357585,
+        "pass2_cv_r2": 0.24117133761104861,
+        "delta_r2": 0.04501689820747276,
+        "pass1_cv_rmse": 0.7814717075476549,
+        "pass2_cv_rmse": 0.7374085280022339
+      },
+      {
+        "spec": "Q0",
+        "hist_spec": "Q0_linear",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.18327271721349853,
+        "pass2_cv_r2": 0.2307212516917226,
+        "delta_r2": 0.047448534478224086,
+        "pass1_cv_rmse": 0.7876864061263336,
+        "pass2_cv_rmse": 0.7424481145984012
+      },
+      {
+        "spec": "Q1",
+        "hist_spec": "Q1_core",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5396687557326767,
+        "pass2_cv_r2": 0.5217379830787884,
+        "delta_r2": -0.017930772653888316,
+        "pass1_cv_rmse": 0.5913159910405579,
+        "pass2_cv_rmse": 0.5854754746704756
+      },
+      {
+        "spec": "Q1",
+        "hist_spec": "Q1_core",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5160184321702583,
+        "pass2_cv_r2": 0.5084638816404492,
+        "delta_r2": -0.007554550529809134,
+        "pass1_cv_rmse": 0.6062915897068998,
+        "pass2_cv_rmse": 0.5935355626208441
+      },
+      {
+        "spec": "Q2",
+        "hist_spec": "Q2_structure",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5458338773263559,
+        "pass2_cv_r2": 0.5310693465769424,
+        "delta_r2": -0.01476453074941353,
+        "pass1_cv_rmse": 0.5873309252151576,
+        "pass2_cv_rmse": 0.5797044662654619
+      },
+      {
+        "spec": "Q2",
+        "hist_spec": "Q2_structure",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5194738775450579,
+        "pass2_cv_r2": 0.5147318529375198,
+        "delta_r2": -0.004742024607538142,
+        "pass1_cv_rmse": 0.6041007798918506,
+        "pass2_cv_rmse": 0.589733792774094
+      },
+      {
+        "spec": "Q3",
+        "hist_spec": "Q3_categories",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5704413447807412,
+        "pass2_cv_r2": 0.5581643169343916,
+        "delta_r2": -0.012277027846349542,
+        "pass1_cv_rmse": 0.5711578260471478,
+        "pass2_cv_rmse": 0.5627021349428688
+      },
+      {
+        "spec": "Q3",
+        "hist_spec": "Q3_categories",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5383027110747538,
+        "pass2_cv_r2": 0.5382095686584843,
+        "delta_r2": -9.314241626945385e-05,
+        "pass1_cv_rmse": 0.592157175091826,
+        "pass2_cv_rmse": 0.5752861234401576
+      },
+      {
+        "spec": "Q3",
+        "hist_spec": "Q3_categories",
+        "weighting": "gls_eff",
+        "pass1_cv_r2": 0.5700984460491045,
+        "pass2_cv_r2": 0.5581668445945591,
+        "delta_r2": -0.011931601454545415,
+        "pass1_cv_rmse": 0.5713905585064252,
+        "pass2_cv_rmse": 0.5627006502908473
+      },
+      {
+        "spec": "Q3b",
+        "hist_spec": "Q3b_flex_volume",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5821894267159451,
+        "pass2_cv_r2": 0.5987036895626533,
+        "delta_r2": 0.016514262846708205,
+        "pass1_cv_rmse": 0.5632644174688681,
+        "pass2_cv_rmse": 0.5362096033519376
+      },
+      {
+        "spec": "Q3b",
+        "hist_spec": "Q3b_flex_volume",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5599494763791414,
+        "pass2_cv_r2": 0.5758665360251741,
+        "delta_r2": 0.01591705964603274,
+        "pass1_cv_rmse": 0.5780952815852046,
+        "pass2_cv_rmse": 0.5512783811536719
+      },
+      {
+        "spec": "Q3b_6band",
+        "hist_spec": "Q3b_flex_volume",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5821894267159451,
+        "pass2_cv_r2": 0.5979561026041343,
+        "delta_r2": 0.015766675888189252,
+        "pass1_cv_rmse": 0.5632644174688681,
+        "pass2_cv_rmse": 0.5367100034991503
+      },
+      {
+        "spec": "Q3b_6band",
+        "hist_spec": "Q3b_flex_volume",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5599494763791414,
+        "pass2_cv_r2": 0.5698270813730992,
+        "delta_r2": 0.009877604993957845,
+        "pass1_cv_rmse": 0.5780952815852046,
+        "pass2_cv_rmse": 0.555211982051881
+      },
+      {
+        "spec": "Q4",
+        "hist_spec": "Q4_mechanics",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5849415737618434,
+        "pass2_cv_r2": 0.6125664479001136,
+        "delta_r2": 0.027624874138270195,
+        "pass1_cv_rmse": 0.5613963760608438,
+        "pass2_cv_rmse": 0.5268520046039022
+      },
+      {
+        "spec": "Q4",
+        "hist_spec": "Q4_mechanics",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5513902960234909,
+        "pass2_cv_r2": 0.5903906236866063,
+        "delta_r2": 0.03900032766311545,
+        "pass1_cv_rmse": 0.5836963604991625,
+        "pass2_cv_rmse": 0.5417695412473229
+      },
+      {
+        "spec": "Q0_flex_year",
+        "hist_spec": "Q0_flex_year",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.29470547236047845,
+        "pass2_cv_r2": 0.3086206784326336,
+        "delta_r2": 0.013915206072155129,
+        "pass1_cv_rmse": 0.7319934595190879,
+        "pass2_cv_rmse": 0.7038245277060144
+      },
+      {
+        "spec": "Q0_flex_year",
+        "hist_spec": "Q0_flex_year",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.2699481192058035,
+        "pass2_cv_r2": 0.2885108527210952,
+        "delta_r2": 0.018562733515291696,
+        "pass1_cv_rmse": 0.7447104734912614,
+        "pass2_cv_rmse": 0.7139794216523158
+      }
+    ],
+    "residual_vs_volume_corr": {
+      "pearson": 0.012538845962038898,
+      "spearman": 0.0020978190614529867
+    },
+    "feature_importance_top": [
+      {
+        "feature": "volband_100-199",
+        "beta": -1.731617360670282,
+        "sd": 0.4618647769462844,
+        "abs_contrib": 0.7997730660422936
+      },
+      {
+        "feature": "volband_200-499",
+        "beta": -1.6083783645012402,
+        "sd": 0.45378031262530516,
+        "abs_contrib": 0.7298504370631498
+      },
+      {
+        "feature": "volband_500-999",
+        "beta": -1.4374422269596459,
+        "sd": 0.3572913570612416,
+        "abs_contrib": 0.5135856839675451
+      },
+      {
+        "feature": "volband_1k-2.5k",
+        "beta": -1.2847046137528961,
+        "sd": 0.33360858191720816,
+        "abs_contrib": 0.4285884843765983
+      },
+      {
+        "feature": "weight_c",
+        "beta": 0.47289130275809615,
+        "sd": 0.7972776674346546,
+        "abs_contrib": 0.37702567481310995
+      },
+      {
+        "feature": "volband_2.5k-5k",
+        "beta": -1.1237706683655608,
+        "sd": 0.23712344882398562,
+        "abs_contrib": 0.26647237657007716
+      },
+      {
+        "feature": "ns_year_1",
+        "beta": 8.600103019460983e-06,
+        "sd": 20199.43733521448,
+        "abs_contrib": 0.17371724201799094
+      },
+      {
+        "feature": "volband_5k-10k",
+        "beta": -0.9862800975522995,
+        "sd": 0.1761200808989164,
+        "abs_contrib": 0.17370373056990215
+      },
+      {
+        "feature": "ns_year_2",
+        "beta": 0.00022216745942439756,
+        "sd": 586.853234581905,
+        "abs_contrib": 0.13037969218205184
+      },
+      {
+        "feature": "volband_10k-25k",
+        "beta": -0.8258167286079965,
+        "sd": 0.148148373081199,
+        "abs_contrib": 0.12234340480651272
+      }
+    ]
+  },
+  "underratedness": {
+    "definition": "underratedness = adj_mean - expected_quality (Q3b OLS)",
+    "n_games": 14698,
+    "residual_stats": {
+      "pass2_residual_mean": -3.0927873618450494e-13,
+      "pass2_residual_sd": 0.5342849701216573,
+      "pass2_residual_p05": -0.8916995344368837,
+      "pass2_residual_p95": 0.8135959130695434,
+      "pass2_residual_p99": 1.1907035734740599,
+      "pass2_residual_max": 1.9800921884739537,
+      "pass2_residual_min": -5.905876375212937
+    },
+    "stability": {
+      "Q3b_vs_Q4": {
+        "pearson": 0.980549236236403,
+        "spearman": 0.9739902981325032,
+        "jaccard_top1": 0.727810650887574,
+        "jaccard_top5": 0.7497020262216925,
+        "jaccard_top10": 0.7773744706594071
+      },
+      "Q3_vs_Q3b_linear_vs_band": {
+        "pearson": 0.9474466859463931,
+        "spearman": 0.9276477544014055,
+        "jaccard_top1": 0.43137254901960786,
+        "jaccard_top5": 0.542016806722689
+      },
+      "OLS_vs_WLS_primary": {
+        "pearson": 0.9725623560904028,
+        "spearman": 0.9631490670100344,
+        "jaccard_top1": 0.5698924731182796,
+        "jaccard_top5": 0.6512935883014623
+      }
+    },
+    "high_resid_vs_quality": {
+      "top1%": {
+        "n": 147,
+        "cutoff": 1.1907035734740599,
+        "mean_adj": 7.880230639127511,
+        "median_adj": 7.888394684409236,
+        "share_adj_lt_6.5": 0.0,
+        "share_adj_lt_7.0": 0.04081632653061224,
+        "share_adj_lt_7.5": 0.30612244897959184,
+        "share_adj_ge_7.5": 0.6938775510204082,
+        "share_adj_ge_7.0": 0.9591836734693877,
+        "examples_high_resid_mediocre": [
+          {
+            "game_id": 7487,
+            "title": "Flutter",
+            "year": 1950.0,
+            "n_obs": 103,
+            "adj_mean": 6.888036120347632,
+            "expected_quality": 5.440759756424734,
+            "underratedness": 1.4472763639228976,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 34450,
+            "title": "Bluff",
+            "year": 1973.0,
+            "n_obs": 160,
+            "adj_mean": 6.844253694025092,
+            "expected_quality": 5.400051934765726,
+            "underratedness": 1.4442017592593661,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 9539,
+            "title": "Beat the 8 Ball",
+            "year": 1975.0,
+            "n_obs": 196,
+            "adj_mean": 6.943384894648628,
+            "expected_quality": 5.533506361306863,
+            "underratedness": 1.4098785333417654,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 9300,
+            "title": "Clay-O-Rama",
+            "year": 1987.0,
+            "n_obs": 134,
+            "adj_mean": 6.876116236410165,
+            "expected_quality": 5.635639510152918,
+            "underratedness": 1.2404767262572465,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 18057,
+            "title": "Anno Domini: Natur",
+            "year": 1998.0,
+            "n_obs": 257,
+            "adj_mean": 6.9848387618617425,
+            "expected_quality": 5.763451682257058,
+            "underratedness": 1.2213870796046846,
+            "volume_band": "200-499"
+          },
+          {
+            "game_id": 3262,
+            "title": "The Powerpuff Girls: Villains at Large Game",
+            "year": 2000.0,
+            "n_obs": 169,
+            "adj_mean": 6.702487300531185,
+            "expected_quality": 5.486263403827493,
+            "underratedness": 1.216223896703692,
+            "volume_band": "100-199"
+          }
+        ]
+      },
+      "top5%": {
+        "n": 735,
+        "cutoff": 0.8135959130695434,
+        "mean_adj": 7.727653535102785,
+        "median_adj": 7.706666397485737,
+        "share_adj_lt_6.5": 0.005442176870748299,
+        "share_adj_lt_7.0": 0.12244897959183673,
+        "share_adj_lt_7.5": 0.3795918367346939,
+        "share_adj_ge_7.5": 0.6204081632653061,
+        "share_adj_ge_7.0": 0.8775510204081632,
+        "examples_high_resid_mediocre": [
+          {
+            "game_id": 7487,
+            "title": "Flutter",
+            "year": 1950.0,
+            "n_obs": 103,
+            "adj_mean": 6.888036120347632,
+            "expected_quality": 5.440759756424734,
+            "underratedness": 1.4472763639228976,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 34450,
+            "title": "Bluff",
+            "year": 1973.0,
+            "n_obs": 160,
+            "adj_mean": 6.844253694025092,
+            "expected_quality": 5.400051934765726,
+            "underratedness": 1.4442017592593661,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 9539,
+            "title": "Beat the 8 Ball",
+            "year": 1975.0,
+            "n_obs": 196,
+            "adj_mean": 6.943384894648628,
+            "expected_quality": 5.533506361306863,
+            "underratedness": 1.4098785333417654,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 9300,
+            "title": "Clay-O-Rama",
+            "year": 1987.0,
+            "n_obs": 134,
+            "adj_mean": 6.876116236410165,
+            "expected_quality": 5.635639510152918,
+            "underratedness": 1.2404767262572465,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 18057,
+            "title": "Anno Domini: Natur",
+            "year": 1998.0,
+            "n_obs": 257,
+            "adj_mean": 6.9848387618617425,
+            "expected_quality": 5.763451682257058,
+            "underratedness": 1.2213870796046846,
+            "volume_band": "200-499"
+          },
+          {
+            "game_id": 3262,
+            "title": "The Powerpuff Girls: Villains at Large Game",
+            "year": 2000.0,
+            "n_obs": 169,
+            "adj_mean": 6.702487300531185,
+            "expected_quality": 5.486263403827493,
+            "underratedness": 1.216223896703692,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 4881,
+            "title": "Personal Preference",
+            "year": 1987.0,
+            "n_obs": 193,
+            "adj_mean": 6.680145999803875,
+            "expected_quality": 5.491510961752027,
+            "underratedness": 1.1886350380518476,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 77361,
+            "title": "Photo Party",
+            "year": 2010.0,
+            "n_obs": 136,
+            "adj_mean": 6.932751248501448,
+            "expected_quality": 5.745293071893418,
+            "underratedness": 1.1874581766080308,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 30505,
+            "title": "Apples to Apples: British Isles Edition",
+            "year": 2007.0,
+            "n_obs": 111,
+            "adj_mean": 6.8706190123560145,
+            "expected_quality": 5.69052002411067,
+            "underratedness": 1.1800989882453443,
+            "volume_band": "100-199"
+          },
+          {
+            "game_id": 17995,
+            "title": "Anno Domini: Sport",
+            "year": 2000.0,
+            "n_obs": 137,
+            "adj_mean": 6.915678228584722,
+            "expected_quality": 5.7641235770433195,
+            "underratedness": 1.1515546515414021,
+            "volume_band": "100-199"
+          }
+        ]
+      }
+    },
+    "residual_by_weight": {
+      "(0.0, 1.5]": -0.014036058345764338,
+      "(1.5, 2.0]": 0.0017667170946721873,
+      "(2.0, 2.5]": 0.04258958225625971,
+      "(2.5, 5.0]": -0.017362477700849834
+    },
+    "residual_by_year": {
+      "(1950, 1990]": -0.0061719683736664,
+      "(1990, 2000]": 0.057601259134335205,
+      "(2000, 2010]": -0.021200087221767985,
+      "(2010, 2020]": 0.003297986854542206,
+      "(2020, 2027]": -0.008052300393468827
+    }
+  },
+  "pass1_vs_pass2": {
+    "pop_comparison": {
+      "pass1_games": 16549,
+      "pass2_games": 14698,
+      "pass1_obs": 24509788,
+      "pass2_obs": 24146307,
+      "pass1_users": 288730,
+      "pass2_users": 287302,
+      "pass1_mu": 7.144007675729632,
+      "pass2_mu": 7.139007726394262,
+      "games_lost": 1869
+    },
+    "quality_dist": {
+      "pass1_adj_mean": {
+        "mean": 6.926166302613665,
+        "median": 6.958859924919993,
+        "sd": 0.8715530135376344,
+        "min": 1.4022191221028004,
+        "max": 11.553486725686795,
+        "p05": 5.43930322865531,
+        "p95": 8.27846824441547
+      },
+      "pass2_adj_mean": {
+        "mean": 6.88312111854628,
+        "median": 6.925107290844706,
+        "sd": 0.846781701304691,
+        "min": 1.3920346312251632,
+        "max": 9.49558070485074,
+        "p05": 5.426502844202734,
+        "p95": 8.185346320595833
+      },
+      "pass1_raw_mean": {
+        "mean": 6.633190357046366,
+        "sd": 0.8394052709294124
+      },
+      "pass2_raw_mean": {
+        "mean": 6.588632304574774,
+        "sd": 0.806331471184431
+      }
+    },
+    "volume_comparison": {
+      "pass1_slopes": {
+        "raw_on_log_n_active": 0.2300687008776984,
+        "adj_on_log_n_active": 0.2607036999476502,
+        "raw_on_log_users_rated": 0.4728500535692234,
+        "adj_on_log_users_rated": 0.5148763324313755,
+        "raw_partial_weight_year": 0.28799737013505744,
+        "adj_partial_weight_year": 0.3228778665865427
+      },
+      "pass2_slopes": {
+        "raw_on_log_n_pass2": 0.47324788850933047,
+        "adj_on_log_n_pass2": 0.5105136403001704,
+        "raw_on_log_users_rated": 0.5459451202854418,
+        "adj_on_log_users_rated": 0.5842051230941995,
+        "raw_partial_weight_year": 0.37178086705635766,
+        "adj_partial_weight_year": 0.4003173221486702
+      },
+      "pass1_gap": {
+        "raw": 0.3048472551689203,
+        "adj": 0.36096378151532615
+      },
+      "pass2_gap": {
+        "raw": 0.8815841600944303,
+        "adj": 0.940143495778698
+      },
+      "ratio_simple_pass1": 1.1331558745413048,
+      "ratio_simple_pass2": 1.0787446763010866
+    },
+    "r2_comparison": [
+      {
+        "spec": "Q0",
+        "hist_spec": "Q0_linear",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.19615443940357585,
+        "pass2_cv_r2": 0.24117133761104861,
+        "delta_r2": 0.04501689820747276,
+        "pass1_cv_rmse": 0.7814717075476549,
+        "pass2_cv_rmse": 0.7374085280022339
+      },
+      {
+        "spec": "Q0",
+        "hist_spec": "Q0_linear",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.18327271721349853,
+        "pass2_cv_r2": 0.2307212516917226,
+        "delta_r2": 0.047448534478224086,
+        "pass1_cv_rmse": 0.7876864061263336,
+        "pass2_cv_rmse": 0.7424481145984012
+      },
+      {
+        "spec": "Q1",
+        "hist_spec": "Q1_core",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5396687557326767,
+        "pass2_cv_r2": 0.5217379830787884,
+        "delta_r2": -0.017930772653888316,
+        "pass1_cv_rmse": 0.5913159910405579,
+        "pass2_cv_rmse": 0.5854754746704756
+      },
+      {
+        "spec": "Q1",
+        "hist_spec": "Q1_core",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5160184321702583,
+        "pass2_cv_r2": 0.5084638816404492,
+        "delta_r2": -0.007554550529809134,
+        "pass1_cv_rmse": 0.6062915897068998,
+        "pass2_cv_rmse": 0.5935355626208441
+      },
+      {
+        "spec": "Q2",
+        "hist_spec": "Q2_structure",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5458338773263559,
+        "pass2_cv_r2": 0.5310693465769424,
+        "delta_r2": -0.01476453074941353,
+        "pass1_cv_rmse": 0.5873309252151576,
+        "pass2_cv_rmse": 0.5797044662654619
+      },
+      {
+        "spec": "Q2",
+        "hist_spec": "Q2_structure",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5194738775450579,
+        "pass2_cv_r2": 0.5147318529375198,
+        "delta_r2": -0.004742024607538142,
+        "pass1_cv_rmse": 0.6041007798918506,
+        "pass2_cv_rmse": 0.589733792774094
+      },
+      {
+        "spec": "Q3",
+        "hist_spec": "Q3_categories",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5704413447807412,
+        "pass2_cv_r2": 0.5581643169343916,
+        "delta_r2": -0.012277027846349542,
+        "pass1_cv_rmse": 0.5711578260471478,
+        "pass2_cv_rmse": 0.5627021349428688
+      },
+      {
+        "spec": "Q3",
+        "hist_spec": "Q3_categories",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5383027110747538,
+        "pass2_cv_r2": 0.5382095686584843,
+        "delta_r2": -9.314241626945385e-05,
+        "pass1_cv_rmse": 0.592157175091826,
+        "pass2_cv_rmse": 0.5752861234401576
+      },
+      {
+        "spec": "Q3",
+        "hist_spec": "Q3_categories",
+        "weighting": "gls_eff",
+        "pass1_cv_r2": 0.5700984460491045,
+        "pass2_cv_r2": 0.5581668445945591,
+        "delta_r2": -0.011931601454545415,
+        "pass1_cv_rmse": 0.5713905585064252,
+        "pass2_cv_rmse": 0.5627006502908473
+      },
+      {
+        "spec": "Q3b",
+        "hist_spec": "Q3b_flex_volume",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5821894267159451,
+        "pass2_cv_r2": 0.5987036895626533,
+        "delta_r2": 0.016514262846708205,
+        "pass1_cv_rmse": 0.5632644174688681,
+        "pass2_cv_rmse": 0.5362096033519376
+      },
+      {
+        "spec": "Q3b",
+        "hist_spec": "Q3b_flex_volume",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5599494763791414,
+        "pass2_cv_r2": 0.5758665360251741,
+        "delta_r2": 0.01591705964603274,
+        "pass1_cv_rmse": 0.5780952815852046,
+        "pass2_cv_rmse": 0.5512783811536719
+      },
+      {
+        "spec": "Q3b_6band",
+        "hist_spec": "Q3b_flex_volume",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5821894267159451,
+        "pass2_cv_r2": 0.5979561026041343,
+        "delta_r2": 0.015766675888189252,
+        "pass1_cv_rmse": 0.5632644174688681,
+        "pass2_cv_rmse": 0.5367100034991503
+      },
+      {
+        "spec": "Q3b_6band",
+        "hist_spec": "Q3b_flex_volume",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5599494763791414,
+        "pass2_cv_r2": 0.5698270813730992,
+        "delta_r2": 0.009877604993957845,
+        "pass1_cv_rmse": 0.5780952815852046,
+        "pass2_cv_rmse": 0.555211982051881
+      },
+      {
+        "spec": "Q4",
+        "hist_spec": "Q4_mechanics",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.5849415737618434,
+        "pass2_cv_r2": 0.6125664479001136,
+        "delta_r2": 0.027624874138270195,
+        "pass1_cv_rmse": 0.5613963760608438,
+        "pass2_cv_rmse": 0.5268520046039022
+      },
+      {
+        "spec": "Q4",
+        "hist_spec": "Q4_mechanics",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.5513902960234909,
+        "pass2_cv_r2": 0.5903906236866063,
+        "delta_r2": 0.03900032766311545,
+        "pass1_cv_rmse": 0.5836963604991625,
+        "pass2_cv_rmse": 0.5417695412473229
+      },
+      {
+        "spec": "Q0_flex_year",
+        "hist_spec": "Q0_flex_year",
+        "weighting": "ols",
+        "pass1_cv_r2": 0.29470547236047845,
+        "pass2_cv_r2": 0.3086206784326336,
+        "delta_r2": 0.013915206072155129,
+        "pass1_cv_rmse": 0.7319934595190879,
+        "pass2_cv_rmse": 0.7038245277060144
+      },
+      {
+        "spec": "Q0_flex_year",
+        "hist_spec": "Q0_flex_year",
+        "weighting": "wls_n",
+        "pass1_cv_r2": 0.2699481192058035,
+        "pass2_cv_r2": 0.2885108527210952,
+        "delta_r2": 0.018562733515291696,
+        "pass1_cv_rmse": 0.7447104734912614,
+        "pass2_cv_rmse": 0.7139794216523158
+      }
+    ],
+    "resid_jaccard": {
+      "top1%": {
+        "jaccard": 0.9466666666666667,
+        "overlap": 142,
+        "k": 146
+      },
+      "top5%": {
+        "jaccard": 0.9290407358738502,
+        "overlap": 707,
+        "k": 734
+      },
+      "top10%": {
+        "jaccard": 0.9444076770350761,
+        "overlap": 1427,
+        "k": 1469
+      },
+      "entered_top1": [
+        {
+          "game_id": 394735,
+          "title": "Exit: The Game \u2013 Advent Calendar: The Missing Hollywood Star",
+          "underratedness": 1.2137916557237656,
+          "underratedness_pass1": 1.1304409529872679,
+          "n_obs": 339,
+          "adj_mean": 8.058571903052831
+        },
+        {
+          "game_id": 135508,
+          "title": "The Mushroom Eaters",
+          "underratedness": 1.200717594015079,
+          "underratedness_pass1": 1.1763633935104556,
+          "n_obs": 183,
+          "adj_mean": 7.747835638972792
+        },
+        {
+          "game_id": 130705,
+          "title": "Super Big Boggle",
+          "underratedness": 1.1958080116823417,
+          "underratedness_pass1": 1.157677034112301,
+          "n_obs": 215,
+          "adj_mean": 7.415616113629037
+        },
+        {
+          "game_id": 177877,
+          "title": "SiXeS",
+          "underratedness": 1.1937847119116096,
+          "underratedness_pass1": 1.1713504828646881,
+          "n_obs": 321,
+          "adj_mean": 7.512032725616253
+        }
+      ],
+      "left_top1": [
+        {
+          "game_id": 248878,
+          "title": "FlickFleet",
+          "underratedness": 1.1901994851073887,
+          "underratedness_pass1": 1.2040165671254144,
+          "n_obs": 214,
+          "adj_mean": 8.1419606295357
+        },
+        {
+          "game_id": 233996,
+          "title": "The Primary",
+          "underratedness": 1.1906787181288303,
+          "underratedness_pass1": 1.2014579471232185,
+          "n_obs": 108,
+          "adj_mean": 7.967963081890026
+        },
+        {
+          "game_id": 40561,
+          "title": "Curling Table Game",
+          "underratedness": 1.1665116504663846,
+          "underratedness_pass1": 1.1959913539200056,
+          "n_obs": 191,
+          "adj_mean": 7.14445630760507
+        },
+        {
+          "game_id": 100169,
+          "title": "Hero of Weehawken: The Aaron Burr Conspiracy 1805-1807",
+          "underratedness": 1.1810802758919472,
+          "underratedness_pass1": 1.1927222083613787,
+          "n_obs": 165,
+          "adj_mean": 7.796908998662534
+        }
+      ]
+    },
+    "flagged_types": {
+      "18XX": {
+        "n_games": 92,
+        "mean_resid": 0.6062096070870515,
+        "median_resid": 0.6077241735716505,
+        "share_top5_resid": 0.358695652173913,
+        "mean_adj": 8.108264846400171
+      },
+      "Wargame": {
+        "n_games": 2020,
+        "mean_resid": -1.3495215945835802e-12,
+        "median_resid": 0.04692532816278838,
+        "share_top5_resid": 0.03811881188118812,
+        "mean_adj": 7.301125416093504
+      },
+      "Party": {
+        "n_games": 1268,
+        "mean_resid": 5.274070699971371e-13,
+        "median_resid": 0.05182387833464164,
+        "share_top5_resid": 0.08753943217665615,
+        "mean_adj": 6.412063994750511
+      },
+      "Economic": {
+        "n_games": 1287,
+        "mean_resid": -2.8869594274526293e-13,
+        "median_resid": 0.02035216288375885,
+        "share_top5_resid": 0.05516705516705517,
+        "mean_adj": 7.2056070346053005
+      },
+      "low_volume_100_199": {
+        "n_games": 4534,
+        "mean_resid": -5.975873621362257e-13,
+        "median_resid": 0.03923391465173065,
+        "share_top5_resid": 0.07366563740626378,
+        "mean_adj": 6.619306782741473
+      },
+      "band_100_249": {
+        "n_games": 4534,
+        "mean_resid": -5.975873621362257e-13,
+        "median_resid": 0.03923391465173065,
+        "share_top5_resid": 0.07366563740626378,
+        "mean_adj": 6.619306782741473
+      }
+    }
+  },
+  "method_discipline": {
+    "severity_reuse": true,
+    "bounded": "4GB/3threads/scratch/ducktmp, copy-once",
+    "seed": 20260824,
+    "claim_tags": "observed fact / empirical finding / model-dependent conclusion per AGENTS.md"
+  }
+}

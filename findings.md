@@ -2731,3 +2731,82 @@ Locked Step 7B methodology validation on pass2 canonical 14,698 × 287,302 × 24
 
 ### Artefacts
 - Scripts 45+46, docs/reports step7c_exposure_propensity_validation/ (8 md + 14698-row csv + json), bounded DuckDB, leakage-corrected cnts, no duplication, sum n_obs 24146307 reconciled.
+
+## 2026-08-25: Step 9 — Expected Quality & Underratedness on Pass-2 (14,698 / 287,302 / 24,146,307, scripts 47-48)
+
+### Population & Reuse [Observed fact]
+- **Canonical Pass-2:** 14,698 games × 287,302 users × 24,146,307 obs (`data/processed/phase2-pass2/`, mu=7.139, `user_severity_pass2.parquet` + `game_adjusted_means_pass2.parquet` via scripts 39/40 — **reuse confirmed severity, NOT refit**) [Observed fact].
+- **Estimation sample:** 14,698 games (all with ≥100, median n 347 p10 123 p90 3184 max 122032, mean 1642.8) — 7 games weight null (99.95% present) median-filled 2.0 + `weight_missing` flag as prior steps [Observed fact].
+- **Method discipline:** bounded DuckDB `memory_limit 4GB`/`threads 3`/`temp scratch/ducktmp`, copy-once `scratch/phase2-pass2`, narrow aggregations, no 24M wide sorts, seed 20260824 [Method].
+
+### 1. Quality-estimator refresh (Phase 5 on Pass-2 `adj_mean`) [Empirical finding / Model-dependent conclusion]
+- **Estimators:** raw active mean (AVG rating on pass2 obs) vs `adj_mean` (severity-adjusted, mu 7.139) vs EB-shrunk `adj_shrunk = w*adj + (1-w)*mu` (w=n/(n+lambda)) vs BGG `bayes_rating` (prior 5.49 lambda 2500) [Method].
+- **EB variance:** sigma_e=1.193 var_adj=0.717 sigma_alpha2=0.712 lambda=2.00 (MM; cov even/odd 2.00 similar), sigma_e from `Var(r - adj_mean - delta)` [Empirical finding]. SE = sigma_e/sqrt(n): median 0.064 p10 (n=123) 0.108 p90 (n=3184) 0.021 — must not treat equally precise [Empirical finding].
+- **Even/odd held-out (rating_observation_id parity, delta_full primary, halfDelta sensitivity r 0.984):** game-level predicting `adj_odd` — `adj_even` RMSE 0.154 R2 0.967 corr 0.984 vs `raw_even` RMSE 0.370 R2 0.810 corr 0.965 vs `bayes` RMSE 1.265 R2 -1.22 corr 0.608 vs shrunk RMSE 0.153 R2 0.968 [Empirical finding]. Individual-level odd ratings: raw 1.37 → adj 1.19 RMSE [Empirical finding].
+- **Shrinkage negligible:** median w 0.994, p10 0.984, even n=100 w 0.98, n=500 w 0.996 — all pass2 n≥100, so **no material gain** (overall 0.154→0.153, larger only for n<50 which does not exist) [Empirical finding].
+- **Bayes overshrinks:** pearson bayes vs adj 0.608, bias -1.1, RMSE 1.26 — useful for popularity ranking not quality [Empirical finding].
+- **Verdict unchanged from Phase 5:** `adj_mean` preferred estimator; BGG bayes inappropriate as primary; empirical shrinkage as sensitivity not replacement — **preserve rationale unless contradicted, not contradicted** [Model-dependent conclusion].
+
+### 2. Expected-quality Q-ladder (Pass-2 game-level, OLS primary) [Model-dependent conclusion / Empirical finding]
+- **Features preserved as Phase 6:** log10(n_obs), year_c (centered 2015), weight_c (median-centered, 7 filled + flag), log1p(playing_time), min_players_c, log1p(max_players), is_reimpl (265 true), log1p(n_implementations) (687 games with reimplementation links), vol_band (9-band edges 0/100/200/500/1k/2.5k/5k/10k/25k) + ns_year (knots 1983/2010/2017/2023, 4 cols) + category flags (27 ≥500) + mechanic flags (31 ≥500) [Method]. 6-band variant (100-199/200-499/500-999/1k-2k/2k-5k/5k+) as sensitivity [Method].
+- **Specs:** Q0 log+year, Q1 +weight, Q2 +structural, Q3 +categories, Q3b bands+ns_year+weight/structure+cat (primary), Q3b_6band, Q4 Q3b+mechanics; plus Q0_flex etc for historical comparison [Method].
+- **Weightings:** OLS (w=1) vs WLS_n (w=n) vs gls_eff (1/(sigma_alpha2+sigma_e2/n)) — OLS vs WLS head-to-head as Phase 6 [Method].
+- **CV (5-fold, seed 20260824, unweighted metrics):**
+  - Q0 0.241 (0.737 RMSE) → Q1 0.522 (0.585) → Q2 0.531 (0.580) → Q3 0.558 (0.563) → **Q3b 0.599 (0.536)** → **Q4 0.613 (0.527)** [Empirical finding].
+  - **Q3b primary:** CV R2 0.599 ±0.006, RMSE 0.536, 45 feats, corr(resid,log_n) 0.013, max|bandmean| 0.000 (flat by construction). Q4 adds mechanics +0.014 R2 (0.613) with spearman 0.974 Jaccard 0.73 vs Q3b — **gain modest, mechanics as sensitivity not primary** [Empirical finding].
+  - **Q3b_6band:** CV 0.598 ±0.006 similar to 9-band (0.599), max|band6| 0.000 vs Q3 linear 0.079 — bands matter, 6 vs 9 not material [Empirical finding].
+  - **OLS dominates WLS:** for every spec WLS degrades CV (Q3 0.558→0.538, Q3b 0.599→0.576) and shifts beta_logn +4–17% (Q0 0.478→0.451 actually -6% but Q3 0.394→0.403, Q4 0.44→0.40) and leaves corr(resid,log_n) ~0.008–0.013 (OLS ~0) and max|band| 0.03 vs 0.000 — **WLS reweights population not corrects noise**, as Phase 6 [Empirical finding].
+  - **Historical comparison (pass1 active 16549 vs pass2 14698):** Q0 +0.045 R2 (0.196→0.241), Q1 -0.018 (0.540→0.522), Q3 -0.012 (0.570→0.558), **Q3b +0.017 (0.582→0.599), Q4 +0.028 (0.585→0.613)** — no material loss, Q3b/Q4 slightly higher after closure; ranking stable [Empirical finding].
+- **Preferred spec: Q3b / OLS** (bands + ns_year + weight/structure + cat) — primary; Q3 (linear volume) compact variant, Q4 mechanics sensitivity. **Do NOT assume Q3b survives automatically — selected on evidence (CV + flat band residual + volume orthogonalization), gls_eff ~ OLS confirms noise small vs between-game variance** [Model-dependent conclusion].
+
+### 3. Volume diagnostic (Pass-2 vs Phase 6) [Empirical finding]
+- **Game-level E[raw|volume] vs E[adj|volume]:** log_n slopes per tenfold — raw +0.473 / adj +0.511 simple (ratio 1.08), partial controlling weight+spline year raw +0.372 / adj +0.400 (ratio 1.08); log_users_rated similar +0.546→+0.584 [Empirical finding].
+- **Flexible bands (100-199 to 25k+):** 100-199 raw 6.353 adj 6.619 (4534 games) → 25k+ raw 7.489 adj 7.755 (138 games) — monotonic rise ~1.14 raw / 1.14 adj [Empirical finding].
+- **Decile gap Q10-Q1:** raw +0.845 / adj +0.940 (pass1 active gap 0.305/0.361 but that included 1-99 high-rated low-n games; pass2 gap larger because floor now 100, low tail 6.35 vs prior 1-99 6.90 high) [Empirical finding].
+- **Partial remains:** weight/year do not explain away — slope remains +0.37/+0.40 [Empirical finding].
+- **Even/odd stable:** raw even +0.473 odd +0.474, adj even +0.511 odd +0.510 [Empirical finding].
+- **Verdict:** After recursive cleanup (16,627→14,698, 25.3M→24.1M), **positive volume–quality relationship remains, not weakened, shape unchanged — classification c) broadly unchanged/grows** (severity explains none, ratio >1). Low tail now 100-199 vs previously <100 — <100 effects gone because no games <100, but 100-199 still lower than high. **Spec must kill volume correlation — Q3b does (OLS corr 0.01, band flat), linear Q3 leaves 0.079 band residual** [Empirical finding / Model-dependent conclusion].
+
+### 4. Underratedness (Q3b OLS) [Model-dependent conclusion / Empirical finding]
+- **Definition:** `underratedness = adj_mean − expected_quality` (residual, mean 0, sd 0.534 p95 +0.82 p99 +1.19 max +1.98 min -5.91) — **not quality, not broad appeal** [Model-dependent conclusion]. Per-game retain: game_id, title, n_obs, adj_mean, expected_quality, underratedness, SE_adj, lower_bound_resid (=resid-1.96*SE), volume_band etc. (14,698 rows `expected_quality_game_level.csv`, top 734 = top 200 + top 5% `underrated_candidates.csv`) [Method].
+- **Stability:**
+  - Q3b vs Q4: pearson 0.974 spearman 0.974 Jaccard top1 0.73 top5 0.77 — **moderately stable** [Empirical finding].
+  - Q3 vs Q3b (linear log vs band): pearson 0.928 Jaccard top1 0.43 — **band vs linear matters** [Empirical finding].
+  - OLS vs WLS primary: spearman 0.963 Jaccard top1 0.57 — **weighting matters** [Empirical finding].
+  - Residual-volume corr after model 0.01 (should be ~0) [Empirical finding].
+  - Systematic by weight/year/band flat (mean resid ~0 per band by construction) [Empirical finding].
+
+### 5. High residual ≠ high quality (§6 conceptual) [Empirical finding / Implication]
+- **Scatter adj_mean vs resid:** many high-resid with mediocre quality [Observed fact].
+- **Top 1% resid (cutoff +1.19, n=147):** mean adj 7.88 median 7.89, share <7.0 4.1%, <6.5 0%, <7.5 30.6% (so 30% fail ≥7.5), ≥7.5 69% — **4% of top-resid would fail adj≥7.0** [Empirical finding].
+- **Top 5% resid (cutoff +0.81, n=735):** mean 7.73 median 7.71, <7.0 12.2%, <6.5 0.5%, <7.5 38% — **12% fail ≥7.0** [Empirical finding].
+- **Examples high resid / mediocre:** Flutter (1950, 103, adj 6.89 resid +1.45), Bluff (1973, 160, 6.84 +1.44), Beat the 8 Ball (1975, 196, 6.94 +1.41), Clay-O-Rama (1987, 134, 6.88 +1.24), Anno Domini:Natur (1998, 257, 6.98 +1.22), Powerpuff Girls (2000, 169, 6.70 +1.22) — all top1% but adj <7.0 [Observed fact].
+- **Implication:** eventual hidden-gem pipeline requires **both genuine quality (e.g., adj≥7.5/7.0) and underratedness** per Step 8; high residual alone is not hidden gem [Implication / Model-dependent conclusion].
+
+### 6. Pass-1 vs Pass-2 what changed [Empirical finding]
+- **Population:** 16,627→14,698 (-1,929), 25.3M→24.1M, users 544k→287k filtered→287k pass2, games_with_ratings 16567→14698 [Observed fact].
+- **Quality dist:** pass2 adj mean 6.88 sd 0.847 vs pass1 active ~6.77 sd ~0.86 — similar; top-quality (adj) titles overlap high but shuffle [Empirical finding].
+- **Volume:** slope raw 0.473 vs pass1 0.23 (higher because <100 high-rated removed), ratio adj/raw 1.08 vs 1.12 similar, decile gap 0.94 vs 0.36 larger for same reason — **relationship not weakened** [Empirical finding].
+- **R2:** Q3b 0.582→0.599 (+0.017), Q4 0.585→0.613 (+0.028) — stable [Empirical finding].
+- **Top residual Jaccard pass1 vs pass2:** top1% 0.42 (estimated from 14,698 overlap; detailed in `pass1_vs_pass2_comparison.md`), top5% ~0.52 — **material candidate turnover** [Empirical finding].
+- **Flagged types:**
+  - **18XX (92 games):** mean resid +0.606 (!) but mean adj 8.11 high — Trains/18XX positive residual persists even after cat control (not flattened), heterog within (1830 +0.62 vs 1817) [Empirical finding].
+  - **Wargame (2020):** mean resid ~0 (by construction cat), mean adj 7.30 — not distinctive after categories, as Phase 6 [Empirical finding].
+  - **Party (1268):** mean resid ~0, mean adj 6.41 low — not underrated after control [Empirical finding].
+  - **Economic (1287):** mean resid ~0, mean adj 7.21 [Empirical finding].
+  - **Low-volume 100-199 (4534):** mean resid ~0 (band model), mean adj 6.62 low — band removes volume bias [Empirical finding].
+  - **100-249 band (same):** similar.
+
+### Implications for screening [Implication]
+- **Use Q3b OLS expected_quality** as primary expectation; report Q4 and Q3 sensitivities; do not collapse residual+quality into opaque score — keep **quality / underratedness / hiddenness / audience-selection risk / broad-appeal evidence separate per Step 8** [Implication].
+- **STOP after Step 9** — do NOT run final hidden-gem screen yet (pipeline validated, model statement locked) [Method].
+- **Next screening** must intersect high adj (e.g., ≥7.5) with high resid and stable cross-spec, then add audience-selection risk (Step7/7B/7C) and broad-appeal evidence — many high resid are not hidden gems [Implication].
+
+### Artefacts [Method]
+- Scripts `47_step9_quality_estimator_refresh.py` + `48_step9_expected_quality_underratedness.py` (next free 47/48, rerunnable, bounded 4GB/3threads/temp scratch/ducktmp, reuse Pass-2 severity NOT refit, seed 20260824)
+- Outputs `docs/phase2-pass2/step9_expected_quality_underratedness/` + mirror `reports/phase2_pass2/step9_expected_quality_underratedness/` (README, quality_estimator_refresh.md/json, volume_diagnostic.md/png, expected_quality_model_comparison.md, underratedness_methodology.md, pass1_vs_pass2_comparison.md, underrated_candidates.csv 734 rows, expected_quality_game_level.csv 14,698 rows, model_comparison.csv, feature_importance.csv, coefficient_table.csv, residual diagnostics PNGs, step9_summary.json) + `data/processed/phase2-pass2/step9_quality_estimator_refresh.json` + `data/processed/phase2-pass2/step9_expected_quality_underratedness/` mirrors.
+- Reproduce: `python scripts/47_step9_quality_estimator_refresh.py && python scripts/48_step9_expected_quality_underratedness.py`
+
+### Tags [Claim discipline]
+Observed fact: counts, means, validation. Empirical finding: slopes, gaps, R2, correlations, Jaccards, residual stats (model-dependent but data-driven). Model-dependent conclusion: preferred estimator/spec, underratedness definition, stability interpretation. Assumption: severity additive, no refit correct, weight median fill 2.0, category threshold 500. Speculation: none — keep open where data cannot distinguish.
+

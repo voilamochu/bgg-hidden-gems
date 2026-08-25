@@ -1,0 +1,507 @@
+{
+  "generated_at": "2026-08-25T09:15:20Z",
+  "pass2_dir": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2-pass2",
+  "population": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/bgg_research_population.parquet",
+  "validation": {
+    "n_obs_pass2": 24146307,
+    "n_users_pass2": 287302,
+    "n_games_pass2_with_ratings": 14698,
+    "n_population_games": 16627,
+    "mu_pass2": 7.139007726394262,
+    "expected_n_obs": 24146307,
+    "expected_n_users": 287302,
+    "expected_n_games": 14698,
+    "pass2_dir": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/scratch/phase2-pass2",
+    "population": "/home/mOCHU/.treehouse/bgg-hidden-gems-efb8da/1/bgg-hidden-gems/data/processed/bgg_research_population.parquet"
+  },
+  "n_distribution": {
+    "mean": 1642.8294325758607,
+    "median": 347.0,
+    "p10": 123.0,
+    "p25": 173.0,
+    "p75": 1008.0,
+    "p90": 3183.9000000000033,
+    "min": 100,
+    "max": 122032,
+    "sd": 5363.776353711344,
+    "n_games": 14698,
+    "note": "Pass-2 n_g distribution (full pass2). All games >=100 after recursive closure."
+  },
+  "raw_agreement": {
+    "n_games_matched": 14698,
+    "pearson_pass2_raw_vs_pop_avg": 0.9952589818353353,
+    "pearson_pass2_adj_vs_pop_avg": 0.9753965117695828,
+    "pearson_pass2_raw_vs_pass2_adj": 0.9834719351827435,
+    "pearson_pop_avg_vs_pop_bayes": 0.5965449319112246,
+    "median_diff_pass2_raw_minus_pop_avg": -0.017137880707009945,
+    "mean_diff_pass2_raw_minus_pop_avg": -0.027586691206964883,
+    "median_diff_pass2_adj_minus_pop_avg": 0.27807666056596014,
+    "corr_n_pass2_vs_n_pop": 0.9944261826101597,
+    "interpretation": "Pass2 raw = AVG(rating) on pass2 obs (24.1M, 14698 games). Pop avg = avg_rating_current in bgg_research_population (all users). Correlation shows agreement.",
+    "bayes_coverage_pop": {
+      "total": 16627,
+      "with_bayes": 16627,
+      "missing": 0
+    }
+  },
+  "eb_variance_components": {
+    "sigma_e2_var_resid": 1.4242984172961815,
+    "sigma_e_sd": 1.193439741795195,
+    "var_adj_observed_unweighted": 0.7170392496644638,
+    "mean_adj": 6.883121118546295,
+    "sd_adj": 0.8467817013046891,
+    "mean_inv_n": 0.003571187150696786,
+    "harmonic_mean_n": 280.0189286649082,
+    "sigma_alpha2_mm": 0.7119528134578579,
+    "lambda_mm": 2.0005517084461792,
+    "sigma_alpha2_cov_even_odd": 0.7111301477952834,
+    "lambda_cov": 2.00286603192388,
+    "mu_prior": 7.139007726394262,
+    "method": "MM: sigma_alpha2 = Var(adj) - sigma_e2*E[1/n]; Cov method: Cov(even_adj, odd_adj). Preferred lambda is MM. Prior is mu=7.139. BGG bayes prior 5.49 lambda~2500 is ~1300x stronger -> overshrinks.",
+    "shrinkage_examples": [
+      {
+        "n": 50,
+        "w": 0.9615282599372644,
+        "shrink_to_prior": 0.03847174006273557,
+        "effective_prior_pct": 3.847174006273557
+      },
+      {
+        "n": 100,
+        "w": 0.9803868540420794,
+        "shrink_to_prior": 0.01961314595792063,
+        "effective_prior_pct": 1.961314595792063
+      },
+      {
+        "n": 120,
+        "w": 0.983602109331218,
+        "shrink_to_prior": 0.016397890668781945,
+        "effective_prior_pct": 1.6397890668781945
+      },
+      {
+        "n": 293,
+        "w": 0.9932184814677115,
+        "shrink_to_prior": 0.0067815185322884775,
+        "effective_prior_pct": 0.6781518532288477
+      },
+      {
+        "n": 347,
+        "w": 0.9942677692093811,
+        "shrink_to_prior": 0.0057322307906189085,
+        "effective_prior_pct": 0.5732230790618909
+      },
+      {
+        "n": 500,
+        "w": 0.996014841613943,
+        "shrink_to_prior": 0.003985158386056953,
+        "effective_prior_pct": 0.3985158386056953
+      },
+      {
+        "n": 1000,
+        "w": 0.9980034425080553,
+        "shrink_to_prior": 0.001996557491944717,
+        "effective_prior_pct": 0.1996557491944717
+      },
+      {
+        "n": 3183,
+        "w": 0.9993718834028544,
+        "shrink_to_prior": 0.0006281165971455671,
+        "effective_prior_pct": 0.06281165971455671
+      },
+      {
+        "n": 5000,
+        "w": 0.9996000496825689,
+        "shrink_to_prior": 0.0003999503174311192,
+        "effective_prior_pct": 0.03999503174311192
+      },
+      {
+        "n": 12000,
+        "w": 0.9998333151461019,
+        "shrink_to_prior": 0.0001666848538981469,
+        "effective_prior_pct": 0.01666848538981469
+      }
+    ],
+    "se_table_n_examples": [
+      {
+        "n": 50,
+        "se_frequentist": 0.16877786687218094,
+        "posterior_sd": 0.165499436785398,
+        "lower_95_frequentist": -0.3308046190694746,
+        "lower_95_posterior": -0.3243788960993801,
+        "width_95_frequentist": 0.6616092381389492,
+        "width_95_posterior": 0.6487577921987602
+      },
+      {
+        "n": 100,
+        "se_frequentist": 0.1193439741795195,
+        "posterior_sd": 0.1181678232240112,
+        "lower_95_frequentist": -0.2339141893918582,
+        "lower_95_posterior": -0.23160893351906195,
+        "width_95_frequentist": 0.4678283787837164,
+        "width_95_posterior": 0.4632178670381239
+      },
+      {
+        "n": 120,
+        "se_frequentist": 0.10894564460072821,
+        "posterior_sd": 0.10804871307152929,
+        "lower_95_frequentist": -0.2135334634174273,
+        "lower_95_posterior": -0.2117754776201974,
+        "width_95_frequentist": 0.4270669268348546,
+        "width_95_posterior": 0.4235509552403948
+      },
+      {
+        "n": 293,
+        "se_frequentist": 0.06972149416393149,
+        "posterior_sd": 0.06948468319406405,
+        "lower_95_frequentist": -0.1366541285613057,
+        "lower_95_posterior": -0.13618997906036553,
+        "width_95_frequentist": 0.2733082571226114,
+        "width_95_posterior": 0.27237995812073107
+      },
+      {
+        "n": 347,
+        "se_frequentist": 0.06406720213886775,
+        "posterior_sd": 0.06388331424379115,
+        "lower_95_frequentist": -0.1255717161921808,
+        "lower_95_posterior": -0.12521129591783065,
+        "width_95_frequentist": 0.2511434323843616,
+        "width_95_posterior": 0.2504225918356613
+      },
+      {
+        "n": 500,
+        "se_frequentist": 0.05337224779407705,
+        "posterior_sd": 0.05326579319815384,
+        "lower_95_frequentist": -0.10460960567639102,
+        "lower_95_posterior": -0.10440095466838152,
+        "width_95_frequentist": 0.20921921135278204,
+        "width_95_posterior": 0.20880190933676304
+      },
+      {
+        "n": 1000,
+        "se_frequentist": 0.03773987834236064,
+        "posterior_sd": 0.03770218460010459,
+        "lower_95_frequentist": -0.07397016155102684,
+        "lower_95_posterior": -0.073896281816205,
+        "width_95_frequentist": 0.14794032310205368,
+        "width_95_posterior": 0.14779256363241
+      },
+      {
+        "n": 3183,
+        "se_frequentist": 0.021153497160726554,
+        "posterior_sd": 0.02114685268585926,
+        "lower_95_frequentist": -0.04146085443502404,
+        "lower_95_posterior": -0.04144783126428415,
+        "width_95_frequentist": 0.08292170887004809,
+        "width_95_posterior": 0.0828956625285683
+      },
+      {
+        "n": 5000,
+        "se_frequentist": 0.016877786687218094,
+        "posterior_sd": 0.01687441121160716,
+        "lower_95_frequentist": -0.03308046190694746,
+        "lower_95_posterior": -0.033073845974750035,
+        "width_95_frequentist": 0.06616092381389492,
+        "width_95_posterior": 0.06614769194950007
+      },
+      {
+        "n": 12000,
+        "se_frequentist": 0.01089456446007282,
+        "posterior_sd": 0.010893656442790405,
+        "lower_95_frequentist": -0.02135334634174273,
+        "lower_95_posterior": -0.021351566627869193,
+        "width_95_frequentist": 0.04270669268348546,
+        "width_95_posterior": 0.042703133255738386
+      }
+    ],
+    "se_quantiles_actual_games": {
+      "se_p10": 0.02115050867497184,
+      "se_median": 0.06406720213886775,
+      "se_p90": 0.1076088375982068,
+      "post_p10": 0.02114386701401411,
+      "post_median": 0.06388331424379115,
+      "post_p90": 0.1067442600215747
+    }
+  },
+  "comparative_metrics": {
+    "game_level_held_out_adj_odd_target": {
+      "n_games_both_halves": 14698,
+      "var_target_adj_odd": 0.7221258814784987,
+      "var_target_raw_odd": 0.657570349050791,
+      "estimators": [
+        {
+          "estimand": "raw_even (AVG rating even half; pass2)",
+          "target": "adj_odd",
+          "rmse": 0.3702761725327922,
+          "r2_vs_target": 0.8101377509627227,
+          "corr_with_target": 0.9646190672430829,
+          "bias": -0.29469445927352456
+        },
+        {
+          "estimand": "raw_even",
+          "target": "raw_odd",
+          "rmse": 0.17662753964584244,
+          "r2_vs_target": 0.9525567297759437,
+          "corr_with_target": 0.9762933300708361,
+          "bias": 8.88849385753673e-05
+        },
+        {
+          "estimand": "adj_even (severity-adjusted AVG even)",
+          "target": "adj_odd",
+          "rmse": 0.1539080101814181,
+          "r2_vs_target": 0.9671973042296936,
+          "corr_with_target": 0.9836176353321898,
+          "bias": -0.00048751845694430107
+        },
+        {
+          "estimand": "adj_shrunk_even (EB w=n/(n+lambda) lambda=2.00 mu=7.139)",
+          "target": "adj_odd",
+          "rmse": 0.15296580478230112,
+          "r2_vs_target": 0.967597702792773,
+          "corr_with_target": 0.9836885661379952,
+          "bias": 0.005832285564326678
+        },
+        {
+          "estimand": "bayes_rating (BGG; prior 5.49 lam=2500)",
+          "target": "adj_odd",
+          "rmse": 1.2654037837396503,
+          "r2_vs_target": -1.2174066557816636,
+          "corr_with_target": 0.607606522487656,
+          "bias": -1.06765986013017
+        },
+        {
+          "estimand": "bayes_rating",
+          "target": "raw_odd",
+          "rmse": 1.009706218433479,
+          "r2_vs_target": -0.5504145663120363,
+          "corr_with_target": 0.6011641389227083,
+          "bias": -0.7728765159180722
+        }
+      ],
+      "pairwise_note": "RMSE on game-mean scale (rating points, game SD ~0.85). Adj_even predicts held-out adj_odd with R2 0.967 vs raw_even R2 0.810 vs bayes R2 -1.217. Shrunk gives 0.153 vs 0.154 RMSE."
+    },
+    "individual_level_held_out": {
+      "n_test_odd_observations": 12073005,
+      "rmse_raw_even_predicts_raw_rating": 1.3715248472827966,
+      "rmse_adj_even_predicts_severity_adjusted_rating": 1.1944376224054636,
+      "note": "Game mean alone predicts severity-adjusted rating r - delta; mirrors prior holdout."
+    },
+    "correlations": {
+      "pearson_raw_even_raw_odd": 0.9762933300708361,
+      "pearson_adj_even_adj_odd": 0.9836176353321898,
+      "pearson_adj_hd": 0.9831480668162365,
+      "pearson_shrunk_adj": 0.9836885661379952,
+      "pearson_bayes_adj": 0.607606522487656,
+      "full_data_pearson_raw_vs_adj": 0.9834719351827402,
+      "full_data_pearson_adj_vs_bayes": 0.609643118484728
+    },
+    "coverage": {
+      "frequentist_95_interval_adj_even": {
+        "coverage_two_sided": 0.8200435433392298,
+        "coverage_lower": 0.9103959722411212,
+        "note": "SE= sigma_e/sqrt(n_even) sigma_e=1.193; under-covers for predicting other half's observed mean because target has its own sampling variance."
+      },
+      "posterior_95_interval_shrunk": {
+        "coverage_two_sided": 0.8192951421962171,
+        "coverage_lower": 0.9042046536943802
+      }
+    },
+    "stratified_by_n_even": [
+      {
+        "band": "100-199",
+        "n_games": 3412,
+        "rmse_adj": 0.1552591509435477,
+        "rmse_shrunk": 0.15460490642203467,
+        "mae_adj": 0.12207194547067639,
+        "mae_shrunk": 0.12157691875852973,
+        "mean_n": 141.05304806565064
+      },
+      {
+        "band": "1000+",
+        "n_games": 2160,
+        "rmse_adj": 0.03655509470064017,
+        "rmse_shrunk": 0.03656696714088138,
+        "mae_adj": 0.027351389900912928,
+        "mae_shrunk": 0.02736647792268451,
+        "mean_n": 4264.693518518518
+      },
+      {
+        "band": "200-499",
+        "n_games": 3075,
+        "rmse_adj": 0.100061754207172,
+        "rmse_shrunk": 0.10002357812891025,
+        "mae_adj": 0.07830198199205524,
+        "mae_shrunk": 0.07826328029780001,
+        "mean_n": 315.4725203252033
+      },
+      {
+        "band": "50-99",
+        "n_games": 4404,
+        "rmse_adj": 0.22227666095852544,
+        "rmse_shrunk": 0.22073925814197767,
+        "mae_adj": 0.17516254860536834,
+        "mae_shrunk": 0.17411794836652375,
+        "mean_n": 71.56880108991825
+      },
+      {
+        "band": "500-999",
+        "n_games": 1535,
+        "rmse_adj": 0.06382867362573191,
+        "rmse_shrunk": 0.06364775994118203,
+        "mae_adj": 0.049394508844551745,
+        "mae_shrunk": 0.049278650782871934,
+        "mean_n": 709.8521172638436
+      },
+      {
+        "band": "n_even<50",
+        "n_games": 112,
+        "rmse_adj": 0.2738234745891977,
+        "rmse_shrunk": 0.26552144874343114,
+        "mae_adj": 0.21728060539766153,
+        "mae_shrunk": 0.20890575736878716,
+        "mean_n": 48.223214285714285
+      }
+    ],
+    "note": "Primary target is adj_odd (severity-adjusted quality). Predicting raw_odd confounds rater-pool severity. Bayes predicts poorly because prior 5.49 and lambda 2500 overshrink vs EB lambda."
+  },
+  "preferred_estimator": {
+    "estimator": "adj_mean_g = AVG(rating - delta_u) = mu + alpha_g  (pass2 ALS mu=7.139)",
+    "shrinkage": {
+      "lambda_eb": 2.0005517084461792,
+      "mu_prior": 7.139007726394262,
+      "formula": "adj_shrunk = w*adj + (1-w)*mu, w=n/(n+lambda)",
+      "when_to_apply": "Optional mild shrinkage for ranking/display, especially n<100 where gain may be larger. Overall gain small. Primary analysis should use adj_mean; sensitivity variant uses adj_shrunk. Do not use bayes_rating (overshrinks).",
+      "shrinkage_at_median": 0.9942677692093811,
+      "shrinkage_at_p10": 0.9839956569702804,
+      "shrinkage_at_example_293": 0.9932184814677115,
+      "shrinkage_at_example_12000": 0.9998333151461019
+    },
+    "uncertainty": {
+      "SE_frequentist": "SE = sigma_e / sqrt(n_g) where sigma_e=1.193 (residual SD after mu+alpha+delta)",
+      "posterior_SD": "post_SD = sqrt(1/(1/sigma_alpha2 + n/sigma_e2)) sigma_alpha2=0.712",
+      "report": "Give adj_mean plus SE and lower 95% bound (adj -1.96*SE). For ranking sensitivity, also give posterior interval of shrunk. Intervals are narrow: median SE 0.064 p10 0.021 p90 0.108.",
+      "se_examples": [
+        {
+          "n": 50,
+          "se_frequentist": 0.16877786687218094,
+          "posterior_sd": 0.165499436785398,
+          "lower_95_frequentist": -0.3308046190694746,
+          "lower_95_posterior": -0.3243788960993801,
+          "width_95_frequentist": 0.6616092381389492,
+          "width_95_posterior": 0.6487577921987602
+        },
+        {
+          "n": 100,
+          "se_frequentist": 0.1193439741795195,
+          "posterior_sd": 0.1181678232240112,
+          "lower_95_frequentist": -0.2339141893918582,
+          "lower_95_posterior": -0.23160893351906195,
+          "width_95_frequentist": 0.4678283787837164,
+          "width_95_posterior": 0.4632178670381239
+        },
+        {
+          "n": 120,
+          "se_frequentist": 0.10894564460072821,
+          "posterior_sd": 0.10804871307152929,
+          "lower_95_frequentist": -0.2135334634174273,
+          "lower_95_posterior": -0.2117754776201974,
+          "width_95_frequentist": 0.4270669268348546,
+          "width_95_posterior": 0.4235509552403948
+        },
+        {
+          "n": 293,
+          "se_frequentist": 0.06972149416393149,
+          "posterior_sd": 0.06948468319406405,
+          "lower_95_frequentist": -0.1366541285613057,
+          "lower_95_posterior": -0.13618997906036553,
+          "width_95_frequentist": 0.2733082571226114,
+          "width_95_posterior": 0.27237995812073107
+        },
+        {
+          "n": 347,
+          "se_frequentist": 0.06406720213886775,
+          "posterior_sd": 0.06388331424379115,
+          "lower_95_frequentist": -0.1255717161921808,
+          "lower_95_posterior": -0.12521129591783065,
+          "width_95_frequentist": 0.2511434323843616,
+          "width_95_posterior": 0.2504225918356613
+        },
+        {
+          "n": 500,
+          "se_frequentist": 0.05337224779407705,
+          "posterior_sd": 0.05326579319815384,
+          "lower_95_frequentist": -0.10460960567639102,
+          "lower_95_posterior": -0.10440095466838152,
+          "width_95_frequentist": 0.20921921135278204,
+          "width_95_posterior": 0.20880190933676304
+        },
+        {
+          "n": 1000,
+          "se_frequentist": 0.03773987834236064,
+          "posterior_sd": 0.03770218460010459,
+          "lower_95_frequentist": -0.07397016155102684,
+          "lower_95_posterior": -0.073896281816205,
+          "width_95_frequentist": 0.14794032310205368,
+          "width_95_posterior": 0.14779256363241
+        },
+        {
+          "n": 3183,
+          "se_frequentist": 0.021153497160726554,
+          "posterior_sd": 0.02114685268585926,
+          "lower_95_frequentist": -0.04146085443502404,
+          "lower_95_posterior": -0.04144783126428415,
+          "width_95_frequentist": 0.08292170887004809,
+          "width_95_posterior": 0.0828956625285683
+        },
+        {
+          "n": 5000,
+          "se_frequentist": 0.016877786687218094,
+          "posterior_sd": 0.01687441121160716,
+          "lower_95_frequentist": -0.03308046190694746,
+          "lower_95_posterior": -0.033073845974750035,
+          "width_95_frequentist": 0.06616092381389492,
+          "width_95_posterior": 0.06614769194950007
+        },
+        {
+          "n": 12000,
+          "se_frequentist": 0.01089456446007282,
+          "posterior_sd": 0.010893656442790405,
+          "lower_95_frequentist": -0.02135334634174273,
+          "lower_95_posterior": -0.021351566627869193,
+          "width_95_frequentist": 0.04270669268348546,
+          "width_95_posterior": 0.042703133255738386
+        }
+      ]
+    },
+    "justification": [
+      "Severity-adjusted mean removes stable rater-level level difference \u2014 established Phases 2-4, gap closed on pass2 to ~-0.03 per baseline_refresh.",
+      "Held-out even->odd predicts adj_odd with RMSE 0.154 R2 0.967 vs raw 0.370 R2 0.810 vs bayes 1.265 (very poor). Adj is far more predictive of latent quality proxied by held-out severity-adjusted mean.",
+      "EB lambda 2.00 implies negligible shrinkage for typical n (median w 0.994, p10 w 0.984). Only games with n<50 see material gain if any; but pass2 has no games <100, so shrinkage even more negligible.",
+      "BGG bayes (prior 5.49 lambda 2500) correlates 0.61 with adj and has bias -1.07 vs adj, RMSE 1.27 \u2014 useful for popularity ranking but not defensible quality estimate.",
+      "SE varies across n_g (e.g., 0.021 at p10 vs 0.108 at p90) so point estimates must not be treated equally precise \u2014 must weight or show uncertainty in expected-rating regression."
+    ],
+    "for_RQ2_next_phase": {
+      "y": "adj_mean_g (or shrunk variant as sensitivity) as the dependent variable representing game quality net of rater severity.",
+      "n_weighting": "Weight RQ2 regression by 1/SE^2 ~ n_g / sigma_e2 or use WLS / include SE as measurement error; or at least report SE and show n_g-weighted vs equal-weighted sensitivity. Do not ignore heteroscedasticity.",
+      "bayes_role": "Keep bayes as reference but not as y.",
+      "raw_role": "Raw is highly correlated with adj but biased by mean(delta) pool; do not use raw as primary."
+    }
+  },
+  "extra": {
+    "raw_vs_adj_full": {
+      "pearson_raw_vs_adj_full": 0.9834719351827402,
+      "mean_shift_adj_minus_raw": 0.2944888139715065,
+      "median_shift": 0.2948761815662979
+    },
+    "bayes_descriptives": {
+      "mean_bayes": 5.798415907259274,
+      "median_bayes": 5.62444,
+      "corr_bayes_vs_adj": 0.6096431184847412
+    }
+  },
+  "method_discipline": {
+    "copy_once": "scratch/phase2-pass2 copy-once verified; DuckDB memory 4GB threads 3 temp scratch/ducktmp",
+    "held_out": "One even/odd rating_observation_id split (deterministic, no cross-half leakage for delta_full vs joint; halfDelta sensitivity shows similar corr)",
+    "bounded": "Compact aggregates only; no large pandas merges; no full-snapshot rescan",
+    "claim_tagging": "per AGENTS.md",
+    "reuse_severity": "Pass-2 severity estimates reused, NOT refit (mu 7.139)"
+  }
+}
