@@ -1,0 +1,14 @@
+pattern_label,pattern_substring,n_games,pct_pop,mean_resid_Q3bFam,median_resid,share_top5_pct,overlap_strong_n,overlap_niche_n,passes_n50_gate,beta_added,ols_se,fold_betas,fold_pos_5,cv_r2_ext,delta_cv_r2,spearman_vs_Q3bFam,jaccard_top1,jaccard_top5,would_keep
+Collector's Edition,Collector's Edition,19,0.13,0.2951,0.4134,36.8,0,7,False,,,,,,,,,,False
+Ultimate Edition,Ultimate Edition,7,0.05,0.4658,0.5072,14.3,0,1,False,,,,,,,,,,False
+Kickstarter Edition,Kickstarter Edition,15,0.1,0.4399,0.5589,20.0,1,0,False,,,,,,,,,,False
+Complete Collector,Complete Collector,1,0.01,1.1821,1.1821,100.0,0,1,False,,,,,,,,,,False
+Essential Edition,Essential Edition,3,0.02,0.508,0.6513,0.0,0,0,False,,,,,,,,,,False
+Second Edition,Second Edition,112,0.76,0.2095,0.1774,5.4,0,7,True,0.2138,0.0506,+0.205 +0.220 +0.225 +0.227 +0.189,5.0,0.6066,0.0005,0.999,0.973,0.989,False
+Anniversary,Anniversary,12,0.08,0.1676,0.4249,25.0,0,4,False,,,,,,,,,,False
+Deluxe Edition,Deluxe Edition,26,0.18,0.2427,0.1799,19.2,0,3,False,,,,,,,,,,False
+Big Box,Big Box,7,0.05,0.7326,0.9013,57.1,0,4,False,,,,,,,,,,False
+Premium,Premium,1,0.01,0.1408,0.1408,0.0,0,0,False,,,,,,,,,,False
+Heritage,Heritage,2,0.01,-0.2441,-0.2441,0.0,0,0,False,,,,,,,,,,False
+Revised Edition,Revised Edition,11,0.07,0.1463,0.3617,27.3,0,3,False,,,,,,,,,,False
+Edition (any),Edition,458,3.12,0.1123,0.1068,10.3,2,33,True,0.1191,0.0255,+0.109 +0.117 +0.144 +0.131 +0.095,5.0,0.6066,0.0005,0.999,0.934,0.981,False
