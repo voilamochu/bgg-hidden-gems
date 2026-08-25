@@ -1,0 +1,7 @@
+subgroup,n_games,prop_insufficient_overlap_pct,prop_borderline_pct,prop_adequate_pct,sensitive_strongly_pct,sensitive_stable_pct,cross_support_ge10_pct,taxonomy_high_pct,taxonomy_insufficient_pct,insufficient_overlap_n,n_prop_total,n_sel_total,n_ca_total
+overall,14698,23.0,44.2,32.8,10.8,34.1,86.2,7.6,18.9,3385,14698,14698,66911
+solo_first,691,34.4,49.8,15.8,22.7,21.0,80.5,19.1,26.2,238,691,691,3300
+duel_1_2p,2555,33.3,41.5,25.2,18.6,27.6,83.3,15.4,25.8,851,2555,2555,11101
+wargame_duel,1153,47.7,52.3,0.0,39.7,0.0,81.0,32.1,31.3,550,1153,1153,5709
+euro_duel,1079,21.8,28.7,49.5,0.8,51.8,86.5,0.8,21.6,235,1079,1079,3978
+solo_mech,1397,18.0,50.3,31.8,11.2,34.6,89.4,5.7,11.7,251,1397,1397,7641

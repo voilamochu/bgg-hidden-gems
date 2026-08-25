@@ -1,0 +1,18 @@
+{
+  "population_dup_base_titles_ge2": 285,
+  "population_dup_games": 611,
+  "candidate_corroborated_titles": 39,
+  "candidate_corroborated_games": 96,
+  "pruned_ids_total": 215,
+  "pruned_in_est": 41,
+  "candidate_not_pruned_games": 87,
+  "pool_dup_titles": 3,
+  "pool_dup_games": 6,
+  "pool_candidate_games": 10,
+  "pool_candidate_strong_overlap": 0,
+  "mean_resid_candidate_corroborated": 0.2854,
+  "mean_resid_pruned": 0.3401,
+  "n_version_truncated_at_100": 11,
+  "families_null": 0,
+  "game_links_capped_note": "n_version capped at 100 for 11 games (Catan etc), log_n_impl censored"
+}
