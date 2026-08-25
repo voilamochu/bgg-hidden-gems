@@ -1,0 +1,357 @@
+{
+  "generated_at": "2026-08-25T12:00:50.867649+00:00Z",
+  "seed": 20260824,
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "source": "data/processed/phase2-pass2/",
+    "mu": 7.139007726394262,
+    "sigma_e": 1.193439741795195,
+    "note": "validated mu\u22487.139, reuse severity Q3bFam/Q4Fam from Step 9B/10 \u2014 NOT refit"
+  },
+  "starting_pool": {
+    "gate": "adj_mean\u22657.5 & resid_Q3bFam\u22650.75",
+    "size": 532,
+    "median_n": 256,
+    "median_SE": 0.0746,
+    "source": "docs/phase2-pass2/step10_quality_underratedness_gates/screening_pool.csv"
+  },
+  "models": {
+    "primary": "Q3bFam (48f CV 0.6033)",
+    "sensitivity": "Q4Fam (78f CV 0.6151)",
+    "spearman_q3bfam_q4fam": 0.9775,
+    "q3b_cv": 0.5987,
+    "q3b_vs_q3bfam_spearman": 0.9928,
+    "q3b_vs_q3bfam_jaccard_top1": 0.86,
+    "18xx_correction": "31 of 38 lost are 18XX (81% churn), resid +0.676\u21920.000, beta +0.748\u00b10.062"
+  },
+  "hiddenness": {
+    "definition": "n_obs primary (<1700 eligible, 1700-2500 borderline, >2500 exclude) from rating_observations_pass2; users_rated sensitivity corr 0.971, 16 discordant flagged popular_via_users",
+    "buckets_n_obs": {
+      "eligible": 485,
+      "exclude": 27,
+      "borderline": 20
+    },
+    "buckets_users_rated": {
+      "eligible": 464,
+      "exclude": 43,
+      "borderline": 25
+    },
+    "popular_via_users": 16,
+    "screened_eligible_borderline": 505,
+    "excluded": 27,
+    "examples_near_1700": [
+      {
+        "game_id": 89952,
+        "title": "Carcassonne: 10 Year Special Edition",
+        "n_obs": 1698
+      },
+      {
+        "game_id": 281474,
+        "title": "Lands of Galzyr",
+        "n_obs": 1709
+      },
+      {
+        "game_id": 215471,
+        "title": "Photograph",
+        "n_obs": 1709
+      },
+      {
+        "game_id": 225482,
+        "title": "Seas of Strife",
+        "n_obs": 1743
+      },
+      {
+        "game_id": 271615,
+        "title": "The Quest for El Dorado: The Golden Temples",
+        "n_obs": 1744
+      }
+    ],
+    "examples_near_2500": [
+      {
+        "game_id": 27976,
+        "title": "Heroscape Master Set: Swarm of the Marro",
+        "n_obs": 2332
+      },
+      {
+        "game_id": 82420,
+        "title": "Summoner Wars: Guild Dwarves vs Cave Goblins",
+        "n_obs": 2362
+      },
+      {
+        "game_id": 1301,
+        "title": "Netrunner",
+        "n_obs": 2392
+      },
+      {
+        "game_id": 252526,
+        "title": "Pictomania (Second Edition)",
+        "n_obs": 2397
+      },
+      {
+        "game_id": 38863,
+        "title": "The Rich and the Good",
+        "n_obs": 2484
+      }
+    ]
+  },
+  "evidence_dimensions": {
+    "quality": "adj_mean and lower_bound=adj-1.96*SE (sigma_e 1.193); robust LB\u22657.0 distinguishes point vs wide-SE",
+    "underratedness": "resid_Q3bFam primary, resid_Q4Fam sensitivity fragile <0.50 robust \u22650.60",
+    "hiddenness": "from \u00a71",
+    "edition_duplicate_system": "via pruned_lists/combined_primary_edition_family.csv (153) + combined_sensitivity_dup.csv (7 in pool) + title pattern heuristic + families Big Box/System + game_links version/reimpl counts; flagged not hidden",
+    "audience_selectivity": "Step7 audience_selectivity_game_level.csv taxonomy/spec/tvd/share_own/herfindahl",
+    "propensity": "Step7C true-scale propensity_validation_game_level.csv overlap_status/sensitivity_class/delta + Step7B sampled as sensitivity",
+    "cross_audience": "Step7 cross_audience_results.csv specialist/volume/ownership/weight splits supported_ge10, broad vs niche_drop"
+  },
+  "outcome_rule": {
+    "description": "No combined score; auditable priority: exclude>edition/system>popular_nuance>insufficient (overlap+no cross)>niche (high/tax/strongly/delta/Q4fragile/cross niche_drop)>strong (eligible+LB\u22657.0+Q4\u22650.60+taxonomy low/moderate+overlap adequate/borderline+sens stable/moderate+cross broad+not mediocre)>plausible else",
+    "strong_hidden_gem_evidence": 39,
+    "plausible_hidden_gem": 176,
+    "niche_but_high_quality": 163,
+    "insufficient_evidence": 127,
+    "excluded_popular_not_hidden": 27,
+    "flag_if_lt10_strong": false,
+    "flag_if_gt500_plausible": false
+  },
+  "outcome_counts_screened": {
+    "plausible_hidden_gem": 176,
+    "niche_but_high_quality": 163,
+    "insufficient_evidence": 127,
+    "strong_hidden_gem_evidence": 39
+  },
+  "outcome_counts_total532": {
+    "plausible_hidden_gem": 176,
+    "niche_but_high_quality": 163,
+    "insufficient_evidence": 127,
+    "strong_hidden_gem_evidence": 39,
+    "excluded_popular_not_hidden": 27
+  },
+  "pass1_failure_modes": {
+    "edition_variants": 46,
+    "expansions_system": 7,
+    "duplicate": 7,
+    "family_flag": 0,
+    "family_link": 14,
+    "popular_exclude": 27,
+    "popular_nuance": 16,
+    "mediocre_large_resid": 49,
+    "specialist_dependent": 95,
+    "broad_unavailable": 155
+  },
+  "q3b_vs_q3bfam_impact": {
+    "prelim_pool_Q3b": 550,
+    "prelim_pool_Q3bFam": 532,
+    "lost_38_gain_20": {
+      "lost": 38,
+      "gain": 20,
+      "intersection": 512,
+      "jaccard": 0.903
+    },
+    "18xx_in_Q3b_pool": 31,
+    "18xx_in_Q3bFam_pool": 0,
+    "q3b_pool_in_532_Q3bFam_table": 512,
+    "spearman_q3b_q3bfam": 0.9928,
+    "note": "Q3bFam removes omitted-family artifact; final hidden gems contain 0 18XX (material local change, global stable). Q4Fam sensitivity Jaccard 0.817."
+  },
+  "strong_candidates": [
+    {
+      "game_id": 2470,
+      "title": "The Extraordinary Adventures of Baron Munchausen",
+      "year": 1998.0,
+      "n_obs": 379,
+      "adj_mean": 7.54142635668983,
+      "residual_Q3bFam": 1.675909551702483,
+      "residual_Q4Fam": 1.6041756285978517
+    },
+    {
+      "game_id": 62814,
+      "title": "Tumblin-Dice Medium",
+      "year": 2008.0,
+      "n_obs": 215,
+      "adj_mean": 7.61403753309305,
+      "residual_Q3bFam": 1.5332386757323686,
+      "residual_Q4Fam": 1.5010055106635782
+    },
+    {
+      "game_id": 275972,
+      "title": "Star Trek: Alliance \u2013 Dominion War Campaign",
+      "year": 2021.0,
+      "n_obs": 193,
+      "adj_mean": 8.586067013741074,
+      "residual_Q3bFam": 1.340699787735952,
+      "residual_Q4Fam": 1.3244635555031223
+    },
+    {
+      "game_id": 244258,
+      "title": "The Red Dragon Inn 7: The Tavern Crew",
+      "year": 2018.0,
+      "n_obs": 310,
+      "adj_mean": 7.855604716276058,
+      "residual_Q3bFam": 1.3138743835085709,
+      "residual_Q4Fam": 1.4141990850659347
+    },
+    {
+      "game_id": 340216,
+      "title": "Heredity: The Book of Swan",
+      "year": 2023.0,
+      "n_obs": 176,
+      "adj_mean": 8.627492692999917,
+      "residual_Q3bFam": 1.2455551384001249,
+      "residual_Q4Fam": 1.144853577018866
+    },
+    {
+      "game_id": 373835,
+      "title": "Unlock! Kids: Stories from the Past",
+      "year": 2022.0,
+      "n_obs": 252,
+      "adj_mean": 8.076560191133414,
+      "residual_Q3bFam": 1.2059661688062722,
+      "residual_Q4Fam": 1.1186359363502358
+    },
+    {
+      "game_id": 319604,
+      "title": "Ricochet: A la poursuite du Comte courant",
+      "year": 2020.0,
+      "n_obs": 223,
+      "adj_mean": 7.738709549479767,
+      "residual_Q3bFam": 1.166233544985153,
+      "residual_Q4Fam": 1.1060003200943411
+    },
+    {
+      "game_id": 252432,
+      "title": "Zoo Break",
+      "year": 2019.0,
+      "n_obs": 178,
+      "adj_mean": 7.970369187843468,
+      "residual_Q3bFam": 1.1336096480730395,
+      "residual_Q4Fam": 1.1104013043589207
+    },
+    {
+      "game_id": 153498,
+      "title": "Kamisado Max",
+      "year": 2014.0,
+      "n_obs": 155,
+      "adj_mean": 7.6015884541196,
+      "residual_Q3bFam": 1.1243801882776925,
+      "residual_Q4Fam": 1.0977987636407605
+    },
+    {
+      "game_id": 41090,
+      "title": "Magnate",
+      "year": 2008.0,
+      "n_obs": 210,
+      "adj_mean": 7.683532630210059,
+      "residual_Q3bFam": 1.1239583821871555,
+      "residual_Q4Fam": 1.0950519031937338
+    }
+  ],
+  "plausible_candidates": [
+    {
+      "game_id": 4385,
+      "title": "A Gamut of Games",
+      "year": 1969.0,
+      "n_obs": 434,
+      "adj_mean": 8.074748244439382,
+      "residual_Q3bFam": 1.9529358035829425
+    },
+    {
+      "game_id": 1803,
+      "title": "Zopp",
+      "year": 1997.0,
+      "n_obs": 158,
+      "adj_mean": 7.667323849066769,
+      "residual_Q3bFam": 1.7523496363884623
+    },
+    {
+      "game_id": 341489,
+      "title": "Carrooka",
+      "year": 2021.0,
+      "n_obs": 195,
+      "adj_mean": 8.554627332404891,
+      "residual_Q3bFam": 1.7484965230713527
+    },
+    {
+      "game_id": 541,
+      "title": "Das Motorsportspiel",
+      "year": 1995.0,
+      "n_obs": 381,
+      "adj_mean": 7.884625607694253,
+      "residual_Q3bFam": 1.6685431334859606
+    },
+    {
+      "game_id": 6688,
+      "title": "Ninety-Nine",
+      "year": 1974.0,
+      "n_obs": 554,
+      "adj_mean": 7.886113311979459,
+      "residual_Q3bFam": 1.6035999915317074
+    },
+    {
+      "game_id": 156372,
+      "title": "Heart of Crown: Fairy Garden",
+      "year": 2013.0,
+      "n_obs": 304,
+      "adj_mean": 8.435737541032188,
+      "residual_Q3bFam": 1.5841251101401923
+    },
+    {
+      "game_id": 14188,
+      "title": "Bughouse Chess",
+      "year": 1960.0,
+      "n_obs": 362,
+      "adj_mean": 7.928732592221245,
+      "residual_Q3bFam": 1.5722549790279414
+    },
+    {
+      "game_id": 2981,
+      "title": "Breaking Away",
+      "year": 1991.0,
+      "n_obs": 460,
+      "adj_mean": 7.882878139721112,
+      "residual_Q3bFam": 1.5408317610311526
+    },
+    {
+      "game_id": 161880,
+      "title": "The Quiet Year",
+      "year": 2013.0,
+      "n_obs": 406,
+      "adj_mean": 7.928581363307283,
+      "residual_Q3bFam": 1.5308571429386708
+    },
+    {
+      "game_id": 165748,
+      "title": "Psycho Raiders",
+      "year": 2014.0,
+      "n_obs": 197,
+      "adj_mean": 8.273367651575443,
+      "residual_Q3bFam": 1.5243620593184044
+    }
+  ],
+  "files": {
+    "hiddenness_screen": "hiddenness_screen.md",
+    "hiddenness_counts": "hiddenness_counts.csv",
+    "screening_evidence_table": "screening_evidence_table.csv (532 rows, documented 505 screened eligible+borderline)",
+    "outcome_breakdown": "outcome_category_breakdown.md",
+    "outcome_counts": "outcome_counts.csv",
+    "failure_audit": "pass1_failure_mode_audit.md",
+    "comparison_q3b": "comparison_q3b_vs_q3bFam_pool.md"
+  },
+  "constraints_preserved": [
+    "reuse Pass-2 adj_mean/Q3bFam/Q4Fam \u2014 NOT refit",
+    "existing Pass-2 cleanup/relationship evidence \u2014 NOT invent new logic",
+    "dimensions separate \u2014 NO combined hidden-gem score",
+    "data/raw immutable, data/processed/phase2-pass2 canonical, scratch bounded 4GB/3threads/temp scratch/ducktmp, narrow aggregations, avoid 24M wide sorts",
+    "weight 7 null median-filled 2.0 + flag as before",
+    "seed 20260824",
+    "next free script 51"
+  ],
+  "claim_tags": {
+    "observed_fact": "counts, hidden buckets, pruned sets",
+    "empirical_finding": "residual dist, spearman/jaccard, audience/propensity/cross stats (model-dependent but data-driven)",
+    "model_dependent_conclusion": "Q3bFam primary, outcome mapping, strong/plausible interpretation",
+    "assumption": "additive severity reuse, weight median-fill, cat threshold 500, propensity calibrated",
+    "limitation": "cannot recover non-raters, timestamp unresolved, snapshot collections, borderline needs external validation"
+  }
+}

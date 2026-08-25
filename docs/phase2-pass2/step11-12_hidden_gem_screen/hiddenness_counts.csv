@@ -1,0 +1,5 @@
+hiddenness_bucket,n_obs_definition,users_rated_definition
+eligible (<1700 ratings),485,464
+borderline (1700-2500),20,25
+exclude (>2500),27,43
+total,532,532

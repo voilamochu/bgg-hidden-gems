@@ -2885,3 +2885,75 @@ Population reused: 14,698 games × 287,302 users × 24,146,307 obs, `data/proces
 ### Tags [claim discipline]
 
 Observed fact: counts, quantiles, SE, band summaries. Empirical finding: CV/R²/Jaccard/Spearman/delta-resid/retained fractions (model-dependent but data-driven). Model-dependent conclusion: recommended primary/sensitivity gates, uncertainty rule as sensitivity, Q3bFam primary justified. Assumption: additive severity reuse correct, weight median-fill, category threshold 500. STOP after Step 10 per task.
+
+## 2026-08-25 — Step 11-12: Combined Hidden-Gem Screening Pass on Final Pass-2 (Q3bFam primary, 532 → 505 screened → 39 strong) [script 51]
+
+Population reused: 14,698 × 287,302 × 24,146,307 `data/processed/phase2-pass2/` (mu 7.139, sigma_e 1.193, SE=sigma_e/sqrt(n), reuse Pass-2 severity — NOT refit) [observed fact]. Starting pool Step 10 primary `adj≥7.5 & resid_Q3bFam≥0.75` → 532 (median n256 SE0.0746) — quality+underratedness only, exactly as Step 10 left it [observed fact]. Script `51_step11-12_hidden_gem_screen.py` (next free 51, bounded 4GB/3threads/scratch/ducktmp, seed 20260824); outputs `docs/phase2-pass2/step11-12_hidden_gem_screen/` mirrored to `reports/phase2_pass2/step11-12_hidden_gem_screen/`; STOP after combined 11-12 [method].
+
+### 1. Hiddenness rule (§1) [observed fact / empirical finding]
+
+- **Rule exactly as stated:** `n_obs` from `rating_observations_pass2` primary (Step 10 median 347) — `<1700 eligible`, `1700-2500 borderline`, `>2500 exclude (not hidden)` [method]. Hiddenness necessary not sufficient.
+- **Counts in 532:** eligible 485 (91.2%), borderline 20 (3.8%), exclude 27 (5.1%) → screened eligible+borderline **505** [observed fact]. `users_rated` sensitivity corr n_obs 0.971, but 16 games `n_obs≤2500` but `users_rated>2500` (e.g., ito 979/4008, Unmatched Game System 2193/3056) flagged `popular_via_users` — survive n_obs cut but not genuinely hidden; used both per-task [observed fact].
+- **Boundary examples:** 89952 Carcassonne:10Year 1698 eligible ↔ 281474 Lands of Galzyr 1709 borderline ↔ 38863 Rich and Good 2484 borderline ↔ 335764 Unmatched Battle Legends 2647 exclude; excluded top are Modern Art 23096, Dixit:Odyssey 21146, Acquire 20432 — clearly popular [observed fact]. Borderline band contains only 20 games (median n 256 well below threshold), so hiddenness alone not discriminating [empirical finding].
+
+### 2. Final candidate screening using established Pass-2 evidence (Steps 7-10) — dimensions kept separate, no combined score [method / model-dependent conclusion]
+
+For each eligible/borderline game (505), evaluated separately:
+- **Quality:** `adj_mean` and `lower_bound=adj-1.96*SE` (sigma_e 1.193). Point pass 7.5 retained, but LB<7.0 flags wide-SE weaker (small-n) — strong requires LB≥7.0 [method].
+- **Underratedness:** `resid_Q3bFam` and `resid_Q4Fam` sensitivity (Spearman 0.9775, Jaccard 0.817 at 7.5+0.75; step 10). Q4Fam fragile <0.50, borderline <0.60, robust ≥0.60 — a candidate strong only under Q3bFam but collapsing under Q4Fam is fragile [empirical finding].
+- **Hiddenness:** from §1 (eligible/borderline) [observed fact].
+- **Edition/duplicate/family/game-system cleanup:** existing Pass-2 cleanup evidence — `game_links_pass2`, `games_pass2` families/relationships, `data/processed/phase2-second-pass/pruned_lists/` `combined_primary_edition_family.csv` (169/153 edition mappings, 0 in 532 pool confirming recursive closure removed primary 143), `rule_*` files, `details_*.json` keeper mappings, plus second-pass closure logs (1,929 pruned). No new classification invented beyond auditable title-pattern heuristic (`Collector/Big Box/Anniversary/Second Edition/Revised/Deluxe/Ultimate/Heritage/Premium` + families `Big Box Versions`) cited per row [method]. 36 title-pattern flagged + 7 sensitivity duplicates (Finca 261720, Lords of Vegas 375769, Puerto Rico 108687/165332, Santorini 9963, Star Realms 355199, Survive 315048, gap 5-28y) + 2 system (Unmatched Game System 295564 Admin: Game System Entries, Anachrony Infinity Box 278292 Big Box) — flagged as not hidden even though n_obs eligible [observed fact].
+- **Step7 audience-selectivity:** `audience_selectivity_game_level.csv` taxonomy (low 3936/moderate 6867/high 1124/insufficient 2771 global; in 532: moderate 269/high 56/low 68/insufficient 139), spec_ge20 mean 0.83 (q75 0.939), TVD 0.15, share_own 0.57 etc. [empirical finding].
+- **Step7B/7C exposure-sensitivity:** `propensity_validation_game_level.csv` true-scale corrected (ECE 0.00034 vs sampled 0.34) — adequate 32.8% (4819), borderline 44.2% (6494), insufficient 23.0% (3385) global; in 532: adequate 144/borderline 233/insufficient 155, stable 153/moderate 161/strong 63/insufficient 155 [empirical finding]. Sampled 7B as sensitivity (70.5% stable vs 19.5% insufficient on sampled scale).
+- **Cross-audience/broad-appeal:** `cross_audience_results.csv` 66,911 splits; volume 10-24 vs 500+ (9227≥10), specialist 0-4 vs ≥20 (3973≥10) etc.; median diff ~0.08 after severity, ~50% |diff|<0.3 broadly consistent — does game remain highly rated by non-specialists? Defined per-game `cross_audience_support`: broad_support_non_specialists_high / broad_consistent / niche_drop / insufficient_no_ge10 [empirical finding].
+
+Keep dimensions separate — one column per dimension, no weighted sum [method].
+
+### 3. Outcome categories — decided from evidence (auditable priority rule, no opaque scoring) [model-dependent conclusion]
+
+Assigned each screened game via priority: exclude>edition/system/duplicate/popular_nuance>insufficient (overlap insufficient+no cross & small_n)>niche (high taxonomy / spec>0.90 / TVD>0.35 / Q4 fragile<0.50 / propensity strongly_sensitive / cross niche_drop)>strong (eligible+LB≥7.0+Q4≥0.60+taxonomy low/moderate+overlap adequate/borderline+sens stable/moderate+cross broad+not mediocre)>plausible else. Documented in `screening_evidence_table.csv` `outcome_category` + `outcome_reason`.
+
+**Counts (screened 505; total 532 incl. 27 excluded):** strong 39 (7.7% screened, 7.3% pool), plausible 176 (34.9%), niche_but_high_quality 163 (32.3%), insufficient_evidence 127 (25.1%), excluded 27 (5.1%) [observed fact]. If <10 strong or >500 plausible flagged — here 39 strong OK≥10 and 176 plausible OK<500, genuine auditable set not fixed size [method].
+
+**Distributions (screened):** strong median n405 adj8.08 resid0.96 q40.91 SE0.059 LB7.93; plausible n382 adj7.91 resid0.94 SE0.061 LB7.80; niche n321 adj8.13 resid0.97 SE0.067 LB7.97; insufficient n123 adj8.02 resid0.96 SE0.108 LB7.80 — insufficient has small-n wide SE as expected [empirical finding].
+
+**Strong top examples (39, few well-supported):** 2470 Baron Munchausen 1998 379 7.54 1.68→1.60 moderate/borderline/broad; 62814 Tumblin-Dice Medium 215 7.61 1.53 low/borderline/broad; 275972 Star Trek Alliance 193 8.59 1.34 moderate/borderline/broad; 244258 Red Dragon Inn 7 310 7.86 1.31 moderate/adequate/stable/broad etc. All eligible, 0 edition/system/duplicate, 0 popular_nuance [observed fact].
+
+**Plausible (176) larger, borderline evidence:** includes e.g., 4385 A Gamut of Games 434 8.07 1.95 but cross mixed_large_heterogeneity; 1803 Zopp 158 7.67 1.75 borderline cross etc. — good+underrated+hidden but one dimension borderline (hiddenness borderline 20 games all plausible/niche not strong, or SE LB dips, or moderate taxonomy + borderline overlap) [empirical finding].
+
+**Niche (163) — specialist-dependent:** high taxonomy 56, spec>0.90 44, TVD>0.35 12, Q4 fragile, propensity strongly_sensitive 63, cross niche_drop 22 — e.g., 33434 Funkenschlag EnBW 198 8.69 1.90 spec0.86 high/strongly/mixed; 97683 Age of Rail 277 8.73 1.78 spec0.97 high/strongly; plus all 46 edition-flagged (Ascension Collector etc.) and 16 popular_nuance (Arydia 637/2581, ito 979/4008) and 7 duplicates — flagged not hidden despite n_obs eligible [empirical finding].
+
+**Insufficient (127) — valid we can't tell:** small_n<150 & wide SE>0.09 139 in pool, overlap insufficient 155, n_supported_ge10=0 etc. — e.g., 120269 Red White & Blue 131 8.45 SE0.104 insufficient/insufficient; 4657 Replay Baseball 103 SE0.117 etc. Low n with wide SE, insufficient_overlap, broad-appeal unavailable — not failure [empirical finding].
+
+### 4. Known Pass-1 failure modes explicitly checked [observed fact / empirical finding]
+
+| Mode | flagged in 532 (screened 505) | method |
+|---|---|---|
+| editions/variants | 46 (46) | title pattern + Big Box family + pruned lists (0 primary overlap, 36 pattern) |
+| expansions/sequels/game-system | 7 (7) | Admin: Game System Entries + Fan Expansion (Unmatched System, Infinity Box etc.) |
+| duplicate/family | dup 7 family_link14 (6) | sensitivity dup 7 (Finca etc.) + n_version>15/reimpl>1 |
+| obviously popular | exclude27 nuance16 rank<500 13 | n_obs>2500 + users_rated>2500 nuance corr0.971 + rank Current |
+| mediocre large resid | 49 (43) | adj 7.5-7.7 resid0.75-0.90 borderline (e.g., Was sticht? 7.53/0.90) |
+| specialist-dependent | 95 (93) | spec>0.90 44 + TVD>0.35 12 + taxonomy high56 + cross niche 22 + strongly 63 |
+| broad unavailable | 155 (155) | insufficient_overlap 155 + no cross ge10 0 + small_n&wideSE 139 |
+Per-outcome flagged matrix in `pass1_failure_mode_audit.md` shows strong has 0 flags across all modes (by construction), plausible has only 17 mediocre +12 broad_unavail borderline, niche carries edition/system/duplicate/popular/specialist, insufficient carries broad_unavail 100% [empirical finding].
+
+### 5. First genuine Pass-2 hidden-gem candidate set — evidence table, not ranking [model-dependent conclusion]
+
+Produce categorized evidence table `screening_evidence_table.csv` 532 rows (505 screened documented) with per-game columns: game_id title year n_obs adj_mean expected_Q3bFam resid_Q3bFam resid_Q4Fam SE lower_bound_adj/volume_band hiddenness_bucket edition_duplicate_flag(with source) family_link_flag audience metrics (spec/tvd/taxonomy) propensity_sensitivity (7C true + 7B sampled) cross_audience_support outcome_category reason — preserved auditable [method]. Strong few well-supported, plausible larger, niche/insufficient clearly separated [model-dependent conclusion].
+
+### Comparison Q3b vs Q3bFam pool [empirical finding / model-dependent conclusion]
+
+Prelim Q3b 550 → Q3bFam 532 (lost38 gain20 Jaccard0.903, Spearman0.9928) — **31 of38 lost are 18XX (81% churn)**, resid +0.676→0.000 β+0.748±0.062 5/5 folds (Step 9B). Q3bFam pool has 0 18XX vs Q3b 31 5.6% — material local change, global stable [empirical finding]. Estimated among 532 table, 512 also pass Q3b≥0.75 intersection. Final screened: Q3bFam yields 0 18XX in any outcome; Q3b would have added ~31 18XX to niche/plausible, inflating candidate set with omitted-family artifact. Q4Fam sensitivity overall Spearman0.9775 Jaccard0.817 (489 vs532 inter459 churn73) — movers are mechanics repricings (Titan Δ+0.55), pool not different list [empirical finding]. Q3bFam correctly primary per Step 9B/10 — not for CV+0.0046 but for fold-consistent systematic residual removal [model-dependent conclusion]. Details in `comparison_q3b_vs_q3bFam_pool.md`.
+
+### Artefacts [method]
+
+- Script `51_step11-12_hidden_gem_screen.py` (next free 51, bounded, seed 20260824, weight 7 null handled via flag)
+- Outputs `docs/phase2-pass2/step11-12_hidden_gem_screen/` mirrored `reports/phase2_pass2/step11-12_hidden_gem_screen/`: README.md (exec summary), hiddenness_screen.md+hiddenness_counts.csv (§1), screening_evidence_table.csv (532 rows, 505 screened), outcome_category_breakdown.md+outcome_counts.csv, pass1_failure_mode_audit.md, comparison_q3b_vs_q3bFam_pool.md, step11-12_summary.json
+- Reproduce: `.venv/bin/python scripts/51_step11-12_hidden_gem_screen.py` (loads screening_pool 532 + games_pass2 + links + step7/7b/7c outputs, no 24M wide sorts)
+
+### Tags [claim discipline]
+
+Observed fact: counts, hidden buckets, pruned sets, 18XX counts. Empirical finding: residual dist, Spearman/Jaccard, audience/propensity/cross stats, distributions per outcome (model-dependent but data-driven). Model-dependent conclusion: Q3bFam primary, outcome rule mapping, strong/plausible interpretation. Assumption: additive severity reuse, weight median-fill, cat threshold 500, propensity calibrated (true-scale ECE 0.00034). Limitation: cannot recover non-raters, timestamp unresolved, snapshot collections, borderline hiddenness still needs external validation (plays/sales). Speculation: none — keep open where data cannot distinguish.
+
+STOP after combined Step 11-12 per task.
