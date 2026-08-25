@@ -1,0 +1,480 @@
+{
+  "generated_at": "2026-08-25T15:49:06Z",
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "mu": 7.139007726394262,
+    "source": "data/processed/phase2-pass2/",
+    "severity": "reused, NOT refit"
+  },
+  "diagnostic_39": {
+    "n_strong": 39,
+    "use": "diagnostic only, not ground truth"
+  },
+  "per_dimension": {
+    "lineage": {
+      "candidates_tested": 21,
+      "pruned_169_remaining_zero": 0,
+      "edition_501_mean_resid": 0.11565914329773037
+    },
+    "quality": {
+      "Q3bFam_CV": 0.6033193821348115,
+      "Q4Fam_CV": 0.6151,
+      "candidates_tested": 22,
+      "joint_delta": 0.0019713667837932825
+    },
+    "reference_population": {
+      "candidates_tested": 13,
+      "chosen": {
+        "candidate_id": "intersect_250_bayes_users",
+        "definition": "intersection top 250 bayes \u2229 top 250 users (strongly established modern hobby = highly ranked + highly rated/high-volume)",
+        "n_games": 134,
+        "n_users_distinct": 279108,
+        "n_obs_total": 4965490,
+        "median_weight": 2.9385,
+        "median_year": 2015.0,
+        "median_users_rated": 33913.0,
+        "weight_range": "NA",
+        "year_min": 1981.0,
+        "chosen": true
+      },
+      "n_games": 134,
+      "n_users": 279108
+    },
+    "audience_structure": {
+      "modes_tested": 15,
+      "solo_first_n": 691
+    },
+    "hiddenness": {
+      "buckets": [
+        {
+          "hidden_bucket": "eligible_<1700",
+          "n_games": 12186,
+          "pct_pop": 82.90923935229283,
+          "mean_n_obs": 416.59740686033155,
+          "median_n_obs": 267.0,
+          "mean_ref_penetration": 0.001464400278469361,
+          "median_ref_penetration": 0.0009315390458173897,
+          "p90_ref_penetration": 0.003489688579331298,
+          "share_high_penetration_gt5pct": 0.0
+        },
+        {
+          "hidden_bucket": "borderline_1700-2500",
+          "n_games": 694,
+          "pct_pop": 4.721730847734386,
+          "mean_n_obs": 2034.9697406340058,
+          "median_n_obs": 1998.5,
+          "mean_ref_penetration": 0.0072350702747191456,
+          "median_ref_penetration": 0.007110150909325423,
+          "p90_ref_penetration": 0.008515341731516116,
+          "share_high_penetration_gt5pct": 0.0
+        },
+        {
+          "hidden_bucket": "exclude_>2500",
+          "n_games": 1818,
+          "pct_pop": 12.369029799972786,
+          "mean_n_obs": 9712.531353135313,
+          "median_n_obs": 5164.0,
+          "mean_ref_penetration": 0.03467218559997508,
+          "median_ref_penetration": 0.01843193315849062,
+          "p90_ref_penetration": 0.07571656849678259,
+          "share_high_penetration_gt5pct": 0.1771177117711771
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge1pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge5pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge10pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge20pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge50pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge80pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "wargame_eligible_pen_gt20pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        }
+      ],
+      "total_ref_users": 279108
+    }
+  },
+  "proposed_changes": [
+    {
+      "change_id": "C-edition_title_any",
+      "observed_problem": "501 edition-title pattern games remain (3.4%) with modest systematic +0.116 resid, 2/39 strong edition-like but legit distinct SKUs, 48/532 pool edition (9%) \u2014 leakage is semantic duplicate vs legit new edition",
+      "generalizes_evidence": "n=501 3.4%, mean resid +0.116, share top5 10.6%, beta +0.123 SE 0.024, cv\u0394 +0.0006",
+      "belongs_in": "eligibility/semantic cleanup + screening flag",
+      "effect": "pruned extension + screening niche flag; not model (would be leakage)",
+      "keep_change": "PROPOSED_CHANGE \u2014 add 5 patterns (Collector's/Ultimate/Kickstarter/Second Edition/Anniversary) with designer/year/weight corroboration to pruned_lists; keep Q3bFam unchanged; flag edition_duplicate in screening"
+    },
+    {
+      "change_id": "C-edition_collectors",
+      "observed_problem": "edition_collectors leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=21 0.1%, mean resid +0.179, share top5 33.3%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-edition_ultimate",
+      "observed_problem": "edition_ultimate leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=7 0.0%, mean resid +0.485, share top5 14.3%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-edition_kickstarter",
+      "observed_problem": "edition_kickstarter leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=15 0.1%, mean resid +0.428, share top5 20.0%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-edition_complete_collector",
+      "observed_problem": "edition_complete_collector leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=1 0.0%, mean resid +1.266, share top5 100.0%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-edition_essential",
+      "observed_problem": "edition_essential leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=3 0.0%, mean resid +0.521, share top5 0.0%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-edition_second_edition",
+      "observed_problem": "edition_second_edition leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=112 0.8%, mean resid +0.201, share top5 7.1%, beta +0.204 SE 0.051, cv\u0394 +0.0004",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-edition_anniversary",
+      "observed_problem": "edition_anniversary leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=12 0.1%, mean resid +0.140, share top5 33.3%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-edition_deluxe",
+      "observed_problem": "edition_deluxe leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=35 0.2%, mean resid +0.232, share top5 11.4%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-high_version_ge10",
+      "observed_problem": "high_version_ge10 leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=588 4.0%, mean resid -0.007, share top5 2.6%, beta -0.012 SE 0.029, cv\u0394 -0.0001",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-any_version",
+      "observed_problem": "any_version leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=2220 15.1%, mean resid +0.023, share top5 5.5%, beta +0.058 SE 0.018, cv\u0394 +0.0002",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-multi_reimpl",
+      "observed_problem": "multi_reimpl leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=869 5.9%, mean resid +0.046, share top5 5.3%, beta +0.258 SE 0.042, cv\u0394 +0.0009",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-game_system",
+      "observed_problem": "32 system entries (0.22%) resid +0.162, 0/39 strong flagged but 32 remain in population with elevated resid",
+      "generalizes_evidence": "n=32 0.2%, mean resid +0.162, share top5 18.8%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "eligibility/hiddenness \u2014 hard exclude (not hidden, like expansions)",
+      "effect": "screening hard exclude via Admin: Game System Entries (already flagged, keep explicit)",
+      "keep_change": "PROPOSED_KEEP \u2014 hard hiddenness exclude, not model (n=32 below gate)"
+    },
+    {
+      "change_id": "C-expansion_family",
+      "observed_problem": "expansion_family leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=42 0.3%, mean resid +0.066, share top5 2.4%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-promo",
+      "observed_problem": "promo leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=35 0.2%, mean resid -0.063, share top5 8.6%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-series_any",
+      "observed_problem": "series_any leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=3222 21.9%, mean resid +0.065, share top5 5.0%, beta +0.094 SE 0.011, cv\u0394 +0.0017",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-game_family",
+      "observed_problem": "game_family leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=2740 18.6%, mean resid +0.032, share top5 7.6%, beta +0.046 SE 0.012, cv\u0394 +0.0004",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-n_expansion_ge5",
+      "observed_problem": "n_expansion_ge5 leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=267 1.8%, mean resid -0.009, share top5 2.2%, beta -0.013 SE 0.038, cv\u0394 -0.0000",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-cardset",
+      "observed_problem": "cardset leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=843 5.7%, mean resid +0.109, share top5 4.5%, beta +0.162 SE 0.022, cv\u0394 +0.0014",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-integration",
+      "observed_problem": "integration leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=167 1.1%, mean resid +0.056, share top5 3.0%, beta +0.062 SE 0.043, cv\u0394 -0.0000",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "C-desc_expansion",
+      "observed_problem": "desc_expansion leakage check: High version >=10 (eligibility)",
+      "generalizes_evidence": "n=20 0.1%, mean resid +0.371, share top5 15.0%, beta +nan SE nan, cv\u0394 +nan",
+      "belongs_in": "lineage \u2014 screening/monitor",
+      "effect": "no model change, monitor",
+      "keep_change": "NO_CHANGE \u2014 n small or CV <0.001, keep as screening note"
+    },
+    {
+      "change_id": "audience_coop",
+      "observed_problem": "Cooperative already in Q3bFam",
+      "generalizes_evidence": "n=1543 10.5%, mean resid -0.000, beta +nan SE nan, 5/5 CV\u0394 +nan, Jaccard nan, spec_ge10 83.92%, TVD 0.127, cross has_broad 76.4%, prop insufficient 19.5%",
+      "belongs_in": "quality model already (fam_Cooperative in Q3bFam)",
+      "effect": "preserve Q3bFam",
+      "keep_change": "PRESERVE \u2014 already in Q3bFam beta +0.083 5/5, no duplicate"
+    },
+    {
+      "change_id": "audience_solo_mech",
+      "observed_problem": "solo_mech not systematic",
+      "generalizes_evidence": "n=1397 9.5%, mean resid +0.011, beta +0.016 SE 0.018, 5/5 CV\u0394 +0.0000, Jaccard 1.000, spec_ge10 84.02%, TVD 0.129, cross has_broad 85.4%, prop insufficient 18.0%",
+      "belongs_in": "audience-selection (specialist+propensity+cross)",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_solo_first",
+      "observed_problem": "solo_first shows systematic resid +0.128/+0.080 but heterogeneous (wargame_duel 1153 +0.074 vs Euro 1079 +0.080), r -0.70 with log_max, insufficient 34.4%/33.3% vs overall 23%",
+      "generalizes_evidence": "n=691 4.7%, mean resid +0.127, beta +0.176 SE 0.024, 5/5 CV\u0394 +0.0014, Jaccard 0.947, spec_ge10 90.06%, TVD 0.115, cross has_broad 84.2%, prop insufficient 34.4%",
+      "belongs_in": "audience-selection (specialist+propensity+cross) \u2014 NOT quality model",
+      "effect": "add specialist metric + propensity covariate + player-eligible at-risk + cross split solo_first_0-4_vs_ge10; keep Q3bFam unchanged; flag for monitoring with propensity insufficient + cross support",
+      "keep_change": "PROPOSED_ADD to Step7 (not Q3bFam) \u2014 systematic but heterogeneous, belongs in audience, not model leakage"
+    },
+    {
+      "change_id": "audience_duel",
+      "observed_problem": "duel shows systematic resid +0.128/+0.080 but heterogeneous (wargame_duel 1153 +0.074 vs Euro 1079 +0.080), r -0.70 with log_max, insufficient 34.4%/33.3% vs overall 23%",
+      "generalizes_evidence": "n=2555 17.4%, mean resid +0.080, beta +0.201 SE 0.017, 5/5 CV\u0394 +0.0038, Jaccard 0.814, spec_ge10 89.87%, TVD 0.129, cross has_broad 83.0%, prop insufficient 33.3%",
+      "belongs_in": "audience-selection (specialist+propensity+cross) \u2014 NOT quality model",
+      "effect": "add specialist metric + propensity covariate + player-eligible at-risk + cross split solo_first_0-4_vs_ge10; keep Q3bFam unchanged; flag for monitoring with propensity insufficient + cross support",
+      "keep_change": "PROPOSED_ADD to Step7 (not Q3bFam) \u2014 systematic but heterogeneous, belongs in audience, not model leakage"
+    },
+    {
+      "change_id": "audience_strict_solo",
+      "observed_problem": "strict_solo not systematic",
+      "generalizes_evidence": "n=249 1.7%, mean resid +0.121, beta +0.141 SE 0.036, 5/5 CV\u0394 +0.0003, Jaccard 0.960, spec_ge10 86.97%, TVD 0.118, cross has_broad 81.9%, prop insufficient 35.7%",
+      "belongs_in": "audience-selection (specialist+propensity+cross)",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_wargame_duel",
+      "observed_problem": "wargame_duel shows systematic resid +0.128/+0.080 but heterogeneous (wargame_duel 1153 +0.074 vs Euro 1079 +0.080), r -0.70 with log_max, insufficient 34.4%/33.3% vs overall 23%",
+      "generalizes_evidence": "n=1153 7.8%, mean resid +0.074, beta +0.204 SE 0.026, 5/5 CV\u0394 +0.0017, Jaccard 0.947, spec_ge10 90.65%, TVD 0.101, cross has_broad 84.5%, prop insufficient 47.7%",
+      "belongs_in": "audience-selection (specialist+propensity+cross) \u2014 NOT quality model",
+      "effect": "add specialist metric + propensity covariate + player-eligible at-risk + cross split solo_first_0-4_vs_ge10; keep Q3bFam unchanged; flag for monitoring with propensity insufficient + cross support",
+      "keep_change": "PROPOSED_ADD to Step7 (not Q3bFam) \u2014 systematic but heterogeneous, belongs in audience, not model leakage"
+    },
+    {
+      "change_id": "audience_euro_duel",
+      "observed_problem": "euro_duel not systematic",
+      "generalizes_evidence": "n=1402 9.5%, mean resid +0.085, beta +0.142 SE 0.018, 5/5 CV\u0394 +0.0015, Jaccard 0.872, spec_ge10 83.31%, TVD 0.153, cross has_broad 81.9%, prop insufficient 21.5%",
+      "belongs_in": "audience-selection (specialist+propensity+cross)",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_team",
+      "observed_problem": "team not systematic",
+      "generalizes_evidence": "n=802 5.5%, mean resid +0.030, beta +0.036 SE 0.020, 5/5 CV\u0394 +0.0001, Jaccard 0.960, spec_ge10 76.09%, TVD 0.142, cross has_broad 84.2%, prop insufficient 20.6%",
+      "belongs_in": "audience-selection (specialist+propensity+cross)",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_semi_coop",
+      "observed_problem": "semi_coop not systematic",
+      "generalizes_evidence": "n=98 0.7%, mean resid -0.252, beta -0.258 SE 0.054, 5/5 CV\u0394 +0.0006, Jaccard 1.000, spec_ge10 77.78%, TVD 0.123, cross has_broad 94.9%, prop insufficient 18.4%",
+      "belongs_in": "audience-selection (specialist+propensity+cross)",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_coop_solo",
+      "observed_problem": "coop_solo not systematic",
+      "generalizes_evidence": "n=495 3.4%, mean resid +0.036, beta +0.056 SE 0.030, 5/5 CV\u0394 +0.0000, Jaccard 0.960, spec_ge10 82.96%, TVD 0.109, cross has_broad 80.4%, prop insufficient 15.8%",
+      "belongs_in": "audience-selection (specialist+propensity+cross)",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_heavy",
+      "observed_problem": "heavy not systematic",
+      "generalizes_evidence": "n=929 6.3%, mean resid -0.045, beta -0.082 SE 0.023, 5/5 CV\u0394 +0.0003, Jaccard 0.986, spec_ge10 86.34%, TVD 0.148, cross has_broad 89.5%, prop insufficient 25.0%",
+      "belongs_in": "audience-selection (specialist+propensity+cross)",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_light",
+      "observed_problem": "light not systematic",
+      "generalizes_evidence": "n=4293 29.2%, mean resid -0.018, beta -0.059 SE 0.015, 5/5 CV\u0394 +0.0004, Jaccard 0.947, spec_ge10 77.57%, TVD 0.174, cross has_broad 85.5%, prop insufficient 23.9%",
+      "belongs_in": "audience-selection (specialist+propensity+cross)",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_game_system",
+      "observed_problem": "game_system not systematic",
+      "generalizes_evidence": "n=32 0.2%, mean resid +0.162, beta +0.166 SE 0.095, 5/5 CV\u0394 -0.0001, Jaccard 0.986, spec_ge10 81.32%, TVD 0.082, cross has_broad 90.6%, prop insufficient 28.1%",
+      "belongs_in": "eligibility/screening",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_edition_title",
+      "observed_problem": "edition_title not systematic",
+      "generalizes_evidence": "n=501 3.4%, mean resid +0.116, beta +0.123 SE 0.024, 5/5 CV\u0394 +0.0006, Jaccard 0.921, spec_ge10 76.18%, TVD 0.133, cross has_broad 79.6%, prop insufficient 25.3%",
+      "belongs_in": "eligibility/screening",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "audience_high_version",
+      "observed_problem": "high_version not systematic",
+      "generalizes_evidence": "n=588 4.0%, mean resid -0.007, beta -0.012 SE 0.029, 5/5 CV\u0394 -0.0001, Jaccard 1.000, spec_ge10 74.22%, TVD 0.116, cross has_broad 81.5%, prop insufficient 5.1%",
+      "belongs_in": "eligibility/screening",
+      "effect": "monitor/keep as screening",
+      "keep_change": "NO_CHANGE/PRESERVE \u2014 not systematic (resid <0.10 or CV <0.001) or n<50"
+    },
+    {
+      "change_id": "C-hiddenness",
+      "observed_problem": "Hiddenness <1700 / 1700-2500 / >2500 preserved unless strong reason; distinction: numerically obscure vs obscure within modern hobby vs well-known within ecosystem. Example: 1200-rating niche wargame that 80% of broad reference has rated would be numerically hidden but hobby-well-known. Need to test if n_obs<1700 alone makes hidden from hobby gamers or need reference penetration condition.",
+      "generalizes_evidence": "eligible <1700 n=12186, mean penetration 0.146%, share >5% 0.0%; penetration correlates with n_obs but some <1700 have high hobby penetration (e.g., wargame eligible >20% penetration n=0)",
+      "belongs_in": "hiddenness \u2014 screening",
+      "effect": "Preserve <1700 / 1700-2500 / >2500 as primary; add monitoring: flag 'hobby_well_known' if ref_penetration>5% despite n<1700 (needs external validation, not hard exclude)",
+      "keep_change": "PRESERVE thresholds \u2014 no strong evidence to move 1700; add penetration as monitoring column per game (per_game_hiddenness.csv) for finalizer"
+    },
+    {
+      "change_id": "C-reference_population",
+      "observed_problem": "Need defensible empirical reference population representing broadly engaged contemporary hobby gamers to ask: Does candidate's rater pool resemble broad modern hobby audience? Test strong established modern hobby games \u2014 intersection of highly ranked and highly rated/high-volume alternatives (top 100/250/500 by bayes vs users_rated vs adj_mean, or weight 2.0-3.5 + year 2010+ + n>5k profile)",
+      "generalizes_evidence": "Tested 13 candidates: top100/250/500 bayes/users/adj + intersect + profile; chosen intersect_250_bayes_users n_games=134 n_users=279108 median_weight 2.94 median_year 2015",
+      "belongs_in": "broad modern-hobby appeal \u2014 reference for audience-selection rework (new specialist metric vs broad)",
+      "effect": "Define reference users as distinct users who rated >=1 (and sensitivity >=5) of chosen games; compute per-game ref_penetration, TVD vs reference, cross via reference split",
+      "keep_change": "PROPOSED_CHANGE \u2014 adopt intersect_250_bayes_users as primary reference (defensible: balances quality and popularity, not just volume or rank); keep alternatives as sensitivity"
+    }
+  ],
+  "preserved_components": [
+    "Q3bFam 48f CV 0.6033 (seed 20260824, 5-fold)",
+    "Q4Fam 78f CV 0.6151",
+    "hiddenness <1700/1700-2500/>2500 (preserved unless strong reason)",
+    "severity mu 7.139 + adj_mean",
+    "Step7/7B/7C framework core (with extensions)",
+    "pruned_lists 269 base (0 violation)"
+  ],
+  "claim_tags": "observed fact / empirical finding / model-dependent conclusion / assumption / hypothesis per AGENTS.md"
+}
