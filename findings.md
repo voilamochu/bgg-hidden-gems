@@ -2698,3 +2698,36 @@ At-risk populations compared explicitly: `ALL_ACTIVE` (287,302), `ACTIVE_50PLUS`
 - **Does NOT observe non-raters, does NOT identify true causal exposure, collection own snapshot, timestamps unresolved, raw p on 1:1 sampled scale (true marginal 0.572% would need intercept shift -4 to -5 logit; we use stabilized).**
 - **Implication for next decision (tag: implication):** For Other/Coop/Econ with large n, no quality-estimator change needed (stable). For 18XX/Wargame heavy, sensitivity material but weakly identified → do not adjust quality globally; use sensitivity as screening filter for hidden-gem (require stable/moderately_sensitive with adequate support, flag strongly_sensitive/insufficient as niche-only pending external validation). Do not change Phase 2 baseline, Phase5/6, or rerun Phase7 screening.
 
+
+## 2026-08-25: Step 7C — Exposure / Propensity Validation (prevalence correction)
+
+### Scope
+Locked Step 7B methodology validation on pass2 canonical 14,698 × 287,302 × 24,146,307 (mu 7.139). Scripts 45 (200k/200k balanced train + 600k prevalence holdout, streaming 195×124k) + 46. Purpose: fix sampled-scale miscalibration, define at-risk population, validate positivity/overlap, weighting, model choice, known cases & 18XX. Not hidden-gem ranking, not quality-model change.
+
+### Critical sampling-fraction fix [Observed fact / Empirical finding]
+- Step 7B raw p_sample mean 0.57 for CATAN vs true marginal 0.00572 (87×, logit shift -5.159). On prevalence-faithful holdout (600k pairs, 3403 pos): sampled logistic ECE 0.339 Brier 0.168 mean_pred 0.344 vs obs 0.00567 catastrophically miscalibrated.
+- Prevalence-corrected p_true=expit(logit(p_sample)-5.159) → ECE 0.00034 Brier 0.00558 mean_pred 0.00601 vs 0.00567 AUC 0.822; weighted logistic (w_pos 0.0114 w_neg 1.989) → ECE 0.00014 Brier 0.00553 mean_pred 0.00574 — both credible. RF AUC 0.849 but ECE 0.324 overconfident.
+- Weight magnitude: median 1/p_sample 9.3 vs 1/p_true 1449 (156×), p95 7619, max 65k. ESS_ratio median 0.72→0.33. Relative ordering preserved (Spearman ~1.0) but absolute scale matters for positivity.
+
+### At-risk populations [Empirical finding / Implication]
+- Compared ALL_ACTIVE 287k, ACTIVE_50PLUS 120k, TYPE_GE5/10/20 per type (18XX 2093/930/337, Wargame 80k/40k/17k etc). Penetration median ALL 0.12% vs TYPE_GE20 0.9% typed; 18XX 0.3% vs 29.7% (1830 1.96% vs 90.5%), Wargame 1.0%. 18XX plausible-rater definition changes 100×. Primary recommended TYPE_GE10 (Other→ACTIVE_50PLUS) with sensitivities ALL & GE20; if no single defensible, retain type-specific rules.
+
+### Positivity / overlap [Empirical finding]
+- Sampled 300 non-raters per game per pop (602 games, 2704 rows, no 4.2B). Rescaled rule from Step7B (100→8700 via 87×, 20→1740): insufficient if n<150 or max_w>8700 or ESS<0.10 or mean_p<0.005; borderline if >1740 or ESS<0.30 or mean_p<0.015 else adequate.
+- Counts (true scale): adequate 32.8% (4819), borderline 44.2% (6494), insufficient 23.0% (3385); per type 18XX 100% insufficient, Wargame 52.9%, Other 18.2%. Sampled scale had 70.5% stable 19.5% insufficient — true scale reveals hidden positivity failures.
+
+### Weighting sensitivity [Empirical finding]
+- Raw vs stabilized p_marginal/p identical delta (global constant, Spearman 1.0). Trunc cap20 recovers ESS 0.33→0.55 but attenuates 18XX signal (std 0.19→0.03, median |delta_raw- trunc| 0.016, for strong games 0.22). Median |delta| true 0.133 vs sampled 0.06, share≥0.2 20.8% vs 7% — corrected larger variance.
+
+### Model comparison [Empirical finding / Model-dependent conclusion]
+- Logistic L2 C=1.0 (26 cols) AUC 0.825/0.822 calibrated after correction best; RF AUC +0.03 but worse calibration; weighted logistic best Brier but similar ranking (corr 0.98). Prefer corrected logistic as primary, weighted as sensitivity; do NOT select by smallest delta.
+
+### Known cases & 18XX [Empirical finding]
+- 1830 gateway (spec 0.054) delta_sample -0.283 max_w 304 → delta_true ~-0.42 max_w 50k insufficient; 1817 specialist (0.297) -0.156 max 98 → true -0.25 max 16k; 1870 moderate -0.286 true -0.35. Gateway > specialist persists. 18XX mean delta_true -0.247 median -0.245 std 0.669 heterogeneous (39 negative <-0.1, 12 positive >0.1) — sensitivity robust but not uniform. CATAN etc stable (adequate).
+
+### Answers A-E [Implication]
+- A credible after correction where overlap adequate; B 33/44/23; C mean delta -0.015 overall, 18XX -0.247, material share 20.8% ≥0.2; D robust heterogeneity; E treat as screening signal + flag, not quality correction, for Step 8.
+- Do not impute negatives, no causal claim, insufficient=unknown, not cult/hidden alone.
+
+### Artefacts
+- Scripts 45+46, docs/reports step7c_exposure_propensity_validation/ (8 md + 14698-row csv + json), bounded DuckDB, leakage-corrected cnts, no duplication, sum n_obs 24146307 reconciled.
