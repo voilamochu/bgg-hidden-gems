@@ -1,9 +1,11 @@
 # Pass 3 Investigation — Broad Improvement Cycle for Pass-2 Pipeline
 
+**Status (2026-08-25):** This was **investigation only — proposed changes, NOT final**. See **final** `docs/phase2-pass2/pass3_final/README.md` (and `reports/phase2_pass2/pass3_final/`) which incorporates the independent reviewer `data/bgg-pass3-review/report.md` (§1-6) and reruns `53/54` — and `docs/phase2-pass2/pass3_review/report.md`. Investigation outcomes are **preserved here for provenance**; for the auditable final methodology and candidate set use `pass3_final`.
+
 **Generated:** 2026-08-25T14:45:00Z · seed 20260824 · population 14,698 games × 287,302 users × 24,146,307 obs
 **Source:** `data/processed/phase2-pass2/` validated mu≈7.139, `user_severity_pass2.parquet` + `game_adjusted_means_pass2.parquet` via scripts 39/40 — **reuse, NOT refit**
 **Models:** Q3bFam primary 48f CV 0.6033 + Q4Fam sensitivity 78f CV 0.6151 from Steps 9B/10; hiddenness `<1,700` eligible / `1,700–2,500` borderline / `>2,500` exclude; **39 strong_hidden_gem_evidence candidates** from Step 11-12 `screening_evidence_table.csv` as **diagnostic only, not ground truth** (tag `pass2-complete` 722d149).
-**Scope:** This task is **investigation only — proposed changes, NOT final rerun**. Reviewer (next crewmate) will challenge; finalizer incorporates critique and then reruns.
+**Scope (historical):** This task was **investigation only — proposed changes, NOT final rerun**. Reviewer (next crewmate) challenged; finalizer incorporated critique then reran (now final).
 
 ## Executive Summary: Which Problems Were Real vs Not, Which Changes Survive
 
