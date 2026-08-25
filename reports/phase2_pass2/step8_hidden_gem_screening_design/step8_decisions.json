@@ -1,0 +1,209 @@
+{
+  "version": "step8_hidden_gem_screening_design_v1",
+  "generated_at": "2026-08-25T00:00:00Z",
+  "population": {
+    "games": 14698,
+    "users": 287302,
+    "observations": 24146307,
+    "mu": 7.13900772639585,
+    "source": "data/processed/phase2-pass2/",
+    "artefacts": ["user_severity_pass2.parquet", "game_adjusted_means_pass2.parquet", "games_pass2.parquet", "users_pass2.parquet", "rating_observations_pass2.parquet"],
+    "validation": "7 checks, 0 violations, 2 iterations closure (4 degenerate removed)",
+    "notes": "Validated, mu approx 7.139, scripts 39/40 reuse, do NOT refit. All Step7/7B/7C evidence on this population, origin/main at 0ef6375."
+  },
+  "quality_estimator": {
+    "estimator": "adj_mean",
+    "definition": "mean(rating - delta_u) per game, mu+alpha+delta additive model",
+    "mu": 7.13900772639585,
+    "source_parquet": "data/processed/phase2-pass2/game_adjusted_means_pass2.parquet",
+    "severity_parquet": "data/processed/phase2-pass2/user_severity_pass2.parquet",
+    "keep_fixed": true,
+    "propensity_adjusted_quality": {
+      "field": "propensity_adjusted_quality in propensity_validation_game_level.csv",
+      "definition": "prop_adj_raw_true via 1/p_true (intercept-corrected logistic, p_true = expit(logit(p_sample)-5.159))",
+      "role": "sensitivity diagnostic, NOT quality estimator",
+      "also_fields": ["delta_quality = prop_adj - adj_mean", "truncated_delta cap20", "stabilized_delta (same rank as raw)"]
+    },
+    "why_not_fold": [
+      "adequate_overlap only 32.8% (4819/14698), borderline 44.2%, insufficient 23.0% — global correction not identified for 2/3",
+      "insufficient dominates niche: 18XX 100% (81/81), Wargame 52.9% (1068/2020)",
+      "weighting magnitude 156x larger after correction: median max_w_true 1449 vs 9.3 sampled, p95 7619 p99 16566 max 65414",
+      "stabilized vs raw identical rank (corr 1.0), adj vs prop_adj Spearman 0.973 top100 Jaccard 0.626 — no estimator gain",
+      "truncation cap20 recovers ESS 0.33->0.98 but attenuates |delta|>=0.2 from 20.8% to 0.2% std 0.19->0.03",
+      "RF overconfident (AUC 0.849 but ECE 0.324) vs corrected logistic ECE 0.00034, Brier 0.00558 — model good for sensitivity not quality"
+    ],
+    "rater_type_interaction": "joint rater x game-type taste v2: <1% variance (R2 0.393->0.403), no flag stable/distinct/material — do not add type correction",
+    "interpretation_rule": "do not claim self-selection solved; observable pool selectivity distinct from unobserved non-rater selection"
+  },
+  "audience_selection_role": {
+    "role": "screening / sensitivity dimension, NOT folded into core quality",
+    "carries_forward_7C": "global severity-adjusted estimator remains appropriate — no fold-in",
+    "observable_measurable": true,
+    "model_AUC_true": 0.822,
+    "propensity_model": "logistic_L2_C1.0_corrected_global_shift, 26 leakage-excluded features, marginal 0.00572 shift -5.159",
+    "credible_only_where": "adequate overlap (32.8%) — else borderline/insufficient",
+    "niche_insufficient": "18XX 100% insufficient under ALL, Wargame 52.9%",
+    "therefore": "exposure propensity is hidden-gem screening / sensitivity flag"
+  },
+  "exposure_classes": {
+    "true_scale_rescaled_rule": {
+      "justification": "prevalence factor 87x = exp(5.159), marginal 0.00572; diagnostics: median max_w_true 1449 p95 7619, ESS_ratio median 0.33 p10 0.17, mean_p median 0.027 p30 0.015 p10 0.005",
+      "insufficient_overlap": {
+        "condition": "n_obs < 150 OR max_w_true > 8700 (100*87 scaled, p95~7619) OR ESS_ratio_true < 0.10 (p10) OR mean_p_true < 0.005 (~marginal)",
+        "meaning": "broader counterfactual not identified — unknown, not cult/bad",
+        "counts_true": {"overall": 3385, "pct": 23.0, "per_type": {"18XX": 81, "Wargame": 1068, "Party": 277, "Economic": 149, "Coop": 208, "Legacy": 2, "Other": 1600}},
+        "CSV_field": "overlap_status == insufficient_overlap, sensitivity_class == insufficient_overlap"
+      },
+      "borderline_overlap": {
+        "condition": "not insufficient AND (max_w_true > 1740 (20*87, median 1449) OR ESS_ratio < 0.30 (median 0.33) OR mean_p_true < 0.015 (3*marginal, p30))",
+        "meaning": "identified but sensitive",
+        "counts_true": {"overall": 6494, "pct": 44.2, "per_type": {"18XX": 0, "Wargame": 952, "Party": 947, "Economic": 889, "Coop": 935, "Legacy": 15, "Other": 2756}}
+      },
+      "adequate_overlap": {
+        "condition": "else (n>=150, max_w<=1740, ESS>=0.30, mean_p>=0.015)",
+        "meaning": "well-behaved weights",
+        "counts_true": {"overall": 4819, "pct": 32.8, "per_type": {"18XX": 0, "Wargame": 0, "Party": 43, "Economic": 111, "Coop": 213, "Legacy": 0, "Other": 4452}}
+      },
+      "sampled_scale_reference": {"adequate": 10364, "moderate": 1033, "strong": 432, "insufficient": 2869, "threshold_sample": "n<150 or max_w>100 or ESS<0.10 or mean_p<0.001"},
+      "scaling_note": "thresholds scaled from Step7B (100->8700, 20->1740) via 87x prevalence factor, not to improve output"
+    },
+    "sensitivity_on_true_scale": {
+      "stable_under_exposure_adjustment": {"definition": "adequate_overlap and |delta_quality| < 0.20 and ESS>0.30 and max_w<1740", "count_true": 5014, "also_truncated": "median |delta_raw - delta_trunc| 0.016"},
+      "moderately_sensitive": {"definition": "borderline with 0.20<=|delta|<0.50 or ESS 0.20-0.30", "count_true": 4711},
+      "strongly_sensitive": {"definition": "|delta|>=0.50 or ESS<0.20 or max_w>50 sampled-equivalent", "count_true": 1588},
+      "insufficient_overlap": {"count_true": 3385}
+    },
+    "screening_buckets": {
+      "stable_exposure": {
+        "CSV_mapping": "adequate_overlap AND sensitivity_class==stable_under_exposure_adjustment",
+        "interpretation": "quality stable under observable reweighting",
+        "gate_effect": "PASS — eligible for hidden-gem candidacy, standard broad-appeal check"
+      },
+      "exposure_sensitive": {
+        "CSV_mapping": "borderline_overlap with moderately_sensitive or strongly_sensitive, OR adequate with |delta|>=0.20",
+        "example_counts": "moderate 4711 + strong 1588, borderline adequate with delta>=0.2",
+        "interpretation": "observable selection materially changes estimate, needs stronger cross-audience evidence",
+        "gate_effect": "DOWNGRADE to caution — requires >=2 splits n>=10 |diff|<0.30 non-significant AND |truncated_delta|<0.20 direction-consistent; else niche_but_high_quality",
+        "why_not_exclude": "20.8% |delta|>=0.2 common, heterogeneous (18XX SD 0.67), some sensitive games still broad (e.g., 18Chesapeake diff 0.00)"
+      },
+      "insufficient_overlap": {
+        "CSV_mapping": "overlap_status==insufficient_overlap",
+        "interpretation": "broader counterfactual not identified (weights explode, ESS collapse)",
+        "gate_effect": "UNKNOWN — exclude from BGG-only hidden-gem claim; preserve for external validation; do not call cult/bad",
+        "example": "1830 max_w 50707 ESS 0.12 delta -0.321 yet insufficient — sensitivity real but not identified"
+      }
+    },
+    "CSV_fields": ["delta_quality", "truncated_delta", "stabilized_delta", "ess_ratio", "effective_sample_size", "max_weight", "p_mean_raters", "overlap_status", "overlap_status_sample_rule", "sensitivity_class", "penetration", "penetration_type_ge20", "propensity_model"],
+    "CSV_path": "docs/phase2-pass2/step7c_exposure_propensity_validation/propensity_validation_game_level.csv",
+    "primary_at_risk": "TYPE_GE10 for typed, ACTIVE_50PLUS for Other, sensitivities ALL_ACTIVE and TYPE_GE20",
+    "at_risk_sizes": {"ALL_ACTIVE": 287302, "ACTIVE_50PLUS": 119969, "TYPE_GE10": {"18XX": 930, "Wargame": 40922, "Party": 62902, "Economic": 105561, "Coop": 94562, "Legacy": 1603}, "TYPE_GE20": {"18XX": 337, "Wargame": 17338, "Party": 25291, "Economic": 55654, "Coop": 44575, "Legacy": 49}}
+  },
+  "primary_vs_secondary": {
+    "primary_gates": [
+      {
+        "measure": "7C overlap_status + sensitivity_class / delta_quality",
+        "why": "only measure of reweighting toward broader plausible population; corr |delta| vs spec_ge20 0.38 leaves 62% unexplained, adds beyond threshold; gateway 1830 vs specialist 1817 continuous gradient beyond spec>=10",
+        "source": "propensity_validation_game_level.csv, overlap_rules.md"
+      },
+      {
+        "measure": "7 cross-audience diffs where n>=10 per side (specialist 0-4 vs >=20, volume 10-24 vs 500+)",
+        "why": "only direct test does high quality remain among non-specialists/light raters; volume 9227 >=10 specialist 3973; median diff small (0.08 volume, 0.15 specialist) but some material",
+        "source": "cross_audience_results.csv fields n_low,n_high,mean_low/high_adj,diff_adj,se_diff,z,p,supported_ge10"
+      }
+    ],
+    "supporting": [
+      {"measure": "7 composition: spec_share_ge10/ge20, share_0_4/share_ge20, TVD_volume_type/global (same-type mean 0.152 most informative), herfindahl q75 0.203, share_within_0.5, share_own q75 0.664", "why": "describes who is in pool, corroborates which dimension drives narrowness; broad categories inflate spec mean 0.832 so read type-specific", "source": "audience_selectivity_game_level.csv"},
+      {"measure": "7 penetration proxy among enthusiasts (penetration_ge20: median 18XX 0.297 vs Wargame 0.010 vs Party 0.007)", "why": "within-type selectivity diagnostic; exposure not negative", "source": "exposure_proxy_results.csv + propensity_validation_game_level.csv penetration"},
+      {"measure": "7C corroboration: ess_ratio, max_weight, mean_p, truncated_delta, mean_p_raters weighted", "why": "diagnoses fragility, attenuation check", "source": "propensity_validation_game_level.csv"}
+    ],
+    "diagnostic_only": [
+      "share_cat_related mean 0.993 least discriminating (methodology_comparison.md)",
+      "share_cat_or_mech_related, weight_missing 7, RF delta variation (rank corr 0.93, diff 0.03 but ECE 0.324)",
+      "per-game category penetration for Other not globally computed",
+      "collection own snapshot not rating-time"
+    ],
+    "ordering_flow": "7C overlap/ESS as GATE (identified?) -> 7 cross-audience as TEST (parity?) -> 7 composition/penetration as SUPPORTING narrative",
+    "justification": "7C determines if broader counterfactual identified at all; 7 cross-audience tests realized breadth; composition explains why narrow. Do not collapse into opaque score — different units/threshold sensitivities (e.g., Catan 0.50 spec moderate not low due to broad Economic)."
+  },
+  "evidence_framework": {
+    "five_dimensions": {
+      "QUALITY": {"question": "Is genuinely good? (severity-adjusted)", "measure": "adj_mean from game_adjusted_means_pass2.parquet, mu 7.139, corr adj-raw 0.983", "gate_example": "adj_mean >= 7.5 or top quartile — state choice explicitly", "manual": "threshold is project definition"},
+      "UNDERRATEDNESS": {"question": "Is better than expected from observable characteristics?", "measure": "residual vs Phase5/6 expectation (Q3b/OLS: log10(n_obs), year, weight, playtime, categories/mechanics — do NOT refit)", "gate_example": "residual >= +0.5 or top 10% per S3, stable across S3 vs S5 (historical SD 0.55 95th +0.87)", "manual": "which model S3 vs S5 and quantile; sensitivity must be shown"},
+      "HIDDENNESS": {"question": "Is sufficiently obscure / low popularity?", "measure": "n_obs band + penetration_all / penetration_type_ge10 (Step7 exposure_proxy + 7C penetration)", "gate_example": "n_obs 100-1500 and penetration_all<0.05 or penetration_type_ge10<0.10", "manual": "band boundaries are project scope; Other penetration NA so n_obs only"},
+      "AUDIENCE_SELECTION": {"question": "Does observable selection materially threaten interpretation?", "measure": "stable_exposure / exposure_sensitive / insufficient_overlap via 7C rescaled rule + delta/ESS/max_w", "gate": "stable_exposure PASS; exposure_sensitive requires stronger broad-appeal; insufficient_overlap = unknown", "manual": "exposure_sensitive downgrade vs exclude is scope — framework chooses downgrade"},
+      "BROAD_APPEAL_EVIDENCE": {"question": "Is there positive evidence appeal extends beyond niche?", "measure": "cross_audience diffs where n>=10 per side (specialist/volume), |diff|<0.30 and |z|<2 for >=2 splits, no diff>=0.50 p<0.05, plus truncated_delta check |trunc|<0.20", "manual": "|diff|<0.30, z<2, n>=10, >=2 splits, |trunc|<0.20 are conventional disclosed thresholds"}
+    },
+    "minimum_for_hidden_gem": "QUALITY ∧ UNDERRATEDNESS ∧ HIDDENNESS ∧ (stable_exposure with parity OR exposure_sensitive with stronger parity+trunc) — positive broad-appeal evidence mandatory; insufficient_overlap cannot be strong/plausible",
+    "interpretation_rules": ["do not call cult/hidden factually — hypotheses", "insufficient_overlap = unknown not bad", "do not impute missing ratings", "tag claims observed/empirical/assumption/hypothesis/model-dependent/speculation"]
+  },
+  "cult_vs_hidden_examples": {
+    "buckets": {
+      "1_high_quality_broad_observed": "high quality + broad audience — adequate+stable, parity",
+      "2_high_quality_specialized_but_stable_cross_audience": "high quality + specialized audience but cross-audience parity — would be plausible if adequate",
+      "3_high_quality_strong_exposure_sensitivity": "high quality + material delta, borderline/sensitive",
+      "4_high_quality_insufficient_unknown": "high quality + insufficient_overlap — unknown",
+      "5_high_quality_popular_not_hidden": "high quality + obviously popular — not hidden per project"
+    },
+    "cases": [
+      {"game_id": 421, "title": "1830: Railways & Robber Barons", "type": "18XX", "n_obs": 5628, "adj_mean": 8.4138, "step7": {"spec_ge10": 0.138, "spec_ge20": 0.054, "tvd_type": 0.134, "tvd_global": 0.087, "taxonomy": "low_audience_selectivity", "deviation_count": 0}, "step7_cross": {"volume_diff": 0.112, "volume_z": 1.1, "volume_n_low": 221, "volume_n_high": 1224, "specialist_diff": 1.136, "specialist_z": 12.8, "spec_n_low": 4146, "spec_n_high": 305}, "step7C": {"delta_true": -0.321, "truncated_delta": -0.201, "overlap": "insufficient_overlap", "sensitivity": "insufficient_overlap", "ess_ratio": 0.118, "max_w": 50707, "mean_p": 0.1626, "penetration_all": 0.0196, "penetration_ge20": 0.905}, "bucket": 4, "confidence": "insufficient_broad_appeal_evidence", "narrative": "Gateway 18XX low specialist share but large specialist gap + material delta yet not identified — unknown, not cult."},
+      {"game_id": 63170, "title": "1817", "type": "18XX", "n_obs": 764, "adj_mean": 9.3602, "step7": {"spec_ge10": 0.594, "spec_ge20": 0.297, "tvd_type": 0.042, "tvd_global": 0.165, "taxonomy": "moderate_audience_selectivity"}, "step7_cross": {"volume_diff": -0.102, "volume_z": -0.3, "specialist_diff": 0.355, "specialist_z": 2.3}, "step7C": {"delta_true": -0.352, "truncated_delta": -0.099, "overlap": "insufficient_overlap", "ess_ratio": 0.026, "max_w": 16299, "mean_p": 0.524}, "bucket": 4, "confidence": "insufficient_broad_appeal_evidence"},
+      {"game_id": 424, "title": "1870: Railroading Across the Trans Mississippi", "type": "18XX", "n_obs": 1053, "adj_mean": 8.0269, "step7": {"spec_ge10": 0.375, "spec_ge20": 0.191, "tvd_global": 0.116}, "step7_cross": {"specialist_diff": 0.87, "specialist_z": 7.6}, "step7C": {"delta_true": -0.414, "truncated_delta": -0.289, "overlap": "insufficient_overlap", "ess_ratio": 0.05, "max_w": 24024}, "bucket": 4, "confidence": "insufficient_broad_appeal_evidence"},
+      {"game_id": 17405, "title": "1846: The Race for the Midwest", "type": "18XX", "n_obs": 2998, "adj_mean": 8.538, "step7": {"spec_ge10": 0.241, "spec_ge20": 0.099, "tvd_type": 0.057}, "step7_cross": {"specialist_diff": 0.597, "specialist_z": 7.3}, "step7C": {"delta_true": -0.269, "truncated_delta": -0.152, "overlap": "insufficient_overlap", "ess_ratio": 0.063, "max_w": 65414}, "bucket": 4, "confidence": "insufficient_broad_appeal_evidence"},
+      {"game_id": 253608, "title": "18Chesapeake", "type": "18XX", "n_obs": 1732, "adj_mean": 8.3389, "step7": {"spec_ge10": 0.277, "spec_ge20": 0.118, "tvd_type": 0.065}, "step7_cross": {"specialist_diff": 0.004, "specialist_z": 0.04, "volume_diff": -0.163}, "step7C": {"delta_true": -0.074, "truncated_delta": -0.052, "overlap": "insufficient_overlap", "ess_ratio": 0.067, "max_w": 44553}, "bucket": 4, "confidence": "insufficient_broad_appeal_evidence", "note": "only 18XX with specialist parity (0.00) — would be bucket 2 if adequate, but insufficient so unknown"},
+      {"game_id": 13, "title": "CATAN", "type": "Economic", "n_obs": 119003, "adj_mean": 7.1197, "step7": {"spec_ge10": 0.505, "spec_ge20": 0.306, "tvd_type": 0.311, "taxonomy": "moderate_audience_selectivity"}, "step7_cross": {"volume_diff": -0.104, "volume_z": -5.0, "specialist_diff": -0.17, "specialist_z": -17.6}, "step7C": {"delta_true": 0.084, "truncated_delta": -0.002, "overlap": "adequate_overlap", "sensitivity": "stable_under_exposure_adjustment", "ess_ratio": 0.463, "max_w": 1738, "mean_p": 0.0187, "penetration_all": 0.414}, "bucket": 5, "confidence": "not_hidden_popular", "narrative": "Bucket 1 subtype — high quality, broadly rated, stable+parity, not hidden."},
+      {"game_id": 9209, "title": "Ticket to Ride", "type": "Other", "n_obs": 87222, "adj_mean": 7.5024, "step7": {"tvd_global": 0.245}, "step7_cross": {"volume_diff": 0.399, "volume_z": 20.8}, "step7C": {"delta_true": -0.07, "truncated_delta": -0.001, "overlap": "borderline_overlap", "sensitivity": "moderately_sensitive", "ess_ratio": 0.542, "max_w": 2049}, "bucket": 5, "confidence": "not_hidden_popular"},
+      {"game_id": 30549, "title": "Pandemic", "type": "Coop", "n_obs": 120228, "adj_mean": 7.6229, "step7": {"spec_ge10": 0.475, "tvd_type": 0.227}, "step7_cross": {"volume_diff": 0.194, "specialist_diff": 0.27}, "step7C": {"delta_true": -0.063, "truncated_delta": -0.005, "overlap": "borderline_overlap", "sensitivity": "moderately_sensitive", "ess_ratio": 0.433, "max_w": 2603}, "bucket": 5, "confidence": "not_hidden_popular"},
+      {"game_id": 822, "title": "Carcassonne", "type": "Other", "n_obs": 122032, "adj_mean": 7.4964, "step7_cross": {"volume_diff": 0.223}, "step7C": {"delta_true": -0.035, "truncated_delta": 0.0, "overlap": "borderline_overlap", "sensitivity": "moderately_sensitive", "ess_ratio": 0.567, "max_w": 1893}, "bucket": 5, "confidence": "not_hidden_popular"}
+    ],
+    "language_rule": "do NOT call cult/hidden factually — tiers are hypotheses about observed evidence"
+  },
+  "confidence_tiers": {
+    "strong_hidden_gem_evidence": {
+      "requires": "QUALITY pass ∧ UNDERRATEDNESS pass (stable S3/S5) ∧ HIDDENNESS pass ∧ stable_exposure (adequate+stable |delta|<0.20) ∧ >=2 cross-audience parities (|diff|<0.30 & |z|<2 & n>=10) ∧ |truncated_delta|<0.20 direction-consistent",
+      "interpretation": "high quality, underrated, obscure, not selection-dependent, parity across materially different audiences",
+      "label_is_hypothesis": true
+    },
+    "plausible_hidden_gem": {
+      "requires": "QUALITY∧UNDERRATEDNESS∧HIDDENNESS ∧ exposure_sensitive but survives stronger bar (>=2 parities & |trunc|<0.20)",
+      "interpretation": "sensitive to observable selection but corroborated breadth — plausible but closer scrutiny"
+    },
+    "niche_but_high_quality": {
+      "requires": "QUALITY (and HIDDENNESS) but exposure_sensitive without parity (<=1 parity or |diff|>=0.30 or trunc fails)",
+      "interpretation": "excellent within niche, no BGG evidence it generalizes — not failure, not cult"
+    },
+    "insufficient_broad_appeal_evidence": {
+      "requires": "insufficient_overlap OR no cross-audience support (no split with n>=10) — regardless of other dimensions",
+      "interpretation": "unknown — cannot tell broad vs niche; requires external data (plays/sales/time)",
+      "insufficient_means": "unknown not bad, not cult"
+    },
+    "not_hidden_popular": {
+      "requires": "HIDDENNESS fail (large n_obs/penetration) regardless of others",
+      "interpretation": "high quality but obviously popular — bucket 5"
+    }
+  },
+  "open_manual_judgments": [
+    {"decision": "T_q threshold for QUALITY (adj_mean cutoff, e.g., >=7.5 vs percentile)", "type": "project definition / qualitative", "sensitivity_required": "show distribution and vary by ±0.2"},
+    {"decision": "which Phase5/6 expectation model (S3 category vs S5 band/decade vs both) and residual quantile (top 10%/5%/1%, >=+0.5)", "type": "methodological choice but threshold-dependent", "historical_reference": "S3 vs S5 top-1% overlap 54.6%"},
+    {"decision": "HIDDENNESS bands: T_h n_obs cutoff (e.g., 1500) and penetration thresholds (all<0.05, type_ge10<0.10); Other relies on n_obs only", "type": "project definition", "caveat": "Other per-game penetration not globally computed"},
+    {"decision": "broad-appeal parity thresholds: |diff|<0.30, |z|<2, n>=10 per side, >=2 splits, |truncated_delta|<0.20", "type": "conventional, disclosed as manual", "sensitivity_required": "vary |diff| 0.20-0.40 and n>=5 vs 10"},
+    {"decision": "exposure_sensitive gate: downgrade+stronger evidence (chosen) vs exclude (stricter variant)", "type": "scope choice", "rationale": "downgrade derived from research objective (need corroboration not auto-exclusion); stricter variant is defensible sensitivity"},
+    {"decision": "language: cult vs hidden tiers are communicative hypotheses, not facts", "type": "interpretive, must tag claims observed/empirical/hypothesis/model-dependent/speculation"}
+  ],
+  "answers_to_five_questions": {
+    "1_quality_estimator": "No — adj_mean stays, prop_adj is sensitivity not quality. Six reasons: adequate 32.8% only, insufficient dominates niche 100% 18XX/52.9% Wargame, weights 156x larger, stabilized==raw rank, truncation attenuates, RF overconfident.",
+    "2_exposure_classes_screening": "stable_exposure PASS, exposure_sensitive DOWNGRADE requiring >=2 cross-audience parities + trunc check else niche_but_high_quality, insufficient_overlap UNKNOWN (exclude from BGG-only hidden-gem, external validation needed). Rescaled thresholds: max_w 1740/8700, ESS 0.30/0.10, mean_p 0.015/0.005 justified from median max_w 1449 p95 7619 ESS 0.33 mean_p 0.027.",
+    "3_primary_vs_secondary": "Primary: 7C overlap/ESS+delta (only reweighting measure, explains 62% beyond spec) and 7 cross-audience diffs n>=10 (only realized breadth test). Secondary: 7 composition (spec/TVD/herf/own/penetration) + 7C ESS/max_w/mean_p/trunc. Diagnostic-only: cat_related 0.993, RF variation, Other penetration NA, snapshot own.",
+    "4_minimum_for_plausible_hidden": "QUALITY ∧ UNDERRATEDNESS (stable residual) ∧ HIDDENNESS (n_obs≤T_h & penetration) ∧ (stable_exposure with >=2 parities |diff|<0.30 OR exposure_sensitive with same but stronger) — positive broad-appeal mandatory; insufficient always insufficient.",
+    "5_methodological_vs_manual": "Methodological: keep adj_mean, no imputation, screening not correction, overlap thresholds, primary mapping, insufficient=unknown, stabilized==raw. Manual: T_q, T_u model/quantile, hiddenness bands, parity cutoffs, downgrade vs exclude, tier labels/language."
+  },
+  "constraints_preserved": [
+    "do NOT rebuild Phase5/6 or run final candidate screen",
+    "do NOT modify Phase2 mu/delta/adj_mean fixed",
+    "do NOT create hidden-gem score in this step",
+    "do NOT call cult/hidden factually — hypotheses only",
+    "do NOT interpret insufficient_overlap as bad/cult",
+    "do NOT impute missing ratings or interpret non-raters as negative"
+  ],
+  "files": ["README.md", "screening_framework.md", "quality_vs_underratedness_vs_hiddenness.md", "audience_selection_policy.md", "cult_vs_hidden_interpretation.md", "known_case_examples.md", "step8_decisions.json"],
+  "mirrored_to": "reports/phase2_pass2/step8_hidden_gem_screening_design/"
+}
