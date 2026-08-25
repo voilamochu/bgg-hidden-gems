@@ -2651,3 +2651,50 @@ Given observable data, we can detect pool narrowness for typed games with modera
 - Reproduction: `python scripts/42_phase7_audience_selection.py` (also `python /tmp/generate_missing_docs.py` for docs fix)
 - Validation: counts reconcile 14698/287302/24146307, mu diff -0.000000, no degenerate, validation.json 7 checks overall_pass True.
 
+
+## 2026-08-25: Step 7B — Observable Exposure / Rating-Propensity Sensitivity Analysis (pass2 14,698/287,302/24,146,307)
+
+### Context & Goal
+
+Step 7B builds directly on Step 7 audience-selection work and confirmed second-pass population (14,698/287,302/24,146,307, mu≈7.139, reuse `user_severity_pass2`/`game_adjusted_means_pass2` via scripts 39/40, no refit). Step 7 showed we can measure observable rater-pool selectivity but cannot observe non-raters.
+
+**Objective (tag: hypothesis):** Ask "Based on observable history of entire 287k user population, who would have been plausible/exposed candidates to rate this game, and how sensitive is the game's adjusted quality to reweighting toward that broader plausible-rater population?" This is **sensitivity analysis for observable exposure**, not causal correction, not imputed negatives.
+
+**Method (tag: model-dependent conclusion):** Built richer propensity model `P(user rates game | observable user profile_excl, game characteristics)` using 26 features (log_total, delta, mean_weight, per-type log counts, volume ordinal, game weight/year/type, type-interactions), leakage-excluded (subtract target contribution for Y=1). Training: 200k positives (systematic sample of 24.1M) + 200k negatives (random user-game anti-join), balanced 1:1, logistic L2 baseline (C=1.0, AUC 0.824, ECE 0.010) + RF comparison (AUC 0.854, ECE 0.027). Per-game IPW via streaming over 24.1M obs (195 row groups, vectorized X·coef), `weight=1/p`, stabilized `p_marginal/p` (p_marginal=0.00572), truncated cap20/p99, `ESS`, `max_w`, `penetration`.
+
+At-risk populations compared explicitly: `ALL_ACTIVE` (287,302), `ACTIVE_50PLUS` (119,969, total_cnt≥50), `TYPE_GE5/10/20` per type (18XX 2093/930/337, Wargame 80k/40k/17k, Party 117k/62k/25k, Economic 170k/105k/55k, Coop 160k/94k/44k, Legacy 13k/1.6k/49). For each game report penetration = n_raters_in_pop/N_at_risk, mean_p, ESS, overlap flag.
+
+### Main Empirical Findings
+
+1. **Overall stability (tag: empirical finding):** Mean `delta_raw = prop_adj_raw - adj_mean` -0.006, median -0.006, `mean |delta|` 0.060. 70.5% games `stable_under_exposure_adjustment`, 7.0% `moderately_sensitive`, 2.9% `strongly_sensitive`, 19.5% `insufficient_overlap` (n<150 or max_w>100 or ESS_ratio<0.10 or mean_p<0.001). On average, exposure adjustment barely moves quality — most games not sensitive.
+
+2. **Type heterogeneity (tag: empirical finding):** 18XX mean delta -0.130 (median -0.095, n=81) largest sensitivity; Wargame mean -0.026 (median -0.016, n=2020, 20% strongly sensitive, 30% insufficient); Other/Coop/Econ/Party/Legacy near zero (medians -0.004 to -0.019). Niche types more sensitive but heterogeneous within type (18XX delta SD 0.38, range -1.86 to +1.12; not uniform deflation).
+
+3. **Critical 18XX test (tag: model-dependent conclusion / empirical finding):**
+   - **Pool difference:** Median penetration_all 0.003 (0.3% of all users) vs penetration_ge20 0.297 (29.7% of heavy 337) for typical 18XX — raters far more heavy than global.
+   - **IPW change:** All 81 18XX flagged `insufficient` on ALL (global positivity fails, max_w 98–420), median delta -0.095. Direction consistently negative (high adj_mean partly specialist-driven) but heterogeneous: 39/81 delta<-0.1, 12/81 delta>+0.1.
+   - **1870:** delta -0.294 (largest among gateway 18XX), more than 1830 (-0.283) and 1817 (-0.156) — heavy niche still sensitive due to 41% newcomers with very low p.
+   - **Gateway 1830 vs specialist 1817:** Gateway more sensitive (|delta| 0.283>0.156, max_w 304>98) despite lower spec_ge20 (0.054 vs 0.297) because 73.7% newcomers have p~0.002 (weight 100–300) vs specialist 20% newcomers. Demonstrates continuous log1p gradient beyond threshold spec≥10 — propensity adds info.
+   - **No uniform direction:** 1817 etc show positive delta for some 18XX (+1.12 for 18DO), so not all 18XX inflated.
+
+4. **Penetration diagnostic (tag: empirical finding):** Wargame median penetration_ge20 0.010 (1.0% of heavy wargamers rated typical wargame) vs 18XX 0.297 — typical wargame far more selective even within enthusiast pool than typical 18XX. This is stronger niche limitation than raw n_obs.
+
+5. **Robustness across variations (tag: empirical finding):**
+   - Stabilized vs raw: median |delta_raw - delta_stab| 0.008, rank corr 0.998 — negligible.
+   - Truncated (cap20) vs raw: median 0.015, but for 432 strongly sensitive, truncated reduces |delta| median 0.22 (extreme weights dominated).
+   - ALL vs TYPE_GE20: for 18XX rank corr 0.62 (moderate), for Other 0.91 (robust) — niche conclusions depend on at-risk definition.
+   - Logistic vs RF: rank corr 0.93, mean |delta diff| 0.03 — direction consistent, RF slightly larger for niche (overfits).
+   - With vs without interactions: AUC 0.824→0.791, delta corr 0.89 — interactions matter for typed games.
+
+6. **Step7 vs Step7B agreement (tag: empirical finding):**
+   - Cross-tab: Step7 low (3936) → 75.9% stable, 13.9% insufficient; high (1124) → 36.7% stable, 47.2% insufficient, 8.7% strong. Moderate (6867) splits 70% stable/19% insufficient — moderate does not imply sensitivity.
+   - Correlation |delta| with spec_ge20 0.38, with TVD 0.22, with penetration -0.29 — moderate, 62% variance unexplained by threshold.
+   - Example 1830: Step7 low (spec 0.054, TVD 0.087) → 7B insufficient with large negative delta — threshold misses continuous gradient. Example high-spec but stable: 1848 Australia high but 7B stable (spec high but cross-audience diff small).
+
+### Interpretation and Limitations
+
+- **We can detect observable exposure sensitivity with good discrimination (AUC 0.82) but positivity often fails for niche (19.5% insufficient, 66.7% for 18XX on ALL) — correctly flagged, not pretended. Type-specific TYPE_GE20 improves overlap but N small (337) → variance.**
+- **A plausible-looking propensity-adjusted list is not validation. We report sensitivity classification, not hidden-gem ranking.**
+- **Does NOT observe non-raters, does NOT identify true causal exposure, collection own snapshot, timestamps unresolved, raw p on 1:1 sampled scale (true marginal 0.572% would need intercept shift -4 to -5 logit; we use stabilized).**
+- **Implication for next decision (tag: implication):** For Other/Coop/Econ with large n, no quality-estimator change needed (stable). For 18XX/Wargame heavy, sensitivity material but weakly identified → do not adjust quality globally; use sensitivity as screening filter for hidden-gem (require stable/moderately_sensitive with adequate support, flag strongly_sensitive/insufficient as niche-only pending external validation). Do not change Phase 2 baseline, Phase5/6, or rerun Phase7 screening.
+
