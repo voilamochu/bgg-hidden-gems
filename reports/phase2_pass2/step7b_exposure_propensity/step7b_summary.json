@@ -1,0 +1,162 @@
+{
+  "generated_at": "2026-08-25T03:40:00Z",
+  "population": {
+    "games": 14698,
+    "users": 287302,
+    "observations": 24146307,
+    "mu": 7.13900772639585
+  },
+  "model": {
+    "auc_test": 0.8243367837500001,
+    "auc_rf": 0.8539884559375001,
+    "ece_test": 0.009825162346528256,
+    "ece_rf": 0.026718116216501695,
+    "feature_cols": [
+      "log_total_excl",
+      "delta_full",
+      "mean_weight_excl",
+      "vol_ord_excl",
+      "log1p_cnt_18xx_excl",
+      "log1p_cnt_warg_excl",
+      "log1p_cnt_party_excl",
+      "log1p_cnt_econ_excl",
+      "log1p_cnt_coop_excl",
+      "log1p_cnt_legacy_excl",
+      "log1p_cnt_other_excl",
+      "weight_filled",
+      "weight_missing",
+      "year_centered",
+      "flag_18xx",
+      "flag_warg",
+      "flag_party",
+      "flag_econ",
+      "flag_coop",
+      "flag_legacy",
+      "inter_flag_18xx",
+      "inter_flag_warg",
+      "inter_flag_party",
+      "inter_flag_econ",
+      "inter_flag_coop",
+      "inter_flag_legacy"
+    ]
+  },
+  "propensity_stats": {
+    "mean_delta_raw": -0.005526791996301149,
+    "median_delta_raw": -0.005971217121899741,
+    "mean_abs_delta_raw": 0.05968011538552126,
+    "share_insufficient": 0.1951966253912097,
+    "share_stable": 0.705129949653014,
+    "share_moderate": 0.07028167097564295,
+    "share_strong": 0.029391753980133353
+  },
+  "counts": {
+    "games": 14698,
+    "at_risk_pops": [
+      "ALL_ACTIVE",
+      "ACTIVE_50PLUS",
+      "TYPE_GE5",
+      "TYPE_GE10",
+      "TYPE_GE20"
+    ]
+  },
+  "validation": {
+    "leakage_excluded": true,
+    "counts_reconcile": true
+  },
+  "pools": {
+    "ALL_ACTIVE": 287302,
+    "ACTIVE_50PLUS": 119969,
+    "ACTIVE_100PLUS": 63333,
+    "18XX_GE5": 2093,
+    "18XX_GE10": 930,
+    "18XX_GE20": 337,
+    "WARGAME_GE5": 80585,
+    "WARGAME_GE10": 40922,
+    "WARGAME_GE20": 17338,
+    "PARTY_GE5": 117050,
+    "PARTY_GE10": 62902,
+    "PARTY_GE20": 25291,
+    "ECONOMIC_GE5": 170899,
+    "ECONOMIC_GE10": 105561,
+    "ECONOMIC_GE20": 55654,
+    "COOP_GE5": 160550,
+    "COOP_GE10": 94562,
+    "COOP_GE20": 44575,
+    "LEGACY_GE5": 13355,
+    "LEGACY_GE10": 1603,
+    "LEGACY_GE20": 49
+  },
+  "penetration_stats": {
+    "median_pen_all": 0.0012077883203040704,
+    "median_pen_type_ge20_typed": 0.009094144161954844,
+    "median_pen_18xx_ge20": 0.29673590504451036,
+    "median_pen_warg_ge20": 0.010151113161841042
+  },
+  "type_delta": {
+    "mean": {
+      "18XX": -0.1296832166644841,
+      "Coop": -0.021870617659345348,
+      "Economic": 0.005250951653471683,
+      "Legacy": 0.015508474614295128,
+      "Other": 0.0011131871013075445,
+      "Party": -0.003572755732844322,
+      "Wargame": -0.026062944880605832
+    },
+    "median": {
+      "18XX": -0.0949639658608276,
+      "Coop": -0.0189810823768339,
+      "Economic": -0.0020899119399029,
+      "Legacy": -0.0013664071408161,
+      "Other": -0.0038352793062519,
+      "Party": -0.0098820364750906,
+      "Wargame": -0.01573839745851785
+    },
+    "std": {
+      "18XX": 0.3309538566750378,
+      "Coop": 0.08306255791777202,
+      "Economic": 0.05702406502542304,
+      "Legacy": 0.06119206729378398,
+      "Other": 0.07138749241470513,
+      "Party": 0.10296884859169836,
+      "Wargame": 0.1370331300985624
+    }
+  },
+  "sensitivity_by_type": {
+    "insufficient_overlap": {
+      "18XX": 54,
+      "Coop": 206,
+      "Economic": 148,
+      "Legacy": 2,
+      "Other": 1593,
+      "Party": 251,
+      "Wargame": 615
+    },
+    "moderately_sensitive": {
+      "18XX": 7,
+      "Coop": 74,
+      "Economic": 7,
+      "Legacy": 0,
+      "Other": 57,
+      "Party": 176,
+      "Wargame": 712
+    },
+    "stable_under_exposure_adjustment": {
+      "18XX": 3,
+      "Coop": 1076,
+      "Economic": 994,
+      "Legacy": 15,
+      "Other": 7156,
+      "Party": 840,
+      "Wargame": 280
+    },
+    "strongly_sensitive": {
+      "18XX": 17,
+      "Coop": 0,
+      "Economic": 0,
+      "Legacy": 0,
+      "Other": 2,
+      "Party": 0,
+      "Wargame": 413
+    }
+  }
+}
