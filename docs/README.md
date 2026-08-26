@@ -2,7 +2,7 @@
 
 **Canonical population:** `14,698` games × `287,302` users × `24,146,307` obs (`data/processed/phase2-pass2/`, `mu 7.139`) — all docs below are built on this population unless noted.
 
-This `docs/` was reorganized on `2026-08-26` from a flat `phase2-pass2`-heavy layout into **10 numbered top-level folders**, each with a clear purpose. Old `phase2-pass2/*` sub-reports are now top-level peers, not nested.
+This `docs/` was reorganized on `2026-08-26` from a flat `phase2-pass2`-heavy layout into **11 numbered top-level folders**, each with a clear purpose. Old `phase2-pass2/*` sub-reports are now top-level peers, not nested. **2026-08-26 P80 promotion:** Pass 6 `11-pass6` now uses **P80 primary (0.4034 N=1,347) with P75 sensitivity (0.3256 N=1,581)** — both 158 strong identical, Jaccard 1.0; see `11-pass6/p75-screening/`.
 
 ## Map
 
@@ -17,11 +17,12 @@ This `docs/` was reorganized on `2026-08-26` from a flat `phase2-pass2`-heavy la
 - **`08-pass3/`** — Pass 3 broad tune-up on the 39: `investigation/` (`52` `22` proposed changes, `5` dims), `review/` (`report.md` `30` sections, `Q3bFam` preserve, `37 vs 39` merely different), `final/` (`53/54` reruns, `39` preserved `Jaccard 1.0`, `pass3_final_summary.json`).
 - **`09-pass4/`** — Pass 4 full redesign preparation (§1-7) that left `39` as monitoring (`per-pattern 501` `45` below gate, `solo_first 691`/`duel 2555` as monitoring, `intersect_250` `134/279k` as monitoring): `investigation/` (`55` `42` files), `final/` (`56/57` `39` preserved `per_pattern` `base-title` `heterogeneity` reruns).
 - **`10-pass5/`** — Pass 5 binding eligibility & consequential screening (`459` hard + `308` borderline via deterministic `game_links`+`families`+`contained_in`+designer/year/weight, `ecosystem 25` hard, `audience` `691`/`2555` as screening not model, `intersect_250` reference as screening dimension, `Q3bFam` preserved): `investigation/` (`58` `44` files `39→30` proposed `9` movers), `final/` (`59/60` `33` strong `29` survive `10` lost `4` gained `Jaccard 0.67`).
+- **`11-pass6/`** — Pass 6 **P80 primary, P75 sensitivity** candidacy & fully automated semantic audit (`P80 0.4034321142 N=1,347 primary` vs `P75 0.3255647930 N=1,581 sensitivity`, both exact empirical quantiles from 14,698 canonical; **both 158 strong hidden-gem candidates identical, Jaccard 1.0, min strong resid 0.408 ≥P80**, P75 extra 234 are plausible/niche/insufficient not strong; **P80 is more precise primary** — same strong recall, 234 fewer to audit): `p75-screening/` (`scripts 65/66`, `thresholds.json` `primary: P80`/`promotion` block, `eligibility_evidence.csv` 1,581 + `eligibility_evidence_p80.csv` 1,347, `broad_appeal_evidence.csv` 1,520 + `p80` 1,293, `final_classification_evidence.csv` 1,581 + `p80` 1,347, `screening_evidence_table.csv` 1,581 + `p80` 1,347 — **P80 pipeline is canonical 1,348-row p80 set**), `screening/` (Pass 6 0.75 screening 532 → 33 proposed), `final/` (Pass 6 final 29 strong after 4 Big Box demotion, Jaccard 0.88 vs Pass 5). Quality model unchanged (`Q3bFam 48f CV 0.6033` + `Q4Fam 78f` from 9B/10, 18XX correction, hiddenness <1,700).
 
 ## Where to start
 
 - **New to the project:** `00-overview/research_report.md` → `01-population/README.md` → `04-quality-model/09-quality-underratedness/README.md`.
-- **Hidden-gem pipeline:** `05-audience-selection/08-screening-design/screening_framework.md` → `06-hiddenness-gates/10-quality-gates/README.md` → `07-candidate-screening/11-12-screen/README.md` → `08-pass3/README.md` → `09-pass4/README.md` → `10-pass5/README.md`.
+- **Hidden-gem pipeline:** `05-audience-selection/08-screening-design/screening_framework.md` → `06-hiddenness-gates/10-quality-gates/README.md` → `07-candidate-screening/11-12-screen/README.md` → `08-pass3/README.md` → `09-pass4/README.md` → `10-pass5/README.md` → `11-pass6/p75-screening/README.md` (**P80 primary 1,347 → 158 strong identical to P75 1,581, Jaccard 1.0**).
 - **Population:** `01-population/baseline/baseline_report.md` + `01-population/recursive-closure/RECURSIVE_CLOSURE_PASS2.md` + `01-population/second-pass/README.md`.
 
 ## Conventions

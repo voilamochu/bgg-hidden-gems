@@ -7,7 +7,8 @@
     "pass2_obs": 24146307,
     "mu": 7.139007726394262,
     "source": "data/processed/phase2-pass2/",
-    "note": "reuse severity Q3bFam/Q4Fam \u2014 re-derived residuals via same 48f spec to compute exact quantiles, verified CV 0.6033/0.6151"
+    "note": "reuse severity Q3bFam/Q4Fam \u2014 re-derived residuals via same 48f spec (game_adjusted_means_pass2 + expected_Q3bFam on 14,698 canonical) to compute exact empirical quantiles, verified CV 0.6033/0.6151 \u2014 exact quantiles, not approximations",
+    "exact_quantile_source": "game_adjusted_means_pass2.parquet + expected_Q3bFam (Q3bFam 48f) on 14,698 canonical games"
   },
   "model": {
     "primary": "Q3bFam 48f CV 0.6033",
@@ -34,16 +35,60 @@
   "thresholds": {
     "P75": 0.3255647929807146,
     "P80": 0.4034321141845052,
-    "P75_note": "exact empirical P75 from 14,698 canonical, do not approximate as 0.75",
-    "P80_note": "exact empirical P80, do not approximate as 0.80"
+    "P75_note": "exact empirical P75 from 14,698 canonical (game_adjusted_means_pass2 + expected_Q3bFam via Q3bFam 48f), do not approximate as 0.75",
+    "P80_note": "exact empirical P80 from 14,698 canonical (game_adjusted_means_pass2 + expected_Q3bFam via Q3bFam 48f), do not approximate as 0.80",
+    "P75_primary": false,
+    "P75_sensitivity": true,
+    "P80_primary": true,
+    "P80_sensitivity": false,
+    "primary_threshold": "P80",
+    "sensitivity_threshold": "P75",
+    "primary_value": 0.4034321141845052,
+    "sensitivity_value": 0.3255647929807146
   },
   "pools": {
     "N_P75_primary": 1581,
     "N_P80_sensitivity": 1347,
     "N_old_075": 532,
     "N_old_080": 455,
-    "threshold_primary": "adj\u22657.5 & resid\u22650.3255647930 (P75)",
-    "threshold_sensitivity": "adj\u22657.5 & resid\u22650.4034321142 (P80)"
+    "threshold_primary": "adj\u22657.5 & resid\u22650.4034321142 (P80)",
+    "threshold_sensitivity": "adj\u22657.5 & resid\u22650.3255647930 (P75)",
+    "N_P75": 1581,
+    "N_P80": 1347,
+    "N_P75_sensitivity": 1581,
+    "N_P80_primary": 1347,
+    "N_P75_primary_deprecated": 1581,
+    "N_P80_sensitivity_deprecated": 1347,
+    "primary": "P80",
+    "sensitivity": "P75",
+    "P80_primary": true,
+    "P75_primary": false,
+    "P80_sensitivity": false,
+    "P75_sensitivity": true,
+    "primary_threshold_value": 0.4034321141845052,
+    "sensitivity_threshold_value": 0.3255647929807146,
+    "primary_N": 1347,
+    "sensitivity_N": 1581
   },
-  "quality_thresholds_note": "P75 0.325 vs old 0.75 was at p96, so new pool larger intentional"
+  "quality_thresholds_note": "P80 0.4034 primary vs P75 0.3256 sensitivity (both exact empirical quantiles from 14,698 canonical, not approximations); P80 primary is stricter, slightly fewer niche/popular, same strong recall (158 identical); old 0.75 was at ~p96 (0.75\u2248p96, resid SD 0.531), P75 0.3256 is p75, P80 0.4034 is p80",
+  "promotion": {
+    "date": "2026-08-26",
+    "primary": "P80",
+    "primary_threshold": 0.4034321141845052,
+    "primary_N": 1347,
+    "primary_threshold_note": "exact empirical P80 0.4034321142 from 14,698 canonical",
+    "sensitivity": "P75",
+    "sensitivity_threshold": 0.3255647929807146,
+    "sensitivity_N": 1581,
+    "sensitivity_threshold_note": "exact empirical P75 0.3255647930 from 14,698 canonical",
+    "reason": "Both thresholds produced exactly 158 strong hidden-gem candidates (P75 10.0% of 1581 vs P80 11.7% of 1347 \u2014 158 strong identical, 122 vs 121 plausible, 786 vs 646 niche); P75 added zero additional strong beyond P80 (min strong resid 0.408783 \u2265 P80, none in 0.325-0.403 gap; Jaccard P75 vs P80 strong 1.0, Spearman 1.0). P80 is more precise (fewer candidates to audit, same strong recall) and therefore more efficient primary that reduces plausible/niche noise without losing strong recall. P75 retained only as sensitivity (broader-discovery comparison, Jaccard strong 1.0).",
+    "empirical_note": "P75 0.3255647930 N=1581 vs P80 0.4034321142 N=1347 \u2192 both 158 strong identical; thresholds are exact empirical quantiles from canonical 14,698 (game_adjusted_means_pass2 + expected_Q3bFam via Q3bFam 48f), not approximations.",
+    "jaccard_strong": 1.0,
+    "spearman_strong": 1.0,
+    "min_strong_resid": 0.4087834232461986,
+    "pool_delta": 234,
+    "pool_delta_note": "P75 pool 234 games larger than P80, but extra 234 are all plausible/niche/insufficient/borderline, not strong"
+  },
+  "promotion_note": "P80 promoted to primary 2026-08-26 per completed P75 vs P80 comparison (284eda3 PR42 scripts65/66): P75 0.3255 N=1581 vs P80 0.4034 N=1347 \u2192 both 158 strong identical, P75 added 0 strong beyond P80, so P80 is more precise and efficient primary.",
+  "updated_at": "2026-08-26T15:30Z promotion P80 primary (retain P75 as sensitivity); original generated_at 2026-08-26T05:24:55.295463+00:00Z"
 }

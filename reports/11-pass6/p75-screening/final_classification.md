@@ -1,6 +1,9 @@
 # 6C — Final Classification (Keep Dimensions Separate, No Combined Score)
 
-**Generated:** 2026-08-26T15:00Z · P75 rerun P75 0.325565 N=1,581 P80 0.403432 N=1,347 · seed 20260824 · survivors 507 (1,581 −61 hard) eligible+borderline after 6A
+**Generated:** 2026-08-26T15:00Z · P75/P80 rerun **P80 primary 0.403432 N=1,347 and P75 sensitivity 0.325565 N=1,581 (P80 promoted 2026-08-26, P75 retained as sensitivity)** · seed 20260824 · survivors **P80 1,293 (1,347 −54 hard) primary + P75 1,520 (1,581 −61 hard) sensitivity** eligible+borderline after 6A — **P80 is canonical (158 strong identical to P75, Jaccard 1.0)**
+> **P80 Promotion (2026-08-26): P80 is now primary** — P75 0.3255647930 N=1,581 vs P80 0.4034321142 N=1,347 → both **158 strong identical** (Jaccard 1.0, Spearman 1.0, min resid 0.408 ≥P80, none in 0.325–0.403 gap; pool delta +234 for P75 yields zero additional strong, so P80 is more precise and efficient primary). P75 retained only as sensitivity. Thresholds exact empirical quantiles from 14,698 canonical (game_adjusted_means_pass2 + expected_Q3bFam). See `thresholds.json` `primary: P80` and `README.md` promotion block.
+
+
 
 **Definition:** *A genuinely good, underappreciated game that is sufficiently hidden and has credible appeal across a broad swathe of modern hobby board gamers* (modern hobby = intersect_250 134 games 279k users median weight 2.94 year 2015, not general population, not all BGG users).
 
@@ -20,7 +23,7 @@
 
 5. **`niche_but_high_quality`** if decisive narrow signal: `taxonomy == high_audience_selectivity` OR `spec>0.90 + has_niche_drop` (q75 0.96, tuned 0.90 was ~60th gap 0.004 — now general) OR `spec>0.95` OR `TVD>0.35` OR `Q4 fragile <0.50` (underratedness not robust vs Q3bFam) OR `strongly_sensitive` OR `has_niche_drop` without `has_broad` OR `abs(delta_quality)≥0.40` — exposure sensitive.
 
-6. **`strong_hidden_gem_evidence`** — must satisfy **all**: good (`adj≥7.5` LB≥7.0) + underrated (`resid≥0.75` Q4≥0.60 robust) + genuinely hidden (`<1,700` eligible and not ecosystem well-known + not hobby_well_known) + **no material audience-selection concern** (taxonomy low/moderate, overlap adequate/borderline, sens stable/moderate, cross has_broad True n_sup≥1 no niche_drop, not mediocre adj 7.5-7.7 resid 0.75-0.90 borderline, not high spec/TVD). With supporting cross-audience where available (has_broad 100% in strong vs plausible 5.7% etc.).
+6. **`strong_hidden_gem_evidence`** — must satisfy **all**: good (`adj≥7.5` LB≥7.0) + underrated (`resid≥P80 0.4034 primary / P75 0.3256 sensitivity` Q4≥0.60 robust) + genuinely hidden (`<1,700` eligible and not ecosystem well-known + not hobby_well_known) + **no material audience-selection concern** (taxonomy low/moderate, overlap adequate/borderline, sens stable/moderate, cross has_broad True n_sup≥1 no niche_drop, not mediocre adj 7.5-7.7 resid 0.75-0.90 borderline, not high spec/TVD). With supporting cross-audience where available (has_broad 100% in strong vs plausible 5.7% etc.).
 
 7. **`plausible_hidden_gem`** — good + underrated + hidden, but some evidence incomplete/borderline (hiddenness 1700-2500 borderline 20/532, or SE lower bound dips LB<7.0, or Q4 0.50-0.60 borderline, or taxonomy moderate+overlap borderline + one audience dimension). Else plausible is default.
 
@@ -82,6 +85,6 @@ Screened eligible+borderline after hard = **507** (vs 505 Pass2, 515 Pass5 final
 
 **Reference:** `intersect_250_bayes_users` primary broad-hobby reference (134 games 279108 users). `per_game_hiddenness.csv` 14,699 rows.
 
-**Reproduce:** `scripts/62_pass6_broad_appeal_final.py`.
+**Reproduce:** `scripts/65_pass6_p75_eligibility.py` + `scripts/66_pass6_p75_broad_appeal_final.py` (seed 20260824, P80 primary 1,347 vs P75 sensitivity 1,581 — both 158 strong identical, Jaccard 1.0; P80 canonical, no rerun needed).
 
-**Outputs:** `final_classification_evidence.csv` (532 rows, 507 survivors) + `screening_evidence_table.csv` (532 rows) + `validation_39.csv`.
+**Outputs:** `final_classification_evidence.csv` (1,581 rows, 1,520 survivors P75 sensitivity) + `final_classification_evidence_p80.csv` (1,347 rows, 1,293 survivors **P80 primary canonical**) + `screening_evidence_table.csv` (1,581) + `screening_evidence_table_p80.csv` (1,347) + `validation_39.csv` — **P80 primary 158 strong identical to P75**; thresholds exact empirical quantiles, `P80 primary: true`.
