@@ -1,0 +1,9 @@
+pattern,n,pct_pop,mean_resid,beta,deltaCV,jaccard,spec_ge10_median,spec_q75,insufficient_pct,cross_has_broad,decision,note
+cooperative,1543,10.5,0.083,fam_Cooperative +0.083 5/5,0.0,1.0,0.75,0.88,23.0,97%,"already in Q3bFam, not reused as broad filter","Q3bFam already corrects, not penalized again"
+solo_first (min1 max≤2),691,4.7,0.127,+0.176 5/5,0.0014,0.947,0.901,0.96,34.4,80.5% vs 86.2% overall,"monitoring flag is_solo_first, general criteria spec>0.90/0.95 + insufficient/niche_drop binding not tuned 0.80","heterogeneous, belongs_in audience not model r -0.70 with log_max"
+1-2 player/duel (max≤2),2555,17.4,0.08,+0.201 5/5,0.0038,0.814,0.899,0.96,33.3,83.3% vs 86.2%,"heterogeneous r -0.70 with log_max_players_c, not all 1-2p is niche; Euro duel broader",largest CV but heterogeneous (solo691+wargame1153+Euro1079)
+wargame_duel,1153,7.8,0.074,+0.204 5/5,0.0017,0.947,0.906,0.96,47.7,68% vs 86.2% (doubly specialized),doubly specialized niche — moves to niche where spec>0.90 + insufficient/niche_drop,"0% in strong vs 16.6% niche, wargame_duel 0/33 strong"
+Euro duel (duel not wargame not solo),1402,9.5,0.082,-,0.0,1.0,0.833,0.9,21.5,89% vs 86.2% broader than wargame,preserved where adequate/borderline + cross broad,"Euro duel broader than wargame duel, heterogeneity preserved"
+edition_title_any,501,3.41,0.116,+0.123 5/5,0.0006,0.921,0.75,0.85,24.5,75%,"belongs_in cleanup not model, precise not blanket 501","per-pattern all n<50 below gate, niche enriched 24.5% vs strong 5.1% (Pass2) now 12.1% vs 6.7% (Pass6 screening)"
+game_system,32,0.22,0.162,n<50 wide SE,0.0,1.0,0.7,0.85,31.0,78%,"eligibility hard exclude (not hidden, like expansions)","32 total, 5 in pool hard"
+overall,14698,100.0,0.0,-,0.0,1.0,0.7,0.88,23.0,86.2%,baseline,spec_ge10 median 0.892 q75 0.960 q90 0.983 in 532 pool (broad pool) vs 0.70 in full pop

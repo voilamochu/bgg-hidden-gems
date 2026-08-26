@@ -1,0 +1,653 @@
+{
+  "generated_at": "2026-08-26T04:47:28.401843+00:00Z",
+  "seed": 20260824,
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "mu": 7.139,
+    "source": "data/processed/phase2-pass2/",
+    "note": "reuse severity Q3bFam/Q4Fam \u2014 NOT refit"
+  },
+  "pass2": {
+    "commit": "722d149",
+    "outcome_counts": {
+      "strong": 39,
+      "plausible": 176,
+      "niche": 163,
+      "insufficient": 127,
+      "excluded_popular": 27,
+      "excluded_not_eligible": 0
+    },
+    "strong_ids": [
+      2470,
+      12166,
+      41090,
+      43262,
+      62814
+    ]
+  },
+  "pass5_final": {
+    "outcome_counts": {
+      "plausible_hidden_gem": 169,
+      "niche_but_high_quality": 158,
+      "insufficient_evidence": 129,
+      "strong_hidden_gem_evidence": 33,
+      "excluded_popular_not_hidden": 26,
+      "excluded_not_eligible": 17
+    },
+    "strong": 33,
+    "jaccard_vs_pass2": 0.674,
+    "strong_ids": [
+      2470,
+      12166,
+      41090,
+      147190,
+      184424
+    ],
+    "note": "Jaccard 0.674 (29 survive 10 lost 4 gained) \u2014 local churn 23%, global Spearman 1.0"
+  },
+  "pass6_screening": {
+    "outcome_counts": {
+      "strong_hidden_gem_evidence": 33,
+      "plausible_hidden_gem": 165,
+      "niche_but_high_quality": 165,
+      "insufficient_evidence": 119,
+      "excluded_popular_not_hidden": 25,
+      "excluded_not_eligible": 25
+    },
+    "strong_ids": [
+      2470,
+      12166,
+      41090,
+      147190,
+      184424
+    ],
+    "note": "33 vs Pass5 33 Jaccard 1.0 identical pool before review incorporation"
+  },
+  "pass6_final": {
+    "method": "Q3bFam 48f preserved, hiddenness <1700/1700-2500/>2500 preserved + ref_penetration monitoring (intersect_250 134/279k), hard eligibility 25 high binding (61 borderline review not hard), ecosystem high 25 only, audience general spec/propensity/cross binding (DROP tuned solo/duel 0.80), hobby_well_known >0.5% binding, DEMOTED 4 borderline Big Box/Ultimate per review \u00a76",
+    "outcome_counts": {
+      "strong_hidden_gem_evidence": 29,
+      "plausible_hidden_gem": 169,
+      "niche_but_high_quality": 165,
+      "insufficient_evidence": 119,
+      "excluded_popular_not_hidden": 25,
+      "excluded_not_eligible": 25
+    },
+    "delta_vs_pass5": {
+      "plausible_hidden_gem": 0,
+      "niche_but_high_quality": 7,
+      "insufficient_evidence": -10,
+      "strong_hidden_gem_evidence": -4,
+      "excluded_popular_not_hidden": -1,
+      "excluded_not_eligible": 8
+    },
+    "delta_vs_pass2": {
+      "plausible_hidden_gem": -7,
+      "niche_but_high_quality": 2,
+      "insufficient_evidence": -8,
+      "strong_hidden_gem_evidence": -10,
+      "excluded_popular_not_hidden": -2,
+      "excluded_not_eligible": 25
+    },
+    "hard_eligibility_in_pool": 25,
+    "borderline_eligibility_in_pool": 61,
+    "reference_primary": {
+      "candidate_id": "intersect_250_bayes_users",
+      "n_games": 134,
+      "n_users": 279108,
+      "n_obs": 4965490,
+      "median_weight": 2.94,
+      "median_year": 2015,
+      "median_users": 33913,
+      "definition": "intersection top250 bayes \u2229 top250 users"
+    },
+    "hiddenness": {
+      "eligible_mean_pen": "0.146% (0% >5% hobby, max 0.589% wargame, 2.95% >0.5%)",
+      "borderline_mean_pen": "0.724%",
+      "exclude_mean_pen": "3.47% (17.7% >5% hobby) \u2014 order gap, 1700 alone sufficient, penetration monitoring via per_game_hiddenness.csv",
+      "r_with_n_obs": 0.999986
+    },
+    "audience": {
+      "note": "general spec>0.90 (q75 0.96) + insufficient/niche_drop/max_weight binding, not tuned solo/duel 0.80 \u2014 re-derived from distribution, not 39"
+    }
+  },
+  "comparison": {
+    "pass5_vs_pass6": {
+      "spearman": 1.0,
+      "jaccard_strong": 0.879,
+      "survive": 29,
+      "lost": 4,
+      "gained": 0,
+      "lost_ids": [
+        147190,
+        212956,
+        317030,
+        367396
+      ],
+      "gained_ids": []
+    },
+    "pass2_vs_pass6": {
+      "spearman": 1.0,
+      "jaccard_strong": 0.744,
+      "survive": 29,
+      "lost": 10,
+      "gained": 0,
+      "lost_ids": [
+        43262,
+        62814,
+        153498,
+        157026,
+        224678,
+        296345,
+        331259,
+        338697,
+        373835,
+        392513
+      ],
+      "gained_ids": []
+    },
+    "pass2_vs_pass5": {
+      "jaccard_strong": 0.674
+    }
+  },
+  "per_change_keep_drop": [
+    {
+      "change_id": "C-eligibility-hard-25",
+      "proposed": "hard 25 high via game_links contained_in/version+Game:+designer/year/weight (532 pool, 4.7% vs 2.16% pop)",
+      "reviewer": "SUPPORTED keep binding",
+      "rerun": "per-pattern all n<50 below gate (collectors21 ultimate33 kickstarter16 etc) fail; second_edition112 \u0394+0.0004 <0.001 and edition_any509 \u0394+0.0006 <0.001 \u2014 not model, belongs_in eligibility",
+      "final": "KEEP high 25 binding \u2014 2 editions correctly excluded from 39 (331259,338697)",
+      "evidence": "eligibility_evidence_final.csv 25 hard, 61 borderline, 446 eligible; 532/532 (100%) queried; 0 description-only hard"
+    },
+    {
+      "change_id": "C-eligibility-borderline-61",
+      "proposed": "61 borderline where edition title + Game: but no link \u2192 borderline/review not hard",
+      "reviewer": "SUPPORTED keep as review queue",
+      "rerun": "per-pattern with_Game_family_n vs with_high_link_n across 14,698/532/strong (big_box 7\u21924 pool 0 hard 4 border, second_edition 112\u21927 pool 0 hard 7 border) \u2014 precise not blanket 501",
+      "final": "KEEP 61 borderline, do NOT hard-exclude; auditability fixed (443 eligible nan reasons filled, evidence full families)",
+      "evidence": "four_column_edition.csv: strong 12.1% vs niche 6.7% before demotion, after demotion strong 3.4% (1/29 Agemonia) borderline"
+    },
+    {
+      "change_id": "C-ecosystem",
+      "proposed": "eco\u226510 flagged medium/borderline, not hard unless link corroborates",
+      "reviewer": "SUPPORTED keep as monitoring, not binding unless contained_in/version corroborates",
+      "rerun": "max_eco\u226510 87/532 16.4%, 42\u226515, 11\u226530, 3\u226540 Catan; 2740 Game:18.6% remain eligible",
+      "final": "KEEP as monitoring, not binding unless link corroborates (already counted in high 25)"
+    },
+    {
+      "change_id": "C-reference",
+      "proposed": "intersect_250_bayes_users 134/279k 4.96M median weight 2.94 primary",
+      "reviewer": "SUPPORTED as assumption but needs rerun with broader test (r=0.9999 redundant but order gap 0.146% vs 3.47% remains)",
+      "rerun": "14,698-wide ref_penetration vs n_obs incremental R2 ~0 (eligible 0.146% vs borderline 0.724% vs exclude 3.47% order gap, max eligible 0.589% 0%>1%, 360 eligible>0.5% 2.95%) \u2014 broader four-column confirms hobby_well_known binding only",
+      "final": "KEEP intersect_250 primary + >0.5% hobby_well_known binding (360 eligible 2.95% \u2192 50/532 pool, 1/39 Sherlock 0.5016% edge moved to niche, 0/29 final strong hobby)",
+      "evidence": "hiddenness_broad_evidence.csv per-bucket, rerun_broad_evidence.json R2 n_obs alone 0.999973"
+    },
+    {
+      "change_id": "C-audience-coop-solo-duel",
+      "proposed": "coop already in Q3bFam; solo_first 691/duel 2555 left as monitoring flags, moved only via general spec>0.90/0.95 + insufficient/niche_drop",
+      "reviewer": "PARTIAL \u2014 needs rerun (was capable in Pass5 9 movers Jaccard 0.814/0.947 but Pass6 Jaccard 1.0 vs Pass5 shows pass-through, missing audience_consequential_evidence.csv)",
+      "rerun": "broader 14,698/532/strong four-column: solo_first 34.4% insufficient vs 23% overall, duel 33.3% vs 23% wargame 47.7% vs Euro 21.5% heterogeneous r -0.70, spec median0.892 q75 0.960 q90 0.983 vs tuned0.90~60th gap0.004 \u2014 re-derived q75 not overfit",
+      "final": "KEEP general spec>0.90 (q75 0.96) + insufficient/niche_drop binding, DROP tuned solo/duel 0.80 \u2014 keep is_solo_first/is_duel as monitoring flags; produce audience_consequential_evidence.csv",
+      "evidence": "audience_consequential_evidence.csv + audience_heterogeneity_broad.csv, four-column spec 0.90"
+    },
+    {
+      "change_id": "C-final-rule-33to29",
+      "proposed": "33 strong /165 plausible/165 niche/119 insufficient/25 pop/25 not-eligible (Jaccard 0.674 vs Pass2)",
+      "reviewer": "SUPPORTED in structure, unsupported in new set defensibility \u2014 flag reduction claimed for edition/system not realized (4 borderline Big Box editions entered strong 12.1% vs 5.1% before)",
+      "rerun": "four_column_edition.csv strong 12.1% (4/33) vs niche 6.7% before, after demotion strong 3.4% (1/29 Agemonia data-error borderline) plausible 11.1% \u2014 truly more defensible; has_broad 100% vs 82% improvement preserved",
+      "final": "DEMOTE 4 gained borderline Big Box/Ultimate/Second Edition from strong to plausible pending manual audit (147190,212956,317030,367396) \u2192 strong 29 (0 gained vs Pass2, 10 lost, Jaccard 0.744)",
+      "evidence": "validation_39_final.csv 39/39 correct, new_candidate_audit.md"
+    },
+    {
+      "change_id": "C-quality-preservation",
+      "proposed": "Q3bFam 48f CV0.6033 + Q4Fam 78f CV0.6151 preserved, hiddenness <1700/1700-2500/>2500 preserved",
+      "reviewer": "SUPPORTED",
+      "rerun": "no candidate meets \u22650.15+5/5+CV\u22650.001+belongs_in (duel \u0394+0.0038 heterogeneous, solo +0.0014 <0.15, edition +0.0006) \u2014 preserve",
+      "final": "PRESERVE Q3bFam 48f primary + Q4Fam 78f sensitivity, hiddenness thresholds, Spearman 1.0 global"
+    }
+  ],
+  "flag_reduction": {
+    "pass2_strong_39": {
+      "hard_edition": 2,
+      "hobby_well_known": 1,
+      "has_broad_true": "32/39 82%"
+    },
+    "pass6_screening_33": {
+      "hard_edition": 0,
+      "borderline_edition": 4,
+      "hobby_well_known": 0,
+      "has_broad_true": "33/33 100% \u2014 but borderline 12.1% regressed"
+    },
+    "pass6_final_29": {
+      "hard_edition": 0,
+      "borderline_edition": 1,
+      "borderline_edition_note": "270871 Agemonia version link to Sherlock 2511 likely data error (year diff 43, no Game: family, no edition token) \u2014 borderline but preserved legitimate from original 39",
+      "hobby_well_known": 0,
+      "has_broad_true": "29/29 100%, spec>0.90+niche_drop 0/29 vs 5%? more defensible"
+    }
+  },
+  "smoke_tests": {
+    "244258_Red_Dragon_Inn_7": {
+      "in_table": true,
+      "eligibility": "eligible (Game: The Red Dragon Inn eco 11 but no version/contained/reimplements link \u2014 no qualifying hard relationship, explicitly stated)",
+      "broad": "moderate adequate borderline broad 6-sup has_broad True spec 0.66 <0.90 \u2014 preserved strong",
+      "final": "strong"
+    },
+    "377969_Marvel_United_Multiverse": {
+      "in_table": true,
+      "eligibility": "eligible (Game: United eco 4, no Marvel United Game: family, no link \u2014 explicitly none)",
+      "final": "strong (moderate adequate borderline broad)"
+    },
+    "267304_Mega_Empires_West": {
+      "in_table": true,
+      "eligibility": "eligible (Game: Civilization eco 4, no version/contained/reimplements link \u2014 explicitly none)",
+      "final": "strong"
+    },
+    "373600_Cthulhu_Fear_Unknown": {
+      "in_table": true,
+      "eligibility": "eligible (no Game: family, 1 integration from 253344 but no version/contained/reimplements \u2014 integration not hard per 6A, explicitly stated)",
+      "broad": "eligible hiddenness 502 <1700, ref 0.178% moderate adequate borderline broad \u2192 preserved strong",
+      "note": "previous smoke borderline hiddenness note was incorrect \u2014 actual n 502 eligible, integration not hard, correctly preserved strong after final"
+    }
+  },
+  "strongest_candidates": [
+    {
+      "game_id": 2470,
+      "title": "The Extraordinary Adventures of Baron Munchausen",
+      "year": 1998.0,
+      "n_obs": 379,
+      "adj_mean": 7.54142635668983,
+      "residual_Q3bFam": 1.675909551702483,
+      "residual_Q4Fam": 1.6041756285978517,
+      "SE": 0.0613028818034207,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 275972,
+      "title": "Star Trek: Alliance \u2013 Dominion War Campaign",
+      "year": 2021.0,
+      "n_obs": 193,
+      "adj_mean": 8.586067013741074,
+      "residual_Q3bFam": 1.340699787735952,
+      "residual_Q4Fam": 1.3244635555031223,
+      "SE": 0.0859056723713636,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 244258,
+      "title": "The Red Dragon Inn 7: The Tavern Crew",
+      "year": 2018.0,
+      "n_obs": 310,
+      "adj_mean": 7.855604716276058,
+      "residual_Q3bFam": 1.3138743835085709,
+      "residual_Q4Fam": 1.4141990850659347,
+      "SE": 0.0677828224813342,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 340216,
+      "title": "Heredity: The Book of Swan",
+      "year": 2023.0,
+      "n_obs": 176,
+      "adj_mean": 8.627492692999917,
+      "residual_Q3bFam": 1.2455551384001249,
+      "residual_Q4Fam": 1.144853577018866,
+      "SE": 0.089958905305302,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 319604,
+      "title": "Ricochet: A la poursuite du Comte courant",
+      "year": 2020.0,
+      "n_obs": 223,
+      "adj_mean": 7.738709549479767,
+      "residual_Q3bFam": 1.166233544985153,
+      "residual_Q4Fam": 1.1060003200943411,
+      "SE": 0.0799186362394187,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 252432,
+      "title": "Zoo Break",
+      "year": 2019.0,
+      "n_obs": 178,
+      "adj_mean": 7.970369187843468,
+      "residual_Q3bFam": 1.1336096480730395,
+      "residual_Q4Fam": 1.1104013043589207,
+      "SE": 0.0894520905382537,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 41090,
+      "title": "Magnate",
+      "year": 2008.0,
+      "n_obs": 210,
+      "adj_mean": 7.683532630210059,
+      "residual_Q3bFam": 1.1239583821871555,
+      "residual_Q4Fam": 1.0950519031937338,
+      "SE": 0.0823551662963296,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 377969,
+      "title": "Marvel United: Multiverse",
+      "year": 2024.0,
+      "n_obs": 405,
+      "adj_mean": 8.598492892011315,
+      "residual_Q3bFam": 1.105672169392216,
+      "residual_Q4Fam": 1.1419167935019845,
+      "SE": 0.0593024975489745,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 267304,
+      "title": "Mega Empires: The West",
+      "year": 2019.0,
+      "n_obs": 366,
+      "adj_mean": 8.65455353802916,
+      "residual_Q3bFam": 1.045906982781709,
+      "residual_Q4Fam": 1.1766389309609178,
+      "SE": 0.0623820946291276,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 309917,
+      "title": "Hidden Games Crime Scene: The Midnight Crown",
+      "year": 2020.0,
+      "n_obs": 341,
+      "adj_mean": 8.200197969827395,
+      "residual_Q3bFam": 1.0272995430734555,
+      "residual_Q4Fam": 0.9747281929722328,
+      "SE": 0.0646283854294272,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 250396,
+      "title": "Terminator Genisys: Rise of the Resistance",
+      "year": 2018.0,
+      "n_obs": 605,
+      "adj_mean": 8.027841502955507,
+      "residual_Q3bFam": 1.0002658609823225,
+      "residual_Q4Fam": 0.9763545438359243,
+      "SE": 0.0485202252673427,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 231962,
+      "title": "Krazy Wordz",
+      "year": 2016.0,
+      "n_obs": 753,
+      "adj_mean": 7.545649480030701,
+      "residual_Q3bFam": 0.9906496686600956,
+      "residual_Q4Fam": 0.9114081218567592,
+      "SE": 0.0434913619256321,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 424975,
+      "title": "Wilmot's Warehouse",
+      "year": 2024.0,
+      "n_obs": 477,
+      "adj_mean": 8.153891057671837,
+      "residual_Q3bFam": 0.988382747422742,
+      "residual_Q4Fam": 0.936879571507868,
+      "SE": 0.0546438519905886,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 373600,
+      "title": "Cthulhu: Death May Die \u2013 Fear of the Unknown",
+      "year": 2024.0,
+      "n_obs": 502,
+      "adj_mean": 8.926113203607716,
+      "residual_Q3bFam": 0.9730528927537384,
+      "residual_Q4Fam": 0.8801974796337078,
+      "SE": 0.0532658224682533,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 270871,
+      "title": "Agemonia",
+      "year": 2024.0,
+      "n_obs": 650,
+      "adj_mean": 9.13215688043694,
+      "residual_Q3bFam": 0.97265641976489,
+      "residual_Q4Fam": 0.9258036361652576,
+      "SE": 0.0468105579362371,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "borderline",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 424774,
+      "title": "Dorfromantik: Sakura",
+      "year": 2024.0,
+      "n_obs": 370,
+      "adj_mean": 8.443661175381106,
+      "residual_Q3bFam": 0.9575298979588318,
+      "residual_Q4Fam": 0.8712616900503694,
+      "SE": 0.0620439778051147,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 257145,
+      "title": "Teenage Mutant Ninja Turtles Adventures: City Fall",
+      "year": 2020.0,
+      "n_obs": 220,
+      "adj_mean": 8.318215717138065,
+      "residual_Q3bFam": 0.924717804411726,
+      "residual_Q4Fam": 0.7984910542859023,
+      "SE": 0.0804616909776487,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 304847,
+      "title": "Hidden Games Crime Scene: The New Haven Case",
+      "year": 2019.0,
+      "n_obs": 664,
+      "adj_mean": 8.372371019768345,
+      "residual_Q3bFam": 0.91979303466419,
+      "residual_Q4Fam": 0.8771292261793029,
+      "SE": 0.0463144441496585,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 195372,
+      "title": "Krazy Wordz: Nicht 100% jugendfrei",
+      "year": 2016.0,
+      "n_obs": 1080,
+      "adj_mean": 7.590985157725267,
+      "residual_Q3bFam": 0.9080193260340916,
+      "residual_Q4Fam": 0.8235688710659872,
+      "SE": 0.0363152148669094,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 187988,
+      "title": "Pyramid Arcade",
+      "year": 2016.0,
+      "n_obs": 813,
+      "adj_mean": 7.945993544520125,
+      "residual_Q3bFam": 0.8893168917946142,
+      "residual_Q4Fam": 1.040289168035919,
+      "SE": 0.0418557591296589,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 406174,
+      "title": "Kinfire Delve: Callous' Lab",
+      "year": 2024.0,
+      "n_obs": 284,
+      "adj_mean": 8.423013689410212,
+      "residual_Q3bFam": 0.8709735841584791,
+      "residual_Q4Fam": 0.8870426869402834,
+      "SE": 0.0708176197861072,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 343844,
+      "title": "Bullet\u2605",
+      "year": 2022.0,
+      "n_obs": 993,
+      "adj_mean": 8.382052189896728,
+      "residual_Q3bFam": 0.845257093068426,
+      "residual_Q4Fam": 0.8402327859893752,
+      "SE": 0.0378726654570008,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 184424,
+      "title": "Mega Civilization",
+      "year": 2015.0,
+      "n_obs": 1035,
+      "adj_mean": 8.616270610757237,
+      "residual_Q3bFam": 0.8333819157869158,
+      "residual_Q4Fam": 0.9436389466935092,
+      "SE": 0.0370962765856366,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 363625,
+      "title": "Fateforge: Chronicles of Kaan",
+      "year": 2024.0,
+      "n_obs": 405,
+      "adj_mean": 8.61334760478483,
+      "residual_Q3bFam": 0.8306880792721767,
+      "residual_Q4Fam": 0.8611887570810133,
+      "SE": 0.0593024975489745,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 285157,
+      "title": "Legendary: A James Bond Deck Building Game",
+      "year": 2019.0,
+      "n_obs": 674,
+      "adj_mean": 7.94157442227659,
+      "residual_Q3bFam": 0.8239315822783198,
+      "residual_Q4Fam": 0.7297568737162798,
+      "SE": 0.0459695812418302,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 12166,
+      "title": "Funkenschlag",
+      "year": 2001.0,
+      "n_obs": 897,
+      "adj_mean": 7.979448127313571,
+      "residual_Q3bFam": 0.8211949631766977,
+      "residual_Q4Fam": 0.7026784683592222,
+      "SE": 0.0398477931516826,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 410209,
+      "title": "Hitster: Summer Party",
+      "year": 2024.0,
+      "n_obs": 452,
+      "adj_mean": 7.8111026200329,
+      "residual_Q3bFam": 0.814264588203061,
+      "residual_Q4Fam": 0.8106711322196016,
+      "SE": 0.0561346835132536,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 256874,
+      "title": "Legendary Encounters: The X-Files Deck Building Game",
+      "year": 2018.0,
+      "n_obs": 815,
+      "adj_mean": 7.852452424928615,
+      "residual_Q3bFam": 0.7758267202534848,
+      "residual_Q4Fam": 0.6466108803432347,
+      "SE": 0.0418043708240575,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    },
+    {
+      "game_id": 404538,
+      "title": "Kinfire Delve: Scorn's Stockade",
+      "year": 2024.0,
+      "n_obs": 408,
+      "adj_mean": 8.28771414548349,
+      "residual_Q3bFam": 0.7753282049208536,
+      "residual_Q4Fam": 0.7888662261424866,
+      "SE": 0.0590840714014614,
+      "hiddenness_bucket": "eligible",
+      "eligibility_flag": "eligible",
+      "taxonomy": "moderate_audience_selectivity"
+    }
+  ],
+  "files": [
+    "eligibility_evidence_final.csv",
+    "final_screening_evidence_table.csv",
+    "screening_evidence_table.csv",
+    "broad_appeal_evidence.csv",
+    "pass5_vs_pass6_counts.csv",
+    "pass5_vs_pass6_movers.csv",
+    "pass5_vs_pass6_comparison.md",
+    "per_pattern_edition_broad.csv",
+    "four_column_edition.csv",
+    "hiddenness_broad_evidence.csv",
+    "audience_consequential_evidence.csv",
+    "validation_39_final.csv",
+    "new_candidate_audit.md",
+    "final_methodology.md",
+    "incorporated_review.md",
+    "README.md",
+    "pass6_final_summary.json"
+  ]
+}

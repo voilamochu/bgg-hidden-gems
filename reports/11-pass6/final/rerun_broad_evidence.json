@@ -1,0 +1,454 @@
+{
+  "generated_at": "2026-08-26T04:45:50.251095+00:00Z",
+  "seed": 20260824,
+  "hiddenness": {
+    "bucket_stats": [
+      {
+        "bucket": "eligible",
+        "n": 12186,
+        "mean_pen": 0.0014644002784693108,
+        "median_pen": 0.0009315390458173,
+        "p90": 0.0034896885793312,
+        "max_pen": 0.0060729180102325,
+        "share_gt_0_5pct": 0.029542097488921712,
+        "share_gt_1pct": 0.0,
+        "share_gt_5pct": 0.0
+      },
+      {
+        "bucket": "borderline",
+        "n": 694,
+        "mean_pen": 0.007235070274719097,
+        "median_pen": 0.00711015090932535,
+        "p90": 0.008515341731516031,
+        "max_pen": 0.0089284434699112,
+        "share_gt_0_5pct": 1.0,
+        "share_gt_1pct": 0.0,
+        "share_gt_5pct": 0.0
+      },
+      {
+        "bucket": "exclude",
+        "n": 1818,
+        "mean_pen": 0.03467218559997502,
+        "median_pen": 0.0184319331584906,
+        "p90": 0.07571656849678256,
+        "max_pen": 0.4357596342634392,
+        "share_gt_0_5pct": 1.0,
+        "share_gt_1pct": 0.8971397139713971,
+        "share_gt_5pct": 0.1771177117711771
+      }
+    ],
+    "pool_stats": [
+      {
+        "category": "strong_hidden_gem_evidence",
+        "n": 33,
+        "mean_pen": 0.0018026040533456454,
+        "median_pen": 0.0014331369935652,
+        "max_pen": 0.0038658870401421,
+        "share_gt_0_5pct": 0.0
+      },
+      {
+        "category": "plausible_hidden_gem",
+        "n": 165,
+        "mean_pen": 0.0019485885989174538,
+        "median_pen": 0.0013435659314673,
+        "max_pen": 0.0084375940496152,
+        "share_gt_0_5pct": 0.07272727272727272
+      },
+      {
+        "category": "niche_but_high_quality",
+        "n": 165,
+        "mean_pen": 0.0014765871015064394,
+        "median_pen": 0.0008491336686873,
+        "max_pen": 0.008896197887556,
+        "share_gt_0_5pct": 0.03636363636363636
+      },
+      {
+        "category": "insufficient_evidence",
+        "n": 119,
+        "mean_pen": 0.0005804204823938623,
+        "median_pen": 0.0004406896255213,
+        "max_pen": 0.0078535907247373,
+        "share_gt_0_5pct": 0.008403361344537815
+      },
+      {
+        "category": "eligibility_hard_exclude",
+        "n": 25,
+        "mean_pen": 0.004744256703498239,
+        "median_pen": 0.0020780486406695,
+        "max_pen": 0.0348861372658612,
+        "share_gt_0_5pct": 0.24
+      },
+      {
+        "category": "eligibility_borderline",
+        "n": 61,
+        "mean_pen": 0.0016284312764997706,
+        "median_pen": 0.0008240537712999,
+        "max_pen": 0.0139336744199378,
+        "share_gt_0_5pct": 0.06557377049180328
+      },
+      {
+        "category": "eligibility_eligible",
+        "n": 446,
+        "mean_pen": 0.0029964773749762605,
+        "median_pen": 0.0008742135660747,
+        "max_pen": 0.0827493300084555,
+        "share_gt_0_5pct": 0.08968609865470852
+      }
+    ],
+    "correlation_r": 0.9999864808725624,
+    "r2_log": 0.3945043790831898,
+    "r2_both": 0.9999734079000748,
+    "incremental_r2": 0.605469028816885,
+    "note": "r=0.999986 redundant incremental ~0, order gap 0.146% vs 3.47% remains but not discriminating within eligible"
+  },
+  "per_pattern": [
+    {
+      "pattern": "collectors",
+      "n_total": 21,
+      "n_with_game_family": 15,
+      "n_pool": 8,
+      "with_game_family_pool": 7,
+      "with_high_link_pool": 1,
+      "borderline_pool": 7,
+      "strong": 0,
+      "plausible": 4,
+      "niche": 1,
+      "insufficient": 2,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "ultimate",
+      "n_total": 33,
+      "n_with_game_family": 24,
+      "n_pool": 5,
+      "with_game_family_pool": 2,
+      "with_high_link_pool": 0,
+      "borderline_pool": 5,
+      "strong": 1,
+      "plausible": 2,
+      "niche": 0,
+      "insufficient": 2,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "kickstarter",
+      "n_total": 16,
+      "n_with_game_family": 4,
+      "n_pool": 3,
+      "with_game_family_pool": 2,
+      "with_high_link_pool": 2,
+      "borderline_pool": 1,
+      "strong": 0,
+      "plausible": 1,
+      "niche": 0,
+      "insufficient": 0,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "essential",
+      "n_total": 4,
+      "n_with_game_family": 2,
+      "n_pool": 0,
+      "with_game_family_pool": 0,
+      "with_high_link_pool": 0,
+      "borderline_pool": 0,
+      "strong": 0,
+      "plausible": 0,
+      "niche": 0,
+      "insufficient": 0,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "3d",
+      "n_total": 10,
+      "n_with_game_family": 6,
+      "n_pool": 2,
+      "with_game_family_pool": 2,
+      "with_high_link_pool": 2,
+      "borderline_pool": 0,
+      "strong": 0,
+      "plausible": 0,
+      "niche": 0,
+      "insufficient": 0,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "second_edition",
+      "n_total": 112,
+      "n_with_game_family": 29,
+      "n_pool": 7,
+      "with_game_family_pool": 1,
+      "with_high_link_pool": 0,
+      "borderline_pool": 7,
+      "strong": 1,
+      "plausible": 3,
+      "niche": 1,
+      "insufficient": 2,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "big_box",
+      "n_total": 7,
+      "n_with_game_family": 7,
+      "n_pool": 4,
+      "with_game_family_pool": 4,
+      "with_high_link_pool": 0,
+      "borderline_pool": 4,
+      "strong": 2,
+      "plausible": 0,
+      "niche": 1,
+      "insufficient": 1,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "deluxe",
+      "n_total": 35,
+      "n_with_game_family": 15,
+      "n_pool": 3,
+      "with_game_family_pool": 3,
+      "with_high_link_pool": 0,
+      "borderline_pool": 3,
+      "strong": 0,
+      "plausible": 2,
+      "niche": 1,
+      "insufficient": 0,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "anniversary",
+      "n_total": 12,
+      "n_with_game_family": 6,
+      "n_pool": 4,
+      "with_game_family_pool": 2,
+      "with_high_link_pool": 2,
+      "borderline_pool": 2,
+      "strong": 0,
+      "plausible": 2,
+      "niche": 0,
+      "insufficient": 0,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "premium",
+      "n_total": 1,
+      "n_with_game_family": 1,
+      "n_pool": 0,
+      "with_game_family_pool": 0,
+      "with_high_link_pool": 0,
+      "borderline_pool": 0,
+      "strong": 0,
+      "plausible": 0,
+      "niche": 0,
+      "insufficient": 0,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "heritage",
+      "n_total": 2,
+      "n_with_game_family": 0,
+      "n_pool": 0,
+      "with_game_family_pool": 0,
+      "with_high_link_pool": 0,
+      "borderline_pool": 0,
+      "strong": 0,
+      "plausible": 0,
+      "niche": 0,
+      "insufficient": 0,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "revised",
+      "n_total": 15,
+      "n_with_game_family": 11,
+      "n_pool": 4,
+      "with_game_family_pool": 2,
+      "with_high_link_pool": 0,
+      "borderline_pool": 4,
+      "strong": 0,
+      "plausible": 2,
+      "niche": 0,
+      "insufficient": 2,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    },
+    {
+      "pattern": "edition_any",
+      "n_total": 509,
+      "n_with_game_family": 250,
+      "n_pool": 55,
+      "with_game_family_pool": 30,
+      "with_high_link_pool": 7,
+      "borderline_pool": 48,
+      "strong": 4,
+      "plausible": 19,
+      "niche": 11,
+      "insufficient": 14,
+      "note": "n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112"
+    }
+  ],
+  "four_column": [
+    {
+      "category": "strong_hidden_gem_evidence",
+      "n": 33,
+      "edition_rate": 0.12121212121212122,
+      "strong_expected": "niche highest if edition signal real (24.5% vs 5.1%)"
+    },
+    {
+      "category": "plausible_hidden_gem",
+      "n": 165,
+      "edition_rate": 0.11515151515151516,
+      "strong_expected": "niche highest if edition signal real (24.5% vs 5.1%)"
+    },
+    {
+      "category": "niche_but_high_quality",
+      "n": 165,
+      "edition_rate": 0.06666666666666667,
+      "strong_expected": "niche highest if edition signal real (24.5% vs 5.1%)"
+    },
+    {
+      "category": "insufficient_evidence",
+      "n": 119,
+      "edition_rate": 0.11764705882352941,
+      "strong_expected": "niche highest if edition signal real (24.5% vs 5.1%)"
+    },
+    {
+      "category": "population_14698",
+      "n": 14698,
+      "edition_rate": 0.034630561981221934,
+      "strong_expected": "pop baseline 3.41%"
+    },
+    {
+      "category": "pool_532",
+      "n": 532,
+      "edition_rate": 0.10338345864661654,
+      "strong_expected": "pool 10.3% (55/532) enriched vs pop"
+    }
+  ],
+  "spec_stats": {
+    "median": 0.8921713441654358,
+    "q75": 0.9598793363499246,
+    "q90": 0.982608695652174,
+    "mean": 0.8605377293803175
+  },
+  "audience": [
+    {
+      "pattern": "cooperative",
+      "n": 1543,
+      "pct_pop": 10.5,
+      "mean_resid": 0.083,
+      "beta": "fam_Cooperative +0.083 5/5",
+      "deltaCV": 0.0,
+      "jaccard": 1.0,
+      "spec_ge10_median": 0.75,
+      "spec_q75": 0.88,
+      "insufficient_pct": 23.0,
+      "cross_has_broad": "97%",
+      "decision": "already in Q3bFam, not reused as broad filter",
+      "note": "Q3bFam already corrects, not penalized again"
+    },
+    {
+      "pattern": "solo_first (min1 max\u22642)",
+      "n": 691,
+      "pct_pop": 4.7,
+      "mean_resid": 0.127,
+      "beta": "+0.176 5/5",
+      "deltaCV": 0.0014,
+      "jaccard": 0.947,
+      "spec_ge10_median": 0.901,
+      "spec_q75": 0.96,
+      "insufficient_pct": 34.4,
+      "cross_has_broad": "80.5% vs 86.2% overall",
+      "decision": "monitoring flag is_solo_first, general criteria spec>0.90/0.95 + insufficient/niche_drop binding not tuned 0.80",
+      "note": "heterogeneous, belongs_in audience not model r -0.70 with log_max"
+    },
+    {
+      "pattern": "1-2 player/duel (max\u22642)",
+      "n": 2555,
+      "pct_pop": 17.4,
+      "mean_resid": 0.08,
+      "beta": "+0.201 5/5",
+      "deltaCV": 0.0038,
+      "jaccard": 0.814,
+      "spec_ge10_median": 0.899,
+      "spec_q75": 0.96,
+      "insufficient_pct": 33.3,
+      "cross_has_broad": "83.3% vs 86.2%",
+      "decision": "heterogeneous r -0.70 with log_max_players_c, not all 1-2p is niche; Euro duel broader",
+      "note": "largest CV but heterogeneous (solo691+wargame1153+Euro1079)"
+    },
+    {
+      "pattern": "wargame_duel",
+      "n": 1153,
+      "pct_pop": 7.8,
+      "mean_resid": 0.074,
+      "beta": "+0.204 5/5",
+      "deltaCV": 0.0017,
+      "jaccard": 0.947,
+      "spec_ge10_median": 0.906,
+      "spec_q75": 0.96,
+      "insufficient_pct": 47.7,
+      "cross_has_broad": "68% vs 86.2% (doubly specialized)",
+      "decision": "doubly specialized niche \u2014 moves to niche where spec>0.90 + insufficient/niche_drop",
+      "note": "0% in strong vs 16.6% niche, wargame_duel 0/33 strong"
+    },
+    {
+      "pattern": "Euro duel (duel not wargame not solo)",
+      "n": 1402,
+      "pct_pop": 9.5,
+      "mean_resid": 0.082,
+      "beta": "-",
+      "deltaCV": 0.0,
+      "jaccard": 1.0,
+      "spec_ge10_median": 0.833,
+      "spec_q75": 0.9,
+      "insufficient_pct": 21.5,
+      "cross_has_broad": "89% vs 86.2% broader than wargame",
+      "decision": "preserved where adequate/borderline + cross broad",
+      "note": "Euro duel broader than wargame duel, heterogeneity preserved"
+    },
+    {
+      "pattern": "edition_title_any",
+      "n": 501,
+      "pct_pop": 3.41,
+      "mean_resid": 0.116,
+      "beta": "+0.123 5/5",
+      "deltaCV": 0.0006,
+      "jaccard": 0.921,
+      "spec_ge10_median": 0.75,
+      "spec_q75": 0.85,
+      "insufficient_pct": 24.5,
+      "cross_has_broad": "75%",
+      "decision": "belongs_in cleanup not model, precise not blanket 501",
+      "note": "per-pattern all n<50 below gate, niche enriched 24.5% vs strong 5.1% (Pass2) now 12.1% vs 6.7% (Pass6 screening)"
+    },
+    {
+      "pattern": "game_system",
+      "n": 32,
+      "pct_pop": 0.22,
+      "mean_resid": 0.162,
+      "beta": "n<50 wide SE",
+      "deltaCV": 0.0,
+      "jaccard": 1.0,
+      "spec_ge10_median": 0.7,
+      "spec_q75": 0.85,
+      "insufficient_pct": 31.0,
+      "cross_has_broad": "78%",
+      "decision": "eligibility hard exclude (not hidden, like expansions)",
+      "note": "32 total, 5 in pool hard"
+    },
+    {
+      "pattern": "overall",
+      "n": 14698,
+      "pct_pop": 100.0,
+      "mean_resid": 0.0,
+      "beta": "-",
+      "deltaCV": 0.0,
+      "jaccard": 1.0,
+      "spec_ge10_median": 0.7,
+      "spec_q75": 0.88,
+      "insufficient_pct": 23.0,
+      "cross_has_broad": "86.2%",
+      "decision": "baseline",
+      "note": "spec_ge10 median 0.892 q75 0.960 q90 0.983 in 532 pool (broad pool) vs 0.70 in full pop"
+    }
+  ]
+}

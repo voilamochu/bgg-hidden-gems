@@ -1,0 +1,7 @@
+category,n,edition_rate,strong_expected
+strong_hidden_gem_evidence,33,0.12121212121212122,niche highest if edition signal real (24.5% vs 5.1%)
+plausible_hidden_gem,165,0.11515151515151516,niche highest if edition signal real (24.5% vs 5.1%)
+niche_but_high_quality,165,0.06666666666666667,niche highest if edition signal real (24.5% vs 5.1%)
+insufficient_evidence,119,0.11764705882352941,niche highest if edition signal real (24.5% vs 5.1%)
+population_14698,14698,0.034630561981221934,pop baseline 3.41%
+pool_532,532,0.10338345864661654,pool 10.3% (55/532) enriched vs pop

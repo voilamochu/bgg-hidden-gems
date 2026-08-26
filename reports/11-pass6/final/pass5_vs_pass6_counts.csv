@@ -1,0 +1,9 @@
+category,pass2_39,pass4_39,pass5_final_33,pass6_final_29,delta_pass2_to_pass6,pct_screened_pass6
+strong_hidden_gem_evidence,39,39,33,29,-10,5.7
+plausible_hidden_gem,176,176,169,169,-7,33.3
+niche_but_high_quality,163,163,158,165,2,32.5
+insufficient_evidence,127,127,129,119,-8,23.5
+excluded_popular_not_hidden,27,27,26,25,-2,
+excluded_not_eligible,0,0,17,25,25,
+screened_eligible_plus_borderline,505,505,515,507,2,100.0
+pool_adj_ge_7_5_resid_ge_0_75,532,532,532,532,0,
