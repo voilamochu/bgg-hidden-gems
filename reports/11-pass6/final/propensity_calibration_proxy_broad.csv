@@ -1,0 +1,13 @@
+metric,value
+spec_ge10 median overall pool 532,0.892
+spec_ge10 q75 pool 532,0.96
+spec_ge10 q90 pool 532,0.983
+tuned_0.90_percentile,~60th percentile vs q75 0.96 — gap 0.004 between moved vs preserved in 39 (review)
+insufficient_overlap overall,23%
+insufficient solo_first,34.4% vs 23% overall
+insufficient duel,33.3% vs 23%
+insufficient wargame_duel,47.7% vs Euro 21.5%
+max_weight median,1449
+ESS_ratio median,0.33
+hobby_penetration eligible vs exclude,0.146% vs 3.47% order gap r=0.999986 redundant
+eligible share >0.5% hobby,2.95% (360/12186) vs pool 9.4% (50/532)

@@ -1,0 +1,14 @@
+pattern,n_total,n_with_game_family,n_pool,with_game_family_pool,with_high_link_pool,borderline_pool,strong,plausible,niche,insufficient,note
+collectors,21,15,8,7,1,7,0,4,1,2,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+ultimate,33,24,5,2,0,5,1,2,0,2,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+kickstarter,16,4,3,2,2,1,0,1,0,0,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+essential,4,2,0,0,0,0,0,0,0,0,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+3d,10,6,2,2,2,0,0,0,0,0,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+second_edition,112,29,7,1,0,7,1,3,1,2,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+big_box,7,7,4,4,0,4,2,0,1,1,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+deluxe,35,15,3,3,0,3,0,2,1,0,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+anniversary,12,6,4,2,2,2,0,2,0,0,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+premium,1,1,0,0,0,0,0,0,0,0,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+heritage,2,0,0,0,0,0,0,0,0,0,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+revised,15,11,4,2,0,4,0,2,0,2,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
+edition_any,509,250,55,30,7,48,4,19,11,14,n<50 gate: all per-pattern n<50 except edition_any 501 and second_edition 112
