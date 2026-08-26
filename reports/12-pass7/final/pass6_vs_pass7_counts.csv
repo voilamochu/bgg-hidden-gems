@@ -1,0 +1,7 @@
+pipeline,total_pool,strong_hidden_gem_evidence,plausible_hidden_gem,niche_but_high_quality,insufficient_evidence,excluded_popular_not_hidden,excluded_not_eligible
+"Pass2_39 (532 pool, 0.75 thresh)",532,39,176,163,127,27,0
+"Pass6_P80_158 (1347 pool, P80 0.4034)",1347,158,121,646,219,149,54
+"Pass6_final_29 (532 pool, 0.75, 4 BigBox demoted)",532,29,169,165,119,25,25
+"Pass7_screening_81 (1347 pool, P80, expanded)",1347,81,78,832,149,149,58
+"Pass7_final_76 (1347 pool, P80, final rev)",1347,76,76,834,154,149,58
+"Pass7_final_P75_76 (1581 pool, P75, final)",1581,76,77,975,182,206,65

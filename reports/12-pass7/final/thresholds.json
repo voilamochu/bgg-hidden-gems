@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-08-26T09:12:29.843300+00:00Z",
+  "seed": 20260824,
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "mu": 7.139007726394262,
+    "source": "data/processed/phase2-pass2/",
+    "note": "reuse severity Q3bFam/Q4Fam \u2014 re-derived residuals via same 48f spec (game_adjusted_means_pass2 + expected_Q3bFam) to compute exact empirical quantiles, verified CV 0.6033/0.6151",
+    "exact_quantile_source": "game_adjusted_means_pass2.parquet + expected_Q3bFam (Q3bFam 48f) on 14,698 canonical games"
+  },
+  "model": {
+    "primary": "Q3bFam 48f CV 0.6033",
+    "sensitivity": "Q4Fam 78f CV 0.6151",
+    "q3b_cv": 0.5987036895624864,
+    "q3bFam_cv": 0.6033193821349394,
+    "q4Fam_cv": 0.6151479547696994
+  },
+  "resid_distribution": {
+    "count": 14698,
+    "mean": -7.365816277020285e-13,
+    "sd": 0.5311588027729426,
+    "p10": -0.630307882871137,
+    "p25": -0.2848630951877771,
+    "p50": 0.027011857400093486,
+    "p75": 0.3255647929807146,
+    "p80": 0.4034321141845052,
+    "p90": 0.6120677636125564,
+    "p95": 0.8041783052731921,
+    "p99": 1.1781237451453945,
+    "min": -5.883773710696973,
+    "max": 1.9936540594520782
+  },
+  "thresholds": {
+    "P75": 0.3255647929807146,
+    "P80": 0.4034321141845052,
+    "P75_note": "exact empirical P75 from 14,698 canonical (game_adjusted_means_pass2 + expected_Q3bFam via Q3bFam 48f), do not approximate as 0.75",
+    "P80_note": "exact empirical P80 from 14,698 canonical (game_adjusted_means_pass2 + expected_Q3bFam via Q3bFam 48f), do not approximate as 0.80",
+    "P75_primary": false,
+    "P75_sensitivity": true,
+    "P80_primary": true,
+    "P80_sensitivity": false,
+    "primary_threshold": "P80",
+    "sensitivity_threshold": "P75",
+    "primary_value": 0.4034321141845052,
+    "sensitivity_value": 0.3255647929807146,
+    "exact_quantile_source": "game_adjusted_means_pass2.parquet + expected_Q3bFam (Q3bFam 48f) on 14,698 canonical games"
+  },
+  "pools": {
+    "N_P75": 1581,
+    "N_P80": 1347,
+    "N_P75_primary": 1581,
+    "N_P80_primary": 1347,
+    "N_old_075": 532,
+    "N_old_080": 455,
+    "threshold_primary": "adj\u22657.5 & resid\u22650.4034321142 (P80)",
+    "threshold_sensitivity": "adj\u22657.5 & resid\u22650.3255647930 (P75)",
+    "N_P75_sensitivity": 1581,
+    "N_P80_sensitivity": 1347,
+    "primary": "P80",
+    "sensitivity": "P75",
+    "P80_primary": true,
+    "P75_primary": false,
+    "primary_threshold_value": 0.4034321141845052,
+    "sensitivity_threshold_value": 0.3255647929807146,
+    "primary_N": 1347,
+    "sensitivity_N": 1581
+  },
+  "quality_thresholds_note": "P80 0.4034 primary vs P75 0.3256 sensitivity (both exact empirical quantiles from 14,698 canonical, not approximations); P80 primary is stricter, slightly fewer niche/popular, same strong recall (158 identical in Pass6) but Pass7 will re-evaluate screening",
+  "updated_at": "2026-08-26 Pass7 P80 primary retained (P75 sensitivity)"
+}
