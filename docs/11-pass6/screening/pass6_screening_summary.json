@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-08-26T04:26:33.454580+00:00Z",
+  "seed": 20260824,
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "mu": 7.139,
+    "source": "data/processed/phase2-pass2/",
+    "note": "reuse severity Q3bFam/Q4Fam \u2014 NOT refit"
+  },
+  "pool": {
+    "total": 532,
+    "thresholds": "adj>=7.5 & resid>=0.75 absolute, NOT percentile",
+    "sensitivity_80": 455,
+    "sensitivity_100": 211
+  },
+  "eligibility": {
+    "total_pool": 532,
+    "hard": 25,
+    "borderline": 61,
+    "eligible": 446,
+    "fraction_queried": "532/532 (100%) queried game_links (33,002 rows) + families/series (Game:2,740 Series:3,302) + reimplementation (reimplements 294 + reimplementation 1,526) + expansion (6,339) + version (19,504 59% vs expansion) + game-system (Admin: Game System Entries 32 + contained_in 238) + related/parent (game_links other_id\u2192game_id)",
+    "hard_examples": [
+      331259,
+      338697
+    ]
+  },
+  "final_counts": {
+    "final_counts": {
+      "plausible_hidden_gem": 165,
+      "niche_but_high_quality": 165,
+      "insufficient_evidence": 119,
+      "strong_hidden_gem_evidence": 33,
+      "excluded_not_eligible": 25,
+      "excluded_popular_not_hidden": 25
+    },
+    "survivors_after_hard": 507
+  },
+  "pass2_counts": {
+    "pass2_counts": {
+      "plausible_hidden_gem": 176,
+      "niche_but_high_quality": 163,
+      "insufficient_evidence": 127,
+      "strong_hidden_gem_evidence": 39,
+      "excluded_popular_not_hidden": 27
+    }
+  },
+  "jaccard": {
+    "jaccard_strong_vs_pass2_39": 0.674,
+    "survive": 29,
+    "lost": [
+      392513,
+      157026,
+      43262,
+      224678,
+      338697,
+      373835,
+      296345,
+      153498,
+      331259,
+      62814
+    ],
+    "gained": [
+      147190,
+      212956,
+      367396,
+      317030
+    ],
+    "survive_count": 29,
+    "lost_count": 10,
+    "gained_count": 4
+  },
+  "spearman": {
+    "resid_spearman": 1.0,
+    "note": "Q3bFam unchanged, no global reranking, Spearman 1.0, Jaccard top1 1.0 \u2014 local screening churn only"
+  },
+  "reference": {
+    "candidate_id": "intersect_250_bayes_users",
+    "n_games": 134,
+    "n_users": 279108,
+    "n_obs": 4965490,
+    "median_weight": 2.94,
+    "median_year": 2015,
+    "definition": "intersection top250 bayes \u2229 top250 users"
+  },
+  "broad_appeal": {
+    "coop": "1,543 10.5% already in Q3bFam fam_Cooperative +0.083",
+    "solo_first": "691 4.7% +0.127 insufficient 34.4% vs 23% overall",
+    "duel": "2,555 17.4% +0.080 insufficient 33.3% vs 23% overall",
+    "wargame_duel": "1,153 47.7% vs Euro duel 1,402 21.5% heterogeneous",
+    "specialist": "spec_ge10 median 0.892 q75 0.960 q90 0.983",
+    "ref_penetration": "eligible 0.146% vs exclude 3.47% order gap max eligible 0.589% wargame r=0.9999 with n_obs redundant but order gap remains",
+    "cross": "has_broad 84.2% solo vs 86.2% overall, specialist 0-4 vs ge20 4,626 31% power thin",
+    "propensity": "insufficient_overlap 23% overall vs 34% solo"
+  }
+}
