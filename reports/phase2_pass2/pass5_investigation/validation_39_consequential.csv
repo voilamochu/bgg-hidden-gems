@@ -1,0 +1,40 @@
+game_id,title,old_outcome,new_outcome,reason,evidence
+2470,The Extraordinary Adventures of Baron Munchausen,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.70 overlap borderline_overlap cross broad True
+62814,Tumblin-Dice Medium,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec nan overlap borderline_overlap cross broad True
+275972,Star Trek: Alliance – Dominion War Campaign,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.78 overlap borderline_overlap cross broad True
+244258,The Red Dragon Inn 7: The Tavern Crew,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.67 overlap adequate_overlap cross broad True
+340216,Heredity: The Book of Swan,strong_hidden_gem_evidence,niche_but_high_quality,audience_specialist_or_insufficient,spec 0.8352272727272727 overlap borderline_overlap
+373835,Unlock! Kids: Stories from the Past,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec nan overlap borderline_overlap cross broad True
+319604,Ricochet: A la poursuite du Comte courant,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.88 overlap borderline_overlap cross broad True
+252432,Zoo Break,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.85 overlap borderline_overlap cross broad True
+153498,Kamisado Max,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec nan overlap adequate_overlap cross broad True
+41090,Magnate,strong_hidden_gem_evidence,plausible_hidden_gem,duel_audience_niche,spec 0.85 overlap borderline_overlap n_sup 4.0
+377969,Marvel United: Multiverse,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.86 overlap borderline_overlap cross broad True
+267304,Mega Empires: The West,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.89 overlap borderline_overlap cross broad True
+331259,Sleeping Gods: Kickstarter Edition,strong_hidden_gem_evidence,excluded_not_eligible,hard_exclude_edition_variant,contained_in via families Game: Sleeping Gods + shared designer 1 year diff 0 weight diff 0.26 link contained_in 255984
+309917,Hidden Games Crime Scene: The Midnight Crown,strong_hidden_gem_evidence,niche_but_high_quality,audience_specialist_or_insufficient,spec 0.8944281524926686 overlap borderline_overlap
+250396,Terminator Genisys: Rise of the Resistance,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.87 overlap borderline_overlap cross broad True
+231962,Krazy Wordz,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.77 overlap borderline_overlap cross broad True
+424975,Wilmot's Warehouse,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.86 overlap borderline_overlap cross broad True
+373600,Cthulhu: Death May Die – Fear of the Unknown,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.87 overlap borderline_overlap cross broad True
+270871,Agemonia,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.87 overlap adequate_overlap cross broad True
+424774,Dorfromantik: Sakura,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.77 overlap adequate_overlap cross broad True
+338697,CATAN: 3D Edition,strong_hidden_gem_evidence,excluded_not_eligible,hard_exclude_edition_variant,contained_in via families Game: Catan + shared designer 1 year diff 26 weight diff 0.45 link contained_in 13
+257145,Teenage Mutant Ninja Turtles Adventures: City Fall,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.84 overlap adequate_overlap cross broad True
+304847,Hidden Games Crime Scene: The New Haven Case,strong_hidden_gem_evidence,niche_but_high_quality,audience_specialist_or_insufficient,spec 0.9006024096385542 overlap borderline_overlap
+195372,Krazy Wordz: Nicht 100% jugendfrei,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.79 overlap borderline_overlap cross broad False
+224678,Baseball Highlights: 2045 – Spring Training,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec nan overlap adequate_overlap cross broad True
+187988,Pyramid Arcade,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.79 overlap borderline_overlap cross broad True
+406174,Kinfire Delve: Callous' Lab,strong_hidden_gem_evidence,niche_but_high_quality,solo_first_audience_niche,spec 0.89 overlap borderline_overlap n_sup 7.0
+43262,Neuroshima Hex! Duel,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec nan overlap adequate_overlap cross broad True
+343844,Bullet★,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.83 overlap borderline_overlap cross broad True
+184424,Mega Civilization,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.90 overlap borderline_overlap cross broad True
+363625,Fateforge: Chronicles of Kaan,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.87 overlap borderline_overlap cross broad True
+296345,Sherlock Holmes Consulting Detective: The Baker Street Irregulars,strong_hidden_gem_evidence,niche_but_high_quality,hobby_well_known,ref_penetration 0.0050 >0.5%
+285157,Legendary: A James Bond Deck Building Game,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.86 overlap borderline_overlap cross broad True
+12166,Funkenschlag,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.89 overlap borderline_overlap cross broad True
+410209,Hitster: Summer Party,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.73 overlap borderline_overlap cross broad True
+392513,Mindbug: Beyond Eternity,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec nan overlap adequate_overlap cross broad True
+256874,Legendary Encounters: The X-Files Deck Building Game,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec 0.90 overlap borderline_overlap cross broad True
+404538,Kinfire Delve: Scorn's Stockade,strong_hidden_gem_evidence,niche_but_high_quality,solo_first_audience_niche,spec 0.90 overlap borderline_overlap n_sup 7.0
+157026,Ascension: Realms Unraveled,strong_hidden_gem_evidence,strong_hidden_gem_evidence,preserved,eligible confidence eligible; spec nan overlap adequate_overlap cross broad True
