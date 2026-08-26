@@ -1,0 +1,80 @@
+base_title,game_id_a,title_a,year_a,weight_a,game_id_b,title_b,year_b,weight_b,designer_overlap,year_diff,weight_diff,corroborated,already_pruned_either,n_group
+one night,180956,One Night Ultimate Vampire,2016,1.59,147949,One Night Ultimate Werewolf,2014,1.38,True,2,0.206,True,False,5
+one night,147949,One Night Ultimate Werewolf,2014,1.38,180956,One Night Ultimate Vampire,2016,1.59,True,2,0.206,True,False,5
+one night,163166,One Night Ultimate Werewolf: Daybreak,2015,1.41,180956,One Night Ultimate Vampire,2016,1.59,True,1,0.182,True,False,5
+one night,255293,One Night Ultimate Super Villains,2019,1.5,180956,One Night Ultimate Vampire,2016,1.59,True,3,0.088,True,False,5
+puerto rico,3076,Puerto Rico,2002,3.27,165332,Puerto Rico,2007,3.08,True,5,0.189,True,False,4
+puerto rico,108687,Puerto Rico,2011,3.22,165332,Puerto Rico,2007,3.08,True,4,0.147,True,False,4
+puerto rico,165332,Puerto Rico,2007,3.08,3076,Puerto Rico,2002,3.27,True,5,0.189,True,False,4
+century: golem,283619,Century: Golem Edition – Eastern Mountains,2019,2.19,312318,Century: Golem Edition – An Endless World,2020,2.14,True,1,0.05,True,False,3
+century: golem,312318,Century: Golem Edition – An Endless World,2020,2.14,283619,Century: Golem Edition – Eastern Mountains,2019,2.19,True,1,0.05,True,False,3
+room 25,127024,Room 25,2013,1.93,212956,Room 25 Ultimate,2016,2.14,True,3,0.213,True,False,2
+room 25,212956,Room 25 Ultimate,2016,2.14,127024,Room 25,2013,1.93,True,3,0.213,True,False,2
+the champion of the wild,186904,The Champion of the Wild,2018,1.2,295503,The Champion of the Wild (Second Edition),2019,1.2,True,1,0.0,True,False,2
+the champion of the wild,295503,The Champion of the Wild (Second Edition),2019,1.2,186904,The Champion of the Wild,2018,1.2,True,1,0.0,True,False,2
+last will,201856,Last Will,2016,2.5,97842,Last Will,2011,2.72,True,5,0.216,True,False,2
+last will,97842,Last Will,2011,2.72,201856,Last Will,2016,2.5,True,5,0.216,True,False,2
+arkham horror: the card game,205637,Arkham Horror: The Card Game,2016,3.57,359609,Arkham Horror: The Card Game (Revised Edition),2021,3.74,True,5,0.177,True,False,2
+arkham horror: the card game,359609,Arkham Horror: The Card Game (Revised Edition),2021,3.74,205637,Arkham Horror: The Card Game,2016,3.57,True,5,0.177,True,False,2
+tokyo highway,215463,Tokyo Highway,2016,1.41,261901,Tokyo Highway,2018,1.46,True,2,0.046,True,False,2
+tokyo highway,261901,Tokyo Highway,2018,1.46,215463,Tokyo Highway,2016,1.41,True,2,0.046,True,False,2
+viticulture,128621,Viticulture,2013,2.95,183394,Viticulture Essential Edition,2015,2.9,True,2,0.047,True,False,2
+viticulture,183394,Viticulture Essential Edition,2015,2.9,128621,Viticulture,2013,2.95,True,2,0.047,True,False,2
+pandánte,140163,Pandánte,2014,1.95,174852,Pandánte (Second Edition),2015,2.1,True,1,0.153,True,False,2
+pandánte,174852,Pandánte (Second Edition),2015,2.1,140163,Pandánte,2014,1.95,True,1,0.153,True,False,2
+kitchen rush,223953,Kitchen Rush,2017,2.19,287938,Kitchen Rush (Revised Edition),2019,2.12,True,2,0.07,True,False,2
+kitchen rush,287938,Kitchen Rush (Revised Edition),2019,2.12,223953,Kitchen Rush,2017,2.19,True,2,0.07,True,False,2
+aquasphere,289223,AquaSphere,2019,3.86,159508,AquaSphere,2014,3.68,True,5,0.179,True,False,2
+aquasphere,159508,AquaSphere,2014,3.68,289223,AquaSphere,2019,3.86,True,5,0.179,True,False,2
+blitzkrieg!: world war two in 20 minutes,347521,Blitzkrieg!: World War Two in 20 Minutes,2021,1.72,258210,Blitzkrieg!: World War Two in 20 Minutes,2019,1.91,True,2,0.188,True,False,2
+blitzkrieg!: world war two in 20 minutes,258210,Blitzkrieg!: World War Two in 20 Minutes,2019,1.91,347521,Blitzkrieg!: World War Two in 20 Minutes,2021,1.72,True,2,0.188,True,False,2
+the ancient world,259298,The Ancient World (Second Edition),2019,2.86,147253,The Ancient World,2014,2.73,True,5,0.123,True,False,2
+the ancient world,147253,The Ancient World,2014,2.73,259298,The Ancient World (Second Edition),2019,2.86,True,5,0.123,True,False,2
+gem rush,251350,Gem Rush (Second Edition),2018,2.0,145393,Gem Rush,2013,1.79,True,5,0.214,True,False,2
+gem rush,145393,Gem Rush,2013,1.79,251350,Gem Rush (Second Edition),2018,2.0,True,5,0.214,True,False,2
+chai,328636,Chai (Deluxe Edition),2020,2.0,253185,Chai,2019,1.71,True,1,0.29,True,False,2
+chai,253185,Chai,2019,1.71,328636,Chai (Deluxe Edition),2020,2.0,True,1,0.29,True,False,2
+illuminati,859,Illuminati,1982,2.48,28,Illuminati,1987,2.65,True,5,0.17,True,False,2
+illuminati,28,Illuminati,1987,2.65,859,Illuminati,1982,2.48,True,5,0.17,True,False,2
+cornerstone,86415,Cornerstone Essential,2010,1.67,38429,Cornerstone,2008,1.68,True,2,0.012,True,False,2
+cornerstone,38429,Cornerstone,2008,1.68,86415,Cornerstone Essential,2010,1.67,True,2,0.012,True,False,2
+lignum,222407,Lignum (Second Edition),2017,4.1,174155,Lignum,2015,3.81,True,2,0.282,True,False,2
+lignum,174155,Lignum,2015,3.81,222407,Lignum (Second Edition),2017,4.1,True,2,0.282,True,False,2
+alien vs predator: the hunt begins,149896,Alien vs Predator: The Hunt Begins,2015,3.48,226009,Alien vs Predator: The Hunt Begins (Second Edition),2017,3.56,True,2,0.076,True,False,2
+alien vs predator: the hunt begins,226009,Alien vs Predator: The Hunt Begins (Second Edition),2017,3.56,149896,Alien vs Predator: The Hunt Begins,2015,3.48,True,2,0.076,True,False,2
+camel up,153938,Camel Up,2014,1.5,260605,Camel Up (Second Edition),2018,1.51,True,4,0.009,True,False,2
+camel up,260605,Camel Up (Second Edition),2018,1.51,153938,Camel Up,2014,1.5,True,4,0.009,True,False,2
+flash duel:,184145,Flash Duel: Revised Second Edition,2015,1.67,107190,Flash Duel: Second Edition,2011,1.61,True,4,0.056,True,False,2
+flash duel:,107190,Flash Duel: Second Edition,2011,1.61,184145,Flash Duel: Revised Second Edition,2015,1.67,True,4,0.056,True,False,2
+tiny epic defenders,238656,Tiny Epic Defenders (Second Edition),2018,2.05,155708,Tiny Epic Defenders,2015,1.82,True,3,0.233,True,False,2
+tiny epic defenders,155708,Tiny Epic Defenders,2015,1.82,238656,Tiny Epic Defenders (Second Edition),2018,2.05,True,3,0.233,True,False,2
+tsukuyumi: full moon down,299450,Tsukuyumi: Full Moon Down (Second Edition),2020,3.66,185538,Tsukuyumi: Full Moon Down,2018,3.77,True,2,0.119,True,False,2
+tsukuyumi: full moon down,185538,Tsukuyumi: Full Moon Down,2018,3.77,299450,Tsukuyumi: Full Moon Down (Second Edition),2020,3.66,True,2,0.119,True,False,2
+yggdrasil,147190,Yggdrasil (Second Edition with Asgard Expansion),2013,2.39,71671,Yggdrasil,2011,2.6,True,2,0.209,True,False,2
+yggdrasil,71671,Yggdrasil,2011,2.6,147190,Yggdrasil (Second Edition with Asgard Expansion),2013,2.39,True,2,0.209,True,False,2
+mag·blast,6209,Mag·Blast (Second Edition),2002,1.55,944,Mag·Blast,1998,1.58,True,4,0.033,True,False,2
+mag·blast,944,Mag·Blast,1998,1.58,6209,Mag·Blast (Second Edition),2002,1.55,True,4,0.033,True,False,2
+zombie in my pocket,41372,Zombie in My Pocket,2010,1.38,33468,Zombie in My Pocket,2007,1.3,True,3,0.074,True,False,2
+zombie in my pocket,33468,Zombie in My Pocket,2007,1.3,41372,Zombie in My Pocket,2010,1.38,True,3,0.074,True,False,2
+shipwrights of the north sea,249889,Shipwrights of the North Sea (Second Edition),2017,2.45,75547,Shipwrights of the North Sea,2014,2.31,True,3,0.148,True,False,2
+shipwrights of the north sea,75547,Shipwrights of the North Sea,2014,2.31,249889,Shipwrights of the North Sea (Second Edition),2017,2.45,True,3,0.148,True,False,2
+fleet: the dice game,328326,Fleet: The Dice Game (Second Edition),2020,2.23,245961,Fleet: The Dice Game,2018,2.5,True,2,0.278,True,False,2
+fleet: the dice game,245961,Fleet: The Dice Game,2018,2.5,328326,Fleet: The Dice Game (Second Edition),2020,2.23,True,2,0.278,True,False,2
+vanuatu,104020,Vanuatu,2011,3.29,193927,Vanuatu (Second Edition),2016,3.28,True,5,0.012,True,False,2
+vanuatu,193927,Vanuatu (Second Edition),2016,3.28,104020,Vanuatu,2011,3.29,True,5,0.012,True,False,2
+project: elite,171726,Project: ELITE,2016,2.45,256999,Project: ELITE,2020,2.46,True,4,0.015,True,False,2
+project: elite,256999,Project: ELITE,2020,2.46,171726,Project: ELITE,2016,2.45,True,4,0.015,True,False,2
+the cousins' war,224133,The Cousins' War,2017,2.0,262818,The Cousins' War (Second Edition),2018,2.12,True,1,0.118,True,False,2
+the cousins' war,262818,The Cousins' War (Second Edition),2018,2.12,224133,The Cousins' War,2017,2.0,True,1,0.118,True,False,2
+elevenses for one,158882,Elevenses for One,2014,1.26,200430,Elevenses for One,2016,1.25,True,2,0.011,True,False,2
+elevenses for one,200430,Elevenses for One,2016,1.25,158882,Elevenses for One,2014,1.26,True,2,0.011,True,False,2
+lord of the rings: the confrontation,18833,Lord of the Rings: The Confrontation,2005,2.19,3201,Lord of the Rings: The Confrontation,2002,2.15,True,3,0.044,True,False,2
+lord of the rings: the confrontation,3201,Lord of the Rings: The Confrontation,2002,2.15,18833,Lord of the Rings: The Confrontation,2005,2.19,True,3,0.044,True,False,2
+trick shot,256707,Trick Shot,2021,2.37,359612,Trick Shot (Second Edition),2024,2.5,True,3,0.132,True,False,2
+trick shot,359612,Trick Shot (Second Edition),2024,2.5,256707,Trick Shot,2021,2.37,True,3,0.132,True,False,2
+council of verona,165469,Council of Verona (Second Edition),2014,1.59,140863,Council of Verona,2013,1.37,True,1,0.217,True,False,2
+council of verona,140863,Council of Verona,2013,1.37,165469,Council of Verona (Second Edition),2014,1.59,True,1,0.217,True,False,2
+onirim,156336,Onirim (Second Edition),2014,1.61,71836,Onirim,2010,1.65,True,4,0.041,True,False,2
+onirim,71836,Onirim,2010,1.65,156336,Onirim (Second Edition),2014,1.61,True,4,0.041,True,False,2
+europa universalis: the price of power,254127,Europa Universalis: The Price of Power,2023,4.7,370448,Europa Universalis: The Price of Power (Deluxe Edition),2023,4.6,True,0,0.102,True,False,2
+europa universalis: the price of power,370448,Europa Universalis: The Price of Power (Deluxe Edition),2023,4.6,254127,Europa Universalis: The Price of Power,2023,4.7,True,0,0.102,True,False,2
