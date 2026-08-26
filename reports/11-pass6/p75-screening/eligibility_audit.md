@@ -1,6 +1,6 @@
 # 6A — Candidate Eligibility & Semantic Cleanup (100% Structured Query, Binding)
 
-**Generated:** 2026-08-26T15:00Z · P75 rerun — thresholds exact P75 0.3255647930 N=1,581, P80 0.4034321142 N=1,347 vs old 0.75 532 · seed 20260824 · population 14,698 × 287,302 × 24,146,307 mu 7.139 reuse `user_severity_pass2` + `game_adjusted_means_pass2` via 39/40 — **reuse, do NOT refit**
+**Generated:** 2026-08-26T15:00Z · P75/P80 rerun — thresholds exact **P80 primary 0.4034321142 N=1,347 vs P75 sensitivity 0.3255647930 N=1,581 (P80 promoted 2026-08-26, both 158 strong Jaccard 1.0)** vs old 0.75 532 · seed 20260824 · population 14,698 × 287,302 × 24,146,307 mu 7.139 reuse `user_severity_pass2` + `game_adjusted_means_pass2` via 39/40 — **reuse, do NOT refit**
 
 **Pool:** **1,581 games `adj≥7.5 & resid≥P75 (0.3255647930)` absolute (NOT percentile; sensitivity P80 0.4034321142 → 1,347, old 0.75 →532, old 0.80→455)** from re-derived exact empirical quantiles of 14,698 canonical resid_Q3bFam (P75 0.3255, P80 0.4034, P90 0.6120) via same Q3bFam 48f spec (verified CV 0.6033) — do NOT approximate P75 as 0.75.
 
