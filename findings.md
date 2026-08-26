@@ -3179,3 +3179,71 @@ Observed fact: counts 14,698/287k/24.1M, mu7.139, 532 pool, hidden buckets 12186
 
 **Strongest candidates (final 39, identical to Pass2 722d149 strong_hidden_gem_evidence, with game_id,title,n,adj,expected,resid,SE,hiddenness,ref_penetration, taxonomy, overlap, cross, flags):** 2470 Baron Munchausen 379 7.54 1.68→1.60 moderate/borderline/broad; 62814 Tumblin-Dice Medium 215 7.61 1.53 low/borderline/broad; 275972 Star Trek Alliance 193 8.59 1.34 moderate/borderline/broad; 244258 Red Dragon Inn 7 310 7.86 1.31 moderate/adequate/broad — all eligible, LB≥7.0, Q4 robust ≥0.60, taxonomy low/moderate, overlap adequate/borderline, cross broad, is_solo_first/is_duel/is_edition/hobby monitoring flags exposed but 0 high/insufficient (see `final_screening_evidence_table.csv` where outcome_category_final==strong_hidden_gem_evidence, edition 2/39 distinct SKUs 5.1%≈pop + hobby 1/39 2.6%≈2.95% pop) [model-dependent conclusion].
 
+
+## 2026-08-26: Pass 5 Investigation — Binding Eligibility & Consequential Audience/Broad-Appeal Screening (proposed — awaiting review, NOT final)
+
+**Status:** `proposed — awaiting review` **NOT final** — investigation only, per Task §§1–6. Reuses canonical 14,698 ×287,302×24,146,307 obs `data/processed/phase2-pass2/` mu 7.139 (`user_severity_pass2` + `game_adjusted_means_pass2` via 39/40 — **reuse, do NOT refit**), Q3bFam 48f CV 0.6033 + Q4Fam 78f CV 0.6151, hiddenness `<1,700/1,700-2,500/>2,500`, 39 `strong_hidden_gem_evidence` diagnostic only (Jaccard 1.0 vs Pass 4 — left as monitoring, so Pass 5 must make binding) [observed fact].
+
+**Reproduce:** `python scripts/58_pass5_investigation.py` (bounded 4GB/3threads `scratch/ducktmp`, narrow duckdb semi-joins, no 24M wide sorts, seed 20260824, handle 7 weight-null median 2.0 + flag) → `docs/phase2-pass2/pass5_investigation/` mirrored `reports/phase2_pass2/pass5_investigation/` (see `README.md`).
+
+### Binding vs Borderline — what moves counts (not just flagged)
+
+**Pass 4 final 39 strong (Jaccard 1.0) → Pass 5 proposed 30 strong (lost 9, -23% local churn, global Spearman ~0.99 Jaccard 0.77)** [model-dependent + empirical]:
+- **Lost 9:** 2 hard editions (331259 Kickstarter via `Game: Sleeping Gods` + `contained_in 255984` **high**, 338697 CATAN 3D via `Game: Catan` + `contained_in 13` **high**), 1 hobby_well_known (296345 Sherlock 0.5016% >0.5%), **6 audience specialists** (340216 0.835, 309917 0.894, 304847 0.90, 406174 solo_first 0.894, 404538 solo_first 0.90, 41090 duel 0.85→plausible) [empirical]. **Capable of moving 4/39 solo_first (2 moved) and 8/39 duel (1 moved) between strong/plausible/niche/insufficient** as required [model-dependent].
+- **Pool re-evaluation 532→:** niche 163→159, plausible 176→196 (+20), insufficient 127→113 (-14), excluded 27→34 (+7) — **consequential reclassification, not just flagged** [empirical].
+- **Pooling re-evaluation:** eligible hard 459 (3.12%) + borderline 308 (2.10%) + eligible 13,931 (94.8%); ecosystem hard 25 high + borderline 378; audience movers show **Euro duel 1402 broader (21.5% insufficient) vs wargame_duel 1153 doubly specialized (47.7%)** — heterogeneity preserved, not blanket penalty [empirical].
+
+### §1 Entity eligibility — richest evidence, binding
+
+**Richest [observed fact]:** `game_links` 33,002 rows (`version` 19,504 59% vs `expansion` 6,339 19% vs `reimplementation` 1,526 etc., truncated at 100 for 11 games), `families`/`series` (`Game:` 2,740 18.6% e.g., Catan 40, Legendary 12 etc.; `Series:` 3,302 22.5% e.g., Unlock 47; `Crowdfunding: Kickstarter` 2,807; `Admin: Game System Entries` 32), `is_reimplementation` 265 (1.80%) via `reimplements` link, `description` tagline mean 62 chars max 85 only 20/14,698 contain "expansion", 0 contain "requires ... base" — **NOT rich**, full paragraph not in extracts (parquet_catalog 34 cols, `bgg.sqlite` stub, `bgg_games_current.description` same tagline) [observed fact]. Must rely on **structured relationships, not description depth** [empirical finding].
+
+**Deterministic hard vs borderline (no CV gate, definition not model variable) [definition]:** hard-exclude verifiable via `game_links` `contained_in`/`version`/`reimplements` + `families` `Game:/Series:` + title + designer/year/weight corroboration (e.g., excluded: 331259 is Kickstarter edition of 255984 via families `Game: Sleeping Gods` + shared designer 1 year diff 0 weight diff 0.26 link `contained_in` 1 **high**; 338697 is 3D edition of 13 via `Game: Catan` + contained 1 **high**). **Borderline where description-only suggests problem but structured insufficient** (e.g., `Talisman (Third Edition)` 5336 `Game: Talisman` but designer 0 no link) → `borderline/review` not hard — per Task §1 example [definition].
+
+**Generalization across 14,698 [empirical finding]:** hard 459 (3.12%) 308 borderline (2.10%) — per-pattern `collectors` 21→hard13, `ultimate` 7→3, `kickstarter` 16→hard4 (1 in strong 331259), `second_edition` 112→hard25, `3d` 1→hard1 (338697), `edition_any` 501→hard189 (37.7%) mean resid +0.116 β+0.123 5/5 CV+0.0006 Jaccard 0.921 — modest not 18XX-scale, **not concentrated in strong (2/39 5.1%≈pop) vs niche 40/163 24.5%**. Base-title 285 dup titles 611→39 corroborated 96 (designer≥1+|year|≤5+|weight|≤0.3)→87 missed but **10 pool (1.9%) 0 strong**; `n_version` truncated at 100 for 11 [observed fact].
+
+**Preserved vs binding [model-dependent]:** No new fam flag to Q3bFam — all leakage belongs in **semantic cleanup / screening** (pruned_lists extension), otherwise leakage; screening local Jaccard 0.92 global Spearman >0.99 — precise.
+
+### §2 Ecosystem — technically standalone but non-hidden
+
+**Large ecosystems [observed fact]:** `Game: Catan` 40, `Series: Unlock!` 47 etc. (2740 Game: 18.6%, 3302 Series: 22.5%) — do NOT ban every member. High confidence if `game_links` version/reimplement + `families` + description corroborate (CATAN 3D 2021 341 obs ref 0.12% Game: Catan eco 40 contained_in 13 **high** — numerically obscure `<1,700` but **ecosystem derivative non-hidden**). Medium if families+title+year/weight; borderline if only description [definition, assumption].
+
+**n vs penetration [empirical finding]:** eligible mean 0.146% median 0.093% p90 0.349% — **0% >1%** max 0.589% wargame; borderline 0.724% median 0.711%; exclude 3.47% median 1.84% (17.7% >5%) — order gap, r=0.999986 but not sufficient alone; wargame-eligible 0.109% vs borderline 0.695% vs exclude 2.88%. 25 hard high + 378 borderline [empirical]. **Effect:** high hard moved strong→niche (capable 2-3 of 39), medium/borderline remain plausible.
+
+### §3 Audience consequential — modes with n/resid/β/SE+5/5 CV/Jaccard + TVD/specialist/propensity/cross
+
+**Per-mode across 14,698 [empirical finding, `audience_consequential_evidence.csv` 15 rows]:** coop 1,543 resid 0 already in Q3bFam; solo_mech 1,397 +0.011 CV 0.000 — no systematic; **solo_first 691 +0.127 β+0.176 5/5 Δ+0.0014 Jaccard 0.947 spec 0.901 TVD 0.115 insufficient 34.4% vs 23% overall cross 84.2%**; **duel 2,555 +0.080 β+0.201 5/5 Δ+0.0038 Jaccard 0.814 spec 0.899 TVD 0.129 insufficient 33.3% vs 23%** — largest CV but **heterogeneous r -0.70 with log_max**; wargame_duel 1,153 +0.074 Δ+0.0017 spec 0.906 insufficient **47.7% vs Euro 21.5%** — doubly specialized; semi_coop 98 -0.252 5/5 n<50. **Heterogeneity matters:** not all 1–2p is niche; Euro duel 1402 broader [empirical].
+
+**Consequential rule (auditable, generalizable, not 39-specific) [model-dependent]:** `insufficient` + `(spec>0.90 or niche_drop or max_weight>2000)` → insufficient; `spec>0.90` + `insufficient`/`niche_drop` → niche; `(solo/duel + borderline + spec≥0.80)` → plausible/niche not strong (capable 4/39 solo +8/39 duel); `spec>0.85` + niche_drop not broad → niche; borderline + n_sup<2 + spec>0.75 → insufficient; else preserve. **Not in Q3bFam** (would be leakage design→quality, r -0.70). **Not blanket exclude** — Euro duel *7 Wonders Duel*-type remains strong if adequate/borderline + cross broad (e.g., 43262 Neuroshima low spec 0.65 adequate 4-sup). Moves 9 of 39 as above, preserves heterogeneity [model-dependent].
+
+### §4 Broad modern-hobby appeal — screening dimension (not monitoring)
+
+**Reference candidates 13 tested [empirical finding, `reference_population.csv`]:** top250 bayes 280k weight 3.03 heavy misses light gateway; top250 users 284k weight 2.29 light conflates popularity; top250 adj 189k weight 3.73 niche; **intersect_250 134/279k 4.96M obs median weight 2.94 year 2015 33k balances**, covers 97% active; 100 too narrow 40, 500 too broad 327 (+1.5% users for 2.4× games), profile 420 less established 10k — **chosen intersect_250** [model-dependent].
+
+**Per-game observables [empirical]:** `ref_penetration` eligible 0.146% vs exclude 3.47% (order gap) but max 0.589% still hobby-obscure; `specialist` 0.901 solo vs 0.833 Euro; `propensity` insufficient 34.4% solo vs 23% overall (player-eligible at-risk `≥10` solo/duel hypothesized ~20%); `cross` where support exists `10-24 vs 500+` 12166/9227 and `specialist 0-4 vs ge20` 4626 (31%) — power thin where it matters (solo 80.5% vs 86.2%) [empirical].
+
+**Binding [model-dependent]:** `ref_penetration>0.5%` despite `<1,700` → **hobby_well_known 360 (2.95%) → not hidden** (1/39 Sherlock 0.5016% → niche); `insufficient` + `spec>0.85` + `cross thin` → **insufficient_evidence** rather than strong — preserves unidentified counterfactual (cannot recover non-raters, timestamp unresolved) [limitation]. Moves among 532: broad 286 + hobby 50 + niche 89 + insufficient 107 — now consequential not r=0.9999 monitoring [empirical].
+
+### §5 Quality model preservation — keep unless genuine omitted-factor
+
+**Preserved [model-dependent]:** Q3bFam 48f CV 0.6033 primary + Q4Fam 78f CV 0.6151 sensitivity + hiddenness + gates + pruned 269 + 18XX (+0.676→0 via β+0.748 5/5). Per-dimension CV 21 candidates one-by-one + jointly: closest `duel +0.080 β+0.201 5/5 Δ+0.0038 Jaccard 0.814` but **heterogeneous + r -0.70 → audience not model**; `solo +0.127 Δ+0.0014 <0.15`; `edition +0.116 Δ+0.0006 <0.001` belongs_in cleanup; joint Δ+0.00197 < duel alone — no candidate reaches **`≥0.15+5/5+CV≥0.001+belongs_in model`** as 18XX did [empirical]. **Add NONE** — keep Spearman 1.0 Jaccard 1.0 globally; screening local Jaccard 0.814-0.986 [model-dependent].
+
+### §6 Validation on 39 — preliminary (not training) [empirical]
+
+**Per-39 table `validation_39_consequential.csv` (game_id,title,old_outcome,new_outcome,reason,evidence) —** correctly excluded **2/2 known ineligible** (331259, 338697 high), **7 specialist-mode concerns** (solo/duel + insufficient + high + hobby well-known), **preserved 23 legitimate** (moderate adequate borderline cross broad), **borderline where ambiguous** (0 false positives for editions) [empirical]. **Next-phase independent reviewer + new-candidate audit is true test** [limitation — proposed — awaiting review].
+
+### Outputs — Investigation Phase (this entry)
+
+`docs/phase2-pass2/pass5_investigation/` mirrored `reports/phase2_pass2/pass5_investigation/` (seed 20260824):
+
+- `README.md` (executive §1–§6 which rules binding vs borderline, moves 39→30)
+- `entity_eligibility_audit.md` + `eligibility_evidence.csv` (§1 459 hard 308 borderline, per-pattern, 769 rows, base-title 285→39, truncation 11)
+- `ecosystem_audit.md` + `ecosystem_evidence.csv` (§2 25 hard high 378 borderline, n vs ref_pen 0.146% vs 3.47%, max 0.589%)
+- `audience_structure_consequential.md` + `audience_consequential_evidence.csv` (§3 15 modes, n/resid/β/CV/Jaccard + TVD/specialist/propensity/cross + consequential rule moving 4/39 solo +8/39 duel)
+- `broad_appeal_screening.md` + `broad_appeal_evidence.csv` (§4 intersect_250 134/279k + per-game ref_pen/specialist/propensity/cross as screening, not monitoring)
+- `quality_model_preservation.md` + `model_comparison.csv` + `joint_model_test.csv` (§5 per-dimension CV, keep/add, 18XX preserved)
+- `proposed_changes.md` + `proposed_changes.csv` (6 binding changes, auditable `change_id | observed_problem | generalizes_evidence | belongs_in | effect | keep/change` — must show binding)
+- `pass5_investigation_summary.json` (machine-readable: population, 39 diagnostic, per-dimension counts/residuals/CV, proposed binding `belongs_in`/`effect`, preserved core)
+- plus `validation_39_consequential.csv` (per-39 old→new), `reference_population.csv`, `chosen_reference_gids.json`, `per_game_hiddenness.csv` (14,699), `hiddenness_evidence.csv`, `base_title_missed_dup.csv`
+- **Mirrors** in `reports/phase2_pass2/pass5_investigation/`; **next free scripts 58/59** used `scripts/58_pass5_investigation.py`
+
+**Tags:** observed_problem = empirical finding diagnostic + population; generalizes_evidence = counts/CV/Jaccard/penetration empirical finding; belongs_in = model-dependent conclusion/hypothesis; effect = empirical; proposed = model-dependent; preserved core = model-dependent; broad appeal intersect_250 = assumption; reference ≥1 of 134 = broad hobby not general pop [assumption]; limitations = cannot recover non-raters, timestamp unresolved, snapshot collections, borderline hiddenness needs external validation, n_version truncation at 100, solo-first n small [limitation]; hypothesis = player-eligible at-risk would reduce insufficient 34%→20% pending full Step7B/7C refit + TVD vs reference [hypothesis]; **proposed — awaiting review, NOT final** [model-dependent — this entry].

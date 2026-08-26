@@ -1,0 +1,14 @@
+candidate_id,definition,n_games,n_users_distinct,n_obs_total,median_weight,median_year,median_users_rated,year_min,chosen
+top100_bayes,top 100 by bayes_rating (bayes),100,257208,2867438,3.4499,2018.0,26942.0,1995.0,False
+top100_users,top 100 by users_rated (users),100,281988,5096175,2.32135,2013.0,51300.5,1959.0,False
+top100_adj,top 100 by adj_mean (adj),100,131392,376352,3.8689,2022.0,1204.5,1994.0,False
+top250_bayes,top 250 by bayes_rating (bayes),250,280449,6049742,3.0305999999999997,2017.0,21491.5,1981.0,False
+top250_users,top 250 by users_rated (users),250,284567,8401937,2.29425,2014.0,29605.5,1950.0,False
+top250_adj,top 250 by adj_mean (adj),250,189463,1089876,3.7348,2021.0,998.5,1988.0,False
+top500_bayes,top 500 by bayes_rating (bayes),500,284179,9232728,2.8729,2017.0,14830.0,1963.0,False
+top500_users,top 500 by users_rated (users),500,285709,11551551,2.29955,2014.0,19649.0,1950.0,False
+top500_adj,top 500 by adj_mean (adj),500,222994,2085562,3.5385,2020.0,982.5,1986.0,False
+intersect_100_bayes_users,intersection top 100 bayes ∩ top 100 users,40,251379,2039283,3.25565,2016.0,57087.0,2002.0,False
+intersect_250_bayes_users,intersection top 250 bayes ∩ top 250 users,134,279108,4965490,2.9385,2015.0,33913.0,1981.0,True
+intersect_500_bayes_users,intersection top 500 bayes ∩ top 500 users,327,283516,8302630,2.6925,2016.0,22219.0,1963.0,False
+profile_weight2-3.5_year2010+_n5k,weight 2.0-3.5 + year 2010+ + users_rated >5k,420,264882,5378079,2.5878,2017.0,10308.5,2010.0,False

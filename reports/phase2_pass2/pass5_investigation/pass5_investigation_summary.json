@@ -1,0 +1,733 @@
+{
+  "generated_at": "2026-08-26T03:10:11Z",
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "mu": 7.139007726394262,
+    "source": "data/processed/phase2-pass2/",
+    "severity": "reused, NOT refit",
+    "model": "Q3bFam 48f CV 0.6033 + Q4Fam 78f CV 0.6151"
+  },
+  "diagnostic_39": {
+    "n_strong": 39,
+    "jaccard_pass4_vs_pass2": 1.0,
+    "use": "diagnostic only, not ground truth",
+    "note": "Pass 4 left problems as monitoring flags and 39 did not change (Jaccard 1.0), so Pass 5 must make them consequential"
+  },
+  "per_dimension": {
+    "eligibility": {
+      "hard_exclude_n": 459,
+      "borderline_n": 308,
+      "eligible_n": 13931,
+      "per_pattern": [
+        {
+          "pattern": "collectors",
+          "col": "flag_ed_collectors",
+          "n_total": 21,
+          "n_hard": 13,
+          "n_border": 8,
+          "n_elig": 0,
+          "mean_resid": 0.17856081641668864,
+          "in_strong_39": 0
+        },
+        {
+          "pattern": "ultimate",
+          "col": "flag_ed_ultimate",
+          "n_total": 7,
+          "n_hard": 3,
+          "n_border": 3,
+          "n_elig": 1,
+          "mean_resid": 0.48532674911943186,
+          "in_strong_39": 0
+        },
+        {
+          "pattern": "kickstarter",
+          "col": "flag_ed_kickstarter",
+          "n_total": 16,
+          "n_hard": 4,
+          "n_border": 12,
+          "n_elig": 0,
+          "mean_resid": 0.3630840060392336,
+          "in_strong_39": 1
+        },
+        {
+          "pattern": "second_edition",
+          "col": "flag_ed_second_edition",
+          "n_total": 112,
+          "n_hard": 25,
+          "n_border": 87,
+          "n_elig": 0,
+          "mean_resid": 0.20054113630155326,
+          "in_strong_39": 0
+        },
+        {
+          "pattern": "anniversary",
+          "col": "flag_ed_anniversary",
+          "n_total": 12,
+          "n_hard": 4,
+          "n_border": 8,
+          "n_elig": 0,
+          "mean_resid": 0.13952680297863526,
+          "in_strong_39": 0
+        },
+        {
+          "pattern": "deluxe",
+          "col": "flag_ed_deluxe",
+          "n_total": 35,
+          "n_hard": 13,
+          "n_border": 22,
+          "n_elig": 0,
+          "mean_resid": 0.23172727204270974,
+          "in_strong_39": 0
+        },
+        {
+          "pattern": "3d_edition",
+          "col": "flag_ed_3d_edition",
+          "n_total": 1,
+          "n_hard": 1,
+          "n_border": 0,
+          "n_elig": 0,
+          "mean_resid": 0.9277529891143068,
+          "in_strong_39": 1
+        },
+        {
+          "pattern": "premium",
+          "col": "flag_ed_premium",
+          "n_total": 1,
+          "n_hard": 1,
+          "n_border": 0,
+          "n_elig": 0,
+          "mean_resid": 0.3989967333083069,
+          "in_strong_39": 0
+        },
+        {
+          "pattern": "big_box",
+          "col": "flag_ed_big_box",
+          "n_total": 8,
+          "n_hard": 6,
+          "n_border": 1,
+          "n_elig": 1,
+          "mean_resid": 0.8607271146852573,
+          "in_strong_39": 0
+        },
+        {
+          "pattern": "edition_any",
+          "col": "flag_edition_title",
+          "n_total": 501,
+          "n_hard": 189,
+          "n_border": 308,
+          "n_elig": 4,
+          "mean_resid": 0.11565914330714747,
+          "in_strong_39": 2
+        }
+      ],
+      "n_version_truncation_at_100": 11,
+      "pruned_269_gap": {
+        "corroborated_39_96": 96,
+        "missed_87_not_pruned": 87,
+        "missed_in_pool": 10,
+        "missed_in_strong": 0
+      }
+    },
+    "ecosystem": {
+      "n_hard": 25,
+      "n_border": 378,
+      "large_ecosystems_ge10": [
+        "Game: Catan 40",
+        "Series: Unlock! 47",
+        "Game: Legendary 12",
+        "Game: Ascension 24"
+      ],
+      "example_derivative": "CATAN 3D 2021 2,500-rating Game: Catan vs 2018 300-rating CATAN-inspired standalone"
+    },
+    "quality": {
+      "Q3bFam_CV": 0.6033193821349394,
+      "Q4Fam_CV": 0.6151,
+      "candidates_tested": 21,
+      "joint_delta": 0.0019713667837838456,
+      "decision": "preserve Q3bFam, add NONE to model (all systematic belongs in audience/screening, would be leakage)"
+    },
+    "reference_population": {
+      "candidates_tested": 13,
+      "chosen": {
+        "candidate_id": "intersect_250_bayes_users",
+        "definition": "intersection top 250 bayes \u2229 top 250 users",
+        "n_games": 134,
+        "n_users_distinct": 279108,
+        "n_obs_total": 4965490,
+        "median_weight": 2.9385,
+        "median_year": 2015.0,
+        "median_users_rated": 33913.0,
+        "year_min": 1981.0,
+        "chosen": true
+      },
+      "total_ref_users": 279108,
+      "intersect_250_n_games": 134,
+      "intersect_250_n_users": 279108,
+      "median_weight": 2.94,
+      "median_year": 2015,
+      "note": "broad modern-hobby = appeal to broad swathe of modern hobby board gamers, not general population"
+    },
+    "audience_structure": {
+      "modes_tested": 15,
+      "solo_first_n": 691,
+      "duel_n": 2555,
+      "wargame_duel_n": 1153,
+      "consequential_movers_out_of_39": 9,
+      "new_counts": {
+        "plausible_hidden_gem": 196,
+        "niche_but_high_quality": 159,
+        "insufficient_evidence": 113,
+        "excluded_not_eligible": 34,
+        "strong_hidden_gem_evidence": 30,
+        "excluded_popular_not_hidden": 0
+      },
+      "old_counts": {
+        "strong_hidden_gem_evidence": 39,
+        "plausible_hidden_gem": 176,
+        "niche_but_high_quality": 163,
+        "insufficient_evidence": 127,
+        "excluded_popular_not_hidden": 27
+      }
+    },
+    "hiddenness": {
+      "buckets": [
+        {
+          "hidden_bucket": "eligible_<1700",
+          "n_games": 12186,
+          "pct_pop": 82.90923935229283,
+          "mean_n_obs": 416.59740686033155,
+          "median_n_obs": 267.0,
+          "mean_ref_penetration": 0.001464400278469361,
+          "median_ref_penetration": 0.0009315390458173897,
+          "p90_ref_penetration": 0.003489688579331298,
+          "share_high_penetration_gt5pct": 0.0
+        },
+        {
+          "hidden_bucket": "borderline_1700-2500",
+          "n_games": 694,
+          "pct_pop": 4.721730847734386,
+          "mean_n_obs": 2034.9697406340058,
+          "median_n_obs": 1998.5,
+          "mean_ref_penetration": 0.0072350702747191456,
+          "median_ref_penetration": 0.007110150909325423,
+          "p90_ref_penetration": 0.008515341731516116,
+          "share_high_penetration_gt5pct": 0.0
+        },
+        {
+          "hidden_bucket": "exclude_>2500",
+          "n_games": 1818,
+          "pct_pop": 12.369029799972786,
+          "mean_n_obs": 9712.531353135313,
+          "median_n_obs": 5164.0,
+          "mean_ref_penetration": 0.03467218559997508,
+          "median_ref_penetration": 0.01843193315849062,
+          "p90_ref_penetration": 0.07571656849678259,
+          "share_high_penetration_gt5pct": 0.1771177117711771
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge1pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge5pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge10pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge20pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge50pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "eligible_<1700_pen_ge80pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        },
+        {
+          "hidden_bucket": "wargame_eligible_pen_gt20pct",
+          "n_games": 0,
+          "pct_pop": 0.0,
+          "mean_n_obs": NaN,
+          "median_n_obs": NaN,
+          "mean_ref_penetration": NaN,
+          "median_ref_penetration": NaN,
+          "p90_ref_penetration": NaN,
+          "share_high_penetration_gt5pct": NaN
+        }
+      ],
+      "total_ref_users": 279108,
+      "eligible_max_penetration": 0.00589,
+      "exclude_mean_penetration": 0.0347
+    },
+    "broad_appeal": {
+      "hobby_well_known_threshold": 0.005,
+      "n_hobby_well_known": 2872,
+      "broad_decisions": {
+        "broad": 286,
+        "insufficient_evidence": 107,
+        "niche_specialist": 77,
+        "not_hidden_hobby_well_known": 50,
+        "niche": 12
+      },
+      "per_game_ref_penetration_mean_eligible": 0.001464400278469361
+    }
+  },
+  "proposed_binding_changes": [
+    {
+      "change_id": "C-eligibility-binding-hard",
+      "observed_problem": "39 still contained editions/system (331259 Kickstarter + 338697 CATAN 3D) and audience-concentrated games because pipeline measured but did not exclude; 39 showed Jaccard 1.0 vs Pass 4",
+      "generalizes_evidence": "hard_exclude n=459 (3.12%) + borderline n=308 across 14,698; edition_title_any 501 mean resid +0.116 beta +0.123 CV \u0394+0.0006 (deterministic, no CV gate required per \u00a71); per-pattern Collectors 20 Ultimate 33 Kickstarter 16 3D 1 all n<50 below gate but structured evidence authoritative; game_system 32 hard exclude (Admin: Game System Entries)",
+      "belongs_in": "entity_eligibility (semantic eligibility, not statistical model)",
+      "effect": "binding: hard_exclude moves strong 39\u219237 (removes 2 editions: 331259 via contained_in Game: Sleeping Gods + Kickstarter, 338697 via contained_in Game: Catan + 3D Edition, high confidence), borderline 308 review not hard exclude by itself; pruned_lists gap 87 missed (10 in pool 0 in strong) + n_version truncation at 100 for 11 games (Catan etc) \u2014 screening local Jaccard 0.92, global Spearman >0.99",
+      "keep_change": "PROPOSED_CHANGE \u2014 binding hard_exclude via game_links contained_in/version + families Game:/Series: + title corroboration (designer/year/weight), borderline where description-only (no structured link) \u2014 not monitoring"
+    },
+    {
+      "change_id": "C-ecosystem-binding",
+      "observed_problem": "Technically standalone but belongs to well-established ecosystem (CATAN 40, Unlock 47, Legendary 12 etc) that makes it non-hidden to modern hobby audience (broad reference intersect_250 134 games 279k users); Pass 4 left as monitoring",
+      "generalizes_evidence": "ecosystem_derivative_hard n=25 high confidence (game_links version/reimplement + families + description corroborated) + borderline n=378 (families + title pattern + year/weight); large ecosystems >=10: Game: Catan 40, Series: Unlock 47, Game: Legendary 12 etc (2740 have Game:, 3302 have Series:); ref_penetration eligible mean 0.146% vs exclude 3.47% (order gap) but max eligible 0.589% still hobby-obscure; n vs penetration r=0.999986 but not sufficient alone",
+      "belongs_in": "ecosystem eligibility (semantic, not model)",
+      "effect": "binding: high confidence ecosystem derivatives moved from strong/plausible to niche (e.g., 338697 if not already excluded, plus 244258 Red Dragon Inn 7 eco 11, 373835 Unlock Kids eco 47) \u2014 capable of moving 2-3 of 39 from strong to niche; medium/borderline remain plausible with medium/borderline confidence",
+      "keep_change": "PROPOSED_CHANGE \u2014 binding for high confidence (game_links + families + description + eco_size>=10 + title corroboration), borderline stays review"
+    },
+    {
+      "change_id": "C-audience-consequential",
+      "observed_problem": "cooperative/solo_first (691) / duel (2555, wargame_duel 1153) / other self-selecting modes (1p==1 249, semi_coop 98, Team-Based 802) were passive monitoring flags (Pass 3 final + Pass 4: insufficient 34.4% solo_first vs 23% overall, wargame_duel 47.7% vs Euro 21.5%) \u2014 4/39 solo_first and 8/39 duel need consequential rule",
+      "generalizes_evidence": "solo_first n=691 4.7% mean resid +0.127 beta +0.176 5/5 CV \u0394+0.0014 Jaccard 0.947 spec 0.901 TVD 0.115 insufficient 34.4% cross has_broad 84.2%; duel n=2555 17.4% mean resid +0.080 beta +0.201 5/5 CV \u0394+0.0038 Jaccard 0.814 spec 0.899 TVD 0.129 insufficient 33.3% cross has_broad 83.0%; wargame_duel n=1153 7.8% mean resid +0.074 beta +0.204 5/5 CV \u0394+0.0017 Jaccard 0.947 spec 0.906 TVD 0.101 insufficient 47.7% cross has_broad 84.5%; coop already in Q3bFam (1543, resid 0); solo_mech 1397 +0.011 CV 0.000; Team 802 +0.030 CV 0.000; semi_coop 98 -0.252 5/5 CV 0.0006 but n<50",
+      "belongs_in": "audience-structure screening (consequential, not model)",
+      "effect": "binding: defined auditable rule \u2014 strong requires adequate/borderline overlap + spec_ge10<0.75 + cross n_sup>=3 + has_broad True + TVD<0.25; insufficient_overlap + spec>0.75 + cross<3 => insufficient_evidence; borderline_overlap + spec>=0.75 + solo/duel => niche/plausible (not strong). Moves 9 of 39 from strong (e.g., 275972 Star Trek solo_first spec 0.77 borderline -> plausible, 406174 Kinfire spec 0.89 borderline -> niche) and reclassifies 34.4% insufficient solo_first pool; preserves Euro duel (1402) broader (21.5% insufficient) vs wargame_duel doubly specialized. Capable of moving 4/39 solo_first and 8/39 duel between strong/plausible/niche/insufficient.",
+      "keep_change": "PROPOSED_CHANGE \u2014 binding screening (not model dummy, to avoid leakage; not blanket exclude); heterogeneity via wargame_duel interaction preserved"
+    },
+    {
+      "change_id": "C-broad-appeal-binding",
+      "observed_problem": "Pass 4 left broad modern-hobby appeal as monitoring (intersect_250 134/279k median weight 2.94 year 2015 33k, ref_penetration r=0.9999 with n_obs, 0% eligible >1% despite 360 >0.5%) \u2014 needed as actual screening dimension, not monitoring",
+      "generalizes_evidence": "reference candidates 13 tested: top250 bayes 280k weight 3.03 heavy misses gateway, top250 users 284k weight 2.29 light conflates popularity, top250 adj 189k weight 3.73 niche, intersect_250 134/279k balances, 500 adds only 1.5% users for 2.4x games; per-game ref_penetration eligible 0.146% mean vs exclude 3.47% (17.7% >5%); cross support overall 86.2% (10-24 vs 500+ 12166/9227) and specialist 0-4 vs ge20 4626 (31%) \u2014 power thin where matters (solo_first cross support 80.5% vs 86.2% duel 83.3% wargame 47.7% insufficient)",
+      "belongs_in": "broad modern-hobby appeal screening (reference population + per-game similarity)",
+      "effect": "binding: ref_penetration>0.5% despite n<1,700 flagged hobby_well_known -> not hidden (1/39 Sherlock 296345 0.5016% edge moved to plausible/niche, 360 eligible >0.5%); specialist concentration (spec_ge10>0.85) + tvd + propensity insufficient + cross thin => insufficient_evidence (valid we can't tell) rather than strong \u2014 preserves uncertainty where counterfactual unidentified (insufficient_overlap, wide SE, max_weight). Moves broad_insufficient 107 + niche 89 + hobby 50 among 532; makes broad appeal consequential, not r=0.9999 monitoring",
+      "keep_change": "PROPOSED_CHANGE \u2014 adopt intersect_250 primary (sensitivity 100/500/profile) and make per-game ref_penetration + specialist + propensity + cross a screening dimension with explicit insufficient_evidence path"
+    },
+    {
+      "change_id": "C-quality-preservation",
+      "observed_problem": "Preserve validated statistical core unless genuine omitted-factor demonstrated out-of-sample (\u22650.15 mean resid +5/5 folds + CV \u0394\u22650.001 + belongs_in model, as 18XX +0.676\u21920 \u03b2+0.748 did); Pass 4 showed no non-18XX candidate meets bar",
+      "generalizes_evidence": "Q3bFam 48f CV 0.6033 primary + Q4Fam 78f CV 0.6151 sensitivity preserved (seed 20260824 5-fold); per-dimension CV: edition_title_any 501 +0.116 beta +0.123 5/5 CV+0.0006 <0.001 not systematic enough and belongs_in screening not model (would be leakage normalizing inflated edition ratings); solo_first 691 +0.127 beta +0.176 5/5 CV+0.0014 <0.15 and belongs_in audience; duel 2555 +0.080 beta +0.201 5/5 CV+0.0038 largest but heterogeneous r -0.70 with log_max already in model + 18% churn Jaccard 0.814 \u2014 would be leakage if added as fam; joint solo+edition+system \u0394+0.00197 < duel alone 0.0038 \u2014 overlap not independent; no candidate reaches 0.15+5/5+CV0.001+belongs_in model",
+      "belongs_in": "quality/expected-quality model (Q3bFam/Q4Fam)",
+      "effect": "preserve Q3bFam 48f unchanged, Q4Fam sensitivity, 18XX correction must remain (+0.676\u21920 via \u03b2+0.748 5/5); screening/audience have local Jaccard 0.814-0.986 Spearman >0.993 \u2014 no global overfit; quality + underratedness gates adj\u22657.5 & resid\u22650.75 \u2192532 pool preserved",
+      "keep_change": "PRESERVE \u2014 keep Q3bFam/Q4Fam/hiddenness <1700/1700-2500/>2500/pruned 269/adj gates unless genuine omitted-factor demonstrated"
+    },
+    {
+      "change_id": "C-hiddenness-preservation",
+      "observed_problem": "Hiddenness thresholds <1,700 / 1,700-2,500 / >2,500 from 11-12 (12186/694/1818) preserved unless strong reason; distinction numerically obscure vs hobby-obscure vs well-known within ecosystem",
+      "generalizes_evidence": "hiddenness buckets: eligible 12186 (82.9%) mean n 417 median 267 pen 0.146% median 0.093% p90 0.349% 0% >1% or >5%; borderline 694 mean 2035 median 1998 pen 0.724% median 0.711%; exclude 1818 mean 9713 median 5164 pen 3.47% median 1.84% (17.7% >5%); max eligible 0.589% wargame, wargame-eligible mean 0.109% vs exclude wargame 2.88%; r=0.999986 with n_obs but order gap remains",
+      "belongs_in": "hiddenness screening",
+      "effect": "preserve <1,700/1,700-2500/>2,500 as primary; add ref_penetration as monitoring -> binding for >0.5% hobby_well_known (360 games) for audience, not hard hiddenness gate (would be redundant; would exclude 2.95% still hidden)",
+      "keep_change": "PRESERVE thresholds + ref_penetration as binding for hobby_well_known (not hard hiddenness gate)"
+    }
+  ],
+  "preserved_core": [
+    "Q3bFam 48f CV 0.6033 (seed 20260824, 5-fold)",
+    "Q4Fam 78f CV 0.6151",
+    "hiddenness <1700/1700-2500/>2500",
+    "severity mu 7.139 + adj_mean",
+    "hiddenness penetration as monitoring->binding for >0.5%",
+    "pruned_lists 269 base"
+  ],
+  "validation_39_consequential": [
+    {
+      "game_id": 2470,
+      "title": "The Extraordinary Adventures of Baron Munchausen",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.70 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 62814,
+      "title": "Tumblin-Dice Medium",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec nan overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 275972,
+      "title": "Star Trek: Alliance \u2013 Dominion War Campaign",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.78 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 244258,
+      "title": "The Red Dragon Inn 7: The Tavern Crew",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.67 overlap adequate_overlap cross broad True"
+    },
+    {
+      "game_id": 340216,
+      "title": "Heredity: The Book of Swan",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "niche_but_high_quality",
+      "reason": "audience_specialist_or_insufficient",
+      "evidence": "spec 0.8352272727272727 overlap borderline_overlap"
+    },
+    {
+      "game_id": 373835,
+      "title": "Unlock! Kids: Stories from the Past",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec nan overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 319604,
+      "title": "Ricochet: A la poursuite du Comte courant",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.88 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 252432,
+      "title": "Zoo Break",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.85 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 153498,
+      "title": "Kamisado Max",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec nan overlap adequate_overlap cross broad True"
+    },
+    {
+      "game_id": 41090,
+      "title": "Magnate",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "plausible_hidden_gem",
+      "reason": "duel_audience_niche",
+      "evidence": "spec 0.85 overlap borderline_overlap n_sup 4.0"
+    },
+    {
+      "game_id": 377969,
+      "title": "Marvel United: Multiverse",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.86 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 267304,
+      "title": "Mega Empires: The West",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.89 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 331259,
+      "title": "Sleeping Gods: Kickstarter Edition",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "excluded_not_eligible",
+      "reason": "hard_exclude_edition_variant",
+      "evidence": "contained_in via families Game: Sleeping Gods + shared designer 1 year diff 0 weight diff 0.26 link contained_in 255984"
+    },
+    {
+      "game_id": 309917,
+      "title": "Hidden Games Crime Scene: The Midnight Crown",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "niche_but_high_quality",
+      "reason": "audience_specialist_or_insufficient",
+      "evidence": "spec 0.8944281524926686 overlap borderline_overlap"
+    },
+    {
+      "game_id": 250396,
+      "title": "Terminator Genisys: Rise of the Resistance",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.87 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 231962,
+      "title": "Krazy Wordz",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.77 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 424975,
+      "title": "Wilmot's Warehouse",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.86 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 373600,
+      "title": "Cthulhu: Death May Die \u2013 Fear of the Unknown",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.87 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 270871,
+      "title": "Agemonia",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.87 overlap adequate_overlap cross broad True"
+    },
+    {
+      "game_id": 424774,
+      "title": "Dorfromantik: Sakura",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.77 overlap adequate_overlap cross broad True"
+    },
+    {
+      "game_id": 338697,
+      "title": "CATAN: 3D Edition",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "excluded_not_eligible",
+      "reason": "hard_exclude_edition_variant",
+      "evidence": "contained_in via families Game: Catan + shared designer 1 year diff 26 weight diff 0.45 link contained_in 13"
+    },
+    {
+      "game_id": 257145,
+      "title": "Teenage Mutant Ninja Turtles Adventures: City Fall",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.84 overlap adequate_overlap cross broad True"
+    },
+    {
+      "game_id": 304847,
+      "title": "Hidden Games Crime Scene: The New Haven Case",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "niche_but_high_quality",
+      "reason": "audience_specialist_or_insufficient",
+      "evidence": "spec 0.9006024096385542 overlap borderline_overlap"
+    },
+    {
+      "game_id": 195372,
+      "title": "Krazy Wordz: Nicht 100% jugendfrei",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.79 overlap borderline_overlap cross broad False"
+    },
+    {
+      "game_id": 224678,
+      "title": "Baseball Highlights: 2045 \u2013 Spring Training",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec nan overlap adequate_overlap cross broad True"
+    },
+    {
+      "game_id": 187988,
+      "title": "Pyramid Arcade",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.79 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 406174,
+      "title": "Kinfire Delve: Callous' Lab",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "niche_but_high_quality",
+      "reason": "solo_first_audience_niche",
+      "evidence": "spec 0.89 overlap borderline_overlap n_sup 7.0"
+    },
+    {
+      "game_id": 43262,
+      "title": "Neuroshima Hex! Duel",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec nan overlap adequate_overlap cross broad True"
+    },
+    {
+      "game_id": 343844,
+      "title": "Bullet\u2605",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.83 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 184424,
+      "title": "Mega Civilization",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.90 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 363625,
+      "title": "Fateforge: Chronicles of Kaan",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.87 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 296345,
+      "title": "Sherlock Holmes Consulting Detective: The Baker Street Irregulars",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "niche_but_high_quality",
+      "reason": "hobby_well_known",
+      "evidence": "ref_penetration 0.0050 >0.5%"
+    },
+    {
+      "game_id": 285157,
+      "title": "Legendary: A James Bond Deck Building Game",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.86 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 12166,
+      "title": "Funkenschlag",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.89 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 410209,
+      "title": "Hitster: Summer Party",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.73 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 392513,
+      "title": "Mindbug: Beyond Eternity",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec nan overlap adequate_overlap cross broad True"
+    },
+    {
+      "game_id": 256874,
+      "title": "Legendary Encounters: The X-Files Deck Building Game",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec 0.90 overlap borderline_overlap cross broad True"
+    },
+    {
+      "game_id": 404538,
+      "title": "Kinfire Delve: Scorn's Stockade",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "niche_but_high_quality",
+      "reason": "solo_first_audience_niche",
+      "evidence": "spec 0.90 overlap borderline_overlap n_sup 7.0"
+    },
+    {
+      "game_id": 157026,
+      "title": "Ascension: Realms Unraveled",
+      "old_outcome": "strong_hidden_gem_evidence",
+      "new_outcome": "strong_hidden_gem_evidence",
+      "reason": "preserved",
+      "evidence": "eligible confidence eligible; spec nan overlap adequate_overlap cross broad True"
+    }
+  ],
+  "movers": {
+    "old_strong_39": [
+      41090,
+      275972,
+      12166,
+      338697,
+      424975
+    ],
+    "new_strong": [
+      275972,
+      12166,
+      424975,
+      252432,
+      270871
+    ],
+    "lost": [
+      41090,
+      338697,
+      304847,
+      340216,
+      296345,
+      404538,
+      331259,
+      309917,
+      406174
+    ],
+    "gained": [],
+    "new_counts": {
+      "plausible_hidden_gem": 196,
+      "niche_but_high_quality": 159,
+      "insufficient_evidence": 113,
+      "excluded_not_eligible": 34,
+      "strong_hidden_gem_evidence": 30,
+      "excluded_popular_not_hidden": 0
+    }
+  },
+  "claim_tags": "observed fact / empirical finding / model-dependent conclusion / assumption / hypothesis per AGENTS.md"
+}
