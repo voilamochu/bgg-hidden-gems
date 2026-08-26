@@ -1,0 +1,168 @@
+{
+  "generated_at": "2026-08-26T05:27:00.698683+00:00Z",
+  "seed": 20260824,
+  "population": {
+    "pass2_games": 14698,
+    "pass2_users": 287302,
+    "pass2_obs": 24146307,
+    "mu": 7.139,
+    "source": "data/processed/phase2-pass2/"
+  },
+  "thresholds": {
+    "P75": 0.3255647929807146,
+    "P80": 0.4034321141845052,
+    "P75_note": "exact empirical P75 from 14,698 canonical, do not approximate as 0.75",
+    "P80_note": "exact empirical P80, do not approximate as 0.80"
+  },
+  "pools": {
+    "N_P75_primary": 1581,
+    "N_P80_sensitivity": 1347,
+    "N_old_075": 532,
+    "N_old_080": 455,
+    "threshold_primary": "adj\u22657.5 & resid\u22650.3255647930 (P75)",
+    "threshold_sensitivity": "adj\u22657.5 & resid\u22650.4034321142 (P80)"
+  },
+  "eligibility_p75": {
+    "total": 1581,
+    "hard": 61,
+    "borderline": 230,
+    "eligible": 1290,
+    "fraction_queried": "1581/1581 (100%) queried game_links (33,002 rows) + families/series (Game:2,740 Series:3,302) + reimplementation + expansion + version + game-system + related/parent + BGG page fetch attempted for every candidate + bgg_games_current description if richer"
+  },
+  "eligibility_p80": {
+    "total": 1347,
+    "hard": 54,
+    "borderline": 213,
+    "eligible": 1080
+  },
+  "final_counts_p75": {
+    "niche_but_high_quality": 786,
+    "insufficient_evidence": 248,
+    "excluded_popular_not_hidden": 206,
+    "strong_hidden_gem_evidence": 158,
+    "plausible_hidden_gem": 122,
+    "excluded_not_eligible": 61
+  },
+  "final_counts_p80": {
+    "niche_but_high_quality": 646,
+    "insufficient_evidence": 219,
+    "strong_hidden_gem_evidence": 158,
+    "excluded_popular_not_hidden": 149,
+    "plausible_hidden_gem": 121,
+    "excluded_not_eligible": 54
+  },
+  "smoke_test": {
+    "n_pass": 8,
+    "total": 8,
+    "must_be": "8/8 PASS (none in strong/plausible)",
+    "result": "PASS",
+    "details": [
+      {
+        "game_id": 244258,
+        "title": "The Red Dragon Inn 7: The Tavern Crew",
+        "eligibility_flag": "borderline",
+        "reason": "sequel/volume derivative '7: The Tavern Crew' via title pattern ' 7:' (Volume 7) + families ['Game: The Red Dragon Inn'] eco 11 (11-game ecosystem) + BGG page HTTPError 403 + description snippet '' \u2014 no version/contained_in/reimplements link, but plainly not genuinely standalone discovery (Volume 7 of 3-volume? Actually 7th entry where Volume 1 is genuine game) \u2014 medium confidence borderline (not hard because no direct link), ecosystem derivative not hidden to modern hobby audience (System: The ",
+        "evidence": "title 'The Red Dragon Inn 7: The Tavern Crew' year 2018.0 weight 1.60 designers ['Jeff Morrow', 'Sam Waller'] n_obs 310 adj 7.86 resid 1.31 Q4 1.41 SE 0.0678 LB 7.72 hidden eligible | families ['Crowdfunding: Kickstarter', 'Food & Drink: Beer', 'Food & Drink: Liquor / Cocktails', 'Food & Drink: Wine'] (1 Game: 0 Series:) | game_links as_target 0 (version_tgt 0 contained_tgt 0 reimpl_tgt 0 integration_tgt 0) as_source 0 (version_src 0 contained_src 0 reimplements_src 0 reimpl_src 0 expansion_src 0) | is_reimplementation False is_expansion False is_game_system 0 is_edition_title 0 is_volume_sequ",
+        "related_id": NaN,
+        "related_title": NaN,
+        "family": "Game: The Red Dragon Inn",
+        "confidence": "medium",
+        "final_outcome_category": "niche_but_high_quality",
+        "PASS_FAIL": "PASS"
+      },
+      {
+        "game_id": 377969,
+        "title": "Marvel United: Multiverse",
+        "eligibility_flag": "borderline",
+        "reason": "established-series/ecosystem derivative 'Marvel United: Multiverse' (3rd entry Marvel United ecosystem) via families ['Game: United'] eco 4 (Game: United 4, but Marvel United series 3+ games share designers Andrea Chiarvesio/Eric M. Lang year diff 4 weight diff 0.48) + title contains series token 'Marvel United' + BGG description 'Co-operate as Marvel Heroes to stop the Villains' master plans!' + page HTTPError 403 \u2014 no version/contained link, but plainly not hidden standalone (Marvel United wel",
+        "evidence": "title 'Marvel United: Multiverse' year 2024.0 weight 1.96 designers ['Andrea Chiarvesio', 'Eric M. Lang'] n_obs 405 adj 8.60 resid 1.11 Q4 1.14 SE 0.0593 LB 8.48 hidden eligible | families ['Admin: Better Description Needed!', 'Comic Books: Marvel Universe', 'Components: Miniatures', 'Crowdfunding: Kickstarter'] (1 Game: 0 Series:) | game_links as_target 0 (version_tgt 0 contained_tgt 0 reimpl_tgt 0 integration_tgt 0) as_source 0 (version_src 0 contained_src 0 reimplements_src 0 reimpl_src 0 expansion_src 0) | is_reimplementation False is_expansion False is_game_system 0 is_edition_title 0 is_",
+        "related_id": NaN,
+        "related_title": "Marvel United (298047)",
+        "family": "Game: United",
+        "confidence": "medium",
+        "final_outcome_category": "niche_but_high_quality",
+        "PASS_FAIL": "PASS"
+      },
+      {
+        "game_id": 267304,
+        "title": "Mega Empires: The West",
+        "eligibility_flag": "borderline",
+        "reason": "reimplementation/derivative 'Mega Empires: The West' via Game: Civilization eco 4 + shared designers {'Flo de Haan', 'John Rodriguez', 'Francis Tresham'} year diff ~4 with Mega Civilization (2015 vs 2019) weight diff 0.48 + title pattern 'Mega' + BGG page HTTPError 403 + description 'Lead your civilization through the ages by trade, conflict and cultural advancem' \u2014 no version/contained/reimplements link found, but families Game: Civilization + designer/year/weight corroboration suggests derivat",
+        "evidence": "title 'Mega Empires: The West' year 2019.0 weight 3.22 designers ['Flo de Haan', 'Gerart de Haan', 'John Rodriguez', 'Francis Tresham'] n_obs 366 adj 8.65 resid 1.05 Q4 1.18 SE 0.0624 LB 8.53 hidden eligible | families ['Components: Map (Continental / National scale)', 'Crowdfunding: Kickstarter', 'Game: Civilization', 'Region: Mediterranean Sea'] (1 Game: 0 Series:) | game_links as_target 0 (version_tgt 0 contained_tgt 0 reimpl_tgt 0 integration_tgt 0) as_source 0 (version_src 0 contained_src 0 reimplements_src 0 reimpl_src 0 expansion_src 0) | is_reimplementation False is_expansion False is_",
+        "related_id": NaN,
+        "related_title": "Mega Civilization (184424) / Civilization (71)",
+        "family": "Game: Civilization",
+        "confidence": "medium",
+        "final_outcome_category": "niche_but_high_quality",
+        "PASS_FAIL": "PASS"
+      },
+      {
+        "game_id": 424774,
+        "title": "Dorfromantik: Sakura",
+        "eligibility_flag": "borderline",
+        "reason": "sequel/reimplementation variant 'Dorfromantik: Sakura' via Game: Dorfromantik eco 3 + shared designers Michael Palm/Lukas Zach year diff 2 weight diff 0.03 + title 'Sakura' indicates sequel/spin-off of Dorfromantik (2022 SDJ winner, well-known) + BGG page attempted webfetch https://boa + description 'Create a landscape tile by tile to satisfy the whims of its residents.' \u2014 no version/contained link, but established-series derivative plainly not hidden to modern hobby audience (like System: CATAN",
+        "evidence": "title 'Dorfromantik: Sakura' year 2024.0 weight 1.94 designers ['Michael Palm', 'Lukas Zach'] n_obs 370 adj 8.44 resid 0.96 Q4 0.87 SE 0.0620 LB 8.32 hidden eligible | families ['Country: Japan', 'Game: Dorfromantik', 'Mechanism: Campaign Games', 'Misc: LongPack Games'] (1 Game: 0 Series:) | game_links as_target 0 (version_tgt 0 contained_tgt 0 reimpl_tgt 0 integration_tgt 0) as_source 0 (version_src 0 contained_src 0 reimplements_src 0 reimpl_src 0 expansion_src 0) | is_reimplementation False is_expansion False is_game_system 0 is_edition_title 0 is_volume_sequel 0 | eco max 3 (Game max 3 Ser",
+        "related_id": NaN,
+        "related_title": "Dorfromantik: The Board Game (370591)",
+        "family": "Game: Dorfromantik",
+        "confidence": "medium",
+        "final_outcome_category": "niche_but_high_quality",
+        "PASS_FAIL": "PASS"
+      },
+      {
+        "game_id": 184424,
+        "title": "Mega Civilization",
+        "eligibility_flag": "borderline",
+        "reason": "reimplementation/remake 'Mega Civilization' via game_links reimplementation target from 71 (Civilization) + families ['Game: Civilization'] + designers Francis Tresham shared 1 year diff 35 weight diff ~? + BGG page attempted webfetch https://boa \u2014 but is_reimplementation False and no direct version link, so medium borderline not high hard (description 'Develop your own unique civilization...' suggests standalone but family + link corroborate derivative)",
+        "evidence": "title 'Mega Civilization' year 2015.0 weight 3.71 designers ['Flo de Haan', 'John Rodriguez', 'Francis Tresham'] n_obs 1035 adj 8.62 resid 0.83 Q4 0.94 SE 0.0371 LB 8.54 hidden eligible | families ['Components: Map (Continental / National scale)', 'Game: Civilization'] (1 Game: 0 Series:) | game_links as_target 1 (version_tgt 0 contained_tgt 0 reimpl_tgt 1 integration_tgt 0) as_source 0 (version_src 0 contained_src 0 reimplements_src 0 reimpl_src 0 expansion_src 0) | is_reimplementation False is_expansion False is_game_system 0 is_edition_title 0 is_volume_sequel 0 | eco max 4 (Game max 4 Seri",
+        "related_id": 71.0,
+        "related_title": "Civilization",
+        "family": "Game: Civilization",
+        "confidence": "medium",
+        "final_outcome_category": "niche_but_high_quality",
+        "PASS_FAIL": "PASS"
+      },
+      {
+        "game_id": 285157,
+        "title": "Legendary: A James Bond Deck Building Game",
+        "eligibility_flag": "borderline",
+        "reason": "established-series/ecosystem derivative 'Legendary: A James Bond Deck Building Game' via Game: Legendary eco large (similar to System: CATAN 40/Series: Unlock 47) + families ['Game: Legendary (Upper Deck Entertainment)'] + title contains 'Legendary' franchise token + BGG description 'Play through Bond's most memorable films using the famous Legendary game system.' + page attempted webfetch https://boa \u2014 no version/contained/reimplements link, but plainly not hidden standalone discovery (Legendar",
+        "evidence": "title 'Legendary: A James Bond Deck Building Game' year 2019.0 weight 2.48 designers ['Ben Cichoski', 'Devin Low', 'Daniel Mandel'] n_obs 674 adj 7.94 resid 0.82 Q4 0.73 SE 0.0460 LB 7.85 hidden eligible | families ['Books: James Bond', 'Game: Legendary (Upper Deck Entertainment)', 'Mechanism: Pure Deckbuilding', 'Players: Games with Solitaire Rules'] (1 Game: 0 Series:) | game_links as_target 0 (version_tgt 0 contained_tgt 0 reimpl_tgt 0 integration_tgt 0) as_source 0 (version_src 0 contained_src 0 reimplements_src 0 reimpl_src 0 expansion_src 0) | is_reimplementation False is_expansion False",
+        "related_id": NaN,
+        "related_title": NaN,
+        "family": "Game: Legendary (Upper Deck Entertainment)",
+        "confidence": "medium",
+        "final_outcome_category": "niche_but_high_quality",
+        "PASS_FAIL": "PASS"
+      },
+      {
+        "game_id": 256874,
+        "title": "Legendary Encounters: The X-Files Deck Building Game",
+        "eligibility_flag": "borderline",
+        "reason": "established-series/ecosystem derivative 'Legendary Encounters: The X-Files Deck Building Game' via Game: Legendary eco large + families ['Game: Legendary (Upper Deck Entertainment)'] + BGG page attempted webfetch https://boa + description 'Save Humanity from aliens and human conspirators.' \u2014 no version/contained link, but Series: Legendary ecosystem derivative plainly not hidden \u2014 medium borderline",
+        "evidence": "title 'Legendary Encounters: The X-Files Deck Building Game' year 2018.0 weight 2.76 designers ['Ben Cichoski', 'Daniel Mandel'] n_obs 815 adj 7.85 resid 0.78 Q4 0.65 SE 0.0418 LB 7.77 hidden eligible | families ['Game: Legendary (Upper Deck Entertainment)', 'Mechanism: Pure Deckbuilding', 'Players: Games with Solitaire Rules', 'TV Shows: The X-Files'] (1 Game: 0 Series:) | game_links as_target 0 (version_tgt 0 contained_tgt 0 reimpl_tgt 0 integration_tgt 0) as_source 0 (version_src 0 contained_src 0 reimplements_src 0 reimpl_src 0 expansion_src 0) | is_reimplementation False is_expansion Fals",
+        "related_id": NaN,
+        "related_title": NaN,
+        "family": "Game: Legendary (Upper Deck Entertainment)",
+        "confidence": "medium",
+        "final_outcome_category": "niche_but_high_quality",
+        "PASS_FAIL": "PASS"
+      },
+      {
+        "game_id": 373600,
+        "title": "Cthulhu: Death May Die \u2013 Fear of the Unknown",
+        "eligibility_flag": "borderline",
+        "reason": "sequel/expansion-like derivative 'Cthulhu: Death May Die \u2013 Fear of the Unknown' via game_links integration target from 253344 (Cthulhu: Death May Die) + families ['Game: Cthulhu: Death may Die'] + title pattern 'Fear of the Unknown' indicates standalone core box but second season content + BGG description 'Face new monsters... in this standalone core box' suggests not genuinely hidden standalone (integration not version, but families + description + integration link corroborate derivative) \u2014 med",
+        "evidence": "title 'Cthulhu: Death May Die \u2013 Fear of the Unknown' year 2024.0 weight 2.71 designers ['Rob Daviau', 'Eric M. Lang', 'Marco Portugal'] n_obs 502 adj 8.93 resid 0.97 Q4 0.88 SE 0.0533 LB 8.82 hidden eligible | families ['Category: Dungeon Crawler', 'Components: Dice with Icons', 'Components: Miniatures', 'Creatures: Monsters'] (1 Game: 0 Series:) | game_links as_target 1 (version_tgt 0 contained_tgt 0 reimpl_tgt 0 integration_tgt 1) as_source 0 (version_src 0 contained_src 0 reimplements_src 0 reimpl_src 0 expansion_src 0) | is_reimplementation False is_expansion False is_game_system 0 is_edit",
+        "related_id": 253344.0,
+        "related_title": "Cthulhu: Death May Die",
+        "family": "Game: Cthulhu: Death may Die",
+        "confidence": "medium",
+        "final_outcome_category": "niche_but_high_quality",
+        "PASS_FAIL": "PASS"
+      }
+    ]
+  },
+  "reference": "intersect_250_bayes_users 134 games 279108 users 4.96M obs median weight 2.94 year2015",
+  "broad_appeal": "cooperative already in Q3bFam; solo_first 691 34.4% insufficient vs 23% overall; duel 33.3% vs 23% wargame 47.7% vs Euro 21.5%; spec median 0.892 q75 0.960 q90 0.983; ref penetration eligible 0.146% vs exclude 3.47%; cross 86.2% has_broad vs solo 80.5%; capable of moving via general spec>0.90+insufficient/niche_drop etc."
+}
