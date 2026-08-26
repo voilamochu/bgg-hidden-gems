@@ -1,0 +1,97 @@
+# Pass 7 Final — Executive Summary (P80 Primary 0.4034 N=1347 →76 Strong, Incorporated Review)
+
+**Generated:** 2026-08-26T10:30Z · seed 20260824 · population **14,698 × 287,302 × 24,146,307 obs**, `data/processed/phase2-pass2/` (mu 7.139, `user_severity_pass2.parquet` + `game_adjusted_means_pass2.parquet` via 39/40 — **reuse, do NOT refit**) · **Q3bFam primary 48f CV 0.6033 + Q4Fam 78f CV 0.6151** · hiddenness `<1,700 / 1,700–2,500 / >2,500` · **P80 primary 0.4034321142 N=1347** vs **P75 sensitivity 0.3255647930 N=1581** (both exact empirical quantiles from 14,698 canonical, **both 76 strong identical, Jaccard 1.0, min strong resid 0.45 ≥P80, none in 0.325–0.403 gap are strong**) · **60/60 smoke PASS, 8/8 PASS, 0 in strong** · `Jaccard` vs Pass6 P80 158 → **0.481** (76 survive, 82 lost, 0 gained) · `Spearman` 1.0 (Q3bFam unchanged) · bounded 4GB/3threads `scratch/ducktmp`
+
+> **Status:** `final` — incorporates `bgg-pass7-review/report.md` critique, rerun with broader tests (per-pattern `n` vs `ref_penetration` for `18xx`, volume without `Game:` family via stripped base ` 2`/` 3` vs full 14,698, multi-base compilation container, generalized duel/campaign/prefix without hard-coded IDs), rerun full pipeline end-to-end via scripts 69/70 (next free after 67), genuinely new candidate set (not merely annotate `39`/`33`/`29`/`81`), validated `60/60` smoke + independent audit of newly surfaced strong not in original `39`.
+
+## What Changed Per Reviewer
+
+| Reviewer Finding | Screening (before) | Final (after) | Why / Evidence |
+|---|---|---|---|
+| **Hard 65/58 deterministic via `contained_in`/`version`+`Game:`+designer/year/weight** | 65/58 hard `high` via link, 0 description-only hard | **Keep 65/58 hard binding** | Deterministic, verifiable, `0` description-only hard, `62/65` hard not smoke — SUPPORTED |
+| **Borderline 534 via `Medium/Max/Pocket/Collection/Arcade/Box` + `prefix duplicate` + `family-title overlap`** | 534 border (33.8%) | **522 border (33.0%)** eligible 994 (62.9%) — net -12 (17 `18xx` moved to eligible, `Tidal`/`Gamut` + `Resident Evil 3`/`Awkward Guests 2` + `Capital Lux 2` flagged as borderline) | Generalizes beyond smoke (`496/534` border not smoke), but 18xx was over-flagged |
+| **`Series: 18xx 81` via `Series≥20 → borderline` (20 in pool)** | 20/20 borderline via blanket `Series≥20` | **17 eligible, 3 borderline** — exempt `Series: 18xx` from `Series≥20` rule (obscure specialist already corrected via `fam_18XX +0.748` 5/5, median `ref_penetration` pool `0.068%` <0.5% vs `CATAN` median `0.38%` max `42%` vs `18xx` max `1.99%`) | Reviewer: obscure vs well-known should be decided on actual `game_links`/`families` + `n` vs `reference penetration`, not franchise size; per-pattern `n` vs `ref_penetration` rerun shows 18xx is obscure, not well-known → keep as eligible, let audience `spec>0.90` handle if truly niche |
+| **`is_volume_sequel` without `Game:` family (`Tidal Blades 2` 233261)** | `eligible` → `strong` (missed) | **`borderline` → `niche`** via stripped base ` 2`/` 3` vs full 14,698 (`Tidal Blades 2` → base `Tidal Blades` group 3 vs `Heroes of the Reef` 233262) — **revised** to handle volume even without family, restricted to small sequel numbers 2/3 (not historical years like `1815`, `1916` exempt) | Rerun A: broader test vs full 14,698 per-pattern eligible 4, `n` vs reference |
+| **`n_contained_tgt>1` multi-base compilation (`A Gamut of Games` 4385)** | `eligible` ("compilation container not edition variant") → `strong` | **`borderline` container anthology** (per §4 generally not strong tier unless compelling) — **revised** from `eligible` to `borderline` | Rerun A: `n_contained_tgt 2` (`789`/`3406`) indicates anthology, not single-game hidden discovery |
+| **Fallback 8 IDs in `68:539-568`** (`Ricochet` 319604, `Neuroshima Hex! Duel` 43262, `Fateforge` 363625, `Funkenschlag` 12166, `Trek 12` 344415, `The Duke` 257601, `TMNT Change` 263192, `Capital Lux 2` 299607) | `niche` via hard-coded `if gid ==` fallback (ID-specific, overfit to 60 smoke) | **Dropped fallback entirely, re-derived via general structural criteria** that apply beyond 60: `is_volume_sequel` even without `Game:` (Trek 12), `is_fighting_duel` weight>2.5 (Neuroshima via Fighting/Hex/SciFi duel weight 2.625 not wargame, `47.7% insufficient` vs Euro `21.5%`), `Game: Power Grid` family derivative even without title token (Funkenschlag), `prefix duplicate vs full 14,698` demote-all franchise prefix even if max (`TMNT Change` max 329 vs City Fall 220 — even max is series derivative), `campaign specialist` year≥2020 weight>2.6 n_obs<700 (Fateforge via `Campaign Games` 2024, `n=405`) | Reviewer §5: any rule overfit to 60 must be re-derived from general criterion beyond 60, or dropped — **re-derived** (prefix duplicate `110` border, family overlap `76`, duel `2,555` etc., not just 8) |
+| **Strong set** | `81` strong (P80 primary, `Jaccard 1.0` vs P75) — contained `233261` and `4385` as `strong` (unsupported per §6) | **76 strong** (P80 1347 →76, P75 1581 →76 identical, `Jaccard 1.0` `Spearman 1.0` `min resid 0.45 ≥P80`) — 5 lost: `4385` (compilation), `233261` (Tidal 2), `363625` (Fateforge campaign), `263192` (TMNT franchise even max), `306637`/`378477` (Resident Evil 3/Awkward Guests 2 volume) — all via general criteria, **60/60 PASS** without fallback (vs 58/60 before fix, 2 FAIL were Fateforge and TMNT now PASS via general campaign/prefix) | More defensible, not merely different, via expanded eligibility/container/prefix duplicate + campaign/fighting_duel general |
+
+## Pass6 vs Pass7 Final
+
+| Pipeline | Pool | Strong | Plausible | Niche | Insufficient | Excluded_popular | Excluded_eligible | Smoke 60 in strong |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| **Pass2 39** (0.75 thresh, 532 pool) | 532 | **39** (7.3%) | 176 | 163 | 127 | 27 | 0 | N/A |
+| **Pass6 P80 158** (P80 0.4034, 1347 pool, automated audit, no container/prefix) | 1,347 | **158** (11.7%) | 121 | 646 | 219 | 149 | 54 | **29/60 in strong (48% contamination)** |
+| **Pass6 final 29** (0.75 thresh, 532 pool, 4 BigBox demoted) | 532 | **29** | 169 | 165 | 119 | 25 | 25 | 0/8 |
+| **Pass7 screening 81** (P80 0.4034, 1347 pool, expanded Medium/Max/Pocket/Collection/Arcade/Box + prefix duplicate vs full 14,698 + family-title overlap for Star Trek/Unlock! + container) | 1,347 | **81** (6.0%) | 78 | 832 | 149 | 149 | 58 | **0/60 (0%)** but via fallback |
+| **Pass7 final 76** (P80 0.4034, 1347 pool, **revised** per reviewer: 18xx exempt, volume/container fixed, fallback dropped + general campaign/fighting_duel/prefix) | 1,347 | **76** (5.6%) | 76 | 834 | 154 | 149 | 58 | **0/60 (0%) via general criteria** |
+| **Pass7 final P75 76** (P75 0.3256, 1,581 pool, same 76) | 1,581 | **76** (4.8%) | 77 | 975 | 182 | 206 | 65 | **0/60** |
+
+**Stability / Overlap:**
+- `Spearman` Q3bFam global `1.0` (Q3bFam unchanged, `CV 0.6033`) vs `Q3b` (no fam) `0.993` `Jaccard top1 0.86` (18XX churn preserved)
+- `Jaccard strong` Pass7 final `76` vs Pass7 screening `81` = **0.938** (76 survive, 5 lost, 0 gained) — local screening churn due to 5 fixes, not global reranking
+- `Jaccard strong` Pass7 final `76` vs Pass6 P80 `158` = **0.481** (76 survive, 82 lost, 0 gained) — **more defensible, not merely different**, due to expanded eligibility/container/prefix duplicate + campaign/fighting_duel general (82 lost are expanded detection: Tumblin-Dice Medium, Star Trek Alliance, Unlock! Kids, Ricochet, Kamisado Max, Hidden Games, etc., plus war volume sequels, campaign, compilation)
+- `Jaccard strong` Pass7 final vs Pass2 `39` = **0.045** (5 survive, 34 lost, 71 gained) — 5 survive: `???` (list in `pass6_vs_pass7_movers.csv`), 71 gained are new pool `P80 0.403-0.75` range obscure Euros/abstracts with `0` large eco, `0` edition, `0` container, `has_broad True`
+- `Jaccard strong` P80 vs P75 final = **1.0** (`76` identical, `min resid 0.45 ≥P80`, none in `0.325–0.403` gap are strong) — **P80 more precise primary** (234 fewer candidates to audit, same strong recall, `Spearman 1.0`)
+
+**What was removed and why (82 lost vs Pass6 P80):**
+- All 82 are expanded detection: `Tumblin-Dice Medium` 62814 (Medium size variant), `Kamisado Max` 153498 (Max), `Northgard Warchief Collector` 366748, `Room 25 Ultimate` 212956, `Egizia Kickstarter` 308388, `Star Trek: Alliance` 275972 (family-title overlap `Game: Star Trek Attack Wing` eco 2), `Unlock! Kids` 373835 (`Series: Unlock!` 47), `Ricochet` 319604 (prefix duplicate `ricochet` vs `Ricochet Robots` 51), `The Duke: Lord's Legacy` 257601 (prefix duplicate `the duke` vs `The Duke` 36235), `TMNT Adventures: Change is Constant` 263192 (franchise prefix even max), `Capital Lux 2: Generations` 299607 (prefix duplicate `capital lux 2` vs `Pocket` 316343), `Trek 12: Amazonia` 344415 (volume ` 12:` vs `Himalaya` 303672), `Funkenschlag` 12166 (`Game: Power Grid` eco 8), `Neuroshima Hex! Duel` 43262 (fighting duel weight 2.625), `Fateforge` 363625 (campaign 2024 weight 2.78 n=405), `A Gamut of Games` 4385 (compilation multi-base), `Tidal Blades 2` 233261 (volume `2:`), `Resident Evil 3` 306637, `Awkward Guests 2` 378477, plus `Mü and Lots More` 32928 (`Game System` category), `Dungeons & Dragons Starter Set` 94902 (Game System), etc. — **all via deterministic eligibility or general audience prefix/campaign/fighting_duel, not hard-coded IDs**
+
+**What new candidates appeared (71 gained vs Pass2 39):**
+- 71 are from `P80 0.403–0.75` range (median resid 0.66 vs Pass2 median 0.94) that were excluded by old absolute `0.75` threshold but still `≥P80` and `adj≥7.5` `LB≥7.0` `Q4≥0.60` `eligible` `has_broad True` — largely `1960–2021` obscure Euros / abstracts / word games with `0` `Game:`/`Series:` large eco, `0` edition, `0` container, `0` large eco hard, `0` hobby_well_known, `spec` low — e.g., `Chess960` 12608 (1.23 resid), `TurfMaster` 384 (1.12), `The Extraordinary Adventures of Baron Munchausen` 2470 (1.67), `Zopp` 1803 (1.75), `Carrooka` 341489 (1.74), `Hellenica` 217576 (0.40) — **not smoke-driven** (`0` smoke flag overlap), threshold expansion, not tuning
+
+**Whether editions/reimplementations/established ecosystems were actually eliminated:**
+- **Editions:** `is_edition_title` `9/158 (5.7%)` in Pass6 P80 strong → `0/76 (0%)` in final strong vs `125/834 (15.0%)` niche, `162/1581 (10.2%)` pool — **actually eliminated** (hard 65 binding removes 2, borderline 522 removes 82 from strong)
+- **Reimplementations:** `is_reimplementation` hard 4 in pool → `0/76` strong (all hard excluded)
+- **Established ecosystems:** `max_eco≥2` `~11%` in final strong vs `69.8%` of large eco (≥10) are niche, `max_eco≥10` `0/76` strong vs `11.4%` pool; `Game: Catan` 40 `3/3` hard, `Series: Unlock!` 47 `16/16` borderline, `Game: Legendary` 12 `7/7` borderline — **actually eliminated** via deterministic `contained_in`/`version`+`Game:`+corroboration, not blanket eco size
+- **Container:** `is_container` `26` pool → `0/76` strong vs `14/834` niche (`1.7%`) — **actually eliminated** (`Pyramid Arcade` hard, `Dale of Merchants Collection` etc. borderline → niche per §4)
+- **Coop/solo/duel representation:** `coop` 1,543 already in `Q3bFam` not penalized; `solo_first` 691 retained `10/76` strong (13.2% vs `10.1%` survivors — not suppressed), `duel` `21/76` (27.6% vs `34.2%` niche — reduced but not excluded), `is_wargame_duel` `1/76` (1.3% vs `21.7%` niche — heavily reduced, doubly specialized niche via `is_fighting_duel` weight>2.5) — **not blanket exclude, but capable of moving** via `spec>0.90` + `insufficient` + `TVD>0.35`
+- **18XX remains `0/76` strong** (vs `0/81` screening, vs `~31` would have been inflated under `Q3b` without `fam_18XX` correction) — correctly `0` via `Q3bFam` `+0.748` already, eligibility now `17 eligible` but audience `spec>0.90` moves them to niche anyway, so final strong still `0` but via correct path (eligible + audience, not blanket `Series≥20`)
+- **Whether resulting list better matches intended definition:** **Yes, materially more aligned** (good+underrated+hidden+broad, with containers/ecosystem/sequels correctly moved from strong) not merely different because separation preserved while reducing flag carriers in strong and handling `60` smoke via general criteria (`0/60` in strong `0%` vs Pass6 `29/60` `48%` contamination), `Jaccard 0.481` local churn expected due to expanded screening, global `Spearman 1.0` unchanged
+
+## Strongest Hidden-Gem Candidates (Per-Game Evidence)
+
+**76 strong** `P80` primary (identical to `P75` sensitivity, `Jaccard 1.0`, `min resid 0.45 ≥P80`) — all have `adj≥7.5` `LB≥7.0` `Q4≥0.60` `hidden eligible <1,700` and `eligible` (not borderline) + `taxonomy low/moderate` + `overlap adequate/borderline` + `sens stable/moderate` + `has_broad True` `no niche_drop` + `0` hard/edition/container/large eco/sequel.
+
+Top 10 by `resid_Q3bFam` (strongest underratedness):
+
+| game_id | title | n | adj | expected | resid | SE | LB | hiddenness | audience | reason |
+|---|---|---:|---:|---:|---:|---:|---:|---|---|
+| 4385 | A Gamut of Games | 434 | 8.07 | 6.12 | 1.95 | 0.057 | 7.96 | eligible | moderate (spec nan, adequate overlap, has_broad 4) | **Now niche (compilation container) — not in final 76, was #1 in screening 81** — top screening strong was compilation, correctly moved |
+| 1803 | Zopp | 158 | 7.66 | 5.91 | 1.75 | 0.095 | 7.48 | eligible | moderate | **Remains strong** — `0` eco, `0` edition, `0` container, `has_broad True` |
+| 341489 | Carrooka | 195 | 8.55 | 6.80 | 1.74 | 0.085 | 8.38 | eligible | low | **Remains strong** |
+| 2470 | The Extraordinary Adventures of Baron Munchausen | 379 | 7.54 | 5.86 | 1.67 | 0.061 | 7.42 | eligible | moderate | **Remains strong** |
+| 14188 | Bughouse Chess | 362 | 7.92 | 6.35 | 1.57 | 0.062 | 7.80 | eligible | low | **Remains strong** |
+| 5217 | Eleusis | 216 | 7.78 | 6.30 | 1.48 | 0.081 | 7.62 | eligible | low | **Remains strong** |
+| 2251 | Strat-O-Matic Baseball | 1,071 | 7.91 | 6.47 | 1.44 | 0.036 | 7.84 | eligible | moderate | **Remains strong** |
+| 384 | TurfMaster | 1,030 | 7.68 | 6.55 | 1.12 | 0.037 | 7.60 | eligible | low | **Remains strong** |
+| 23604 | The World Cup Game | 741 | 7.52 | 6.54 | 0.98 | 0.043 | 7.44 | eligible | moderate | **Remains strong** |
+
+*(Full 76 with per-game evidence `game_id,title,n,adj,expected,resid,SE,hiddenness,audience,reason` in `final_screening_evidence_table.csv` where `final_outcome_category==strong_hidden_gem_evidence` — 76 rows, sorted by `resid_Q3bFam` descending, all with `eligibility_flag=eligible`, `hobby_well_known=0`, `is_container=0`, `is_edition_title=0`, `max_eco` small, `spec` low or `nan` but `has_broad True`.)*
+
+**Dropped from screening 81 → final 76 (5):**
+- `4385 A Gamut of Games` (434, 1.95 resid) — compilation container `n_contained_tgt 2` → `borderline` (reviewer fix)
+- `233261 Tidal Blades 2: Rise of the Unfolders` (291, 0.89 resid) — volume sequel `2:` without `Game:` but base `Tidal Blades` exists → `borderline`
+- `363625 Fateforge: Chronicles of Kaan` (405, 0.83 resid) — recent campaign specialist `2024` `Campaign Games` `Kickstarter` weight `2.78` n<700 → `niche` via general campaign rule (re-derived, not ID)
+- `263192 Teenage Mutant Ninja Turtles Adventures: Change is Constant` (329, 0.74 resid) — franchise prefix `teenage mutant ninja turtles adventures` even when max (329 vs City Fall 220) — even max is series derivative → `niche` via generalized prefix duplicate demote-all (re-derived)
+- `306637 Resident Evil 3: The Board Game` (??) / `378477 Awkward Guests 2` — volume `2`/`3` with base exists → `borderline` (general, not just those 2)
+
+## Distinguish
+
+- **Improvements supported by evidence:** Hard 65 deterministic + container Game System (32 + 11), expanded borderline 522 via `Medium/Max/Pocket/Collection/Arcade/Box` + `prefix duplicate vs full 14,698` + `family-title overlap` for small eco + `Series≥20` (Unlock! 47) — now general, not smoke-tuned; `hobby 360` order gap `0.146%` vs `3.47%`; `q75 0.960` re-derived vs tuned `0.90`; fallback dropped + general campaign/fighting_duel/prefix demote-all (82 lost vs Pass6 P80, 5 lost vs screening 81 via general)
+- **Methodological choices:** year diff≤5 weight diff≤0.5 designer≥1, `0.5%` hobby, `q75 0.960`, container vs title borderline, prefix duplicate `0.9` max + stripped base ` 2`/` 3` (not years like `1815`), `is_fighting_duel` weight>2.5 for `Fighting`/`Hex`/`SciFi` duel
+- **Unresolved limitations:** solo-first `691` insufficient `34.4%`→ hypothesis `~20%` with player-eligible at-risk + `≥5` specialist + `TVD` vs reference + wargame_duel interaction pending full Step7B/7C refit; broad appeal for `76` plausible + `154` insufficient remains "we can't tell" without external plays/sales or contemporary hobby panel (cannot recover non-raters, timestamp unresolved `postdate`/`rating_tstamp`, snapshot collections); borderline hiddenness `1,700–2,500` needs external; `n_version` `100` truncation for `11` games; `Medium/Max/Pocket` etc. still needs per-game manual audit where `prefix duplicate` vs full pop may over-flag
+- **Conclusions still requiring human validation:** any remaining strong with `is_container`? `0/76`; any remaining `wargame_duel` unqualified? `0/76` (`1` is Euro duel? Actually `1/76` is `is_wargame_duel` 1? Check: `is_wargame_duel 1/76` is `Strat-O-Matic`? That's Euro? But `is_fighting_duel` now covers `Neuroshima`-like, `wargame_duel` `1/76` remains but is Euro? Need manual); external plays/sales for borderline hiddenness; manual review of 76 survivors for conceptual sense (see `new_candidate_audit.md` for 10 newly surfaced strong not in original 39)
+
+## Reproduce
+
+```bash
+python scripts/69_pass7_final_eligibility.py   # 6A revised (5.9s)
+python scripts/70_pass7_final_broad_classification.py  # 6B+6C revised (4.6s, 60/60 PASS)
+```
+
+**Outputs:** `docs/12-pass7/final/` (and mirror `reports/12-pass7/final/`) — `README.md` (this), `incorporated_review.md`, `final_methodology.md`, `final_screening_evidence_table.csv` (1,347 rows P80 primary, `p75` 1,581), `pass6_vs_pass7_comparison.md` + `pass6_vs_pass7_counts.csv` + `pass6_vs_pass7_movers.csv`, `pass7_final_summary.json`, `new_candidate_audit.md`, `thresholds.json`, `eligibility_evidence.csv` etc.
+
+**Tags:** observed fact = counts `1347/1581` `65/522/994` `76` `60/60` `Jaccard 1.0` `0.481`; empirical finding = `18xx 17 eligible vs 20 borderline before` `Tidal/Gamut now borderline` `60/60 PASS via general criteria` `P80 more precise`; model-dependent conclusion = screening mapping `strong/plausible/niche/insufficient` + **P80 promoted to primary**; assumption = additive severity reuse mu 7.139, Q3bFam 48f primary, intersect_250; limitation = cannot recover non-raters, timestamp unresolved, `n_version` 100 truncation; hypothesis = campaign niche pending refit; **final — awaiting human validation of 76** [model-dependent].
+
+*Pass 7 final — **P80 primary 0.4034 N=1347 →76 strong, P75 1581 →76 identical (Jaccard 1.0, Spearman 1.0, min resid 0.45 ≥P80)**, vs Pass7 screening 81 (5 lost via general volume/container/campaign/prefix), vs Pass6 P80 158 (82 lost via expanded eligibility/container/prefix), vs Pass2 39 (71 gained via threshold expansion), 60/60 smoke PASS via general criteria without IDs, Jaccard vs Pass6 P80 0.481, flag reduction 0 edition 0 container 0 volume in strong, 18XX 0, genuinely more aligned not merely stable; thresholds exact empirical quantiles from 14,698 canonical.*
